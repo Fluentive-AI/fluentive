@@ -6,7 +6,7 @@ import {
   Home, 
   Users, 
   FileText, 
-  Tool, 
+  Wrench, 
   BarChart, 
   Settings, 
   MessageCircle,
@@ -61,7 +61,7 @@ const AppSidebar = () => {
           </div>
           <NavItem to="/tenants" icon={<Building className="h-5 w-5" />} label="Tenants" />
           <NavItem to="/rent" icon={<CreditCard className="h-5 w-5" />} label="Rent Collection" />
-          <NavItem to="/maintenance" icon={<Tool className="h-5 w-5" />} label="Maintenance" />
+          <NavItem to="/maintenance" icon={<Wrench className="h-5 w-5" />} label="Maintenance" />
           <NavItem to="/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
         </div>
         
