@@ -12,6 +12,8 @@ import Maintenance from "./pages/Maintenance";
 import Communications from "./pages/Communications";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
+import LandingPage from "./pages/LandingPage";
+import MapView from "./pages/MapView";
 
 const queryClient = new QueryClient();
 
@@ -22,13 +24,15 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AppLayout><Dashboard /></AppLayout>} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<AppLayout><Dashboard /></AppLayout>} />
           <Route path="/leads" element={<AppLayout><Leads /></AppLayout>} />
           <Route path="/applications" element={<AppLayout><PlaceholderPage /></AppLayout>} />
           <Route path="/tenants" element={<AppLayout><Tenants /></AppLayout>} />
           <Route path="/rent" element={<AppLayout><PlaceholderPage /></AppLayout>} />
           <Route path="/maintenance" element={<AppLayout><Maintenance /></AppLayout>} />
           <Route path="/calendar" element={<AppLayout><PlaceholderPage /></AppLayout>} />
+          <Route path="/map" element={<AppLayout><MapView /></AppLayout>} />
           <Route path="/communications" element={<AppLayout><Communications /></AppLayout>} />
           <Route path="/reports" element={<AppLayout><PlaceholderPage /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><PlaceholderPage /></AppLayout>} />

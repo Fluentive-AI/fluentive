@@ -12,7 +12,8 @@ import {
   MessageCircle,
   Building,
   Calendar,
-  CreditCard
+  CreditCard,
+  Map
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -41,11 +42,13 @@ const AppSidebar = () => {
   return (
     <div className="h-screen w-64 border-r border-sidebar-border bg-sidebar fixed left-0 top-0 flex flex-col">
       <div className="p-4 border-b border-sidebar-border">
-        <AppLogo />
+        <NavLink to="/dashboard">
+          <AppLogo />
+        </NavLink>
       </div>
       
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        <NavItem to="/" icon={<Home className="h-5 w-5" />} label="Dashboard" />
+        <NavItem to="/dashboard" icon={<Home className="h-5 w-5" />} label="Dashboard" />
         
         <div className="pt-4 pb-2">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
@@ -57,12 +60,19 @@ const AppSidebar = () => {
         
         <div className="pt-4 pb-2">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
-            Operations
+            Property Operations
           </div>
           <NavItem to="/tenants" icon={<Building className="h-5 w-5" />} label="Tenants" />
           <NavItem to="/rent" icon={<CreditCard className="h-5 w-5" />} label="Rent Collection" />
           <NavItem to="/maintenance" icon={<Wrench className="h-5 w-5" />} label="Maintenance" />
+        </div>
+        
+        <div className="pt-4 pb-2">
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
+            Maintenance Staff
+          </div>
           <NavItem to="/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
+          <NavItem to="/map" icon={<Map className="h-5 w-5" />} label="Map View" />
         </div>
         
         <div className="pt-4 pb-2">

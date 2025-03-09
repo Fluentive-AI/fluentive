@@ -26,6 +26,7 @@ export interface Lead {
   dateCreated: string;
   nextFollowUp: string | null;
   tourScheduled: string | null;
+  assignedTo: string;  // Leasing agent
 }
 
 export interface Application {
@@ -40,6 +41,7 @@ export interface Application {
   backgroundCheck: 'pending' | 'approved' | 'rejected';
   creditCheck: 'pending' | 'approved' | 'rejected';
   incomeVerification: 'pending' | 'approved' | 'rejected';
+  assignedTo: string;  // Leasing agent
 }
 
 export interface Tenant {
@@ -53,6 +55,7 @@ export interface Tenant {
   rentAmount: number;
   status: 'active' | 'inactive' | 'pending';
   rentStatus: 'paid' | 'pending' | 'overdue';
+  region: string;
 }
 
 export interface MaintenanceRequest {
@@ -67,6 +70,7 @@ export interface MaintenanceRequest {
   priority: 'urgent' | 'normal' | 'low';
   assignedTo: string | null;
   scheduledDate: string | null;
+  region: string;
 }
 
 export interface AIConversation {
@@ -106,4 +110,16 @@ export interface MetricData {
 export interface ChartData {
   name: string;
   value: number;
+}
+
+export interface SuperItinerary {
+  id: string;
+  name: string;
+  locations: {
+    address: string;
+    lat: number;
+    lng: number;
+    requestId: string;
+    description: string;
+  }[];
 }
