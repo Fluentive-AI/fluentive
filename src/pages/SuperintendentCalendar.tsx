@@ -53,8 +53,8 @@ const viewOptions = {
   month: { label: "Month", days: 31 }
 };
 
-const BUSINESS_HOURS_START = 8; // 8 AM
-const BUSINESS_HOURS_END = 18; // 6 PM
+const BUSINESS_HOURS_START = 6; // 6 AM
+const BUSINESS_HOURS_END = 20; // 8 PM
 
 // Updated mock data to include hours and March 2025 dates
 const updateMockRequestDates = () => {
@@ -193,7 +193,7 @@ const SuperintendentCalendar = () => {
       
       // Check if the event overlaps with this hour slot
       return isSameDay(requestStartDate, day) && 
-             isWithinInterval(hourStart, { 
+             (isWithinInterval(hourStart, { 
                start: requestStartDate, 
                end: requestEndDate 
              }) || 
@@ -201,7 +201,7 @@ const SuperintendentCalendar = () => {
                start: requestStartDate, 
                end: requestEndDate 
              }) ||
-             (requestStartDate <= hourStart && requestEndDate >= hourEnd);
+             (requestStartDate <= hourStart && requestEndDate >= hourEnd));
     });
   };
 
@@ -282,17 +282,19 @@ const SuperintendentCalendar = () => {
       // List view for day, 3-day, 5-day, and week views
       if (['3day', '5day', 'week'].includes(calendarView)) {
         // Side-by-side view for multiple days
+        const maxCols = calendarView === '3day' ? 3 : calendarView === '5day' ? 5 : 7;
+        const colClass = calendarView === '3day' ? "w-1/3" : calendarView === '5day' ? "w-1/5" : "w-1/7";
+        
         return (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-0 w-full">
             {dateRange.map((day, dayIndex) => {
               const events = getEventsForDay(day);
-              const maxCols = calendarView === '3day' ? 3 : calendarView === '5day' ? 5 : 7;
               
               // Only show the columns we need based on the view
               if (dayIndex >= maxCols) return null;
               
               return (
-                <div key={dayIndex} className="border rounded-lg p-3">
+                <div key={dayIndex} className="p-3">
                   <div className={cn(
                     "text-base font-semibold mb-2 text-center",
                     isSameDay(day, new Date()) ? "text-primary" : ""
@@ -539,250 +541,308 @@ const SuperintendentCalendar = () => {
         const visibleDays = dateRange.slice(0, maxCols);
         
         return (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-4">
-            {visibleDays.map((day, dayIndex) => (
-              <div key={dayIndex} className="border rounded-lg p-2 overflow-hidden h-[600px]">
-                <div className={cn(
-                  "text-base font-semibold mb-2 text-center sticky top-0 bg-background pb-1",
-                  isSameDay(day, new Date()) ? "text-primary" : ""
-                )}>
-                  {format(day, 'EEE, MMM d')}
-                </div>
-                
-                <div className="space-y-0 overflow-auto h-[550px] pb-4">
-                  {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START + 1) }, (_, i) => {
-                    const hour = BUSINESS_HOURS_START + i;
-                    const events = getEventsForHour(day, hour);
+          <div className="flex w-full h-[700px] overflow-auto">
+            {/* Time labels column */}
+            <div className="w-16 flex-shrink-0 pt-12 pr-2">
+              {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                const hour = BUSINESS_HOURS_START + i;
+                return (
+                  <div key={hour} className="h-14 flex items-start justify-end sticky">
+                    <div className="text-xs text-muted-foreground">
+                      {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Days columns */}
+            <div className="flex-grow grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 divide-x divide-gray-200">
+              {visibleDays.map((day, dayIndex) => (
+                <div key={dayIndex} className="relative">
+                  <div className="h-12 flex justify-center items-center sticky top-0 bg-background z-10 border-b">
+                    <div className={cn(
+                      "text-base font-semibold",
+                      isSameDay(day, new Date()) ? "text-primary" : ""
+                    )}>
+                      {format(day, 'EEE, MMM d')}
+                    </div>
+                  </div>
+                  
+                  <div className="relative">
+                    {/* Hour lines */}
+                    {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                      const hour = BUSINESS_HOURS_START + i;
+                      return <div key={hour} className="h-14 border-b border-gray-100"></div>;
+                    })}
                     
-                    return (
-                      <div key={hour} className="flex border-l-2 border-gray-200 pl-2">
-                        <div className="w-12 text-xs text-muted-foreground pt-2 shrink-0">
-                          {hour === 12 ? '12p' : hour > 12 ? `${hour - 12}p` : `${hour}a`}
-                        </div>
-                        <div className="flex-1 min-h-12 py-1 border-b border-gray-200 border-opacity-30">
-                          {events.length > 0 ? (
-                            <div className="space-y-1">
-                              {events.map((event) => (
-                                <Dialog key={event.id}>
-                                  <DialogTrigger asChild>
-                                    <div 
-                                      className={cn(
-                                        "text-xs p-1 rounded cursor-pointer",
-                                        event.priority === 'urgent' ? "bg-red-100 text-red-800" :
-                                        event.priority === 'high' ? "bg-orange-100 text-orange-800" :
-                                        "bg-blue-100 text-blue-800"
-                                      )}
-                                    >
-                                      <div className="font-medium truncate">{event.issue}</div>
-                                      <div className="flex items-center gap-1 mt-0.5">
-                                        <Clock className="h-2.5 w-2.5" />
-                                        <span>{format(new Date(event.scheduledDate), 'h:mm')} - {format(new Date(event.endDate), 'h:mm')}</span>
-                                      </div>
+                    {/* Events */}
+                    {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                      const hour = BUSINESS_HOURS_START + i;
+                      const events = getEventsForHour(day, hour);
+                      
+                      return events.length > 0 && (
+                        <div 
+                          key={hour} 
+                          className="absolute w-full"
+                          style={{
+                            top: `${(hour - BUSINESS_HOURS_START) * 56}px`, // 56px = 14px (height) * 4 (quarter hours)
+                          }}
+                        >
+                          {events.map((event) => {
+                            const startDate = new Date(event.scheduledDate);
+                            const endDate = new Date(event.endDate);
+                            const startHour = startDate.getHours();
+                            const startMinute = startDate.getMinutes();
+                            const eventDuration = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60); // in hours
+                            
+                            // Calculate position and height
+                            const topOffset = ((startHour - BUSINESS_HOURS_START) * 56) + ((startMinute / 60) * 56);
+                            const height = eventDuration * 56;
+                            
+                            return (
+                              <Dialog key={event.id}>
+                                <DialogTrigger asChild>
+                                  <div 
+                                    className={cn(
+                                      "absolute m-0.5 p-1 rounded overflow-hidden cursor-pointer",
+                                      event.priority === 'urgent' ? "bg-red-100 text-red-800" :
+                                      event.priority === 'high' ? "bg-orange-100 text-orange-800" :
+                                      "bg-blue-100 text-blue-800"
+                                    )}
+                                    style={{
+                                      top: `${(startMinute / 60) * 56}px`,
+                                      height: `${height}px`,
+                                      width: 'calc(100% - 4px)',
+                                      zIndex: 5
+                                    }}
+                                  >
+                                    <div className="font-medium text-xs truncate">{event.issue}</div>
+                                    <div className="text-xs truncate flex items-center gap-0.5">
+                                      <Clock className="h-2.5 w-2.5 inline" />
+                                      <span>
+                                        {format(startDate, 'h:mm')} - {format(endDate, 'h:mm')}
+                                      </span>
                                     </div>
-                                  </DialogTrigger>
-                                  <DialogContent>
-                                    <DialogHeader>
-                                      <DialogTitle className="flex justify-between items-center">
-                                        <span>{event.issue}</span>
-                                        <Badge 
-                                          variant={
-                                            event.priority === 'urgent' ? "destructive" :
-                                            event.priority === 'high' ? "default" : "secondary"
-                                          }
-                                        >
-                                          {event.priority}
-                                        </Badge>
-                                      </DialogTitle>
-                                      <DialogDescription className="text-lg">
-                                        Maintenance Request Details
-                                      </DialogDescription>
-                                    </DialogHeader>
-                                    <div className="space-y-4 mt-4">
-                                      <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
-                                          <p>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Location</p>
-                                          <p>{event.unit} ({event.region} Region)</p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Tenant</p>
-                                          <p>{event.tenantName}</p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Status</p>
-                                          <p className="capitalize">{event.status}</p>
-                                        </div>
+                                  </div>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle className="flex justify-between items-center">
+                                      <span>{event.issue}</span>
+                                      <Badge 
+                                        variant={
+                                          event.priority === 'urgent' ? "destructive" :
+                                          event.priority === 'high' ? "default" : "secondary"
+                                        }
+                                      >
+                                        {event.priority}
+                                      </Badge>
+                                    </DialogTitle>
+                                    <DialogDescription className="text-lg">
+                                      Maintenance Request Details
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <div className="space-y-4 mt-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div>
+                                        <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
+                                        <p>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</p>
                                       </div>
                                       <div>
-                                        <p className="text-sm font-medium text-muted-foreground">Description</p>
-                                        <p>{event.description}</p>
+                                        <p className="text-sm font-medium text-muted-foreground">Location</p>
+                                        <p>{event.unit} ({event.region} Region)</p>
                                       </div>
                                       <div>
-                                        <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
-                                        <p>{event.assignedTo || 'Unassigned'}</p>
+                                        <p className="text-sm font-medium text-muted-foreground">Tenant</p>
+                                        <p>{event.tenantName}</p>
                                       </div>
-                                      <div className="flex justify-between mt-4">
-                                        <Button variant="outline" className="flex items-center gap-1">
-                                          <ImageIcon className="h-4 w-4" />
-                                          View Images
-                                        </Button>
-                                        <Button className="flex items-center gap-1">
-                                          <Info className="h-4 w-4" />
-                                          Full Details
-                                        </Button>
+                                      <div>
+                                        <p className="text-sm font-medium text-muted-foreground">Status</p>
+                                        <p className="capitalize">{event.status}</p>
                                       </div>
                                     </div>
-                                  </DialogContent>
-                                </Dialog>
-                              ))}
-                            </div>
-                          ) : null}
+                                    <div>
+                                      <p className="text-sm font-medium text-muted-foreground">Description</p>
+                                      <p>{event.description}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                                      <p>{event.assignedTo || 'Unassigned'}</p>
+                                    </div>
+                                    <div className="flex justify-between mt-4">
+                                      <Button variant="outline" className="flex items-center gap-1">
+                                        <ImageIcon className="h-4 w-4" />
+                                        View Images
+                                      </Button>
+                                      <Button className="flex items-center gap-1">
+                                        <Info className="h-4 w-4" />
+                                        Full Details
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
+                            );
+                          })}
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         );
       } else {
-        // Single day hourly view (original implementation)
+        // Single day hourly view
         return (
-          <div className="grid grid-cols-1 divide-y">
-            {dateRange.map((day, dayIndex) => (
-              <div key={dayIndex} className="py-4">
-                <div className={cn(
-                  "text-base font-semibold mb-2",
-                  isSameDay(day, new Date()) ? "text-primary" : ""
-                )}>
-                  {format(day, 'EEEE, MMMM d')}
-                </div>
-                
-                <div className="grid grid-cols-1 gap-0 mt-3">
-                  {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START + 1) }, (_, i) => {
-                    const hour = BUSINESS_HOURS_START + i;
-                    const events = getEventsForHour(day, hour);
-                    
-                    return (
-                      <div key={hour} className="flex border-l-2 border-gray-200 pl-2">
-                        <div className="w-16 text-sm text-muted-foreground pt-2">
-                          {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
-                        </div>
-                        <div className="flex-1 min-h-12 py-1 border-b border-gray-200">
-                          {events.length > 0 ? (
-                            <div className="space-y-1">
-                              {events.map((event) => (
-                                <Dialog key={event.id}>
-                                  <DialogTrigger asChild>
-                                    <div 
-                                      className={cn(
-                                        "text-sm p-2 rounded cursor-pointer",
-                                        event.priority === 'urgent' ? "bg-red-100 text-red-800" :
-                                        event.priority === 'high' ? "bg-orange-100 text-orange-800" :
-                                        "bg-blue-100 text-blue-800"
-                                      )}
-                                    >
-                                      <div className="font-medium">{event.issue}</div>
-                                      <div className="text-xs flex items-center gap-1 mt-1">
-                                        <Clock className="h-3 w-3" />
-                                        <span>{format(new Date(event.scheduledDate), 'h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</span>
-                                      </div>
-                                      <div className="text-xs flex items-center gap-1 mt-1">
-                                        <MapPin className="h-3 w-3" />
-                                        {event.unit}
-                                      </div>
-                                      <div className="flex justify-between items-center mt-1">
-                                        <Badge 
-                                          variant={
-                                            event.priority === 'urgent' ? "destructive" :
-                                            event.priority === 'high' ? "default" : "secondary"
-                                          }
-                                          className="text-xs"
-                                        >
-                                          {event.priority}
-                                        </Badge>
-                                        <Button 
-                                          variant="ghost" 
-                                          size="sm" 
-                                          className="text-xs flex items-center h-6 px-2"
-                                        >
-                                          <ImageIcon className="h-3 w-3 mr-1" />
-                                          View images
-                                        </Button>
-                                      </div>
-                                    </div>
-                                  </DialogTrigger>
-                                  <DialogContent>
-                                    <DialogHeader>
-                                      <DialogTitle className="flex justify-between items-center">
-                                        <span>{event.issue}</span>
-                                        <Badge 
-                                          variant={
-                                            event.priority === 'urgent' ? "destructive" :
-                                            event.priority === 'high' ? "default" : "secondary"
-                                          }
-                                        >
-                                          {event.priority}
-                                        </Badge>
-                                      </DialogTitle>
-                                      <DialogDescription className="text-lg">
-                                        Maintenance Request Details
-                                      </DialogDescription>
-                                    </DialogHeader>
-                                    <div className="space-y-4 mt-4">
-                                      <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
-                                          <p>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Location</p>
-                                          <p>{event.unit} ({event.region} Region)</p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Tenant</p>
-                                          <p>{event.tenantName}</p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Status</p>
-                                          <p className="capitalize">{event.status}</p>
-                                        </div>
-                                      </div>
-                                      <div>
-                                        <p className="text-sm font-medium text-muted-foreground">Description</p>
-                                        <p>{event.description}</p>
-                                      </div>
-                                      <div>
-                                        <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
-                                        <p>{event.assignedTo || 'Unassigned'}</p>
-                                      </div>
-                                      <div className="flex justify-between mt-4">
-                                        <Button variant="outline" className="flex items-center gap-1">
-                                          <ImageIcon className="h-4 w-4" />
-                                          View Images
-                                        </Button>
-                                        <Button className="flex items-center gap-1">
-                                          <Info className="h-4 w-4" />
-                                          Full Details
-                                        </Button>
-                                      </div>
-                                    </div>
-                                  </DialogContent>
-                                </Dialog>
-                              ))}
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+          <div className="flex w-full h-[700px] overflow-auto">
+            {/* Time labels column */}
+            <div className="w-16 flex-shrink-0 pr-2">
+              {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                const hour = BUSINESS_HOURS_START + i;
+                return (
+                  <div key={hour} className="h-14 flex items-start justify-end">
+                    <div className="text-xs text-muted-foreground">
+                      {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Day content */}
+            <div className="flex-grow">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold">
+                  {format(dateRange[0], 'EEEE, MMMM d, yyyy')}
+                </h3>
               </div>
-            ))}
+              
+              <div className="relative border-l border-gray-200">
+                {/* Hour lines */}
+                {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                  const hour = BUSINESS_HOURS_START + i;
+                  return <div key={hour} className="h-14 border-b border-gray-100"></div>;
+                })}
+                
+                {/* Events */}
+                {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                  const hour = BUSINESS_HOURS_START + i;
+                  const events = getEventsForHour(dateRange[0], hour);
+                  
+                  return events.length > 0 && (
+                    <div 
+                      key={hour} 
+                      className="absolute w-full"
+                      style={{
+                        top: `${(hour - BUSINESS_HOURS_START) * 56}px`, // 56px = 14px (height) * 4 (quarter hours)
+                      }}
+                    >
+                      {events.map((event) => {
+                        const startDate = new Date(event.scheduledDate);
+                        const endDate = new Date(event.endDate);
+                        const startHour = startDate.getHours();
+                        const startMinute = startDate.getMinutes();
+                        const eventDuration = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60); // in hours
+                        
+                        // Calculate position and height
+                        const topOffset = ((startHour - BUSINESS_HOURS_START) * 56) + ((startMinute / 60) * 56);
+                        const height = eventDuration * 56;
+                        
+                        return (
+                          <Dialog key={event.id}>
+                            <DialogTrigger asChild>
+                              <div 
+                                className={cn(
+                                  "absolute left-0 ml-2 p-2 rounded overflow-hidden cursor-pointer",
+                                  event.priority === 'urgent' ? "bg-red-100 text-red-800 border-l-4 border-red-500" :
+                                  event.priority === 'high' ? "bg-orange-100 text-orange-800 border-l-4 border-orange-500" :
+                                  "bg-blue-100 text-blue-800 border-l-4 border-blue-500"
+                                )}
+                                style={{
+                                  top: `${(startMinute / 60) * 56}px`,
+                                  height: `${height}px`,
+                                  width: 'calc(100% - 16px)',
+                                  zIndex: 5
+                                }}
+                              >
+                                <div className="font-medium truncate">{event.issue}</div>
+                                <div className="text-xs flex items-center gap-1 mt-1">
+                                  <Clock className="h-3 w-3" />
+                                  <span>{format(startDate, 'h:mm a')} - {format(endDate, 'h:mm a')}</span>
+                                </div>
+                                <div className="text-xs flex items-center gap-1 mt-1">
+                                  <MapPin className="h-3 w-3" />
+                                  {event.unit}
+                                </div>
+                              </div>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle className="flex justify-between items-center">
+                                  <span>{event.issue}</span>
+                                  <Badge 
+                                    variant={
+                                      event.priority === 'urgent' ? "destructive" :
+                                      event.priority === 'high' ? "default" : "secondary"
+                                    }
+                                  >
+                                    {event.priority}
+                                  </Badge>
+                                </DialogTitle>
+                                <DialogDescription className="text-lg">
+                                  Maintenance Request Details
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="space-y-4 mt-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
+                                    <p>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium text-muted-foreground">Location</p>
+                                    <p>{event.unit} ({event.region} Region)</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium text-muted-foreground">Tenant</p>
+                                    <p>{event.tenantName}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium text-muted-foreground">Status</p>
+                                    <p className="capitalize">{event.status}</p>
+                                  </div>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Description</p>
+                                  <p>{event.description}</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                                  <p>{event.assignedTo || 'Unassigned'}</p>
+                                </div>
+                                <div className="flex justify-between mt-4">
+                                  <Button variant="outline" className="flex items-center gap-1">
+                                    <ImageIcon className="h-4 w-4" />
+                                    View Images
+                                  </Button>
+                                  <Button className="flex items-center gap-1">
+                                    <Info className="h-4 w-4" />
+                                    Full Details
+                                  </Button>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         );
       }
