@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,6 @@ import { ExternalLink, MapPin } from 'lucide-react';
 import { mockMaintenanceRequests } from '@/data/mockData';
 import { useLocation } from 'react-router-dom';
 import MaintenanceTable from '@/components/maintenance/MaintenanceTable';
-import StatusBadge from '@/components/shared/StatusBadge';
 
 // This would be better stored in env variables
 const MAPBOX_TOKEN = "pk.eyJ1IjoibG92YWJsZWFpIiwiYSI6ImNrczl4eGxhdTBxaXIydHFpbmhuc3ZkbzAifQ.QpZOOZ5H5avIcQpq0qmYRQ";
@@ -69,43 +67,7 @@ const MapView = () => {
           <CardTitle>Today's Stops</CardTitle>
         </CardHeader>
         <CardContent>
-          {isSuperintendentView ? (
-            <MaintenanceTable requests={filteredRequests} />
-          ) : (
-            <div className="relative w-full">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Tenant</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Unit</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Issue</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Date</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Assigned To</th>
-                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">Pictures</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredRequests.map((request) => (
-                    <tr key={request.id} className="border-b">
-                      <td className="py-3 px-4">{request.tenantName}</td>
-                      <td className="py-3 px-4">{request.unit}</td>
-                      <td className="py-3 px-4">{request.description}</td>
-                      <td className="py-3 px-4">{request.date}</td>
-                      <td className="py-3 px-4">{request.assignedTo || 'Unassigned'}</td>
-                      <td className="py-3 px-4">
-                        <button 
-                          className="text-blue-600 hover:text-blue-800 underline p-0 bg-transparent border-none text-sm"
-                          onClick={() => {/* Handle picture view */}}
-                        >
-                          {`See picture${(request.images?.length || 0) <= 1 ? '' : 's'} (${request.images?.length || 0})`}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          <MaintenanceTable requests={filteredRequests} />
         </CardContent>
       </Card>
     </div>

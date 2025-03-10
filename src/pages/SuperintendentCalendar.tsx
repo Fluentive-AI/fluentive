@@ -4,10 +4,37 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { mockMaintenanceRequests } from '@/data/mockData';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, MapPin, Wrench, ImageIcon } from 'lucide-react';
-import { format, startOfToday, startOfDay, endOfDay, eachDayOfInterval, add, sub, isSameDay, isSameMonth, getDay } from 'date-fns';
+import { 
+  Calendar as CalendarIcon, 
+  ChevronLeft, 
+  ChevronRight, 
+  Clock, 
+  MapPin, 
+  Wrench, 
+  ImageIcon,
+  List,
+  CalendarClock
+} from 'lucide-react';
+import { 
+  format, 
+  startOfToday, 
+  startOfDay, 
+  endOfDay, 
+  eachDayOfInterval, 
+  add, 
+  sub, 
+  isSameDay, 
+  isSameMonth, 
+  getDay,
+  addHours,
+  startOfHour,
+  endOfHour,
+  isWithinInterval,
+  parseISO
+} from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 const CURRENT_SUPER = "Mike Johnson";
 
@@ -19,9 +46,13 @@ const viewOptions = {
   month: { label: "Month", days: 31 }
 };
 
+const BUSINESS_HOURS_START = 8; // 8 AM
+const BUSINESS_HOURS_END = 18; // 6 PM
+
 const SuperintendentCalendar = () => {
   const [calendarView, setCalendarView] = useState<string>('week');
   const [selectedDate, setSelectedDate] = useState<Date>(startOfToday());
+  const [displayMode, setDisplayMode] = useState<string>('list'); // 'list' or 'hourly'
   
   const superintendentRequests = useMemo(() => mockMaintenanceRequests.filter(
     request => request.assignedTo === CURRENT_SUPER
@@ -36,14 +67,19 @@ const SuperintendentCalendar = () => {
       const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
       const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
       return eachDayOfInterval({ start: startDate, end: endDate });
+    } else if (calendarView === '3day') {
+      // For 3-day view, we show the selected date and the next 2 days
+      return eachDayOfInterval({
+        start: today,
+        end: add(today, { days: 2 })
+      });
     } else {
-      // For day/week views, we show the selected number of days
+      // For other views, we show the selected number of days
       const days = viewOptions[calendarView as keyof typeof viewOptions]?.days || 7;
-      const firstDayOfWeek = 0; // Sunday
       
-      // Adjust start date to begin on Sunday for week views
+      // For week views (5-day and 7-day), adjust to start on Sunday or Monday
       let startDate = today;
-      if (days > 1) {
+      if (days === 5 || days === 7) {
         const dayOfWeek = getDay(today);
         startDate = sub(today, { days: dayOfWeek });
       }
@@ -54,6 +90,19 @@ const SuperintendentCalendar = () => {
       });
     }
   }, [selectedDate, calendarView]);
+
+  // Get business hours for a specific day
+  const getBusinessHours = (day: Date) => {
+    const hours = [];
+    const startHour = BUSINESS_HOURS_START;
+    const endHour = BUSINESS_HOURS_END;
+    
+    for (let hour = startHour; hour <= endHour; hour++) {
+      hours.push(add(startOfDay(day), { hours: hour }));
+    }
+    
+    return hours;
+  };
 
   // Navigate to previous period
   const goToPrevious = () => {
@@ -83,7 +132,30 @@ const SuperintendentCalendar = () => {
   // Get events for a specific day
   const getEventsForDay = (day: Date) => {
     return superintendentRequests.filter(request => {
-      const requestDate = new Date(request.scheduledDate || request.dateSubmitted);
+      const requestDate = request.scheduledDate ? new Date(request.scheduledDate) : new Date(request.dateSubmitted);
+      return isSameDay(requestDate, day);
+    });
+  };
+
+  // Get events for a specific hour
+  const getEventsForHour = (day: Date, hour: number) => {
+    const hourStart = add(startOfDay(day), { hours: hour });
+    const hourEnd = add(hourStart, { hours: 1 });
+    
+    return superintendentRequests.filter(request => {
+      if (!request.scheduledDate) return false;
+      
+      let requestDate;
+      try {
+        requestDate = typeof request.scheduledDate === 'string' ? 
+          new Date(request.scheduledDate) : request.scheduledDate;
+      } catch(e) {
+        // If date parsing fails, use date submitted as fallback
+        requestDate = new Date(request.dateSubmitted);
+      }
+      
+      // If it's the same day, consider it for this hour slot
+      // In a real app, we'd have specific time slots
       return isSameDay(requestDate, day);
     });
   };
@@ -141,6 +213,18 @@ const SuperintendentCalendar = () => {
             <Button variant="outline" size="icon" onClick={goToNext}>
               <ChevronRight className="h-4 w-4" />
             </Button>
+            
+            {/* View toggle for list/hourly view */}
+            {calendarView !== 'month' && (
+              <ToggleGroup type="single" value={displayMode} onValueChange={(value) => value && setDisplayMode(value)}>
+                <ToggleGroupItem value="list" aria-label="List view">
+                  <List className="h-4 w-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="hourly" aria-label="Hourly view">
+                  <CalendarClock className="h-4 w-4" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -194,7 +278,7 @@ const SuperintendentCalendar = () => {
                 );
               })}
             </div>
-          ) : (
+          ) : displayMode === 'list' ? (
             <div>
               <div className="grid grid-cols-1 divide-y">
                 {dateRange.map((day, i) => {
@@ -251,7 +335,7 @@ const SuperintendentCalendar = () => {
                                   className="text-xs flex items-center gap-1"
                                 >
                                   <ImageIcon className="h-3.5 w-3.5" />
-                                  {`See picture${(event.images?.length || 0) <= 1 ? '' : 's'} (${event.images?.length || 0})`}
+                                  View images
                                 </Button>
                               </div>
                             </div>
@@ -262,6 +346,77 @@ const SuperintendentCalendar = () => {
                   );
                 })}
               </div>
+            </div>
+          ) : (
+            // Hourly planner view
+            <div className="grid grid-cols-1 divide-y">
+              {dateRange.map((day, dayIndex) => (
+                <div key={dayIndex} className="py-4">
+                  <div className={cn(
+                    "text-base font-semibold mb-2",
+                    isSameDay(day, new Date()) ? "text-primary" : ""
+                  )}>
+                    {format(day, 'EEEE, MMMM d')}
+                  </div>
+                  
+                  <div className="grid grid-cols-1 gap-1 mt-3">
+                    {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START + 1) }, (_, i) => {
+                      const hour = BUSINESS_HOURS_START + i;
+                      const events = getEventsForHour(day, hour);
+                      
+                      return (
+                        <div key={hour} className="flex border-l-2 border-gray-200 pl-2">
+                          <div className="w-16 text-sm text-muted-foreground pt-2">
+                            {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                          </div>
+                          <div className="flex-1 min-h-12 py-1">
+                            {events.length > 0 ? (
+                              <div className="space-y-1">
+                                {events.map((event) => (
+                                  <div 
+                                    key={event.id} 
+                                    className={cn(
+                                      "text-sm p-2 rounded",
+                                      event.priority === 'urgent' ? "bg-red-100 text-red-800" :
+                                      event.priority === 'high' ? "bg-orange-100 text-orange-800" :
+                                      "bg-blue-100 text-blue-800"
+                                    )}
+                                  >
+                                    <div className="font-medium">{event.issue}</div>
+                                    <div className="text-xs flex items-center gap-1 mt-1">
+                                      <MapPin className="h-3 w-3" />
+                                      {event.unit}
+                                    </div>
+                                    <div className="flex justify-between items-center mt-1">
+                                      <Badge 
+                                        variant={
+                                          event.priority === 'urgent' ? "destructive" :
+                                          event.priority === 'high' ? "default" : "secondary"
+                                        }
+                                        className="text-xs"
+                                      >
+                                        {event.priority}
+                                      </Badge>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="text-xs flex items-center h-6 px-2"
+                                      >
+                                        <ImageIcon className="h-3 w-3 mr-1" />
+                                        View images
+                                      </Button>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </CardContent>
