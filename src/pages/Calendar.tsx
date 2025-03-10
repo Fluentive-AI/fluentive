@@ -5,7 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { mockMaintenanceRequests } from '@/data/mockData';
 import { 
-  Calendar as CalendarIcon, 
   ChevronLeft, 
   ChevronRight, 
   Clock, 
@@ -27,7 +26,10 @@ import {
   isSameMonth, 
   getDay,
   setHours,
-  setMinutes
+  setMinutes,
+  addHours,
+  parseISO,
+  isWithinInterval
 } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -40,7 +42,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useNavigate } from 'react-router-dom';
 
 const viewOptions = {
   day: { label: "Day", days: 1 },
@@ -58,16 +59,21 @@ const updateMockRequestDates = () => {
   return mockMaintenanceRequests.map(request => {
     // Create a new date in March 2025
     const day = Math.floor(Math.random() * 31) + 1; // Random day in March
-    const hour = Math.floor(Math.random() * (BUSINESS_HOURS_END - BUSINESS_HOURS_START)) + BUSINESS_HOURS_START;
+    const startHour = Math.floor(Math.random() * (BUSINESS_HOURS_END - BUSINESS_HOURS_START - 1)) + BUSINESS_HOURS_START;
     const minute = Math.floor(Math.random() * 4) * 15; // 0, 15, 30, or 45 minutes
+    const duration = Math.floor(Math.random() * 3) + 1; // 1 to 3 hours
     
     const scheduledDate = new Date(2025, 2, day); // March is month 2 (0-indexed)
-    setHours(scheduledDate, hour);
+    setHours(scheduledDate, startHour);
     setMinutes(scheduledDate, minute);
+    
+    const endDate = new Date(scheduledDate);
+    endDate.setHours(endDate.getHours() + duration);
     
     return {
       ...request,
       scheduledDate: scheduledDate.toISOString(),
+      endDate: endDate.toISOString()
     };
   });
 };
@@ -77,7 +83,6 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(startOfToday());
   const [displayMode, setDisplayMode] = useState<string>('list'); // 'list' or 'hourly'
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const navigate = useNavigate();
   
   const maintenanceRequests = useMemo(() => updateMockRequestDates(), []);
 
@@ -163,17 +168,33 @@ const Calendar = () => {
     return maintenanceRequests.filter(request => {
       if (!request.scheduledDate) return false;
       
-      let requestDate;
+      let requestStartDate;
+      let requestEndDate;
+      
       try {
-        requestDate = typeof request.scheduledDate === 'string' ? 
+        requestStartDate = typeof request.scheduledDate === 'string' ? 
           new Date(request.scheduledDate) : request.scheduledDate;
+          
+        requestEndDate = request.endDate ? 
+          (typeof request.endDate === 'string' ? new Date(request.endDate) : request.endDate) :
+          addHours(requestStartDate, 1); // Default to 1 hour if no end date
       } catch(e) {
         // If date parsing fails, use date submitted as fallback
-        requestDate = new Date(request.dateSubmitted);
+        requestStartDate = new Date(request.dateSubmitted);
+        requestEndDate = addHours(requestStartDate, 1);
       }
       
-      // If it's the same day, consider it for this hour slot
-      return isSameDay(requestDate, day);
+      // Check if the event overlaps with this hour slot
+      return isSameDay(requestStartDate, day) && 
+             isWithinInterval(hourStart, { 
+               start: requestStartDate, 
+               end: requestEndDate 
+             }) || 
+             isWithinInterval(hourEnd, { 
+               start: requestStartDate, 
+               end: requestEndDate 
+             }) ||
+             (requestStartDate <= hourStart && requestEndDate >= hourEnd);
     });
   };
 
@@ -191,6 +212,570 @@ const Calendar = () => {
         return `${format(start, 'MMMM d')} - ${format(end, 'd, yyyy')}`;
       } else {
         return `${format(start, 'MMM d')} - ${format(end, 'MMM d, yyyy')}`;
+      }
+    }
+  };
+
+  // Render the calendar content based on the selected view and display mode
+  const renderCalendarContent = () => {
+    if (calendarView === 'month') {
+      return (
+        <div className="grid grid-cols-7 gap-1">
+          {/* Week day headers */}
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+            <div key={day} className="text-center p-2 font-medium text-muted-foreground">
+              {day}
+            </div>
+          ))}
+          
+          {/* Calendar days */}
+          {dateRange.map((day, i) => {
+            const events = getEventsForDay(day);
+            return (
+              <div 
+                key={i} 
+                className={cn(
+                  "min-h-24 border p-1 relative cursor-pointer",
+                  !isSameMonth(day, selectedDate) && "bg-muted/50 text-muted-foreground", 
+                  isSameDay(day, new Date()) && "border-primary"
+                )}
+                onClick={() => handleDayClick(day)}
+              >
+                <div className="text-right mb-1">{format(day, 'd')}</div>
+                <div className="space-y-1">
+                  {events.slice(0, 3).map((event) => (
+                    <div 
+                      key={event.id} 
+                      className={cn(
+                        "text-xs p-1 rounded truncate",
+                        event.priority === 'urgent' ? "bg-red-100 text-red-800" :
+                        event.priority === 'high' ? "bg-orange-100 text-orange-800" :
+                        "bg-blue-100 text-blue-800"
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedEvent(event);
+                      }}
+                    >
+                      {event.issue}
+                    </div>
+                  ))}
+                  {events.length > 3 && (
+                    <div className="text-xs text-center text-muted-foreground">
+                      + {events.length - 3} more
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    } else if (displayMode === 'list') {
+      // List view for day, 3-day, 5-day, and week views
+      if (['3day', '5day', 'week'].includes(calendarView)) {
+        // Side-by-side view for multiple days
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-4">
+            {dateRange.map((day, dayIndex) => {
+              const events = getEventsForDay(day);
+              const maxCols = calendarView === '3day' ? 3 : calendarView === '5day' ? 5 : 7;
+              
+              // Only show the columns we need based on the view
+              if (dayIndex >= maxCols) return null;
+              
+              return (
+                <div key={dayIndex} className="border rounded-lg p-3">
+                  <div className={cn(
+                    "text-base font-semibold mb-2 text-center",
+                    isSameDay(day, new Date()) ? "text-primary" : ""
+                  )}>
+                    {format(day, 'EEE, MMM d')}
+                  </div>
+                  
+                  {events.length === 0 ? (
+                    <div className="text-sm text-muted-foreground italic py-2 text-center">
+                      No tasks
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {events.map((event) => (
+                        <Dialog key={event.id}>
+                          <DialogTrigger asChild>
+                            <div className="bg-muted/40 rounded-lg p-2 text-sm cursor-pointer hover:bg-muted/60">
+                              <div className="flex justify-between items-start">
+                                <div className="font-medium truncate">{event.issue}</div>
+                                <Badge 
+                                  variant={
+                                    event.priority === 'urgent' ? "destructive" :
+                                    event.priority === 'high' ? "default" : "secondary"
+                                  }
+                                  className="ml-1 shrink-0"
+                                >
+                                  {event.priority}
+                                </Badge>
+                              </div>
+                              
+                              <div className="mt-1 space-y-1 text-xs text-muted-foreground">
+                                <div className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  <span>{format(new Date(event.scheduledDate), 'h:mm')} - {format(new Date(event.endDate), 'h:mm a')}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <MapPin className="h-3 w-3" />
+                                  <span className="truncate">{event.unit}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle className="flex justify-between items-center">
+                                <span>{event.issue}</span>
+                                <Badge 
+                                  variant={
+                                    event.priority === 'urgent' ? "destructive" :
+                                    event.priority === 'high' ? "default" : "secondary"
+                                  }
+                                >
+                                  {event.priority}
+                                </Badge>
+                              </DialogTitle>
+                              <DialogDescription className="text-lg">
+                                Maintenance Request Details
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 mt-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
+                                  <p>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Location</p>
+                                  <p>{event.unit} ({event.region} Region)</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Tenant</p>
+                                  <p>{event.tenantName}</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Status</p>
+                                  <p className="capitalize">{event.status}</p>
+                                </div>
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium text-muted-foreground">Description</p>
+                                <p>{event.description}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                                <p>{event.assignedTo || 'Unassigned'}</p>
+                              </div>
+                              <div className="flex justify-between mt-4">
+                                <Button variant="outline" className="flex items-center gap-1">
+                                  <ImageIcon className="h-4 w-4" />
+                                  View Images
+                                </Button>
+                                <Button className="flex items-center gap-1">
+                                  <Info className="h-4 w-4" />
+                                  Full Details
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        );
+      } else {
+        // Single day list view
+        return (
+          <div className="grid grid-cols-1 divide-y">
+            {dateRange.map((day, i) => {
+              const events = getEventsForDay(day);
+              return (
+                <div key={i} className="py-4">
+                  <div className={cn(
+                    "text-base font-semibold mb-2",
+                    isSameDay(day, new Date()) ? "text-primary" : ""
+                  )}>
+                    {format(day, 'EEEE, MMMM d')}
+                  </div>
+                  
+                  {events.length === 0 ? (
+                    <div className="text-sm text-muted-foreground italic py-2">
+                      No maintenance tasks scheduled
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {events.map((event) => (
+                        <Dialog key={event.id}>
+                          <DialogTrigger asChild>
+                            <div className="bg-muted/40 rounded-lg p-3 text-sm cursor-pointer hover:bg-muted/60">
+                              <div className="flex justify-between items-start">
+                                <div className="font-medium">{event.issue}</div>
+                                <Badge 
+                                  variant={
+                                    event.priority === 'urgent' ? "destructive" :
+                                    event.priority === 'high' ? "default" : "secondary"
+                                  }
+                                  className="ml-2"
+                                >
+                                  {event.priority}
+                                </Badge>
+                              </div>
+                              
+                              <div className="mt-2 space-y-1 text-muted-foreground">
+                                <div className="flex items-center gap-1">
+                                  <Clock className="h-3.5 w-3.5" />
+                                  <span>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <MapPin className="h-3.5 w-3.5" />
+                                  <span>{event.unit}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Wrench className="h-3.5 w-3.5" />
+                                  <span>{event.description}</span>
+                                </div>
+                              </div>
+                              
+                              <div className="flex justify-between items-center mt-2">
+                                <div className="text-xs text-muted-foreground">
+                                  Assigned to: {event.assignedTo || 'Unassigned'}
+                                </div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="text-xs flex items-center gap-1"
+                                >
+                                  <ImageIcon className="h-3.5 w-3.5" />
+                                  View images
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle className="flex justify-between items-center">
+                                <span>{event.issue}</span>
+                                <Badge 
+                                  variant={
+                                    event.priority === 'urgent' ? "destructive" :
+                                    event.priority === 'high' ? "default" : "secondary"
+                                  }
+                                >
+                                  {event.priority}
+                                </Badge>
+                              </DialogTitle>
+                              <DialogDescription className="text-lg">
+                                Maintenance Request Details
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 mt-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
+                                  <p>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Location</p>
+                                  <p>{event.unit} ({event.region} Region)</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Tenant</p>
+                                  <p>{event.tenantName}</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-muted-foreground">Status</p>
+                                  <p className="capitalize">{event.status}</p>
+                                </div>
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium text-muted-foreground">Description</p>
+                                <p>{event.description}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                                <p>{event.assignedTo || 'Unassigned'}</p>
+                              </div>
+                              <div className="flex justify-between mt-4">
+                                <Button variant="outline" className="flex items-center gap-1">
+                                  <ImageIcon className="h-4 w-4" />
+                                  View Images
+                                </Button>
+                                <Button className="flex items-center gap-1">
+                                  <Info className="h-4 w-4" />
+                                  Full Details
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        );
+      }
+    } else {
+      // Hourly planner view
+      if (['3day', '5day', 'week'].includes(calendarView)) {
+        // Side-by-side hourly view for multiple days
+        const maxCols = calendarView === '3day' ? 3 : calendarView === '5day' ? 5 : 7;
+        const visibleDays = dateRange.slice(0, maxCols);
+        
+        return (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-4">
+            {visibleDays.map((day, dayIndex) => (
+              <div key={dayIndex} className="border rounded-lg p-2 overflow-hidden h-[600px]">
+                <div className={cn(
+                  "text-base font-semibold mb-2 text-center sticky top-0 bg-background pb-1",
+                  isSameDay(day, new Date()) ? "text-primary" : ""
+                )}>
+                  {format(day, 'EEE, MMM d')}
+                </div>
+                
+                <div className="space-y-0 overflow-auto h-[550px] pb-4">
+                  {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START + 1) }, (_, i) => {
+                    const hour = BUSINESS_HOURS_START + i;
+                    const events = getEventsForHour(day, hour);
+                    
+                    return (
+                      <div key={hour} className="flex border-l-2 border-gray-200 pl-2">
+                        <div className="w-12 text-xs text-muted-foreground pt-2 shrink-0">
+                          {hour === 12 ? '12p' : hour > 12 ? `${hour - 12}p` : `${hour}a`}
+                        </div>
+                        <div className="flex-1 min-h-12 py-1 border-b border-gray-200 border-opacity-30">
+                          {events.length > 0 ? (
+                            <div className="space-y-1">
+                              {events.map((event) => (
+                                <Dialog key={event.id}>
+                                  <DialogTrigger asChild>
+                                    <div 
+                                      className={cn(
+                                        "text-xs p-1 rounded cursor-pointer",
+                                        event.priority === 'urgent' ? "bg-red-100 text-red-800" :
+                                        event.priority === 'high' ? "bg-orange-100 text-orange-800" :
+                                        "bg-blue-100 text-blue-800"
+                                      )}
+                                    >
+                                      <div className="font-medium truncate">{event.issue}</div>
+                                      <div className="flex items-center gap-1 mt-0.5">
+                                        <Clock className="h-2.5 w-2.5" />
+                                        <span>{format(new Date(event.scheduledDate), 'h:mm')} - {format(new Date(event.endDate), 'h:mm')}</span>
+                                      </div>
+                                    </div>
+                                  </DialogTrigger>
+                                  <DialogContent>
+                                    <DialogHeader>
+                                      <DialogTitle className="flex justify-between items-center">
+                                        <span>{event.issue}</span>
+                                        <Badge 
+                                          variant={
+                                            event.priority === 'urgent' ? "destructive" :
+                                            event.priority === 'high' ? "default" : "secondary"
+                                          }
+                                        >
+                                          {event.priority}
+                                        </Badge>
+                                      </DialogTitle>
+                                      <DialogDescription className="text-lg">
+                                        Maintenance Request Details
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="space-y-4 mt-4">
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
+                                          <p>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Location</p>
+                                          <p>{event.unit} ({event.region} Region)</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Tenant</p>
+                                          <p>{event.tenantName}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Status</p>
+                                          <p className="capitalize">{event.status}</p>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium text-muted-foreground">Description</p>
+                                        <p>{event.description}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                                        <p>{event.assignedTo || 'Unassigned'}</p>
+                                      </div>
+                                      <div className="flex justify-between mt-4">
+                                        <Button variant="outline" className="flex items-center gap-1">
+                                          <ImageIcon className="h-4 w-4" />
+                                          View Images
+                                        </Button>
+                                        <Button className="flex items-center gap-1">
+                                          <Info className="h-4 w-4" />
+                                          Full Details
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      } else {
+        // Single day hourly view (original implementation)
+        return (
+          <div className="grid grid-cols-1 divide-y">
+            {dateRange.map((day, dayIndex) => (
+              <div key={dayIndex} className="py-4">
+                <div className={cn(
+                  "text-base font-semibold mb-2",
+                  isSameDay(day, new Date()) ? "text-primary" : ""
+                )}>
+                  {format(day, 'EEEE, MMMM d')}
+                </div>
+                
+                <div className="grid grid-cols-1 gap-0 mt-3">
+                  {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START + 1) }, (_, i) => {
+                    const hour = BUSINESS_HOURS_START + i;
+                    const events = getEventsForHour(day, hour);
+                    
+                    return (
+                      <div key={hour} className="flex border-l-2 border-gray-200 pl-2">
+                        <div className="w-16 text-sm text-muted-foreground pt-2">
+                          {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                        </div>
+                        <div className="flex-1 min-h-12 py-1 border-b border-gray-200">
+                          {events.length > 0 ? (
+                            <div className="space-y-1">
+                              {events.map((event) => (
+                                <Dialog key={event.id}>
+                                  <DialogTrigger asChild>
+                                    <div 
+                                      className={cn(
+                                        "text-sm p-2 rounded cursor-pointer",
+                                        event.priority === 'urgent' ? "bg-red-100 text-red-800" :
+                                        event.priority === 'high' ? "bg-orange-100 text-orange-800" :
+                                        "bg-blue-100 text-blue-800"
+                                      )}
+                                    >
+                                      <div className="font-medium">{event.issue}</div>
+                                      <div className="text-xs flex items-center gap-1 mt-1">
+                                        <Clock className="h-3 w-3" />
+                                        <span>{format(new Date(event.scheduledDate), 'h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</span>
+                                      </div>
+                                      <div className="text-xs flex items-center gap-1 mt-1">
+                                        <MapPin className="h-3 w-3" />
+                                        {event.unit}
+                                      </div>
+                                      <div className="flex justify-between items-center mt-1">
+                                        <Badge 
+                                          variant={
+                                            event.priority === 'urgent' ? "destructive" :
+                                            event.priority === 'high' ? "default" : "secondary"
+                                          }
+                                          className="text-xs"
+                                        >
+                                          {event.priority}
+                                        </Badge>
+                                        <div className="text-xs">
+                                          {event.assignedTo || 'Unassigned'}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </DialogTrigger>
+                                  <DialogContent>
+                                    <DialogHeader>
+                                      <DialogTitle className="flex justify-between items-center">
+                                        <span>{event.issue}</span>
+                                        <Badge 
+                                          variant={
+                                            event.priority === 'urgent' ? "destructive" :
+                                            event.priority === 'high' ? "default" : "secondary"
+                                          }
+                                        >
+                                          {event.priority}
+                                        </Badge>
+                                      </DialogTitle>
+                                      <DialogDescription className="text-lg">
+                                        Maintenance Request Details
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="space-y-4 mt-4">
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
+                                          <p>{format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(event.endDate), 'h:mm a')}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Location</p>
+                                          <p>{event.unit} ({event.region} Region)</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Tenant</p>
+                                          <p>{event.tenantName}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Status</p>
+                                          <p className="capitalize">{event.status}</p>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium text-muted-foreground">Description</p>
+                                        <p>{event.description}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                                        <p>{event.assignedTo || 'Unassigned'}</p>
+                                      </div>
+                                      <div className="flex justify-between mt-4">
+                                        <Button variant="outline" className="flex items-center gap-1">
+                                          <ImageIcon className="h-4 w-4" />
+                                          View Images
+                                        </Button>
+                                        <Button className="flex items-center gap-1">
+                                          <Info className="h-4 w-4" />
+                                          Full Details
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
       }
     }
   };
@@ -249,316 +834,7 @@ const Calendar = () => {
             <h3 className="text-lg font-semibold">{formatDateRangeHeader()}</h3>
           </div>
           
-          {calendarView === 'month' ? (
-            <div className="grid grid-cols-7 gap-1">
-              {/* Week day headers */}
-              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                <div key={day} className="text-center p-2 font-medium text-muted-foreground">
-                  {day}
-                </div>
-              ))}
-              
-              {/* Calendar days */}
-              {dateRange.map((day, i) => {
-                const events = getEventsForDay(day);
-                return (
-                  <div 
-                    key={i} 
-                    className={cn(
-                      "min-h-24 border p-1 relative cursor-pointer",
-                      !isSameMonth(day, selectedDate) && "bg-muted/50 text-muted-foreground", 
-                      isSameDay(day, new Date()) && "border-primary"
-                    )}
-                    onClick={() => handleDayClick(day)}
-                  >
-                    <div className="text-right mb-1">{format(day, 'd')}</div>
-                    <div className="space-y-1">
-                      {events.slice(0, 3).map((event) => (
-                        <div 
-                          key={event.id} 
-                          className={cn(
-                            "text-xs p-1 rounded truncate",
-                            event.priority === 'urgent' ? "bg-red-100 text-red-800" :
-                            event.priority === 'high' ? "bg-orange-100 text-orange-800" :
-                            "bg-blue-100 text-blue-800"
-                          )}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedEvent(event);
-                          }}
-                        >
-                          {event.issue}
-                        </div>
-                      ))}
-                      {events.length > 3 && (
-                        <div className="text-xs text-center text-muted-foreground">
-                          + {events.length - 3} more
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : displayMode === 'list' ? (
-            <div>
-              <div className="grid grid-cols-1 divide-y">
-                {dateRange.map((day, i) => {
-                  const events = getEventsForDay(day);
-                  return (
-                    <div key={i} className="py-4">
-                      <div className={cn(
-                        "text-base font-semibold mb-2",
-                        isSameDay(day, new Date()) ? "text-primary" : ""
-                      )}>
-                        {format(day, 'EEEE, MMMM d')}
-                      </div>
-                      
-                      {events.length === 0 ? (
-                        <div className="text-sm text-muted-foreground italic py-2">
-                          No maintenance tasks scheduled
-                        </div>
-                      ) : (
-                        <div className="space-y-3">
-                          {events.map((event) => (
-                            <Dialog key={event.id}>
-                              <DialogTrigger asChild>
-                                <div className="bg-muted/40 rounded-lg p-3 text-sm cursor-pointer hover:bg-muted/60">
-                                  <div className="flex justify-between items-start">
-                                    <div className="font-medium">{event.issue}</div>
-                                    <Badge 
-                                      variant={
-                                        event.priority === 'urgent' ? "destructive" :
-                                        event.priority === 'high' ? "default" : "secondary"
-                                      }
-                                      className="ml-2"
-                                    >
-                                      {event.priority}
-                                    </Badge>
-                                  </div>
-                                  
-                                  <div className="mt-2 space-y-1 text-muted-foreground">
-                                    <div className="flex items-center gap-1">
-                                      <Clock className="h-3.5 w-3.5" />
-                                      <span>{event.scheduledDate ? format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a') : 'Not scheduled'}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                      <MapPin className="h-3.5 w-3.5" />
-                                      <span>{event.unit}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                      <Wrench className="h-3.5 w-3.5" />
-                                      <span>{event.description}</span>
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="flex justify-between items-center mt-2">
-                                    <div className="text-xs text-muted-foreground">
-                                      Assigned to: {event.assignedTo || 'Unassigned'}
-                                    </div>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="sm" 
-                                      className="text-xs flex items-center gap-1"
-                                    >
-                                      <ImageIcon className="h-3.5 w-3.5" />
-                                      View images
-                                    </Button>
-                                  </div>
-                                </div>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <DialogHeader>
-                                  <DialogTitle className="flex justify-between items-center">
-                                    <span>{event.issue}</span>
-                                    <Badge 
-                                      variant={
-                                        event.priority === 'urgent' ? "destructive" :
-                                        event.priority === 'high' ? "default" : "secondary"
-                                      }
-                                    >
-                                      {event.priority}
-                                    </Badge>
-                                  </DialogTitle>
-                                  <DialogDescription className="text-lg">
-                                    Maintenance Request Details
-                                  </DialogDescription>
-                                </DialogHeader>
-                                <div className="space-y-4 mt-4">
-                                  <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                      <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
-                                      <p>{event.scheduledDate ? format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a') : 'Not scheduled'}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm font-medium text-muted-foreground">Location</p>
-                                      <p>{event.unit} ({event.region} Region)</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm font-medium text-muted-foreground">Tenant</p>
-                                      <p>{event.tenantName}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm font-medium text-muted-foreground">Status</p>
-                                      <p className="capitalize">{event.status}</p>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <p className="text-sm font-medium text-muted-foreground">Description</p>
-                                    <p>{event.description}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
-                                    <p>{event.assignedTo || 'Unassigned'}</p>
-                                  </div>
-                                  <div className="flex justify-between mt-4">
-                                    <Button variant="outline" className="flex items-center gap-1">
-                                      <ImageIcon className="h-4 w-4" />
-                                      View Images
-                                    </Button>
-                                    <Button className="flex items-center gap-1">
-                                      <Info className="h-4 w-4" />
-                                      Full Details
-                                    </Button>
-                                  </div>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            // Hourly planner view
-            <div className="grid grid-cols-1 divide-y">
-              {dateRange.map((day, dayIndex) => (
-                <div key={dayIndex} className="py-4">
-                  <div className={cn(
-                    "text-base font-semibold mb-2",
-                    isSameDay(day, new Date()) ? "text-primary" : ""
-                  )}>
-                    {format(day, 'EEEE, MMMM d')}
-                  </div>
-                  
-                  <div className="grid grid-cols-1 gap-0 mt-3">
-                    {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START + 1) }, (_, i) => {
-                      const hour = BUSINESS_HOURS_START + i;
-                      const events = getEventsForHour(day, hour);
-                      
-                      return (
-                        <div key={hour} className="flex border-l-2 border-gray-200 pl-2">
-                          <div className="w-16 text-sm text-muted-foreground pt-2">
-                            {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
-                          </div>
-                          <div className="flex-1 min-h-12 py-1 border-b border-gray-200 border-opacity-30">
-                            {events.length > 0 ? (
-                              <div className="space-y-1">
-                                {events.map((event) => (
-                                  <Dialog key={event.id}>
-                                    <DialogTrigger asChild>
-                                      <div 
-                                        key={event.id} 
-                                        className={cn(
-                                          "text-sm p-2 rounded cursor-pointer",
-                                          event.priority === 'urgent' ? "bg-red-100 text-red-800" :
-                                          event.priority === 'high' ? "bg-orange-100 text-orange-800" :
-                                          "bg-blue-100 text-blue-800"
-                                        )}
-                                      >
-                                        <div className="font-medium">{event.issue}</div>
-                                        <div className="text-xs flex items-center gap-1 mt-1">
-                                          <MapPin className="h-3 w-3" />
-                                          {event.unit}
-                                        </div>
-                                        <div className="flex justify-between items-center mt-1">
-                                          <Badge 
-                                            variant={
-                                              event.priority === 'urgent' ? "destructive" :
-                                              event.priority === 'high' ? "default" : "secondary"
-                                            }
-                                            className="text-xs"
-                                          >
-                                            {event.priority}
-                                          </Badge>
-                                          <div className="text-xs">
-                                            {event.assignedTo || 'Unassigned'}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </DialogTrigger>
-                                    <DialogContent>
-                                      <DialogHeader>
-                                        <DialogTitle className="flex justify-between items-center">
-                                          <span>{event.issue}</span>
-                                          <Badge 
-                                            variant={
-                                              event.priority === 'urgent' ? "destructive" :
-                                              event.priority === 'high' ? "default" : "secondary"
-                                            }
-                                          >
-                                            {event.priority}
-                                          </Badge>
-                                        </DialogTitle>
-                                        <DialogDescription className="text-lg">
-                                          Maintenance Request Details
-                                        </DialogDescription>
-                                      </DialogHeader>
-                                      <div className="space-y-4 mt-4">
-                                        <div className="grid grid-cols-2 gap-4">
-                                          <div>
-                                            <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
-                                            <p>{event.scheduledDate ? format(new Date(event.scheduledDate), 'MMM d, yyyy h:mm a') : 'Not scheduled'}</p>
-                                          </div>
-                                          <div>
-                                            <p className="text-sm font-medium text-muted-foreground">Location</p>
-                                            <p>{event.unit} ({event.region} Region)</p>
-                                          </div>
-                                          <div>
-                                            <p className="text-sm font-medium text-muted-foreground">Tenant</p>
-                                            <p>{event.tenantName}</p>
-                                          </div>
-                                          <div>
-                                            <p className="text-sm font-medium text-muted-foreground">Status</p>
-                                            <p className="capitalize">{event.status}</p>
-                                          </div>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Description</p>
-                                          <p>{event.description}</p>
-                                        </div>
-                                        <div>
-                                          <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
-                                          <p>{event.assignedTo || 'Unassigned'}</p>
-                                        </div>
-                                        <div className="flex justify-between mt-4">
-                                          <Button variant="outline" className="flex items-center gap-1">
-                                            <ImageIcon className="h-4 w-4" />
-                                            View Images
-                                          </Button>
-                                          <Button className="flex items-center gap-1">
-                                            <Info className="h-4 w-4" />
-                                            Full Details
-                                          </Button>
-                                        </div>
-                                      </div>
-                                    </DialogContent>
-                                  </Dialog>
-                                ))}
-                              </div>
-                            ) : null}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {renderCalendarContent()}
         </CardContent>
       </Card>
       
@@ -586,7 +862,7 @@ const Calendar = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
-                  <p>{selectedEvent.scheduledDate ? format(new Date(selectedEvent.scheduledDate), 'MMM d, yyyy h:mm a') : 'Not scheduled'}</p>
+                  <p>{format(new Date(selectedEvent.scheduledDate), 'MMM d, yyyy h:mm a')} - {format(new Date(selectedEvent.endDate), 'h:mm a')}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Location</p>
