@@ -45,6 +45,7 @@ const App = () => (
           <Route path="/super" element={<SuperintendentLayout><SuperintendentDashboard /></SuperintendentLayout>} />
           <Route path="/super/calendar" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
           <Route path="/super/map" element={<SuperintendentLayout><MapView /></SuperintendentLayout>} />
+          <Route path="/super/settings" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>

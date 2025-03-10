@@ -42,12 +42,12 @@ const SuperintendentSidebar = () => {
       
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         <NavItem to="/super" icon={<Wrench className="h-5 w-5" />} label="Work Orders" />
-        <NavItem to="/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
-        <NavItem to="/map" icon={<Map className="h-5 w-5" />} label="Map View" />
+        <NavItem to="/super/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
+        <NavItem to="/super/map" icon={<Map className="h-5 w-5" />} label="Map View" />
       </nav>
       
       <div className="p-4 border-t border-sidebar-border">
-        <NavItem to="/settings" icon={<Settings className="h-5 w-5" />} label="Settings" />
+        <NavItem to="/super/settings" icon={<Settings className="h-5 w-5" />} label="Settings" />
       </div>
     </div>
   );
