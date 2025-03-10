@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import LandingPage from "./pages/LandingPage";
 import MapView from "./pages/MapView";
 import SuperintendentDashboard from "./pages/SuperintendentDashboard";
+import SuperintendentCalendar from "./pages/SuperintendentCalendar";
 
 const queryClient = new QueryClient();
 
@@ -43,7 +44,7 @@ const App = () => (
           
           {/* Superintendent Routes */}
           <Route path="/super" element={<SuperintendentLayout><SuperintendentDashboard /></SuperintendentLayout>} />
-          <Route path="/super/calendar" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
+          <Route path="/super/calendar" element={<SuperintendentLayout><SuperintendentCalendar /></SuperintendentLayout>} />
           <Route path="/super/map" element={<SuperintendentLayout><MapView /></SuperintendentLayout>} />
           <Route path="/super/settings" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
           
