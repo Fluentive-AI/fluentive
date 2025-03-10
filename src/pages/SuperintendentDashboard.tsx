@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,14 +7,14 @@ import { mockMaintenanceRequests } from '@/data/mockData';
 import MaintenanceTable from '@/components/maintenance/MaintenanceTable';
 import { useNavigate } from 'react-router-dom';
 
-// In a real application, this would come from authentication
-const CURRENT_SUPER = "John Doe";
+// Changed superintendent name
+const CURRENT_SUPER = "Mike Johnson";
 
 const SuperintendentDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>('workorders');
   
-  // Filter maintenance requests for the current superintendent
+  // Filter maintenance requests for Mike Johnson
   const superintendentRequests = mockMaintenanceRequests.filter(
     request => request.assignedTo === CURRENT_SUPER
   );
@@ -29,11 +28,11 @@ const SuperintendentDashboard = () => {
         </div>
         
         <div className="flex gap-3">
-          <Button variant="outline" size="sm" onClick={() => navigate('/calendar')}>
+          <Button variant="outline" size="sm" onClick={() => navigate('/super/calendar')}>
             <Calendar className="h-4 w-4 mr-2" />
             Calendar View
           </Button>
-          <Button variant="outline" size="sm" onClick={() => navigate('/map')}>
+          <Button variant="outline" size="sm" onClick={() => navigate('/super/map')}>
             <Map className="h-4 w-4 mr-2" />
             Map View
           </Button>
@@ -65,7 +64,7 @@ const SuperintendentDashboard = () => {
             </CardHeader>
             <CardContent>
               <MaintenanceTable 
-                requests={superintendentRequests.filter(r => r.status === 'scheduled')} 
+                requests={superintendentRequests.filter(r => r.status !== 'completed')} 
               />
             </CardContent>
           </Card>

@@ -1,0 +1,6 @@
+pnpm i
+pnpm add -g pnpm
+pnpm run dev
+pnpm run dev
+pnpm run dev
+pnpm run dev
