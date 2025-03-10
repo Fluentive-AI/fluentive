@@ -42,13 +42,21 @@ const LandingPage = () => {
           >
             Superintendent Access
           </Button>
+          
+          <Button 
+            size="lg" 
+            variant="secondary"
+            className="text-lg px-8 py-6 h-auto"
+            onClick={() => navigate('/tenant')}
+          >
+            Tenant Interface Preview
+          </Button>
         </div>
         
         <div className="mt-32">
           <p className="text-2xl font-medium text-gray-700 mb-8">
             Demo For Brandywine Homes USA and Lafayette RE
           </p>
-
         </div>
       </main>
     </div>

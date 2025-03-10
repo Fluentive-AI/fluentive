@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +19,10 @@ import SuperintendentCalendar from "./pages/SuperintendentCalendar";
 import SuperintendentMap from "./pages/SuperintendentMap";
 import Calendar from "./pages/Calendar";
 import SuperintendentDashboard from "./pages/SuperintendentDashboard";
+import TenantLayout from "./components/layout/TenantLayout";
+import TenantLeasing from "./pages/tenant/TenantLeasing";
+import TenantOperations from "./pages/tenant/TenantOperations";
+import TenantMaintenance from "./pages/tenant/TenantMaintenance";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +53,24 @@ const App = () => (
           <Route path="/super/calendar" element={<SuperintendentLayout><SuperintendentCalendar /></SuperintendentLayout>} />
           <Route path="/super/map" element={<SuperintendentLayout><SuperintendentMap /></SuperintendentLayout>} />
           <Route path="/super/settings" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
+          
+          {/* Tenant Interface Routes */}
+          <Route path="/tenant" element={<TenantLayout><TenantLeasing scenario="lead" /></TenantLayout>} />
+          <Route path="/tenant/leasing/lead" element={<TenantLayout><TenantLeasing scenario="lead" /></TenantLayout>} />
+          <Route path="/tenant/leasing/application" element={<TenantLayout><TenantLeasing scenario="application" /></TenantLayout>} />
+          <Route path="/tenant/leasing/signing" element={<TenantLayout><TenantLeasing scenario="signing" /></TenantLayout>} />
+          <Route path="/tenant/leasing/premove" element={<TenantLayout><TenantLeasing scenario="premove" /></TenantLayout>} />
+          <Route path="/tenant/leasing/onboarding" element={<TenantLayout><TenantLeasing scenario="onboarding" /></TenantLayout>} />
+          
+          <Route path="/tenant/operations/rent" element={<TenantLayout><TenantOperations scenario="rent" /></TenantLayout>} />
+          <Route path="/tenant/operations/renewal" element={<TenantLayout><TenantOperations scenario="renewal" /></TenantLayout>} />
+          <Route path="/tenant/operations/moveout-notice" element={<TenantLayout><TenantOperations scenario="moveout-notice" /></TenantLayout>} />
+          <Route path="/tenant/operations/moveout-coordination" element={<TenantLayout><TenantOperations scenario="moveout-coordination" /></TenantLayout>} />
+          
+          <Route path="/tenant/maintenance/request" element={<TenantLayout><TenantMaintenance scenario="request" /></TenantLayout>} />
+          <Route path="/tenant/maintenance/workorder" element={<TenantLayout><TenantMaintenance scenario="workorder" /></TenantLayout>} />
+          <Route path="/tenant/maintenance/scheduling" element={<TenantLayout><TenantMaintenance scenario="scheduling" /></TenantLayout>} />
+          <Route path="/tenant/maintenance/relationship" element={<TenantLayout><TenantMaintenance scenario="relationship" /></TenantLayout>} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>
