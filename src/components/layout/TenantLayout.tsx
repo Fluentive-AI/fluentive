@@ -1,10 +1,9 @@
-
 import React, { ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { 
-  Home, Phone, MessageSquare, Settings, ChevronLeft,
+  Home, Settings, ChevronLeft,
   BookOpen, Building, Wrench
 } from 'lucide-react';
 import TenantVoiceAgent from '../tenant/TenantVoiceAgent';
@@ -175,7 +174,7 @@ const TenantLayout = ({ children }: TenantLayoutProps) => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* iPhone Preview */}
+            {/* Phone Preview */}
             <div className="lg:col-span-1">
               <div className="relative mx-auto" style={{ width: "300px", height: "600px" }}>
                 <div className="absolute inset-0 bg-black rounded-[40px] shadow-lg"></div>
@@ -183,11 +182,11 @@ const TenantLayout = ({ children }: TenantLayoutProps) => {
                   <div className="h-6 bg-black flex justify-center items-end">
                     <div className="w-1/3 h-4 bg-black rounded-b-xl"></div>
                   </div>
-                  <div className="flex-1 bg-gray-100 overflow-auto p-0">
+                  <div className="flex-1 overflow-hidden">
                     <PhoneInterface />
                   </div>
-                  <div className="h-12 bg-white border-t flex justify-center items-center">
-                    <div className="w-1/3 h-1 bg-black rounded-full"></div>
+                  <div className="h-12 bg-black flex justify-center items-center">
+                    <div className="w-1/3 h-1 bg-white rounded-full"></div>
                   </div>
                 </div>
               </div>
