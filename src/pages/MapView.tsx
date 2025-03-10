@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, MapPin } from 'lucide-react';
+import { ExternalLink, MapPin, InfoIcon } from 'lucide-react';
 import { mockMaintenanceRequests } from '@/data/mockData';
 import { useLocation } from 'react-router-dom';
 import MaintenanceTable from '@/components/maintenance/MaintenanceTable';
@@ -20,23 +20,6 @@ const MapView = () => {
   const filteredRequests = isSuperintendentView
     ? mockMaintenanceRequests.filter(request => request.assignedTo === CURRENT_SUPER)
     : mockMaintenanceRequests;
-
-  useEffect(() => {
-    // A placeholder for the map implementation
-    // In a real implementation, we would:
-    // 1. Create a mapbox map
-    // 2. Add markers for each maintenance request
-    // 3. Add click handlers to the markers
-    const mapContainer = mapContainerRef.current;
-    
-    if (mapContainer) {
-      mapContainer.innerHTML = '<div class="flex justify-center items-center h-full bg-muted/50 rounded-lg border"><p class="text-muted-foreground">Interactive map would be displayed here<br/>(requires Mapbox integration)</p></div>';
-    }
-    
-    return () => {
-      // Clean up map resources
-    };
-  }, [filteredRequests]);
 
   return (
     <div>
@@ -59,7 +42,17 @@ const MapView = () => {
       </div>
       
       <div className="mb-6">
-        <div ref={mapContainerRef} className="w-full h-[400px] rounded-lg border shadow-sm"></div>
+        <Card>
+          <CardContent className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <InfoIcon className="h-12 w-12 mb-4 mx-auto text-brand-300" />
+              <h2 className="text-xl font-semibold mb-2">Coming Soon</h2>
+              <p className="text-muted-foreground max-w-md">
+                The Map View page is under development. Check back later for updates.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
       
       <Card>

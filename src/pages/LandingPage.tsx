@@ -15,13 +15,13 @@ const LandingPage = () => {
       
       <main className="flex-1 flex flex-col items-center justify-center text-center px-4 max-w-5xl mx-auto">
         <h1 className="text-6xl font-bold tracking-tight mb-8">
-          AI-Native Property
+          AI Agents for 
           <br />
-          Management
+          Property Management
         </h1>
         
         <p className="text-xl text-gray-600 mb-12 max-w-3xl">
-          Avallon turns complex property operations into automated
+          We turns complex property operations into automated
           resolutions by supercharging property manager productivity.
         </p>
         
@@ -45,16 +45,10 @@ const LandingPage = () => {
         </div>
         
         <div className="mt-32">
-          <p className="text-lg font-medium text-gray-700 mb-8">
-            Built by AI engineers and industry professionals from:
+          <p className="text-2xl font-medium text-gray-700 mb-8">
+            Demo For Brandywine Homes USA and Lafayette RE
           </p>
-          
-          <div className="flex flex-wrap justify-center gap-12 items-center opacity-80">
-            <div className="h-12 w-36 bg-gray-200 rounded flex items-center justify-center">Company 1</div>
-            <div className="h-12 w-36 bg-gray-200 rounded flex items-center justify-center">Company 2</div>
-            <div className="h-12 w-36 bg-gray-200 rounded flex items-center justify-center">Company 3</div>
-            <div className="h-12 w-36 bg-gray-200 rounded flex items-center justify-center">Company 4</div>
-          </div>
+
         </div>
       </main>
     </div>

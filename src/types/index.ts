@@ -1,4 +1,3 @@
-
 export type Status = 
   | 'pending' 
   | 'active' 
@@ -70,7 +69,8 @@ export interface MaintenanceRequest {
   priority: 'urgent' | 'normal' | 'low';
   assignedTo: string | null;
   scheduledDate: string | null;
-  region: string;
+  endDate: string | null;
+  community: string;
 }
 
 export interface AIConversation {
