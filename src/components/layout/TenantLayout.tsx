@@ -178,15 +178,9 @@ const TenantLayout = ({ children }: TenantLayoutProps) => {
             <div className="lg:col-span-1">
               <div className="relative mx-auto" style={{ width: "300px", height: "600px" }}>
                 <div className="absolute inset-0 bg-black rounded-[40px] shadow-lg"></div>
-                <div className="absolute inset-2 bg-white rounded-[32px] overflow-hidden flex flex-col">
-                  <div className="h-6 bg-black flex justify-center items-end">
-                    <div className="w-1/3 h-4 bg-black rounded-b-xl"></div>
-                  </div>
-                  <div className="flex-1 overflow-hidden">
+                <div className="absolute inset-2 bg-white rounded-[32px] overflow-hidden">
+                  <div className="h-full overflow-hidden">
                     <PhoneInterface />
-                  </div>
-                  <div className="h-12 bg-black flex justify-center items-center">
-                    <div className="w-1/3 h-1 bg-white rounded-full"></div>
                   </div>
                 </div>
               </div>
