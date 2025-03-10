@@ -18,7 +18,7 @@ const TenantVoiceAgent = () => {
   useEffect(() => {
     // Reset conversation when route changes
     setConversation([
-      { role: 'agent', text: 'Hello! How can I assist you today?' }
+      { role: 'agent', text: 'Hello! I\'m your Property AI assistant. How can I help you today?' }
     ]);
   }, [location.pathname]);
   
@@ -33,7 +33,7 @@ const TenantVoiceAgent = () => {
       const scenario = getSoundWaveScenario();
       setConversation(prev => [...prev, { 
         role: 'agent', 
-        text: `[AI Agent Response for ${scenario}]: I understand your question. Let me help you with that.` 
+        text: `I understand you're inquiring about ${scenario}. Let me help you with that. How would you like to proceed?` 
       }]);
     }, 1000);
     
@@ -48,7 +48,7 @@ const TenantVoiceAgent = () => {
       setTimeout(() => {
         setConversation(prev => [...prev, { 
           role: 'user', 
-          text: 'Can you tell me more about this?' 
+          text: 'I\'d like to know more about the services you provide.' 
         }]);
         
         // Simulate agent response
@@ -56,7 +56,7 @@ const TenantVoiceAgent = () => {
           const scenario = getSoundWaveScenario();
           setConversation(prev => [...prev, { 
             role: 'agent', 
-            text: `[AI Agent Response for ${scenario}]: Of course! I'd be happy to provide more information.` 
+            text: `As your Property AI assistant, I can help with ${scenario} and other property management needs. Would you like me to explain our specific services in this area?` 
           }]);
           setIsListening(false);
         }, 1500);
@@ -69,7 +69,7 @@ const TenantVoiceAgent = () => {
     if (path.includes('leasing/lead')) return 'Lead Interaction';
     if (path.includes('leasing/application')) return 'Application Support';
     if (path.includes('leasing/signing')) return 'Lease Signing';
-    if (path.includes('leasing/premove')) return 'Pre-Move-in Prep';
+    if (path.includes('leasing/premove')) return 'Pre-Move-in Preparation';
     if (path.includes('leasing/onboarding')) return 'Tenant Onboarding';
     if (path.includes('operations/rent')) return 'Rent Collection';
     if (path.includes('operations/renewal')) return 'Lease Renewals';
@@ -78,8 +78,8 @@ const TenantVoiceAgent = () => {
     if (path.includes('maintenance/request')) return 'Maintenance Requests';
     if (path.includes('maintenance/workorder')) return 'Work Order Triage';
     if (path.includes('maintenance/scheduling')) return 'Maintenance Scheduling';
-    if (path.includes('maintenance/relationship')) return 'Tenant Relationship';
-    return 'AI Agent';
+    if (path.includes('maintenance/relationship')) return 'Tenant Relationship Management';
+    return 'Property Management';
   };
   
   const handleSaveApiKey = () => {
@@ -92,7 +92,7 @@ const TenantVoiceAgent = () => {
       <CardHeader>
         <CardTitle className="flex items-center">
           <Volume2 className="h-5 w-5 mr-2" />
-          Voice AI Agent - {getSoundWaveScenario()}
+          Property AI Voice Assistant - {getSoundWaveScenario()}
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col h-[500px]">
@@ -134,7 +134,7 @@ const TenantVoiceAgent = () => {
           ))}
         </div>
         
-        {/* Sound wave visualization (simplified) */}
+        {/* Sound wave visualization */}
         <div className="h-16 mb-4 bg-gray-50 rounded-md flex items-center justify-center">
           <div className="flex items-center space-x-1">
             {Array.from({ length: 20 }).map((_, i) => (

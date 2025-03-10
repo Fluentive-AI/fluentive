@@ -8,6 +8,7 @@ import {
   BookOpen, Building, Wrench
 } from 'lucide-react';
 import TenantVoiceAgent from '../tenant/TenantVoiceAgent';
+import PhoneInterface from '../tenant/PhoneInterface';
 
 interface TenantLayoutProps {
   children: ReactNode;
@@ -182,8 +183,8 @@ const TenantLayout = ({ children }: TenantLayoutProps) => {
                   <div className="h-6 bg-black flex justify-center items-end">
                     <div className="w-1/3 h-4 bg-black rounded-b-xl"></div>
                   </div>
-                  <div className="flex-1 bg-gray-100 overflow-auto p-4">
-                    {children}
+                  <div className="flex-1 bg-gray-100 overflow-auto p-0">
+                    <PhoneInterface />
                   </div>
                   <div className="h-12 bg-white border-t flex justify-center items-center">
                     <div className="w-1/3 h-1 bg-black rounded-full"></div>
