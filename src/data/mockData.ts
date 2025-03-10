@@ -213,7 +213,8 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     assignedTo: 'Mike Johnson',
     scheduledDate: '2025-03-18T10:30:00',
     endDate: '2025-03-18T12:30:00',
-    community: 'Avila Bay'
+    community: 'Avila Bay',
+    type: 'maintenance'
   },
   {
     id: '2',
@@ -228,7 +229,8 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     assignedTo: 'Alex Rodriguez',
     scheduledDate: '2025-03-15T09:00:00',
     endDate: '2025-03-15T11:00:00',
-    community: 'Belmont'
+    community: 'Belmont',
+    type: 'maintenance',
   },
   {
     id: '3',
@@ -243,7 +245,8 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     assignedTo: 'Mike Johnson',
     scheduledDate: '2025-03-11T13:00:00',
     endDate: '2025-03-11T15:00:00',
-    community: 'Preserve at Pine Grove'
+    community: 'Preserve at Pine Grove',
+    type: 'maintenance',
   },
   {
     id: '4',
@@ -258,7 +261,8 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     assignedTo: 'Mike Johnson',
     scheduledDate: '2025-03-14T09:45:00',
     endDate: '2025-03-14T11:45:00', // 1 hour duration
-    community: 'Crestview at Towne Lake'
+    community: 'Crestview at Towne Lake',
+    type: 'maintenance',
   },
   {
     id: '5',
@@ -273,7 +277,8 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     assignedTo: 'Alex Rodriguez',
     scheduledDate: '2025-03-19T15:00:00',
     endDate: '2025-03-19T16:00:00',
-    community: 'Osborne Farms'
+    community: 'Osborne Farms',
+    type: 'maintenance',
   },
 ];
 

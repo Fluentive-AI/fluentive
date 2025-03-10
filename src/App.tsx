@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,9 +14,10 @@ import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 import LandingPage from "./pages/LandingPage";
 import MapView from "./pages/MapView";
-import SuperintendentDashboard from "./pages/SuperintendentDashboard";
 import SuperintendentCalendar from "./pages/SuperintendentCalendar";
+import SuperintendentMap from "./pages/SuperintendentMap";
 import Calendar from "./pages/Calendar";
+import SuperintendentDashboard from "./pages/SuperintendentDashboard";
 
 const queryClient = new QueryClient();
 
@@ -46,7 +46,7 @@ const App = () => (
           {/* Superintendent Routes */}
           <Route path="/super" element={<SuperintendentLayout><SuperintendentDashboard /></SuperintendentLayout>} />
           <Route path="/super/calendar" element={<SuperintendentLayout><SuperintendentCalendar /></SuperintendentLayout>} />
-          <Route path="/super/map" element={<SuperintendentLayout><MapView /></SuperintendentLayout>} />
+          <Route path="/super/map" element={<SuperintendentLayout><SuperintendentMap /></SuperintendentLayout>} />
           <Route path="/super/settings" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
           
           <Route path="*" element={<NotFound />} />

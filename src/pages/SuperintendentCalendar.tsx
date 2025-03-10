@@ -652,7 +652,7 @@ const SuperintendentCalendar = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Superintendent Calendar</h1>
+          <h1 className="text-2xl font-bold">Calendar</h1>
           <p className="text-muted-foreground">Welcome back, {CURRENT_SUPER}</p>
         </div>
         

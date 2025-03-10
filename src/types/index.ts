@@ -71,6 +71,7 @@ export interface MaintenanceRequest {
   scheduledDate: string | null;
   endDate: string | null;
   community: string;
+  type: 'maintenance' | 'turn' | 'renovation';
 }
 
 export interface AIConversation {
