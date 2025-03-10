@@ -17,6 +17,7 @@ import LandingPage from "./pages/LandingPage";
 import MapView from "./pages/MapView";
 import SuperintendentDashboard from "./pages/SuperintendentDashboard";
 import SuperintendentCalendar from "./pages/SuperintendentCalendar";
+import Calendar from "./pages/Calendar";
 
 const queryClient = new QueryClient();
 
@@ -36,7 +37,7 @@ const App = () => (
           <Route path="/tenants" element={<AppLayout><Tenants /></AppLayout>} />
           <Route path="/rent" element={<AppLayout><PlaceholderPage /></AppLayout>} />
           <Route path="/maintenance" element={<AppLayout><Maintenance /></AppLayout>} />
-          <Route path="/calendar" element={<AppLayout><PlaceholderPage /></AppLayout>} />
+          <Route path="/calendar" element={<AppLayout><Calendar /></AppLayout>} />
           <Route path="/map" element={<AppLayout><MapView /></AppLayout>} />
           <Route path="/communications" element={<AppLayout><Communications /></AppLayout>} />
           <Route path="/reports" element={<AppLayout><PlaceholderPage /></AppLayout>} />

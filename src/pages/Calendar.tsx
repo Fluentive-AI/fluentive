@@ -20,18 +20,12 @@ import {
   format, 
   startOfToday, 
   startOfDay, 
-  endOfDay, 
   eachDayOfInterval, 
   add, 
   sub, 
   isSameDay, 
   isSameMonth, 
   getDay,
-  addHours,
-  startOfHour,
-  endOfHour,
-  isWithinInterval,
-  parseISO,
   setHours,
   setMinutes
 } from 'date-fns';
@@ -47,8 +41,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useNavigate } from 'react-router-dom';
-
-const CURRENT_SUPER = "Mike Johnson";
 
 const viewOptions = {
   day: { label: "Day", days: 1 },
@@ -80,19 +72,14 @@ const updateMockRequestDates = () => {
   });
 };
 
-const SuperintendentCalendar = () => {
+const Calendar = () => {
   const [calendarView, setCalendarView] = useState<string>('week');
   const [selectedDate, setSelectedDate] = useState<Date>(startOfToday());
   const [displayMode, setDisplayMode] = useState<string>('list'); // 'list' or 'hourly'
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const navigate = useNavigate();
   
-  const superintendentRequests = useMemo(() => {
-    const updatedRequests = updateMockRequestDates();
-    return updatedRequests.filter(
-      request => request.assignedTo === CURRENT_SUPER
-    );
-  }, []);
+  const maintenanceRequests = useMemo(() => updateMockRequestDates(), []);
 
   // Calculate date range for the current view
   const dateRange = useMemo(() => {
@@ -126,19 +113,6 @@ const SuperintendentCalendar = () => {
       });
     }
   }, [selectedDate, calendarView]);
-
-  // Get business hours for a specific day
-  const getBusinessHours = (day: Date) => {
-    const hours = [];
-    const startHour = BUSINESS_HOURS_START;
-    const endHour = BUSINESS_HOURS_END;
-    
-    for (let hour = startHour; hour <= endHour; hour++) {
-      hours.push(add(startOfDay(day), { hours: hour }));
-    }
-    
-    return hours;
-  };
 
   // Navigate to previous period
   const goToPrevious = () => {
@@ -175,7 +149,7 @@ const SuperintendentCalendar = () => {
 
   // Get events for a specific day
   const getEventsForDay = (day: Date) => {
-    return superintendentRequests.filter(request => {
+    return maintenanceRequests.filter(request => {
       const requestDate = request.scheduledDate ? new Date(request.scheduledDate) : new Date(request.dateSubmitted);
       return isSameDay(requestDate, day);
     });
@@ -186,7 +160,7 @@ const SuperintendentCalendar = () => {
     const hourStart = add(startOfDay(day), { hours: hour });
     const hourEnd = add(hourStart, { hours: 1 });
     
-    return superintendentRequests.filter(request => {
+    return maintenanceRequests.filter(request => {
       if (!request.scheduledDate) return false;
       
       let requestDate;
@@ -199,7 +173,6 @@ const SuperintendentCalendar = () => {
       }
       
       // If it's the same day, consider it for this hour slot
-      // In a real app, we'd have specific time slots
       return isSameDay(requestDate, day);
     });
   };
@@ -226,8 +199,8 @@ const SuperintendentCalendar = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Superintendent Calendar</h1>
-          <p className="text-muted-foreground">Welcome back, {CURRENT_SUPER}</p>
+          <h1 className="text-2xl font-bold">Maintenance Calendar</h1>
+          <p className="text-muted-foreground">All scheduled maintenance</p>
         </div>
         
         <div className="flex gap-3 items-center">
@@ -379,7 +352,10 @@ const SuperintendentCalendar = () => {
                                     </div>
                                   </div>
                                   
-                                  <div className="mt-2">
+                                  <div className="flex justify-between items-center mt-2">
+                                    <div className="text-xs text-muted-foreground">
+                                      Assigned to: {event.assignedTo || 'Unassigned'}
+                                    </div>
                                     <Button 
                                       variant="ghost" 
                                       size="sm" 
@@ -430,6 +406,10 @@ const SuperintendentCalendar = () => {
                                   <div>
                                     <p className="text-sm font-medium text-muted-foreground">Description</p>
                                     <p>{event.description}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                                    <p>{event.assignedTo || 'Unassigned'}</p>
                                   </div>
                                   <div className="flex justify-between mt-4">
                                     <Button variant="outline" className="flex items-center gap-1">
@@ -504,14 +484,9 @@ const SuperintendentCalendar = () => {
                                           >
                                             {event.priority}
                                           </Badge>
-                                          <Button 
-                                            variant="ghost" 
-                                            size="sm" 
-                                            className="text-xs flex items-center h-6 px-2"
-                                          >
-                                            <ImageIcon className="h-3 w-3 mr-1" />
-                                            View images
-                                          </Button>
+                                          <div className="text-xs">
+                                            {event.assignedTo || 'Unassigned'}
+                                          </div>
                                         </div>
                                       </div>
                                     </DialogTrigger>
@@ -554,6 +529,10 @@ const SuperintendentCalendar = () => {
                                         <div>
                                           <p className="text-sm font-medium text-muted-foreground">Description</p>
                                           <p>{event.description}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                                          <p>{event.assignedTo || 'Unassigned'}</p>
                                         </div>
                                         <div className="flex justify-between mt-4">
                                           <Button variant="outline" className="flex items-center gap-1">
@@ -626,6 +605,10 @@ const SuperintendentCalendar = () => {
                 <p className="text-sm font-medium text-muted-foreground">Description</p>
                 <p>{selectedEvent.description}</p>
               </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Assigned To</p>
+                <p>{selectedEvent.assignedTo || 'Unassigned'}</p>
+              </div>
               <div className="flex justify-between mt-4">
                 <Button variant="outline" className="flex items-center gap-1">
                   <ImageIcon className="h-4 w-4" />
@@ -644,4 +627,4 @@ const SuperintendentCalendar = () => {
   );
 };
 
-export default SuperintendentCalendar;
+export default Calendar;
