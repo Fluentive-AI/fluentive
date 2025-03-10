@@ -34,19 +34,15 @@ const PhoneInterface = () => {
     }, 2000);
   };
   
+  // Simply display the image based on the current screen state
   if (currentScreen === 'contact') {
     return (
-      <div className="relative h-full">
-        <img 
-          src="/lovable-uploads/75567474-1885-44eb-a0d2-6a52e47bfd89.png" 
-          alt="Contact Screen" 
-          className="w-full h-full object-cover"
-        />
-        <button 
-          className="absolute bottom-32 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-green-500 flex items-center justify-center"
-          onClick={handleCall}
-        />
-      </div>
+      <img 
+        src="/lovable-uploads/75567474-1885-44eb-a0d2-6a52e47bfd89.png" 
+        alt="Contact Screen" 
+        className="w-full h-full object-cover cursor-pointer"
+        onClick={handleCall}
+      />
     );
   }
   
@@ -60,21 +56,18 @@ const PhoneInterface = () => {
     );
   }
   
-  // In call screen
+  // In call screen with timer
   return (
-    <div className="relative h-full">
+    <div className="relative w-full h-full">
       <img 
         src="/lovable-uploads/75567474-1885-44eb-a0d2-6a52e47bfd89.png" 
         alt="In Call Screen" 
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover cursor-pointer"
+        onClick={() => setCurrentScreen('contact')}
       />
       <div className="absolute top-10 left-1/2 -translate-x-1/2 text-white text-xl font-semibold">
         {formatTime(callTime)}
       </div>
-      <button 
-        className="absolute bottom-32 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-red-500 flex items-center justify-center"
-        onClick={() => setCurrentScreen('contact')}
-      />
     </div>
   );
 };

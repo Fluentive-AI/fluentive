@@ -53,7 +53,6 @@ const TenantLayout = ({ children }: TenantLayoutProps) => {
       </header>
       
       <div className="flex flex-1 p-6">
-        {/* Sidebar Navigation */}
         <aside className="w-64 mr-6">
           <Card className="p-4">
             <h2 className="font-medium mb-4 text-lg">Demo Scenarios</h2>
@@ -174,19 +173,12 @@ const TenantLayout = ({ children }: TenantLayoutProps) => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Phone Preview */}
             <div className="lg:col-span-1">
-              <div className="relative mx-auto" style={{ width: "300px", height: "600px" }}>
-                <div className="absolute inset-0 bg-black rounded-[40px] shadow-lg"></div>
-                <div className="absolute inset-2 bg-white rounded-[32px] overflow-hidden">
-                  <div className="h-full overflow-hidden">
-                    <PhoneInterface />
-                  </div>
-                </div>
+              <div className="mx-auto" style={{ width: "300px", height: "600px" }}>
+                <PhoneInterface />
               </div>
             </div>
             
-            {/* Voice Agent */}
             <div className="lg:col-span-2">
               <TenantVoiceAgent />
             </div>
