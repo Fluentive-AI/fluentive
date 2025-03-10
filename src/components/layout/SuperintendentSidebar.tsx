@@ -13,11 +13,13 @@ interface NavItemProps {
   to: string;
   icon: React.ReactNode;
   label: string;
+  end?: boolean;
 }
 
-const NavItem = ({ to, icon, label }: NavItemProps) => (
+const NavItem = ({ to, icon, label, end = false }: NavItemProps) => (
   <NavLink
     to={to}
+    end={end}
     className={({ isActive }) => 
       `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
         isActive 
@@ -41,7 +43,7 @@ const SuperintendentSidebar = () => {
       </div>
       
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        <NavItem to="/super" icon={<Wrench className="h-5 w-5" />} label="Work Orders" />
+        <NavItem to="/super" icon={<Wrench className="h-5 w-5" />} label="Work Orders" end={true} />
         <NavItem to="/super/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
         <NavItem to="/super/map" icon={<Map className="h-5 w-5" />} label="Map View" />
       </nav>
