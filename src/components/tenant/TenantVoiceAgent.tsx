@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Mic, MicOff, Send, Volume2 } from 'lucide-react';
+import { Mic, MicOff, Send, Volume } from 'lucide-react';
 import { getApiConfig, setApiKey } from '@/config/apiConfig';
 
 const TenantVoiceAgent = () => {
@@ -91,7 +91,7 @@ const TenantVoiceAgent = () => {
     <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex items-center">
-          <Volume2 className="h-5 w-5 mr-2" />
+          <Volume className="h-5 w-5 mr-2" />
           Property AI Voice Assistant - {getSoundWaveScenario()}
         </CardTitle>
       </CardHeader>
