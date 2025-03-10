@@ -34,7 +34,7 @@ const PhoneInterface = () => {
     }, 2000);
   };
   
-  // Simply display the image based on the current screen state
+  // Contact screen (initial state)
   if (currentScreen === 'contact') {
     return (
       <img 
@@ -46,6 +46,7 @@ const PhoneInterface = () => {
     );
   }
   
+  // Calling screen (intermediate state)
   if (currentScreen === 'calling') {
     return (
       <img 
@@ -56,16 +57,16 @@ const PhoneInterface = () => {
     );
   }
   
-  // In call screen with timer
+  // In call screen with timer (using the new image)
   return (
     <div className="relative w-full h-full">
       <img 
-        src="/lovable-uploads/75567474-1885-44eb-a0d2-6a52e47bfd89.png" 
+        src="/lovable-uploads/5fcebbdf-5df9-46f3-aa0b-b3ca59b77ab1.png" 
         alt="In Call Screen" 
         className="w-full h-full object-cover cursor-pointer"
         onClick={() => setCurrentScreen('contact')}
       />
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 text-white text-xl font-semibold">
+      <div className="absolute top-24 left-1/2 -translate-x-1/2 text-white text-xl font-semibold">
         {formatTime(callTime)}
       </div>
     </div>
