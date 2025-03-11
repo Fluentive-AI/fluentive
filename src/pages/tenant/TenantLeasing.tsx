@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Home } from 'lucide-react';
 import PhoneInterface from '@/components/tenant/PhoneInterface';
 import TenantVoiceAgent, { TenantVoiceAgentRef } from '@/components/tenant/TenantVoiceAgent';
-import { toast } from 'sonner';
 
 type Screen = 'contact' | 'calling' | 'inCall';
 
@@ -18,22 +17,9 @@ const TenantLeasing = () => {
   console.log('Current params:', params);
   
   const scenario = params['*']?.split('/').pop();
-  
   const [currentScreen, setCurrentScreen] = useState<Screen>('contact');
-  const [debugInfo, setDebugInfo] = useState<string>('Waiting for call...');
   const [isPlaying, setIsPlaying] = useState(false);
-  
   const voiceAgentRef = useRef<TenantVoiceAgentRef>(null);
-  
-  useEffect(() => {
-    console.log('Current scenario from URL:', scenario);
-  }, [scenario]);
-
-  const handleScreenChange = (screen: Screen) => {
-    console.log('Screen changed to:', screen);
-    setCurrentScreen(screen);
-    setDebugInfo(`Current screen: ${screen}`);
-  };
   
   const toggleVideoAndScreen = () => {
     if (isPlaying) {
@@ -62,7 +48,6 @@ const TenantLeasing = () => {
             <p className="text-sm">
               Start a call using the phone interface to see the AI assistant in action.
             </p>
-            <p className="text-xs text-gray-500">{debugInfo}</p>
           </div>
         </div>
         
@@ -82,7 +67,7 @@ const TenantLeasing = () => {
                   ref={voiceAgentRef}
                   currentScreen={currentScreen}
                   scenario={scenario}
-                  onScreenChange={handleScreenChange}
+                  onScreenChange={setCurrentScreen}
                 />
               </div>
             </div>

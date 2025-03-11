@@ -11,3 +11,5 @@ git reset --hard HEAD~3
 git reset --hard 879eebd22dda8e3df64e4e841706e15ed4171230
 git push --force origin main
 pnpm run dev
+pnpm run dev
+pnpm run dev

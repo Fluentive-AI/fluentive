@@ -100,12 +100,25 @@ export interface RentPayment {
   paymentMethod: 'bank' | 'card' | 'cash' | 'check' | null;
 }
 
+export type MetricStatus = 'increase_good' | 'increase_bad' | 'decrease_good' | 'decrease_bad';
+
+export interface MarketMetric {
+  value: number;
+  change: number;
+  status: MetricStatus;
+}
+
 export interface MetricData {
   label: string;
   value: number;
-  previousValue?: number;
-  change?: number;
-  status?: 'increase' | 'decrease' | 'neutral';
+  change: number;
+  status: MetricStatus;
+  markets: {
+    Atlanta: MarketMetric;
+    Tampa: MarketMetric;
+    Jacksonville: MarketMetric;
+    Orlando: MarketMetric;
+  };
 }
 
 export interface ChartData {
