@@ -1,5 +1,5 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import React, { useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
 
 interface SimpleBarChartProps {
   data: any[];
@@ -22,6 +22,45 @@ const SimpleBarChart = ({
   bars,
   stacked = false
 }: SimpleBarChartProps) => {
+  const [hoveredBar, setHoveredBar] = useState<string | null>(null);
+
+  // Custom tooltip component
+  const CustomTooltip = ({ active, payload, label }: TooltipProps<any, any>) => {
+    if (active && payload && payload.length) {
+      const isFirstQuarter = label.includes('Mar') || label.includes('Apr') || label.includes('May');
+      
+      return (
+        <div 
+          className="bg-white p-1.5 border border-gray-200 shadow-md rounded text-xs min-w-[120px]"
+          style={{
+            transform: isFirstQuarter ? 'translateX(10px)' : 'none'
+          }}
+        >
+          <p className="font-medium text-[10px] text-gray-500">{label}</p>
+          <div className="flex flex-col gap-0.5">
+            {payload.map((entry, index) => (
+              <div 
+                key={`item-${index}`} 
+                className="flex items-center gap-1.5"
+                style={{ 
+                  color: entry.color,
+                  fontWeight: entry.dataKey === hoveredBar ? 'bold' : 'normal'
+                }}
+              >
+                <div 
+                  className="w-1.5 h-1.5 rounded-full" 
+                  style={{ backgroundColor: entry.color }}
+                />
+                <span>{`${entry.dataKey}: ${entry.value}`}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   // Calculate global min and max values
   const allValues = data.flatMap(item =>
     Object.entries(item)
@@ -69,6 +108,7 @@ const SimpleBarChart = ({
             left: 20,
             bottom: 5,
           }}
+          onMouseLeave={() => setHoveredBar(null)}
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <XAxis 
@@ -89,7 +129,13 @@ const SimpleBarChart = ({
             domain={[yAxisMin, yAxisMax]}
             tick={{ fontSize: 12 }}
           />
-          <Tooltip />
+          <Tooltip 
+            content={<CustomTooltip />}
+            position={{ x: 10, y: -30 }}
+            cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }}
+            offset={15}
+            wrapperStyle={{ left: 'auto' }}
+          />
           {chartBars.map((bar, index) => (
             <Bar 
               key={index}
@@ -97,6 +143,7 @@ const SimpleBarChart = ({
               fill={bar.color} 
               stackId={bar.stackId}
               name={bar.dataKey}
+              onMouseOver={() => setHoveredBar(bar.dataKey)}
             />
           ))}
         </BarChart>
