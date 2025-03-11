@@ -7,11 +7,12 @@ interface SimpleLineChartProps {
   data: ChartData[];
   title: string;
   dataKey?: string;
+  yAxisLabel?: string;
 }
 
-const SimpleLineChart = ({ data, title, dataKey = 'value' }: SimpleLineChartProps) => {
+const SimpleLineChart = ({ data, title, dataKey = 'value', yAxisLabel }: SimpleLineChartProps) => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 h-full">
+    <div>
       <h3 className="text-base font-medium mb-4">{title}</h3>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
@@ -26,9 +27,21 @@ const SimpleLineChart = ({ data, title, dataKey = 'value' }: SimpleLineChartProp
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="name" />
-            <YAxis domain={[0, 100]} />
+            <YAxis 
+              label={{ 
+                value: yAxisLabel,
+                angle: -90,
+                position: 'insideLeft'
+              }}
+            />
             <Tooltip />
-            <Line type="monotone" dataKey={dataKey} stroke="#3391b1" strokeWidth={2} activeDot={{ r: 8 }} />
+            <Line 
+              type="monotone" 
+              dataKey={dataKey} 
+              stroke="#3391b1" 
+              strokeWidth={2} 
+              activeDot={{ r: 8 }} 
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>

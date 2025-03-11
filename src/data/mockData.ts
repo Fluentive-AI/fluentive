@@ -387,125 +387,78 @@ export const mockRentPayments: RentPayment[] = [
 // Mock Metrics Data
 export const mockDashboardMetrics: MetricData[] = [
   {
-    label: 'Total Properties',
-    value: 3,
-    previousValue: 3,
-    change: 0,
-    status: 'neutral',
+    label: '# Homes',
+    value: 1250,
+    change: 5.2,
+    status: 'increase'
   },
   {
-    label: 'Total Units',
-    value: 120,
-    previousValue: 118,
-    change: 1.7,
-    status: 'increase',
+    label: '$ Avg rent',
+    value: 1850,
+    change: 3.8,
+    status: 'increase'
   },
   {
-    label: 'Occupancy Rate',
-    value: 92,
-    previousValue: 89,
-    change: 3.4,
-    status: 'increase',
+    label: 'Monthly Occupancy',
+    value: 94.5,
+    change: 2.1,
+    status: 'increase'
   },
   {
-    label: 'Active Leases',
-    value: 110,
-    previousValue: 105,
-    change: 4.8,
-    status: 'increase',
+    label: 'DQ as % of billed rent',
+    value: 2.3,
+    change: -0.5,
+    status: 'decrease'
   },
+  {
+    label: 'Renewals MTD',
+    value: 45,
+    change: 15.3,
+    status: 'increase'
+  },
+  {
+    label: '% Rent Increase (renewals)',
+    value: 5.8,
+    change: 0.7,
+    status: 'increase'
+  }
 ];
 
 export const mockLeadMetrics: MetricData[] = [
   {
-    label: 'New Leads (30d)',
-    value: 28,
-    previousValue: 22,
-    change: 27.3,
-    status: 'increase',
-  },
-  {
-    label: 'Tours Scheduled',
-    value: 15,
-    previousValue: 12,
-    change: 25,
-    status: 'increase',
-  },
-  {
-    label: 'Applications',
-    value: 8,
-    previousValue: 10,
-    change: -20,
-    status: 'decrease',
-  },
-  {
-    label: 'Conversion Rate',
-    value: 28.6,
-    previousValue: 31.8,
-    change: -10.1,
-    status: 'decrease',
-  },
+    label: '% Renewals trend',
+    value: 68.5,
+    change: 4.2,
+    status: 'increase'
+  }
 ];
 
-export const mockOperationMetrics: MetricData[] = [
-  {
-    label: 'On-Time Rent',
-    value: 86,
-    previousValue: 82,
-    change: 4.9,
-    status: 'increase',
-  },
-  {
-    label: 'Maintenance Requests',
-    value: 23,
-    previousValue: 19,
-    change: 21.1,
-    status: 'increase',
-  },
-  {
-    label: 'Avg. Resolution Time',
-    value: 1.8,
-    previousValue: 2.2,
-    change: -18.2,
-    status: 'increase',
-  },
-  {
-    label: 'Renewals (30d)',
-    value: 12,
-    previousValue: 10,
-    change: 20,
-    status: 'increase',
-  },
-];
+export const mockOperationMetrics: MetricData[] = [];
 
-// Chart Data
 export const mockOccupancyData: ChartData[] = [
-  { name: 'Jan', value: 85 },
-  { name: 'Feb', value: 88 },
-  { name: 'Mar', value: 87 },
-  { name: 'Apr', value: 89 },
-  { name: 'May', value: 91 },
-  { name: 'Jun', value: 90 },
-  { name: 'Jul', value: 92 },
-  { name: 'Aug', value: 91 },
-  { name: 'Sep', value: 92 },
+  { name: 'Atlanta', value: 95.2 },
+  { name: 'Tampa', value: 93.8 },
+  { name: 'Jacksonville', value: 92.5 },
+  { name: 'Orlando', value: 94.7 }
 ];
 
-export const mockLeadSourceData: ChartData[] = [
-  { name: 'Website', value: 35 },
-  { name: 'Zillow', value: 25 },
-  { name: 'Referral', value: 15 },
-  { name: 'Facebook', value: 12 },
-  { name: 'Instagram', value: 8 },
-  { name: 'Other', value: 5 },
+export const mockDelinquencyData: ChartData[] = [
+  { name: 'Atlanta', value: 2.1 },
+  { name: 'Tampa', value: 2.4 },
+  { name: 'Jacksonville', value: 2.6 },
+  { name: 'Orlando', value: 2.2 }
 ];
 
-export const mockMaintenanceData: ChartData[] = [
-  { name: 'Plumbing', value: 32 },
-  { name: 'HVAC', value: 28 },
-  { name: 'Electrical', value: 15 },
-  { name: 'Appliance', value: 12 },
-  { name: 'Structural', value: 8 },
-  { name: 'Other', value: 5 },
+export const mockBillHoursData: ChartData[] = [
+  { name: 'Tech 1', value: 6.8 },
+  { name: 'Tech 2', value: 7.2 },
+  { name: 'Tech 3', value: 6.5 },
+  { name: 'Tech 4', value: 7.0 }
 ];
 
+export const mockWorkOrdersData: ChartData[] = [
+  { name: 'Tech 1', value: 8.5 },
+  { name: 'Tech 2', value: 7.8 },
+  { name: 'Tech 3', value: 8.2 },
+  { name: 'Tech 4', value: 7.5 }
+];
