@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface SimpleLineChartProps {
   data: any[];
@@ -65,7 +65,6 @@ const SimpleLineChart = ({
               }}
             />
             <Tooltip />
-            <Legend />
             {chartLines.map((line, index) => (
               <Line 
                 key={index}
@@ -73,8 +72,8 @@ const SimpleLineChart = ({
                 dataKey={line.dataKey} 
                 stroke={line.color}
                 strokeWidth={line.strokeWidth || (line.isAverage ? 3 : 1.5)}
-                dot={line.isAverage ? { r: 4 } : { r: 3 }}
-                activeDot={line.isAverage ? { r: 8 } : { r: 6 }}
+                dot={false}
+                activeDot={line.isAverage ? { r: 6 } : { r: 4 }}
                 name={line.dataKey}
               />
             ))}

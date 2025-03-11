@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface SimpleBarChartProps {
   data: any[];
@@ -62,7 +62,6 @@ const SimpleBarChart = ({
               }}
             />
             <Tooltip />
-            <Legend />
             {chartBars.map((bar, index) => (
               <Bar 
                 key={index}
