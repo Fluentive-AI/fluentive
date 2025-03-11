@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -56,7 +55,7 @@ const App = () => (
           
           {/* Tenant Interface Routes */}
           <Route path="/tenant" element={<TenantLayout><TenantLeasing scenario="lead" /></TenantLayout>} />
-          <Route path="/tenant/leasing/lead" element={<TenantLayout><TenantLeasing scenario="lead" /></TenantLayout>} />
+          <Route path="/tenant/leasing/:scenario" element={<TenantLayout><TenantLeasing /></TenantLayout>} />
           <Route path="/tenant/leasing/application" element={<TenantLayout><TenantLeasing scenario="application" /></TenantLayout>} />
           <Route path="/tenant/leasing/signing" element={<TenantLayout><TenantLeasing scenario="signing" /></TenantLayout>} />
           <Route path="/tenant/leasing/premove" element={<TenantLayout><TenantLeasing scenario="premove" /></TenantLayout>} />

@@ -1,185 +1,80 @@
+import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Volume } from 'lucide-react';
 
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Mic, MicOff, Send, Volume } from 'lucide-react';
-import { getApiConfig, setApiKey } from '@/config/apiConfig';
+interface TenantVoiceAgentProps {
+  currentScreen?: 'contact' | 'calling' | 'inCall';
+  scenario?: string;
+}
 
-const TenantVoiceAgent = () => {
-  const [inputText, setInputText] = useState('');
-  const [isListening, setIsListening] = useState(false);
-  const [conversation, setConversation] = useState<{ role: 'user' | 'agent', text: string }[]>([]);
-  const [apiKey, setApiKeyState] = useState(getApiConfig().ELEVEN_LABS_API_KEY);
-  const [showApiKeyInput, setShowApiKeyInput] = useState(apiKey === 'MY_API_KEY');
-  const location = useLocation();
-  
-  useEffect(() => {
-    // Reset conversation when route changes
-    setConversation([
-      { role: 'agent', text: 'Hello! I\'m your Property AI assistant. How can I help you today?' }
-    ]);
-  }, [location.pathname]);
-  
-  const handleSendMessage = () => {
-    if (!inputText.trim()) return;
+export interface TenantVoiceAgentRef {
+  playVideo: () => void;
+}
+
+const TenantVoiceAgent = forwardRef<TenantVoiceAgentRef, TenantVoiceAgentProps>(
+  ({ currentScreen, scenario }, ref) => {
+    const [debugInfo, setDebugInfo] = useState<string>('');
+    const videoRef = useRef<HTMLVideoElement>(null);
     
-    // Add user message to conversation
-    setConversation(prev => [...prev, { role: 'user', text: inputText }]);
-    
-    // Simulate agent response
-    setTimeout(() => {
-      const scenario = getSoundWaveScenario();
-      setConversation(prev => [...prev, { 
-        role: 'agent', 
-        text: `I understand you're inquiring about ${scenario}. Let me help you with that. How would you like to proceed?` 
-      }]);
-    }, 1000);
-    
-    setInputText('');
-  };
-  
-  const toggleListening = () => {
-    setIsListening(!isListening);
-    
-    if (!isListening) {
-      // Simulate user speaking after 2 seconds
-      setTimeout(() => {
-        setConversation(prev => [...prev, { 
-          role: 'user', 
-          text: 'I\'d like to know more about the services you provide.' 
-        }]);
-        
-        // Simulate agent response
-        setTimeout(() => {
-          const scenario = getSoundWaveScenario();
-          setConversation(prev => [...prev, { 
-            role: 'agent', 
-            text: `As your Property AI assistant, I can help with ${scenario} and other property management needs. Would you like me to explain our specific services in this area?` 
-          }]);
-          setIsListening(false);
-        }, 1500);
-      }, 2000);
-    }
-  };
-  
-  const getSoundWaveScenario = () => {
-    const path = location.pathname;
-    if (path.includes('leasing/lead')) return 'Lead Interaction';
-    if (path.includes('leasing/application')) return 'Application Support';
-    if (path.includes('leasing/signing')) return 'Lease Signing';
-    if (path.includes('leasing/premove')) return 'Pre-Move-in Preparation';
-    if (path.includes('leasing/onboarding')) return 'Tenant Onboarding';
-    if (path.includes('operations/rent')) return 'Rent Collection';
-    if (path.includes('operations/renewal')) return 'Lease Renewals';
-    if (path.includes('operations/moveout-notice')) return 'Move-Out Notices';
-    if (path.includes('operations/moveout-coordination')) return 'Move-Out Coordination';
-    if (path.includes('maintenance/request')) return 'Maintenance Requests';
-    if (path.includes('maintenance/workorder')) return 'Work Order Triage';
-    if (path.includes('maintenance/scheduling')) return 'Maintenance Scheduling';
-    if (path.includes('maintenance/relationship')) return 'Tenant Relationship Management';
-    return 'Property Management';
-  };
-  
-  const handleSaveApiKey = () => {
-    setApiKey(apiKey);
-    setShowApiKeyInput(false);
-  };
-  
-  return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <Volume className="h-5 w-5 mr-2" />
-          Property AI Voice Assistant - {getSoundWaveScenario()}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col h-[500px]">
-        {showApiKeyInput ? (
-          <div className="bg-yellow-50 p-4 rounded-md mb-4">
-            <h3 className="font-medium mb-2">API Key Required</h3>
-            <p className="text-sm mb-4">
-              To use the Voice AI Agent, please enter your ElevenLabs API key below.
-              This will be stored in localStorage and not transmitted to any server.
+    useEffect(() => {
+      console.log('TenantVoiceAgent - Current screen:', currentScreen);
+      
+      // Try to play video when entering inCall state
+      if (currentScreen === 'inCall') {
+        playVideo();
+      }
+    }, [currentScreen, scenario]);
+
+    const playVideo = () => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play()
+          .then(() => {
+            console.log('Video started playing from external trigger');
+          })
+          .catch(error => {
+            console.error('Error playing video:', error);
+          });
+      } else {
+        console.error('Video ref is null');
+      }
+    };
+
+    // Expose the playVideo method to parent components
+    useImperativeHandle(ref, () => ({
+      playVideo
+    }));
+
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Volume className="h-5 w-5 mr-2" />
+            Property AI Voice Assistant - {scenario || 'lead'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col h-[500px] space-y-4">
+          <div className="bg-gray-100 p-4 rounded-lg w-2/3">
+            <p className="text-base">
+              Hello! I'm your Property AI assistant. How can I help you today?
             </p>
-            <div className="flex gap-2">
-              <Input 
-                type="password" 
-                value={apiKey} 
-                onChange={(e) => setApiKeyState(e.target.value)}
-                placeholder="Enter ElevenLabs API Key" 
-              />
-              <Button onClick={handleSaveApiKey}>Save</Button>
-            </div>
           </div>
-        ) : null}
-        
-        <div className="flex-1 overflow-y-auto mb-4 space-y-4">
-          {conversation.map((item, index) => (
-            <div 
-              key={index} 
-              className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}
+          <div className="bg-white p-4 rounded-lg border border-gray-200">
+            <video
+              ref={videoRef}
+              className="w-full h-auto rounded-lg"
+              playsInline
+              muted
             >
-              <div 
-                className={`max-w-[80%] p-3 rounded-lg ${
-                  item.role === 'user' 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'bg-muted'
-                }`}
-              >
-                {item.text}
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Sound wave visualization */}
-        <div className="h-16 mb-4 bg-gray-50 rounded-md flex items-center justify-center">
-          <div className="flex items-center space-x-1">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div 
-                key={i}
-                className="bg-primary/80 rounded-full w-1"
-                style={{ 
-                  height: `${12 + Math.sin(i / Math.PI) * 20}px`,
-                  animationDelay: `${i * 0.05}s`,
-                  animation: isListening ? 'soundwave 1s infinite' : 'none'
-                }}
-              ></div>
-            ))}
+              <source src="/phone_calls/leasing/lead.mp4" type="video/mp4" />
+            </video>
           </div>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button
-            variant={isListening ? "destructive" : "outline"}
-            size="icon"
-            onClick={toggleListening}
-            className="flex-shrink-0"
-          >
-            {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-          </Button>
-          
-          <Input
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            placeholder="Type your message..."
-            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-          />
-          
-          <Button 
-            onClick={handleSendMessage}
-            disabled={!inputText.trim()}
-            className="flex-shrink-0"
-          >
-            <Send className="h-4 w-4 mr-2" />
-            Send
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+        </CardContent>
+      </Card>
+    );
+  }
+);
+
+TenantVoiceAgent.displayName = 'TenantVoiceAgent';
 
 export default TenantVoiceAgent;
