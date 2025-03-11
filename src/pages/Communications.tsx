@@ -7,27 +7,38 @@ import { Button } from '@/components/ui/button';
 import { Phone, MessageSquare, Mail, Plus, Filter } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ScenarioFilter from '@/components/communications/ScenarioFilter';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
-const SCENARIO_OPTIONS = [
-  { value: 'all', label: 'All Scenarios' },
-  { value: 'leasing', label: 'Leasing' },
-  { value: 'lead', label: 'Leasing/Lead Interaction' },
-  { value: 'application', label: 'Leasing/Application Support' },
-  { value: 'signing', label: 'Leasing/Lease Signing' },
-  { value: 'premove', label: 'Leasing/Pre-Move-in Prep' },
-  { value: 'onboarding', label: 'Leasing/Tenant Onboarding' },
-  { value: 'operations', label: 'Operations' },
-  { value: 'rent', label: 'Operations/Rent Collection' },
-  { value: 'renewal', label: 'Operations/Lease Renewals' },
-  { value: 'moveout-notice', label: 'Operations/Move-Out Notices' },
-  { value: 'moveout-coordination', label: 'Operations/Move-Out Coordination' },
-  { value: 'maintenance', label: 'Maintenance' },
-  { value: 'request', label: 'Maintenance/Maintenance Requests' },
-  { value: 'workorder', label: 'Maintenance/Work Order Triage' },
-  { value: 'scheduling', label: 'Maintenance/Maintenance Scheduling' },
-  { value: 'relationship', label: 'Maintenance/Tenant Relationship' }
+const SCENARIO_CATEGORIES = [
+  {
+    name: 'Leasing',
+    options: [
+      { value: 'leasing/lead', label: 'Leasing/Lead Interaction' },
+      { value: 'leasing/application', label: 'Leasing/Application Support' },
+      { value: 'leasing/signing', label: 'Leasing/Lease Signing' },
+      { value: 'leasing/premove', label: 'Leasing/Pre-Move-in Prep' },
+      { value: 'leasing/onboarding', label: 'Leasing/Tenant Onboarding' },
+    ]
+  },
+  {
+    name: 'Operations',
+    options: [
+      { value: 'operations/rent', label: 'Operations/Rent Collection' },
+      { value: 'operations/renewal', label: 'Operations/Lease Renewals' },
+      { value: 'operations/moveout-notice', label: 'Operations/Move-Out Notices' },
+      { value: 'operations/moveout-coordination', label: 'Operations/Move-Out Coordination' },
+    ]
+  },
+  {
+    name: 'Maintenance',
+    options: [
+      { value: 'maintenance/request', label: 'Maintenance/Maintenance Requests' },
+      { value: 'maintenance/workorder', label: 'Maintenance/Work Order Triage' },
+      { value: 'maintenance/scheduling', label: 'Maintenance/Maintenance Scheduling' },
+      { value: 'maintenance/relationship', label: 'Maintenance/Tenant Relationship' }
+    ]
+  }
 ];
 
 const COMMUNICATION_TYPES = [
@@ -38,13 +49,13 @@ const COMMUNICATION_TYPES = [
 ];
 
 const Communications = () => {
-  const [scenarioFilter, setScenarioFilter] = useState('all');
+  const [selectedScenarios, setSelectedScenarios] = useState<string[]>([]);
   const [commTypeFilter, setCommTypeFilter] = useState('all');
   
   // Filter conversations based on selected filters
   const filteredConversations = mockAIConversations.filter(conversation => {
     // Filter by scenario
-    if (scenarioFilter !== 'all' && !conversation.scenario?.includes(scenarioFilter)) {
+    if (selectedScenarios.length > 0 && (!conversation.scenario || !selectedScenarios.includes(conversation.scenario))) {
       return false;
     }
     
@@ -82,10 +93,10 @@ const Communications = () => {
       </div>
       
       <Card>
-        <CardHeader className="pb-3 flex flex-row items-center justify-between">
+        <CardHeader className="pb-3 flex flex-row items-center justify-between flex-wrap gap-3">
           <CardTitle>AI Agent Activity</CardTitle>
           
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center flex-wrap">
             {/* Communication Type Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -105,18 +116,11 @@ const Communications = () => {
             </DropdownMenu>
             
             {/* Scenario Filter */}
-            <Select value={scenarioFilter} onValueChange={setScenarioFilter}>
-              <SelectTrigger className="w-[220px] h-8">
-                <SelectValue placeholder="All Scenarios" />
-              </SelectTrigger>
-              <SelectContent>
-                {SCENARIO_OPTIONS.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <ScenarioFilter 
+              options={SCENARIO_CATEGORIES}
+              selectedValues={selectedScenarios}
+              onChange={setSelectedScenarios}
+            />
           </div>
         </CardHeader>
         <CardContent>

@@ -1,32 +1,24 @@
 
 import React, { useState, useRef } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { AIConversation } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Home } from 'lucide-react';
 import PhoneInterface from '@/components/tenant/PhoneInterface';
 import TenantVoiceAgent, { TenantVoiceAgentRef } from '@/components/tenant/TenantVoiceAgent';
 
-type Screen = 'contact' | 'calling' | 'inCall';
-
-interface TenantLeasingProps {
-  scenario?: string;
+interface ConversationViewProps {
+  conversation: AIConversation;
 }
 
-const TenantLeasing: React.FC<TenantLeasingProps> = ({ scenario: propScenario }) => {
-  // Extract the scenario from the URL path
-  const params = useParams();
-  const location = useLocation();
-  
-  // Log the full URL and params for debugging
-  console.log('Current location:', location);
-  console.log('Current params:', params);
-  
-  const urlScenario = params['*']?.split('/').pop();
-  const scenario = propScenario || urlScenario || 'lead';
-  
-  const [currentScreen, setCurrentScreen] = useState<Screen>('contact');
+const ConversationView: React.FC<ConversationViewProps> = ({ conversation }) => {
+  const [currentScreen, setCurrentScreen] = useState<'contact' | 'calling' | 'inCall'>('contact');
   const [isPlaying, setIsPlaying] = useState(false);
   const voiceAgentRef = useRef<TenantVoiceAgentRef>(null);
+  
+  // Extract scenario name if it exists
+  const scenarioParts = conversation.scenario?.split('/') || [];
+  const scenarioCategory = scenarioParts[0] || '';
+  const scenarioName = scenarioParts[1] || 'lead';
   
   const toggleVideoAndScreen = () => {
     if (isPlaying) {
@@ -45,12 +37,12 @@ const TenantLeasing: React.FC<TenantLeasingProps> = ({ scenario: propScenario })
 
   return (
     <Card className="shadow-none border-none">
-      <CardContent className="p-0 flex flex-col md:flex-row gap-8">
+      <CardContent className="p-0 flex flex-col md:flex-row gap-4">
         <div className="flex-1">
           <div className="space-y-4">
             <h3 className="text-lg font-medium flex items-center">
               <Home className="h-5 w-5 mr-2" />
-              PropertyAI Voice Assistant - {scenario || 'lead'} Interaction
+              PropertyAI Voice Assistant - {scenarioName || 'lead'}
             </h3>
             <p className="text-sm">
               Start a call using the phone interface to see the AI assistant in action.
@@ -65,7 +57,7 @@ const TenantLeasing: React.FC<TenantLeasingProps> = ({ scenario: propScenario })
                 <PhoneInterface
                   currentScreen={currentScreen}
                   setCurrentScreen={setCurrentScreen}
-                  scenario={scenario}
+                  scenario={scenarioName}
                 />
               </div>
               
@@ -73,7 +65,7 @@ const TenantLeasing: React.FC<TenantLeasingProps> = ({ scenario: propScenario })
                 <TenantVoiceAgent
                   ref={voiceAgentRef}
                   currentScreen={currentScreen}
-                  scenario={scenario}
+                  scenario={scenarioName}
                   onScreenChange={setCurrentScreen}
                 />
               </div>
@@ -91,4 +83,4 @@ const TenantLeasing: React.FC<TenantLeasingProps> = ({ scenario: propScenario })
   );
 };
 
-export default TenantLeasing;
+export default ConversationView;

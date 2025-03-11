@@ -5,8 +5,7 @@ import { Phone, MessageSquare, Mail, User, Bot, Send, Mic, MicOff, FileText, Lis
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
-import TenantVoiceAgent from '@/components/tenant/TenantVoiceAgent';
+import ConversationView from '@/components/communications/ConversationView';
 
 interface AIAgentConsoleProps {
   conversations: AIConversation[];
@@ -17,7 +16,6 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
   const [inputText, setInputText] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
   
   const handleSelectConversation = (conversation: AIConversation) => {
     setSelectedConversation(conversation);
@@ -57,20 +55,11 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
         return null;
     }
   };
-
-  const handleViewInTenant = () => {
-    if (selectedConversation?.scenario) {
-      const [category, scenario] = selectedConversation.scenario.split('/');
-      if (category && scenario) {
-        navigate(`/tenant/${category.toLowerCase()}/${scenario.toLowerCase()}`);
-      }
-    }
-  };
   
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 h-[600px] flex">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-100 h-[600px] flex flex-col md:flex-row">
       {/* Conversations Sidebar */}
-      <div className="w-1/4 border-r border-gray-100 overflow-y-auto">
+      <div className="w-full md:w-1/4 border-r border-gray-100 overflow-y-auto">
         <div className="p-3 border-b border-gray-100">
           <h3 className="font-medium">Recent Conversations</h3>
         </div>
@@ -109,7 +98,7 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
         {selectedConversation ? (
           <>
             {/* Chat Header */}
-            <div className="p-3 border-b border-gray-100 flex items-center justify-between">
+            <div className="p-3 border-b border-gray-100 flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600">
                   {getChannelIcon(selectedConversation.channel)}
@@ -120,18 +109,18 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
                 </div>
               </div>
               
-              <Tabs defaultValue="transcript" className="w-auto">
+              <Tabs defaultValue="summary" className="w-auto">
                 <TabsList>
                   <TabsTrigger value="summary">
                     <List className="h-4 w-4 mr-2" />
                     Summary
                   </TabsTrigger>
                   <TabsTrigger value="transcript">
-                    <FileText className="h-4 w-4 mr-2" />
+                    <MessageCircle className="h-4 w-4 mr-2" />
                     Transcript
                   </TabsTrigger>
                   <TabsTrigger value="conversation">
-                    <MessageCircle className="h-4 w-4 mr-2" />
+                    <Phone className="h-4 w-4 mr-2" />
                     Conversation
                   </TabsTrigger>
                 </TabsList>
@@ -198,17 +187,7 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
               </TabsContent>
               
               <TabsContent value="conversation" className="mt-0 h-full">
-                <div className="flex flex-col items-center justify-center h-full">
-                  <div className="text-center mb-6">
-                    <h3 className="text-lg font-medium mb-2">Interactive Agent View</h3>
-                    <p className="text-gray-500 mb-4">
-                      Open the tenant interface to view this conversation in the interactive mode.
-                    </p>
-                    <Button onClick={handleViewInTenant}>
-                      View in Tenant Interface
-                    </Button>
-                  </div>
-                </div>
+                <ConversationView conversation={selectedConversation} />
               </TabsContent>
             </div>
             
