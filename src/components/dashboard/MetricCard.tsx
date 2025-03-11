@@ -13,11 +13,11 @@ const MetricCard = ({ metric, className, selectedMarket }: MetricCardProps) => {
   const { label, value, change, status, markets } = metric;
   
   const getStatusIcon = () => {
-    if (status === 'increase_good') return <TrendingUp className="h-4 w-4 text-green-500" />;
-    if (status === 'increase_bad') return <TrendingUp className="h-4 w-4 text-red-500" />;
-    if (status === 'decrease_good') return <TrendingDown className="h-4 w-4 text-green-500" />;
-    if (status === 'decrease_bad') return <TrendingDown className="h-4 w-4 text-red-500" />;
-    return <Minus className="h-4 w-4 text-gray-500" />;
+    if (status === 'increase_good') return <TrendingUp className="h-4 w-4 text-green-500 mr-1" />;
+    if (status === 'increase_bad') return <TrendingUp className="h-4 w-4 text-red-500 mr-1" />;
+    if (status === 'decrease_good') return <TrendingDown className="h-4 w-4 text-green-500 mr-1" />;
+    if (status === 'decrease_bad') return <TrendingDown className="h-4 w-4 text-red-500 mr-1" />;
+    return <Minus className="h-4 w-4 text-gray-500 mr-1" />;
   };
   
   const getStatusColor = () => {
