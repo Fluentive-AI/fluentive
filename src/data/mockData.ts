@@ -1,3 +1,4 @@
+
 import { 
   Lead, 
   Application, 
@@ -435,6 +436,102 @@ export const mockLeadMetrics: MetricData[] = [
 
 export const mockOperationMetrics: MetricData[] = [];
 
+// Monthly data for renewals trend (last 12 months)
+export const mockRenewalsTrendData = [
+  { month: 'Mar 24', Atlanta: 63, Tampa: 61, Jacksonville: 59, Orlando: 62, Average: 61.3 },
+  { month: 'Apr 24', Atlanta: 64, Tampa: 62, Jacksonville: 60, Orlando: 63, Average: 62.3 },
+  { month: 'May 24', Atlanta: 65, Tampa: 63, Jacksonville: 61, Orlando: 64, Average: 63.3 },
+  { month: 'Jun 24', Atlanta: 66, Tampa: 64, Jacksonville: 62, Orlando: 65, Average: 64.3 },
+  { month: 'Jul 24', Atlanta: 67, Tampa: 65, Jacksonville: 63, Orlando: 66, Average: 65.3 },
+  { month: 'Aug 24', Atlanta: 68, Tampa: 66, Jacksonville: 64, Orlando: 67, Average: 66.3 },
+  { month: 'Sep 24', Atlanta: 69, Tampa: 67, Jacksonville: 65, Orlando: 68, Average: 67.3 },
+  { month: 'Oct 24', Atlanta: 70, Tampa: 68, Jacksonville: 66, Orlando: 69, Average: 68.3 },
+  { month: 'Nov 24', Atlanta: 71, Tampa: 69, Jacksonville: 67, Orlando: 70, Average: 69.3 },
+  { month: 'Dec 24', Atlanta: 72, Tampa: 70, Jacksonville: 68, Orlando: 71, Average: 70.3 },
+  { month: 'Jan 25', Atlanta: 73, Tampa: 71, Jacksonville: 69, Orlando: 72, Average: 71.3 },
+  { month: 'Feb 25', Atlanta: 74, Tampa: 72, Jacksonville: 70, Orlando: 73, Average: 72.3 }
+];
+
+// Monthly data for occupancy rate trend (last 12 months)
+export const mockOccupancyTrendData = [
+  { month: 'Mar 24', Atlanta: 91.2, Tampa: 90.8, Jacksonville: 90.1, Orlando: 91.5, Average: 90.9 },
+  { month: 'Apr 24', Atlanta: 91.5, Tampa: 91.0, Jacksonville: 90.3, Orlando: 91.8, Average: 91.1 },
+  { month: 'May 24', Atlanta: 91.8, Tampa: 91.2, Jacksonville: 90.5, Orlando: 92.1, Average: 91.4 },
+  { month: 'Jun 24', Atlanta: 92.1, Tampa: 91.4, Jacksonville: 90.7, Orlando: 92.4, Average: 91.7 },
+  { month: 'Jul 24', Atlanta: 92.4, Tampa: 91.6, Jacksonville: 90.9, Orlando: 92.7, Average: 91.9 },
+  { month: 'Aug 24', Atlanta: 92.7, Tampa: 91.8, Jacksonville: 91.1, Orlando: 93.0, Average: 92.2 },
+  { month: 'Sep 24', Atlanta: 93.0, Tampa: 92.0, Jacksonville: 91.3, Orlando: 93.3, Average: 92.4 },
+  { month: 'Oct 24', Atlanta: 93.3, Tampa: 92.2, Jacksonville: 91.5, Orlando: 93.6, Average: 92.7 },
+  { month: 'Nov 24', Atlanta: 93.6, Tampa: 92.4, Jacksonville: 91.7, Orlando: 93.9, Average: 92.9 },
+  { month: 'Dec 24', Atlanta: 93.9, Tampa: 92.6, Jacksonville: 91.9, Orlando: 94.2, Average: 93.1 },
+  { month: 'Jan 25', Atlanta: 94.2, Tampa: 92.8, Jacksonville: 92.1, Orlando: 94.5, Average: 93.4 },
+  { month: 'Feb 25', Atlanta: 94.5, Tampa: 93.0, Jacksonville: 92.3, Orlando: 94.8, Average: 93.7 }
+];
+
+// Monthly data for delinquency rate trend (last 12 months)
+export const mockDelinquencyTrendData = [
+  { month: 'Mar 24', Atlanta: 2.8, Tampa: 3.0, Jacksonville: 3.2, Orlando: 2.7, Average: 2.9 },
+  { month: 'Apr 24', Atlanta: 2.7, Tampa: 2.9, Jacksonville: 3.1, Orlando: 2.6, Average: 2.8 },
+  { month: 'May 24', Atlanta: 2.6, Tampa: 2.8, Jacksonville: 3.0, Orlando: 2.5, Average: 2.7 },
+  { month: 'Jun 24', Atlanta: 2.5, Tampa: 2.7, Jacksonville: 2.9, Orlando: 2.4, Average: 2.6 },
+  { month: 'Jul 24', Atlanta: 2.4, Tampa: 2.6, Jacksonville: 2.8, Orlando: 2.3, Average: 2.5 },
+  { month: 'Aug 24', Atlanta: 2.3, Tampa: 2.5, Jacksonville: 2.7, Orlando: 2.2, Average: 2.4 },
+  { month: 'Sep 24', Atlanta: 2.2, Tampa: 2.4, Jacksonville: 2.6, Orlando: 2.1, Average: 2.3 },
+  { month: 'Oct 24', Atlanta: 2.1, Tampa: 2.3, Jacksonville: 2.5, Orlando: 2.0, Average: 2.2 },
+  { month: 'Nov 24', Atlanta: 2.0, Tampa: 2.2, Jacksonville: 2.4, Orlando: 1.9, Average: 2.1 },
+  { month: 'Dec 24', Atlanta: 1.9, Tampa: 2.1, Jacksonville: 2.3, Orlando: 1.8, Average: 2.0 },
+  { month: 'Jan 25', Atlanta: 1.8, Tampa: 2.0, Jacksonville: 2.2, Orlando: 1.7, Average: 1.9 },
+  { month: 'Feb 25', Atlanta: 1.7, Tampa: 1.9, Jacksonville: 2.1, Orlando: 1.6, Average: 1.8 }
+];
+
+// Monthly data for billable hours per technician (last 12 months)
+export const mockBillHoursTrendData = [
+  { month: 'Mar 24', 'John D.': 5.8, 'Maria L.': 6.2, 'Roberto S.': 5.5, 'Sarah K.': 6.0, Average: 5.9 },
+  { month: 'Apr 24', 'John D.': 5.9, 'Maria L.': 6.3, 'Roberto S.': 5.6, 'Sarah K.': 6.1, Average: 6.0 },
+  { month: 'May 24', 'John D.': 6.0, 'Maria L.': 6.4, 'Roberto S.': 5.7, 'Sarah K.': 6.2, Average: 6.1 },
+  { month: 'Jun 24', 'John D.': 6.1, 'Maria L.': 6.5, 'Roberto S.': 5.8, 'Sarah K.': 6.3, Average: 6.2 },
+  { month: 'Jul 24', 'John D.': 6.2, 'Maria L.': 6.6, 'Roberto S.': 5.9, 'Sarah K.': 6.4, Average: 6.3 },
+  { month: 'Aug 24', 'John D.': 6.3, 'Maria L.': 6.7, 'Roberto S.': 6.0, 'Sarah K.': 6.5, Average: 6.4 },
+  { month: 'Sep 24', 'John D.': 6.4, 'Maria L.': 6.8, 'Roberto S.': 6.1, 'Sarah K.': 6.6, Average: 6.5 },
+  { month: 'Oct 24', 'John D.': 6.5, 'Maria L.': 6.9, 'Roberto S.': 6.2, 'Sarah K.': 6.7, Average: 6.6 },
+  { month: 'Nov 24', 'John D.': 6.6, 'Maria L.': 7.0, 'Roberto S.': 6.3, 'Sarah K.': 6.8, Average: 6.7 },
+  { month: 'Dec 24', 'John D.': 6.7, 'Maria L.': 7.1, 'Roberto S.': 6.4, 'Sarah K.': 6.9, Average: 6.8 },
+  { month: 'Jan 25', 'John D.': 6.8, 'Maria L.': 7.2, 'Roberto S.': 6.5, 'Sarah K.': 7.0, Average: 6.9 },
+  { month: 'Feb 25', 'John D.': 6.9, 'Maria L.': 7.3, 'Roberto S.': 6.6, 'Sarah K.': 7.1, Average: 7.0 }
+];
+
+// Monthly data for work orders per technician (last 12 months)
+export const mockWorkOrdersTrendData = [
+  { month: 'Mar 24', 'John D.': 7.5, 'Maria L.': 6.8, 'Roberto S.': 7.2, 'Sarah K.': 6.5, Average: 7.0 },
+  { month: 'Apr 24', 'John D.': 7.6, 'Maria L.': 6.9, 'Roberto S.': 7.3, 'Sarah K.': 6.6, Average: 7.1 },
+  { month: 'May 24', 'John D.': 7.7, 'Maria L.': 7.0, 'Roberto S.': 7.4, 'Sarah K.': 6.7, Average: 7.2 },
+  { month: 'Jun 24', 'John D.': 7.8, 'Maria L.': 7.1, 'Roberto S.': 7.5, 'Sarah K.': 6.8, Average: 7.3 },
+  { month: 'Jul 24', 'John D.': 7.9, 'Maria L.': 7.2, 'Roberto S.': 7.6, 'Sarah K.': 6.9, Average: 7.4 },
+  { month: 'Aug 24', 'John D.': 8.0, 'Maria L.': 7.3, 'Roberto S.': 7.7, 'Sarah K.': 7.0, Average: 7.5 },
+  { month: 'Sep 24', 'John D.': 8.1, 'Maria L.': 7.4, 'Roberto S.': 7.8, 'Sarah K.': 7.1, Average: 7.6 },
+  { month: 'Oct 24', 'John D.': 8.2, 'Maria L.': 7.5, 'Roberto S.': 7.9, 'Sarah K.': 7.2, Average: 7.7 },
+  { month: 'Nov 24', 'John D.': 8.3, 'Maria L.': 7.6, 'Roberto S.': 8.0, 'Sarah K.': 7.3, Average: 7.8 },
+  { month: 'Dec 24', 'John D.': 8.4, 'Maria L.': 7.7, 'Roberto S.': 8.1, 'Sarah K.': 7.4, Average: 7.9 },
+  { month: 'Jan 25', 'John D.': 8.5, 'Maria L.': 7.8, 'Roberto S.': 8.2, 'Sarah K.': 7.5, Average: 8.0 },
+  { month: 'Feb 25', 'John D.': 8.6, 'Maria L.': 7.9, 'Roberto S.': 8.3, 'Sarah K.': 7.6, Average: 8.1 }
+];
+
+// Monthly data for leasing timeline trend (last 12 months)
+export const mockLeasingTimelineTrendData = [
+  { month: 'Mar 24', 'Lead to Sign': 14, 'Sign to Move': 28 },
+  { month: 'Apr 24', 'Lead to Sign': 14, 'Sign to Move': 28 },
+  { month: 'May 24', 'Lead to Sign': 14, 'Sign to Move': 28 },
+  { month: 'Jun 24', 'Lead to Sign': 15, 'Sign to Move': 29 },
+  { month: 'Jul 24', 'Lead to Sign': 15, 'Sign to Move': 29 },
+  { month: 'Aug 24', 'Lead to Sign': 15, 'Sign to Move': 29 },
+  { month: 'Sep 24', 'Lead to Sign': 14, 'Sign to Move': 28 },
+  { month: 'Oct 24', 'Lead to Sign': 14, 'Sign to Move': 28 },
+  { month: 'Nov 24', 'Lead to Sign': 14, 'Sign to Move': 28 },
+  { month: 'Dec 24', 'Lead to Sign': 15, 'Sign to Move': 29 },
+  { month: 'Jan 25', 'Lead to Sign': 15, 'Sign to Move': 30 },
+  { month: 'Feb 25', 'Lead to Sign': 15, 'Sign to Move': 30 }
+];
+
 export const mockOccupancyData: ChartData[] = [
   { name: 'Atlanta', value: 95.2 },
   { name: 'Tampa', value: 93.8 },
@@ -450,15 +547,15 @@ export const mockDelinquencyData: ChartData[] = [
 ];
 
 export const mockBillHoursData: ChartData[] = [
-  { name: 'Tech 1', value: 6.8 },
-  { name: 'Tech 2', value: 7.2 },
-  { name: 'Tech 3', value: 6.5 },
-  { name: 'Tech 4', value: 7.0 }
+  { name: 'John D.', value: 6.8 },
+  { name: 'Maria L.', value: 7.2 },
+  { name: 'Roberto S.', value: 6.5 },
+  { name: 'Sarah K.', value: 7.0 }
 ];
 
 export const mockWorkOrdersData: ChartData[] = [
-  { name: 'Tech 1', value: 8.5 },
-  { name: 'Tech 2', value: 7.8 },
-  { name: 'Tech 3', value: 8.2 },
-  { name: 'Tech 4', value: 7.5 }
+  { name: 'John D.', value: 8.5 },
+  { name: 'Maria L.', value: 7.8 },
+  { name: 'Roberto S.', value: 8.2 },
+  { name: 'Sarah K.', value: 7.5 }
 ];

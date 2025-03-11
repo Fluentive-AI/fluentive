@@ -1,16 +1,46 @@
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { ChartData } from '@/types';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 interface SimpleLineChartProps {
-  data: ChartData[];
+  data: any[];
   title: string;
-  dataKey?: string;
+  xAxisKey?: string;
   yAxisLabel?: string;
+  lines?: {
+    dataKey: string;
+    color: string;
+    strokeWidth?: number;
+    isAverage?: boolean;
+  }[];
 }
 
-const SimpleLineChart = ({ data, title, dataKey = 'value', yAxisLabel }: SimpleLineChartProps) => {
+const SimpleLineChart = ({ 
+  data, 
+  title, 
+  xAxisKey = 'month', 
+  yAxisLabel,
+  lines 
+}: SimpleLineChartProps) => {
+  // Determine lines to display based on data if not provided
+  const chartLines = lines || (() => {
+    if (!data || data.length === 0) return [];
+    
+    // Get all keys except the x-axis key
+    const firstItem = data[0];
+    return Object.keys(firstItem)
+      .filter(key => key !== xAxisKey)
+      .map((key, index) => {
+        const isAverage = key === 'Average';
+        return {
+          dataKey: key,
+          color: isAverage ? '#3391b1' : `hsl(${(index * 30) % 360}, 70%, 65%)`,
+          strokeWidth: isAverage ? 3 : 1.5,
+          isAverage
+        };
+      });
+  })();
+
   return (
     <div>
       <h3 className="text-base font-medium mb-4">{title}</h3>
@@ -26,7 +56,7 @@ const SimpleLineChart = ({ data, title, dataKey = 'value', yAxisLabel }: SimpleL
             }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="name" />
+            <XAxis dataKey={xAxisKey} />
             <YAxis 
               label={{ 
                 value: yAxisLabel,
@@ -35,13 +65,19 @@ const SimpleLineChart = ({ data, title, dataKey = 'value', yAxisLabel }: SimpleL
               }}
             />
             <Tooltip />
-            <Line 
-              type="monotone" 
-              dataKey={dataKey} 
-              stroke="#3391b1" 
-              strokeWidth={2} 
-              activeDot={{ r: 8 }} 
-            />
+            <Legend />
+            {chartLines.map((line, index) => (
+              <Line 
+                key={index}
+                type="monotone" 
+                dataKey={line.dataKey} 
+                stroke={line.color}
+                strokeWidth={line.strokeWidth || (line.isAverage ? 3 : 1.5)}
+                dot={line.isAverage ? { r: 4 } : { r: 3 }}
+                activeDot={line.isAverage ? { r: 8 } : { r: 6 }}
+                name={line.dataKey}
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </div>

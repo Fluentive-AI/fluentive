@@ -1,16 +1,43 @@
 
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { ChartData } from '@/types';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 interface SimpleBarChartProps {
-  data: ChartData[];
+  data: any[];
   title: string;
-  dataKey?: string;
+  xAxisKey?: string;
   yAxisLabel?: string;
+  bars?: {
+    dataKey: string;
+    color: string;
+    stackId?: string;
+  }[];
+  stacked?: boolean;
 }
 
-const SimpleBarChart = ({ data, title, dataKey = 'value', yAxisLabel }: SimpleBarChartProps) => {
+const SimpleBarChart = ({ 
+  data, 
+  title, 
+  xAxisKey = 'month', 
+  yAxisLabel,
+  bars,
+  stacked = false
+}: SimpleBarChartProps) => {
+  // Determine bars to display based on data if not provided
+  const chartBars = bars || (() => {
+    if (!data || data.length === 0) return [];
+    
+    // Get all keys except the x-axis key
+    const firstItem = data[0];
+    return Object.keys(firstItem)
+      .filter(key => key !== xAxisKey)
+      .map((key, index) => ({
+        dataKey: key,
+        color: index === 0 ? '#3391b1' : '#7bccee',
+        stackId: stacked ? 'a' : undefined
+      }));
+  })();
+
   return (
     <div>
       <h3 className="text-base font-medium mb-4">{title}</h3>
@@ -26,7 +53,7 @@ const SimpleBarChart = ({ data, title, dataKey = 'value', yAxisLabel }: SimpleBa
             }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="name" />
+            <XAxis dataKey={xAxisKey} />
             <YAxis 
               label={{ 
                 value: yAxisLabel,
@@ -35,7 +62,16 @@ const SimpleBarChart = ({ data, title, dataKey = 'value', yAxisLabel }: SimpleBa
               }}
             />
             <Tooltip />
-            <Bar dataKey={dataKey} fill="#3391b1" />
+            <Legend />
+            {chartBars.map((bar, index) => (
+              <Bar 
+                key={index}
+                dataKey={bar.dataKey} 
+                fill={bar.color} 
+                stackId={bar.stackId}
+                name={bar.dataKey}
+              />
+            ))}
           </BarChart>
         </ResponsiveContainer>
       </div>

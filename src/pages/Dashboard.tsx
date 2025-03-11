@@ -5,11 +5,12 @@ import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
 import SimpleBarChart from '@/components/dashboard/SimpleBarChart';
 import { 
   mockDashboardMetrics, 
-  mockLeadMetrics,
-  mockOccupancyData,
-  mockDelinquencyData,
-  mockBillHoursData,
-  mockWorkOrdersData
+  mockRenewalsTrendData,
+  mockOccupancyTrendData,
+  mockDelinquencyTrendData,
+  mockBillHoursTrendData,
+  mockWorkOrdersTrendData,
+  mockLeasingTimelineTrendData
 } from '@/data/mockData';
 import { Card } from '@/components/ui/card';
 
@@ -28,19 +29,21 @@ const Dashboard = () => {
           <h2 className="text-lg font-semibold">Leasing</h2>
           <Card className="p-4">
             <SimpleLineChart 
-              data={mockOccupancyData} 
+              data={mockRenewalsTrendData} 
               title="% Renewals trend"
               yAxisLabel="%"
             />
           </Card>
           <Card className="p-4">
             <SimpleBarChart 
-              data={[
-                { name: 'Lead to Sign', value: 15 },
-                { name: 'Sign to Move', value: 30 }
-              ]} 
+              data={mockLeasingTimelineTrendData} 
               title="Leasing Timeline Trend"
               yAxisLabel="Days"
+              stacked={true}
+              bars={[
+                { dataKey: 'Lead to Sign', color: '#3391b1', stackId: 'a' },
+                { dataKey: 'Sign to Move', color: '#7bccee', stackId: 'a' }
+              ]}
             />
           </Card>
         </div>
@@ -50,14 +53,14 @@ const Dashboard = () => {
           <h2 className="text-lg font-semibold">Property Ops</h2>
           <Card className="p-4">
             <SimpleLineChart 
-              data={mockOccupancyData} 
+              data={mockOccupancyTrendData} 
               title="Occupancy Rate Trend by Market"
               yAxisLabel="%"
             />
           </Card>
           <Card className="p-4">
             <SimpleLineChart 
-              data={mockDelinquencyData} 
+              data={mockDelinquencyTrendData} 
               title="Delinquency Rate Trend by Market"
               yAxisLabel="%"
             />
@@ -69,14 +72,14 @@ const Dashboard = () => {
           <h2 className="text-lg font-semibold">Renovation, Maintenance, Turns</h2>
           <Card className="p-4">
             <SimpleLineChart 
-              data={mockBillHoursData} 
+              data={mockBillHoursTrendData} 
               title="Bill Hours/Day/Technician"
               yAxisLabel="Hours"
             />
           </Card>
           <Card className="p-4">
             <SimpleLineChart 
-              data={mockWorkOrdersData} 
+              data={mockWorkOrdersTrendData} 
               title="Work Orders/Day/Technician"
               yAxisLabel="Orders"
             />
