@@ -8,6 +8,8 @@ interface PhoneInterfaceProps {
   onScreenChange?: (screen: Screen) => void;
   onCallStarted?: () => void;
   playVideo?: () => void;
+  currentScreen?: Screen;
+  setCurrentScreen?: (screen: Screen) => void;
 }
 
 const VIDEO_PATHS = {
@@ -22,14 +24,18 @@ const PhoneInterface = ({
   scenario = 'lead', 
   onScreenChange, 
   onCallStarted,
-  playVideo 
+  playVideo,
+  currentScreen: externalScreen,
+  setCurrentScreen: externalSetScreen
 }: PhoneInterfaceProps) => {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('contact');
+  const [internalScreen, setInternalScreen] = useState<Screen>('contact');
   const [callTime, setCallTime] = useState(0);
   const location = useLocation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
-  // Add debug logging
+  const currentScreen = externalScreen || internalScreen;
+  const setCurrentScreen = externalSetScreen || setInternalScreen;
+  
   useEffect(() => {
     console.log('PhoneInterface - Current scenario:', scenario);
     console.log('PhoneInterface - Current screen:', currentScreen);
@@ -42,13 +48,12 @@ const PhoneInterface = ({
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-  }, [location.pathname]);
+  }, [location.pathname, setCurrentScreen]);
   
   useEffect(() => {
     onScreenChange?.(currentScreen);
     
     if (currentScreen === 'inCall') {
-      // Notify parent that call has started
       onCallStarted?.();
     }
   }, [currentScreen, onScreenChange, onCallStarted]);
@@ -67,7 +72,6 @@ const PhoneInterface = ({
         setCallTime(prev => prev + 1);
       }, 1000);
 
-      // Play audio when entering inCall screen
       console.log('Attempting to play audio for scenario:', scenario);
       const videoPath = VIDEO_PATHS[scenario as keyof typeof VIDEO_PATHS] || VIDEO_PATHS.lead;
       console.log('Audio path:', videoPath);
@@ -95,7 +99,6 @@ const PhoneInterface = ({
   
   const handleCall = () => {
     setCurrentScreen('calling');
-    // Simulate call being picked up after 2 seconds
     setTimeout(() => {
       setCallTime(0);
       setCurrentScreen('inCall');
@@ -106,7 +109,6 @@ const PhoneInterface = ({
     setCurrentScreen('contact');
   };
   
-  // Contact screen (initial state)
   if (currentScreen === 'contact') {
     return (
       <img 
@@ -118,7 +120,6 @@ const PhoneInterface = ({
     );
   }
   
-  // Calling screen (intermediate state)
   if (currentScreen === 'calling') {
     return (
       <img 
@@ -129,7 +130,6 @@ const PhoneInterface = ({
     );
   }
   
-  // In call screen with timer
   return (
     <div className="relative w-full h-full">
       <img 

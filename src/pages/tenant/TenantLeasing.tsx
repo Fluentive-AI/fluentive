@@ -1,48 +1,52 @@
-import React, { useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
-import { Home, Volume } from 'lucide-react';
+import { Home } from 'lucide-react';
 import PhoneInterface from '@/components/tenant/PhoneInterface';
+import TenantVoiceAgent, { TenantVoiceAgentRef } from '@/components/tenant/TenantVoiceAgent';
+import { toast } from 'sonner';
 
 type Screen = 'contact' | 'calling' | 'inCall';
 
-const VIDEO_PATHS = {
-  lead: '/phone_calls/leasing/lead.mp4',
-  application: '/phone_calls/leasing/application.mp4',
-  signing: '/phone_calls/leasing/signing.mp4',
-  premove: '/phone_calls/leasing/premove.mp4',
-  onboarding: '/phone_calls/leasing/onboarding.mp4'
-};
-
 const TenantLeasing = () => {
-  const { scenario = 'lead' } = useParams<{ scenario: string }>();
+  // Extract the scenario from the URL path
+  const params = useParams();
+  const location = useLocation();
+  
+  // Log the full URL and params for debugging
+  console.log('Current location:', location);
+  console.log('Current params:', params);
+  
+  const scenario = params['*']?.split('/').pop();
+  
   const [currentScreen, setCurrentScreen] = useState<Screen>('contact');
-  const [callTime, setCallTime] = useState(0);
-  const [debugInfo, setDebugInfo] = useState<string>('Waiting for state change...');
+  const [debugInfo, setDebugInfo] = useState<string>('Waiting for call...');
+  const [isPlaying, setIsPlaying] = useState(false);
   
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const voiceAgentRef = useRef<TenantVoiceAgentRef>(null);
   
+  useEffect(() => {
+    console.log('Current scenario from URL:', scenario);
+  }, [scenario]);
+
   const handleScreenChange = (screen: Screen) => {
+    console.log('Screen changed to:', screen);
     setCurrentScreen(screen);
+    setDebugInfo(`Current screen: ${screen}`);
   };
   
-  const playVideo = () => {
-    console.log('Play video function called');
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play()
-        .then(() => {
-          console.log('Video started playing successfully');
-          setDebugInfo('Video playing successfully');
-        })
-        .catch(error => {
-          console.error('Error playing video:', error);
-          setDebugInfo(`Video error: ${error.message}`);
-        });
+  const toggleVideoAndScreen = () => {
+    if (isPlaying) {
+      voiceAgentRef.current?.playVideo();
+      setCurrentScreen('contact');
+      setIsPlaying(false);
     } else {
-      console.error('Video ref is null');
-      setDebugInfo('Video element not found');
+      setCurrentScreen('calling');
+      setTimeout(() => {
+        setCurrentScreen('inCall');
+      }, 2000);
+      voiceAgentRef.current?.playVideo();
+      setIsPlaying(true);
     }
   };
 
@@ -53,59 +57,42 @@ const TenantLeasing = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-medium flex items-center">
               <Home className="h-5 w-5 mr-2" />
-              PropertyAI Voice Assistant - Lead Interaction
+              PropertyAI Voice Assistant - {scenario || 'lead'} Interaction
             </h3>
             <p className="text-sm">
-              Hello! I'm your Property AI assistant. How can I help you today?
+              Start a call using the phone interface to see the AI assistant in action.
             </p>
+            <p className="text-xs text-gray-500">{debugInfo}</p>
           </div>
         </div>
         
-        {/* Combined Phone and Voice Agent Card */}
-        <Card className="w-[700px] flex-shrink-0">
+        <Card className="w-[700px] flex-shrink-0 relative">
           <CardContent className="p-4">
             <div className="flex gap-4">
-              {/* Phone Interface */}
               <div className="w-[280px]">
-                <PhoneInterface 
-                  scenario={scenario} 
-                  onScreenChange={handleScreenChange}
-                  playVideo={playVideo}
+                <PhoneInterface
+                  currentScreen={currentScreen}
+                  setCurrentScreen={setCurrentScreen}
+                  scenario={scenario}
                 />
               </div>
               
-              {/* Voice Agent */}
               <div className="flex-1">
-                <div className="flex flex-col h-full space-y-4">
-                  <div className="flex items-center">
-                    <Volume className="h-5 w-5 mr-2" />
-                    <h3 className="text-lg font-medium">
-                      Property AI Voice Assistant - {scenario}
-                    </h3>
-                  </div>
-                  
-                  <div className="bg-gray-100 p-4 rounded-lg">
-                    <p className="text-base">
-                      Hello! I'm your Property AI assistant. How can I help you today?
-                    </p>
-                    <p className="text-xs text-gray-500 mt-2">{debugInfo}</p>
-                  </div>
-                  
-                  <div className="bg-white p-4 rounded-lg border border-gray-200 flex-grow">
-                    <video
-                      ref={videoRef}
-                      className="w-full h-auto rounded-lg"
-                      playsInline
-                      muted
-                      style={{ border: '1px solid blue' }}
-                    >
-                      <source src="/phone_calls/leasing/lead.mp4" type="video/mp4" />
-                    </video>
-                  </div>
-                </div>
+                <TenantVoiceAgent
+                  ref={voiceAgentRef}
+                  currentScreen={currentScreen}
+                  scenario={scenario}
+                  onScreenChange={handleScreenChange}
+                />
               </div>
             </div>
           </CardContent>
+          
+          <button
+            onClick={toggleVideoAndScreen}
+            className="fixed bottom-0 left-[calc(16rem+24px)] right-0 h-16 bg-transparent hover:bg-black/[0.02] transition-colors duration-200 z-10"
+            style={{ border: 'none', outline: 'none' }}
+          />
         </Card>
       </CardContent>
     </Card>
