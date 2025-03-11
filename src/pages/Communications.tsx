@@ -1,13 +1,61 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import AIAgentConsole from '@/components/communications/AIAgentConsole';
+import CommunicationsAnalytics from '@/components/communications/CommunicationsAnalytics';
 import { mockAIConversations } from '@/data/mockData';
 import { Button } from '@/components/ui/button';
-import { Phone, MessageSquare, Mail, Plus } from 'lucide-react';
+import { Phone, MessageSquare, Mail, Plus, Filter } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+
+const SCENARIO_OPTIONS = [
+  { value: 'all', label: 'All Scenarios' },
+  { value: 'leasing', label: 'Leasing' },
+  { value: 'lead', label: 'Leasing/Lead Interaction' },
+  { value: 'application', label: 'Leasing/Application Support' },
+  { value: 'signing', label: 'Leasing/Lease Signing' },
+  { value: 'premove', label: 'Leasing/Pre-Move-in Prep' },
+  { value: 'onboarding', label: 'Leasing/Tenant Onboarding' },
+  { value: 'operations', label: 'Operations' },
+  { value: 'rent', label: 'Operations/Rent Collection' },
+  { value: 'renewal', label: 'Operations/Lease Renewals' },
+  { value: 'moveout-notice', label: 'Operations/Move-Out Notices' },
+  { value: 'moveout-coordination', label: 'Operations/Move-Out Coordination' },
+  { value: 'maintenance', label: 'Maintenance' },
+  { value: 'request', label: 'Maintenance/Maintenance Requests' },
+  { value: 'workorder', label: 'Maintenance/Work Order Triage' },
+  { value: 'scheduling', label: 'Maintenance/Maintenance Scheduling' },
+  { value: 'relationship', label: 'Maintenance/Tenant Relationship' }
+];
+
+const COMMUNICATION_TYPES = [
+  { value: 'all', label: 'All Communications' },
+  { value: 'voice', label: 'Voice', icon: Phone },
+  { value: 'sms', label: 'Text Message', icon: MessageSquare },
+  { value: 'email', label: 'Email', icon: Mail }
+];
 
 const Communications = () => {
+  const [scenarioFilter, setScenarioFilter] = useState('all');
+  const [commTypeFilter, setCommTypeFilter] = useState('all');
+  
+  // Filter conversations based on selected filters
+  const filteredConversations = mockAIConversations.filter(conversation => {
+    // Filter by scenario
+    if (scenarioFilter !== 'all' && !conversation.scenario?.includes(scenarioFilter)) {
+      return false;
+    }
+    
+    // Filter by communication type
+    if (commTypeFilter !== 'all' && conversation.channel !== commTypeFilter) {
+      return false;
+    }
+    
+    return true;
+  });
+  
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -34,37 +82,56 @@ const Communications = () => {
       </div>
       
       <Card>
-        <CardHeader className="pb-3">
-          <CardTitle>AI Agent Console</CardTitle>
+        <CardHeader className="pb-3 flex flex-row items-center justify-between">
+          <CardTitle>AI Agent Activity</CardTitle>
+          
+          <div className="flex gap-2 items-center">
+            {/* Communication Type Filter */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-8">
+                  <Filter className="h-3.5 w-3.5 mr-2" />
+                  {COMMUNICATION_TYPES.find(t => t.value === commTypeFilter)?.label || 'All Communications'}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {COMMUNICATION_TYPES.map(type => (
+                  <DropdownMenuItem key={type.value} onClick={() => setCommTypeFilter(type.value)}>
+                    {type.icon && <type.icon className="h-4 w-4 mr-2" />}
+                    {type.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {/* Scenario Filter */}
+            <Select value={scenarioFilter} onValueChange={setScenarioFilter}>
+              <SelectTrigger className="w-[220px] h-8">
+                <SelectValue placeholder="All Scenarios" />
+              </SelectTrigger>
+              <SelectContent>
+                {SCENARIO_OPTIONS.map(option => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="console">
             <TabsList className="mb-4">
               <TabsTrigger value="console">Agent Console</TabsTrigger>
-              <TabsTrigger value="history">Conversation History</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
             </TabsList>
             
             <TabsContent value="console">
-              <AIAgentConsole conversations={mockAIConversations} />
-            </TabsContent>
-            
-            <TabsContent value="history">
-              <div className="bg-gray-50 p-4 rounded-lg text-center text-gray-500 h-[600px] flex items-center justify-center">
-                <div>
-                  <h3 className="text-lg font-medium mb-2">Conversation History</h3>
-                  <p>View and search through past conversations.</p>
-                </div>
-              </div>
+              <AIAgentConsole conversations={filteredConversations} />
             </TabsContent>
             
             <TabsContent value="analytics">
-              <div className="bg-gray-50 p-4 rounded-lg text-center text-gray-500 h-[600px] flex items-center justify-center">
-                <div>
-                  <h3 className="text-lg font-medium mb-2">Communication Analytics</h3>
-                  <p>View analytics and insights from AI communications.</p>
-                </div>
-              </div>
+              <CommunicationsAnalytics conversations={filteredConversations} />
             </TabsContent>
           </Tabs>
         </CardContent>

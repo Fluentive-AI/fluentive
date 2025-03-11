@@ -286,43 +286,135 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
 export const mockAIConversations: AIConversation[] = [
   {
     id: '1',
-    relatedTo: 'lead',
-    relatedId: '1',
     contactName: 'John Smith',
-    contactType: 'lead',
-    channel: 'voice',
-    dateTime: '2025-03-15T14:30:00',
-    transcript: 'AI: Hello, this is PropertyAI assistant. How can I help you today?\nJohn: I\'m interested in touring the Oakwood Apartments.\nAI: Great! We have availability this weekend. Would Saturday at 2 PM work for you?\nJohn: Yes, that works perfectly.\nAI: Excellent! I\'ve scheduled your tour for Saturday at 2 PM. You\'ll receive a confirmation email shortly. Is there anything else I can help with?',
-    summary: 'Scheduled a property tour for Oakwood Apartments on Saturday at 2 PM.',
+    channel: 'voice' as 'voice' | 'sms' | 'email',
+    dateTime: '2025-03-12T14:30:00',
+    summary: 'Inquired about 2-bedroom apartment availability and pricing at Riverside Apartments.',
+    transcript: `AI: Hello, thank you for calling PropertyAI. How can I assist you today?
+John: Hi, I'm looking for information about the 2 bedroom apartments at Riverside.
+AI: I'd be happy to help you with that. We do have 2-bedroom apartments available at Riverside Apartments. The units start at $1,850 per month for a standard 2-bedroom and go up to $2,200 for a deluxe unit with a view. Would you like to know more specific details about the layouts or amenities?
+John: Yes, could you tell me about the amenities?
+AI: Of course. Riverside Apartments offers a fitness center, swimming pool, covered parking, in-unit washer and dryer, pet-friendly units with a dog park, 24-hour maintenance, and a clubhouse with a business center. All units have updated kitchens with stainless steel appliances and quartz countertops. Would you be interested in scheduling a tour to see the property?
+John: That sounds good. Do you have any availability next weekend?
+AI: Let me check our calendar. Yes, we have tour slots available next Saturday at 10:00 AM, 1:00 PM, and 3:00 PM, or Sunday at 1:00 PM and 3:00 PM. Would any of those times work for you?
+John: Saturday at 1 PM would be perfect.
+AI: Great! I'll schedule you for a tour this Saturday at 1:00 PM. Could I get your full name, email, and phone number to confirm the appointment?
+John: John Smith, john.smith@email.com, and my phone is 555-123-4567.
+AI: Thank you, John. I've scheduled your tour for Saturday, March 15th at 1:00 PM at Riverside Apartments. You'll receive a confirmation email shortly with the details and directions to the property. Is there anything else I can help you with today?
+John: No, that's all. Thank you!
+AI: You're welcome, John. We look forward to seeing you on Saturday. Feel free to call back if you have any other questions. Have a great day!`,
     sentiment: 'positive',
-    actionItems: ['Send tour confirmation email', 'Update CRM with tour details'],
+    actionItems: [
+      'Schedule tour for Saturday, March 15th at 1:00 PM',
+      'Send confirmation email with property details',
+      'Add to CRM for follow-up'
+    ],
+    scenario: 'Leasing/Lead Interaction'
   },
   {
     id: '2',
-    relatedTo: 'tenant',
-    relatedId: '3',
-    contactName: 'Thomas White',
-    contactType: 'tenant',
-    channel: 'sms',
-    dateTime: '2025-03-12T10:15:00',
-    transcript: 'Thomas: My AC isn\'t cooling, can someone look at it?\nAI: I\'m sorry to hear that. I can help schedule a maintenance visit. Is this an urgent matter?\nThomas: Yes, it\'s very hot in the apartment.\nAI: I understand. I\'ve created an urgent maintenance request, and a technician will contact you within 4 hours. If you don\'t hear back by 2:15 PM, please let us know.',
-    summary: 'Created urgent maintenance request for AC not cooling.',
-    sentiment: 'negative',
-    actionItems: ['Follow up on HVAC repair', 'Check if technician contacted tenant'],
+    contactName: 'Jennifer Lee',
+    channel: 'email' as 'voice' | 'sms' | 'email',
+    dateTime: '2025-03-11T09:15:00',
+    summary: 'Requested information about application process and required documentation for Maple Ridge townhomes.',
+    transcript: `AI: Hello Jennifer, thank you for your inquiry about the application process for Maple Ridge townhomes. I'm happy to provide you with the information you need.
+Jennifer: Hi, I'm interested in applying for a townhome at Maple Ridge. What documents do I need to prepare and what is the application fee?
+AI: For the Maple Ridge townhomes application, you'll need to provide the following documents: government-issued ID, proof of income (last 3 pay stubs or offer letter), last 2 months of bank statements, and contact information for previous landlords. The application fee is $50 per applicant, and there's a $150 administrative fee if approved. Would you like me to send you the online application link?
+Jennifer: Yes, please send me the link. How long does the approval process take?
+AI: I've sent the application link to your email. The approval process typically takes 2-3 business days from the time we receive your completed application and all required documents. We'll run a credit and background check, verify your employment and rental history. Is there a specific move-in date you're considering?
+Jennifer: I'm hoping to move in by April 1st if possible.
+AI: Thank you for sharing your preferred move-in date. Based on our current availability, we do have units that would be ready for an April 1st move-in. Once your application is approved, we can work to secure one of those units for you. Is there anything specific you're looking for in terms of floor plan or location within the community?
+Jennifer: I'd prefer a 2-bedroom with a garage if available.
+AI: We do have 2-bedroom townhomes with attached garages available for April 1st move-in. They're 1,250 square feet with 2.5 bathrooms and start at $2,100 per month. I've updated your profile with this preference. Is there anything else you'd like to know about the application process or the property?
+Jennifer: That's all for now, thank you for your help!
+AI: You're welcome, Jennifer! If you have any questions while completing your application, please don't hesitate to reach out. We look forward to receiving your application and hopefully welcoming you to Maple Ridge soon. Have a great day!`,
+    sentiment: 'positive',
+    actionItems: [
+      'Send application link via email',
+      'Update CRM with preference for 2-bedroom with garage',
+      'Follow up in 2 days if application not received'
+    ],
+    scenario: 'Leasing/Application Support'
   },
   {
     id: '3',
-    relatedTo: 'maintenance',
-    relatedId: '3',
-    contactName: 'Jennifer Lopez',
-    contactType: 'tenant',
-    channel: 'email',
-    dateTime: '2025-03-09T16:45:00',
-    transcript: 'Jennifer: I wanted to report that my garbage disposal is broken.\nAI: Thank you for reporting this issue. Can you provide any additional details about the problem?\nJennifer: It makes a loud noise but doesn\'t seem to be working properly.\nAI: I understand. I\'ve created a maintenance request for your broken garbage disposal. A technician will be scheduled to visit your unit. You\'ll receive a notification once the appointment is confirmed.',
-    summary: 'Created maintenance request for broken garbage disposal.',
+    contactName: 'Thomas Wilson',
+    channel: 'sms' as 'voice' | 'sms' | 'email',
+    dateTime: '2025-03-10T16:45:00',
+    summary: 'Maintenance request for leaking faucet in master bathroom. Scheduled repair for tomorrow between 1-3 PM.',
+    transcript: `AI: Hello! This is PropertyAI from Oakwood Apartments. How can I assist you today?
+Thomas: Hi, the faucet in my master bathroom is leaking and getting worse.
+AI: I'm sorry to hear about the leaking faucet. I'd be happy to help get that fixed for you. Could you please confirm your apartment number so I can create a maintenance request?
+Thomas: It's apartment 304.
+AI: Thank you for confirming, Mr. Wilson in apartment 304. I've created a maintenance request for the leaking faucet in your master bathroom. Our maintenance team has availability tomorrow between 9-11 AM or 1-3 PM. Would either of those time slots work for you?
+Thomas: 1-3 PM works better for me.
+AI: Perfect. I've scheduled the maintenance visit for tomorrow between 1-3 PM. Our technician will call about 15 minutes before arriving. Is there anything else about the issue that would be helpful for our maintenance team to know?
+Thomas: No, it's just a constant drip that's getting faster.
+AI: Thank you for that information. I've added those details to the work order. You'll receive a confirmation text with the scheduled time, and another notification when the work is complete. Is there anything else I can assist you with today?
+Thomas: No that's it, thanks!
+AI: You're welcome! If you need anything else, feel free to text us anytime. Have a great day!`,
     sentiment: 'neutral',
-    actionItems: ['Schedule maintenance appointment', 'Send confirmation when scheduled'],
+    actionItems: [
+      'Create maintenance work order for leaking faucet',
+      'Schedule repair for tomorrow 1-3 PM',
+      'Send confirmation text with scheduled time'
+    ],
+    scenario: 'Maintenance/Maintenance Requests'
   },
+  {
+    id: '4',
+    contactName: 'Sarah Johnson',
+    channel: 'voice' as 'voice' | 'sms' | 'email',
+    dateTime: '2025-03-09T13:20:00',
+    summary: 'Discussed lease renewal options and negotiated a 14-month lease with $50 rent increase instead of the standard $100 increase.',
+    transcript: `AI: Hello, thank you for calling PropertyAI. How can I assist you today?
+Sarah: Hi, this is Sarah Johnson from apartment 512. I received a lease renewal notice and wanted to discuss the options.
+AI: Hello Ms. Johnson, I'd be happy to discuss your lease renewal options. I see your current lease for apartment 512 at Parkview Apartments is set to expire on April 30th, 2025. We're offering a 12-month renewal with a $100 monthly increase, or a 6-month renewal with a $150 monthly increase. Which option were you considering?
+Sarah: The $100 increase seems high. I've been a good tenant for two years now. Is there any way to reduce that?
+AI: I understand your concern about the increase, Ms. Johnson. You're right that you've been a valued resident for two years with on-time payments and no issues. Based on your good standing, I could offer you a 14-month lease with only a $50 monthly increase. Would that be more agreeable?
+Sarah: That sounds much better. I'd be interested in the 14-month option.
+AI: Excellent. I'll prepare the 14-month lease renewal with the $50 monthly increase. Your new lease would run from May 1st, 2025 to June 30th, 2026, and your new monthly rent would be $1,750. I can send the renewal documents to your email for electronic signature. Is the email we have on file still current?
+Sarah: Yes, my email is still the same.
+AI: Perfect. I'll send the lease renewal documents to your email today. You'll have until March 25th to review and sign them. Is there anything else you'd like to discuss about your renewal or any questions about the process?
+Sarah: No, that covers everything. Thank you for working with me on the price.
+AI: You're very welcome, Ms. Johnson. We value you as a resident and appreciate your continued residency at Parkview Apartments. You should receive the renewal documents in your email within the next hour. Please don't hesitate to call if you have any questions after reviewing them. Have a wonderful day!`,
+    sentiment: 'positive',
+    actionItems: [
+      'Prepare 14-month lease renewal with $50 increase',
+      'Send renewal documents for electronic signature',
+      'Update CRM with negotiated terms'
+    ],
+    scenario: 'Operations/Lease Renewals'
+  },
+  {
+    id: '5',
+    contactName: 'Michael Chen',
+    channel: 'voice' as 'voice' | 'sms' | 'email',
+    dateTime: '2025-03-08T11:10:00',
+    summary: 'Provided move-out instructions and scheduled final inspection for March 31st at 10:00 AM.',
+    transcript: `AI: Hello, thank you for calling PropertyAI. How can I assist you today?
+Michael: Hi, I need information about moving out. My lease ends next month.
+AI: I'd be happy to help you with the move-out process. Could you please provide your name and apartment number so I can pull up your information?
+Michael: Michael Chen, apartment 721.
+AI: Thank you, Mr. Chen. I see that your lease for apartment 721 at Lakeside Apartments is set to end on March 31st, 2025. To ensure a smooth move-out process, I'd like to go over some important details with you. First, would you like to schedule your final inspection?
+Michael: Yes, that would be helpful.
+AI: We have availability on March 31st at 10:00 AM, 1:00 PM, or 4:00 PM for the final inspection. Would any of those times work for you?
+Michael: 10:00 AM works best.
+AI: Great, I've scheduled your final inspection for March 31st at 10:00 AM. Please ensure all your belongings are removed before this time. For a full refund of your security deposit, the apartment should be cleaned according to our move-out checklist, which I'll email to you. This includes cleaning appliances, floors, bathrooms, and walls. All keys, fobs, and parking permits must be returned at the final inspection. Do you have any questions about the cleaning requirements?
+Michael: No, but when will I receive my security deposit back?
+AI: Your security deposit will be processed within 30 days of your move-out date, assuming there are no damages beyond normal wear and tear. We'll mail the refund to your forwarding address. Could you please provide your forwarding address where we should send your security deposit?
+Michael: Yes, it's 835 Pine Street, Apt 205, Westlake, CA 90210.
+AI: Thank you. I've noted your forwarding address as 835 Pine Street, Apt 205, Westlake, CA 90210. I'll send you an email confirmation of your final inspection appointment and the move-out checklist. Is there anything else I can assist you with regarding your move-out?
+Michael: That's all for now, thanks.
+AI: You're welcome, Mr. Chen. If you have any other questions before your move-out date, please don't hesitate to contact us. We wish you all the best in your new home. Have a great day!`,
+    sentiment: 'neutral',
+    actionItems: [
+      'Schedule final inspection for March 31st at 10:00 AM',
+      'Send move-out checklist via email',
+      'Update system with forwarding address'
+    ],
+    scenario: 'Operations/Move-Out Notices'
+  }
 ];
 
 // Mock Rent Payments

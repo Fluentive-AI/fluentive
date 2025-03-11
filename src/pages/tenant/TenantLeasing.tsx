@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,7 +8,11 @@ import TenantVoiceAgent, { TenantVoiceAgentRef } from '@/components/tenant/Tenan
 
 type Screen = 'contact' | 'calling' | 'inCall';
 
-const TenantLeasing = () => {
+interface TenantLeasingProps {
+  scenario?: string;
+}
+
+const TenantLeasing: React.FC<TenantLeasingProps> = ({ scenario: propScenario }) => {
   // Extract the scenario from the URL path
   const params = useParams();
   const location = useLocation();
@@ -16,7 +21,9 @@ const TenantLeasing = () => {
   console.log('Current location:', location);
   console.log('Current params:', params);
   
-  const scenario = params['*']?.split('/').pop();
+  const urlScenario = params['*']?.split('/').pop();
+  const scenario = propScenario || urlScenario || 'lead';
+  
   const [currentScreen, setCurrentScreen] = useState<Screen>('contact');
   const [isPlaying, setIsPlaying] = useState(false);
   const voiceAgentRef = useRef<TenantVoiceAgentRef>(null);

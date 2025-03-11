@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
 import { AIConversation } from '@/types';
-import { Phone, MessageSquare, Mail, User, Bot, Send, Mic, MicOff } from 'lucide-react';
+import { Phone, MessageSquare, Mail, User, Bot, Send, Mic, MicOff, FileText, List, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
+import TenantVoiceAgent from '@/components/tenant/TenantVoiceAgent';
 
 interface AIAgentConsoleProps {
   conversations: AIConversation[];
@@ -15,6 +17,7 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
   const [inputText, setInputText] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const handleSelectConversation = (conversation: AIConversation) => {
     setSelectedConversation(conversation);
@@ -54,6 +57,15 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
         return null;
     }
   };
+
+  const handleViewInTenant = () => {
+    if (selectedConversation?.scenario) {
+      const [category, scenario] = selectedConversation.scenario.split('/');
+      if (category && scenario) {
+        navigate(`/tenant/${category.toLowerCase()}/${scenario.toLowerCase()}`);
+      }
+    }
+  };
   
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-100 h-[600px] flex">
@@ -82,6 +94,11 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
               <div className="text-xs text-gray-500 mt-1">
                 {new Date(conversation.dateTime).toLocaleString()}
               </div>
+              {conversation.scenario && (
+                <div className="text-xs text-blue-500 mt-1">
+                  {conversation.scenario}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -99,20 +116,60 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
                 </div>
                 <div>
                   <div className="font-medium">{selectedConversation.contactName}</div>
-                  <div className="text-xs text-gray-500">{selectedConversation.channel}</div>
+                  <div className="text-xs text-gray-500">{selectedConversation.channel} • {selectedConversation.scenario || 'General Inquiry'}</div>
                 </div>
               </div>
               
-              <Tabs defaultValue="transcript">
+              <Tabs defaultValue="transcript" className="w-auto">
                 <TabsList>
-                  <TabsTrigger value="transcript">Transcript</TabsTrigger>
-                  <TabsTrigger value="summary">Summary</TabsTrigger>
+                  <TabsTrigger value="summary">
+                    <List className="h-4 w-4 mr-2" />
+                    Summary
+                  </TabsTrigger>
+                  <TabsTrigger value="transcript">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Transcript
+                  </TabsTrigger>
+                  <TabsTrigger value="conversation">
+                    <MessageCircle className="h-4 w-4 mr-2" />
+                    Conversation
+                  </TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
             
             {/* Chat Messages */}
             <div className="flex-1 overflow-y-auto p-4">
+              <TabsContent value="summary" className="mt-0 h-full">
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <h4 className="font-medium mb-2">Conversation Summary</h4>
+                  <p>{selectedConversation.summary}</p>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <h4 className="font-medium mb-2">Sentiment</h4>
+                  <p className="capitalize">{selectedConversation.sentiment}</p>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <h4 className="font-medium mb-2">Action Items</h4>
+                  <ul className="list-disc list-inside">
+                    {selectedConversation.actionItems.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">System Actions</h4>
+                  <ul className="list-disc list-inside">
+                    <li>Contact information saved to Yardi</li>
+                    <li>Property tour scheduled for {new Date().toLocaleDateString()} at 3:00 PM</li>
+                    <li>Follow-up email sent with property details</li>
+                  </ul>
+                </div>
+              </TabsContent>
+              
               <TabsContent value="transcript" className="mt-0 h-full">
                 {selectedConversation.transcript.split('\n').map((line, index) => {
                   const isAI = line.startsWith('AI:');
@@ -140,24 +197,17 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
                 })}
               </TabsContent>
               
-              <TabsContent value="summary" className="mt-0 h-full">
-                <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                  <h4 className="font-medium mb-2">Conversation Summary</h4>
-                  <p>{selectedConversation.summary}</p>
-                </div>
-                
-                <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                  <h4 className="font-medium mb-2">Sentiment</h4>
-                  <p className="capitalize">{selectedConversation.sentiment}</p>
-                </div>
-                
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Action Items</h4>
-                  <ul className="list-disc list-inside">
-                    {selectedConversation.actionItems.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
+              <TabsContent value="conversation" className="mt-0 h-full">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <div className="text-center mb-6">
+                    <h3 className="text-lg font-medium mb-2">Interactive Agent View</h3>
+                    <p className="text-gray-500 mb-4">
+                      Open the tenant interface to view this conversation in the interactive mode.
+                    </p>
+                    <Button onClick={handleViewInTenant}>
+                      View in Tenant Interface
+                    </Button>
+                  </div>
                 </div>
               </TabsContent>
             </div>
