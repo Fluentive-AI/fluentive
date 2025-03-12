@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +23,8 @@ import TenantLayout from "./components/layout/TenantLayout";
 import TenantLeasing from "./pages/tenant/TenantLeasing";
 import TenantOperations from "./pages/tenant/TenantOperations";
 import TenantMaintenance from "./pages/tenant/TenantMaintenance";
+import LeasingAgentLayout from "./components/layout/LeasingAgentLayout";
+import LeasingAgentMyDay from "./pages/LeasingAgentMyDay";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,13 @@ const App = () => (
           <Route path="/super/calendar" element={<SuperintendentLayout><SuperintendentCalendar /></SuperintendentLayout>} />
           <Route path="/super/map" element={<SuperintendentLayout><SuperintendentMap /></SuperintendentLayout>} />
           <Route path="/super/settings" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
+          
+          {/* Leasing Agent Routes */}
+          <Route path="/agent" element={<LeasingAgentLayout><LeasingAgentMyDay /></LeasingAgentLayout>} />
+          <Route path="/agent/leads" element={<LeasingAgentLayout><Leads /></LeasingAgentLayout>} />
+          <Route path="/agent/applications" element={<LeasingAgentLayout><PlaceholderPage /></LeasingAgentLayout>} />
+          <Route path="/agent/calendar" element={<LeasingAgentLayout><Calendar /></LeasingAgentLayout>} />
+          <Route path="/agent/settings" element={<LeasingAgentLayout><PlaceholderPage /></LeasingAgentLayout>} />
           
           {/* Tenant Interface Routes */}
           <Route path="/tenant" element={<TenantLayout><TenantLeasing scenario="lead" /></TenantLayout>} />
