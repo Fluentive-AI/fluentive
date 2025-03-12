@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +19,7 @@ import SuperintendentCalendar from "./pages/SuperintendentCalendar";
 import SuperintendentMap from "./pages/SuperintendentMap";
 import Calendar from "./pages/Calendar";
 import SuperintendentDashboard from "./pages/SuperintendentDashboard";
+import SuperintendentMyDay from "./pages/SuperintendentMyDay";
 import TenantLayout from "./components/layout/TenantLayout";
 import TenantLeasing from "./pages/tenant/TenantLeasing";
 import TenantOperations from "./pages/tenant/TenantOperations";
@@ -48,7 +50,8 @@ const App = () => (
           <Route path="/settings" element={<AppLayout><PlaceholderPage /></AppLayout>} />
           
           {/* Superintendent Routes */}
-          <Route path="/super" element={<SuperintendentLayout><SuperintendentDashboard /></SuperintendentLayout>} />
+          <Route path="/super" element={<SuperintendentLayout><SuperintendentMyDay /></SuperintendentLayout>} />
+          <Route path="/super/dashboard" element={<SuperintendentLayout><SuperintendentDashboard /></SuperintendentLayout>} />
           <Route path="/super/calendar" element={<SuperintendentLayout><SuperintendentCalendar /></SuperintendentLayout>} />
           <Route path="/super/map" element={<SuperintendentLayout><SuperintendentMap /></SuperintendentLayout>} />
           <Route path="/super/settings" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />

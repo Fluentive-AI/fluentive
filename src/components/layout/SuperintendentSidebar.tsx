@@ -7,6 +7,7 @@ import {
   Calendar,
   Map,
   Settings,
+  Sun
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -43,7 +44,8 @@ const SuperintendentSidebar = () => {
       </div>
       
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        <NavItem to="/super" icon={<Wrench className="h-5 w-5" />} label="Work Orders" end={true} />
+        <NavItem to="/super" icon={<Sun className="h-5 w-5" />} label="My Day" end={true} />
+        <NavItem to="/super/dashboard" icon={<Wrench className="h-5 w-5" />} label="Work Orders" />
         <NavItem to="/super/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
         <NavItem to="/super/map" icon={<Map className="h-5 w-5" />} label="Map View" />
       </nav>
