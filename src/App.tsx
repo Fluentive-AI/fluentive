@@ -34,6 +34,9 @@ import ReportsPage from "./pages/ReportsPage";
 import SettingsPage from "./pages/SettingsPage";
 import PropertyManagerTenants from "./pages/PropertyManagerTenants";
 import PropertyManagerRent from "./pages/PropertyManagerRent";
+import LeasingAgentLeads from "./pages/LeasingAgentLeads";
+import LeasingAgentApplications from "./pages/LeasingAgentApplications";
+import LeasingAgentCalendar from "./pages/LeasingAgentCalendar";
 
 const queryClient = new QueryClient();
 
@@ -74,9 +77,9 @@ const App = () => (
           
           {/* Leasing Agent Routes */}
           <Route path="/agent" element={<LeasingAgentLayout><LeasingAgentMyDay /></LeasingAgentLayout>} />
-          <Route path="/agent/leads" element={<LeasingAgentLayout><Leads /></LeasingAgentLayout>} />
-          <Route path="/agent/applications" element={<LeasingAgentLayout><PlaceholderPage /></LeasingAgentLayout>} />
-          <Route path="/agent/calendar" element={<LeasingAgentLayout><Calendar /></LeasingAgentLayout>} />
+          <Route path="/agent/leads" element={<LeasingAgentLayout><LeasingAgentLeads /></LeasingAgentLayout>} />
+          <Route path="/agent/applications" element={<LeasingAgentLayout><LeasingAgentApplications /></LeasingAgentLayout>} />
+          <Route path="/agent/calendar" element={<LeasingAgentLayout><LeasingAgentCalendar /></LeasingAgentLayout>} />
           <Route path="/agent/settings" element={<LeasingAgentLayout><PlaceholderPage /></LeasingAgentLayout>} />
           
           {/* Tenant Interface Routes */}

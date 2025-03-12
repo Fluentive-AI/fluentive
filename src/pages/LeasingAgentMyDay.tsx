@@ -2,20 +2,30 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Users } from 'lucide-react';
+import { Calendar, Users, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { mockLeads } from '@/data/mockData';
 import LeadsTable from '@/components/leads/LeadsTable';
-
-const CURRENT_AGENT = "Emily Wilson";
+import { mockLeasingAgentLeads, CURRENT_LEASING_AGENT } from '@/data/leasingMockData';
+import { format } from 'date-fns';
 
 const LeasingAgentMyDay = () => {
   const navigate = useNavigate();
   
-  // Filter leads for today's appointments for the current agent
-  const todaysLeads = mockLeads.filter(
-    lead => lead.assignedTo === CURRENT_AGENT && 
-    lead.status === 'tour_scheduled'
+  // Today's date in ISO format for filtering
+  const todayISO = new Date().toISOString().split('T')[0];
+  
+  // Filter leads for today's appointments and contacts for the current agent
+  const todaysTours = mockLeasingAgentLeads.filter(
+    lead => lead.assignedTo === CURRENT_LEASING_AGENT && 
+            lead.status === 'tour_scheduled' &&
+            lead.tourScheduled === todayISO
+  );
+  
+  // Leads that need to be contacted today
+  const todaysContacts = mockLeasingAgentLeads.filter(
+    lead => lead.assignedTo === CURRENT_LEASING_AGENT && 
+            lead.dateCreated === todayISO &&
+            (lead.status === 'new' || lead.status === 'contacted')
   );
 
   return (
@@ -23,7 +33,7 @@ const LeasingAgentMyDay = () => {
       <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">My Day</h1>
-          <p className="text-muted-foreground">Your scheduled appointments for today</p>
+          <p className="text-muted-foreground">Your schedule for {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
         </div>
         
         <div className="flex gap-3 w-full md:w-auto">
@@ -51,11 +61,26 @@ const LeasingAgentMyDay = () => {
             <CardTitle>Today's Tours</CardTitle>
           </CardHeader>
           <CardContent>
-            {todaysLeads.length > 0 ? (
-              <LeadsTable leads={todaysLeads} />
+            {todaysTours.length > 0 ? (
+              <LeadsTable leads={todaysTours} />
             ) : (
               <div className="text-center py-6">
                 <p>No tours scheduled for today.</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle>Leads To Contact Today</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {todaysContacts.length > 0 ? (
+              <LeadsTable leads={todaysContacts} />
+            ) : (
+              <div className="text-center py-6">
+                <p>No new leads to contact today.</p>
               </div>
             )}
           </CardContent>
@@ -68,19 +93,27 @@ const LeasingAgentMyDay = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span>Total tours</span>
-                <span className="font-medium">{todaysLeads.length}</span>
+                <span>Total scheduled tours</span>
+                <span className="font-medium">{todaysTours.length}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>New leads to contact</span>
+                <span className="font-medium">{todaysContacts.length}</span>
               </div>
               <div className="flex justify-between">
                 <span>First appointment</span>
                 <span className="font-medium">
-                  {todaysLeads.length > 0 ? '10:00 AM' : 'N/A'}
+                  {todaysTours.length > 0 ? 
+                    format(new Date(todaysTours[0].tourDateTime!), 'h:mm a') : 
+                    'N/A'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span>Last appointment</span>
                 <span className="font-medium">
-                  {todaysLeads.length > 0 ? '4:00 PM' : 'N/A'}
+                  {todaysTours.length > 0 ? 
+                    format(new Date(todaysTours[todaysTours.length - 1].tourDateTime!), 'h:mm a') : 
+                    'N/A'}
                 </span>
               </div>
               <div className="flex justify-between">
