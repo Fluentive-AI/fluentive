@@ -28,6 +28,10 @@ import LeasingAgentLayout from "./components/layout/LeasingAgentLayout";
 import LeasingAgentMyDay from "./pages/LeasingAgentMyDay";
 import PropertyManagerLayout from "./components/layout/PropertyManagerLayout";
 import PropertyManagerMyDay from "./pages/PropertyManagerMyDay";
+import ApplicationPage from "./pages/ApplicationPage";
+import RentPage from "./pages/RentPage";
+import ReportsPage from "./pages/ReportsPage";
+import SettingsPage from "./pages/SettingsPage";
 
 const queryClient = new QueryClient();
 
@@ -43,15 +47,15 @@ const App = () => (
           {/* Admin/Property Manager Routes */}
           <Route path="/dashboard" element={<AppLayout><Dashboard /></AppLayout>} />
           <Route path="/leads" element={<AppLayout><Leads /></AppLayout>} />
-          <Route path="/applications" element={<AppLayout><PlaceholderPage /></AppLayout>} />
+          <Route path="/applications" element={<AppLayout><ApplicationPage /></AppLayout>} />
           <Route path="/tenants" element={<AppLayout><Tenants /></AppLayout>} />
-          <Route path="/rent" element={<AppLayout><PlaceholderPage /></AppLayout>} />
+          <Route path="/rent" element={<AppLayout><RentPage /></AppLayout>} />
           <Route path="/maintenance" element={<AppLayout><Maintenance /></AppLayout>} />
           <Route path="/calendar" element={<AppLayout><Calendar /></AppLayout>} />
           <Route path="/map" element={<AppLayout><MapView /></AppLayout>} />
           <Route path="/communications" element={<AppLayout><Communications /></AppLayout>} />
-          <Route path="/reports" element={<AppLayout><PlaceholderPage /></AppLayout>} />
-          <Route path="/settings" element={<AppLayout><PlaceholderPage /></AppLayout>} />
+          <Route path="/reports" element={<AppLayout><ReportsPage /></AppLayout>} />
+          <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
           
           {/* Property Manager Routes */}
           <Route path="/manager" element={<PropertyManagerLayout><PropertyManagerMyDay /></PropertyManagerLayout>} />
