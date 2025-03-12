@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,6 +26,8 @@ import TenantOperations from "./pages/tenant/TenantOperations";
 import TenantMaintenance from "./pages/tenant/TenantMaintenance";
 import LeasingAgentLayout from "./components/layout/LeasingAgentLayout";
 import LeasingAgentMyDay from "./pages/LeasingAgentMyDay";
+import PropertyManagerLayout from "./components/layout/PropertyManagerLayout";
+import PropertyManagerMyDay from "./pages/PropertyManagerMyDay";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +52,12 @@ const App = () => (
           <Route path="/communications" element={<AppLayout><Communications /></AppLayout>} />
           <Route path="/reports" element={<AppLayout><PlaceholderPage /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><PlaceholderPage /></AppLayout>} />
+          
+          {/* Property Manager Routes */}
+          <Route path="/manager" element={<PropertyManagerLayout><PropertyManagerMyDay /></PropertyManagerLayout>} />
+          <Route path="/manager/tenants" element={<PropertyManagerLayout><Tenants /></PropertyManagerLayout>} />
+          <Route path="/manager/rent" element={<PropertyManagerLayout><PlaceholderPage /></PropertyManagerLayout>} />
+          <Route path="/manager/settings" element={<PropertyManagerLayout><PlaceholderPage /></PropertyManagerLayout>} />
           
           {/* Superintendent Routes */}
           <Route path="/super" element={<SuperintendentLayout><SuperintendentMyDay /></SuperintendentLayout>} />

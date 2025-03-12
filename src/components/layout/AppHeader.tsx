@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -8,7 +9,8 @@ import {
   Settings,
   LogOut,
   HardHat,
-  Users
+  Users,
+  Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -44,6 +46,10 @@ const getTitleFromPath = (pathname: string): string => {
     '/agent/applications': 'Applications',
     '/agent/calendar': 'Calendar',
     '/agent/settings': 'Settings',
+    '/manager': 'My Day',
+    '/manager/tenants': 'Tenants',
+    '/manager/rent': 'Rent Collection',
+    '/manager/settings': 'Settings',
   };
   
   return pathMap[pathname] || 'Dashboard';
@@ -56,6 +62,8 @@ const AppHeader = () => {
   const [profileSwitcherOpen, setProfileSwitcherOpen] = useState(false);
   
   const isLeasingAgentView = location.pathname.startsWith('/agent');
+  const isPropertyManagerView = location.pathname.startsWith('/manager');
+  const isSuperintendentView = location.pathname.startsWith('/super');
   
   const handleSwitchToLeasingAgent = () => {
     navigate('/agent');
@@ -69,6 +77,11 @@ const AppHeader = () => {
   
   const handleSwitchToSuperintendent = () => {
     navigate('/super');
+    setProfileSwitcherOpen(false);
+  };
+  
+  const handleSwitchToPropertyManager = () => {
+    navigate('/manager');
     setProfileSwitcherOpen(false);
   };
   
@@ -104,6 +117,20 @@ const AppHeader = () => {
                     <Users className="h-4 w-4" />
                   </div>
                   <span>Sarah Parker</span>
+                </>
+              ) : isPropertyManagerView ? (
+                <>
+                  <div className="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center text-white">
+                    <Home className="h-4 w-4" />
+                  </div>
+                  <span>John Davis</span>
+                </>
+              ) : isSuperintendentView ? (
+                <>
+                  <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                    <HardHat className="h-4 w-4" />
+                  </div>
+                  <span>Mike Johnson</span>
                 </>
               ) : (
                 <>
@@ -145,6 +172,19 @@ const AppHeader = () => {
               </div>
               <div>
                 <div className="font-medium">Admin</div>
+                <div className="text-sm text-gray-500">Property Manager</div>
+              </div>
+            </div>
+            
+            <div 
+              className="flex items-center gap-4 p-4 rounded-lg border hover:bg-gray-50 cursor-pointer"
+              onClick={handleSwitchToPropertyManager}
+            >
+              <div className="h-12 w-12 rounded-full bg-purple-500 flex items-center justify-center text-white">
+                <Home className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="font-medium">John Davis</div>
                 <div className="text-sm text-gray-500">Property Manager</div>
               </div>
             </div>
