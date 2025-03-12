@@ -309,7 +309,7 @@ AI: You're welcome, John. We look forward to seeing you on Saturday. Feel free t
       'Send confirmation email with property details',
       'Add to CRM for follow-up'
     ],
-    scenario: 'Leasing/Lead Interaction'
+    scenario: 'leasing/lead'
   },
   {
     id: '2',
@@ -334,7 +334,7 @@ AI: You're welcome, Jennifer! If you have any questions while completing your ap
       'Update CRM with preference for 2-bedroom with garage',
       'Follow up in 2 days if application not received'
     ],
-    scenario: 'Leasing/Application Support'
+    scenario: 'operations/renewal'
   },
   {
     id: '3',
@@ -359,7 +359,7 @@ AI: You're welcome! If you need anything else, feel free to text us anytime. Hav
       'Schedule repair for tomorrow 1-3 PM',
       'Send confirmation text with scheduled time'
     ],
-    scenario: 'Maintenance/Maintenance Requests'
+    scenario: 'maintenance/maintenance-requests'
   },
   {
     id: '4',
@@ -384,7 +384,7 @@ AI: You're very welcome, Ms. Johnson. We value you as a resident and appreciate 
       'Send renewal documents for electronic signature',
       'Update CRM with negotiated terms'
     ],
-    scenario: 'Operations/Lease Renewals'
+    scenario: 'operations/renewal'
   },
   {
     id: '5',
@@ -413,7 +413,7 @@ AI: You're welcome, Mr. Chen. If you have any other questions before your move-o
       'Send move-out checklist via email',
       'Update system with forwarding address'
     ],
-    scenario: 'Operations/Move-Out Notices'
+    scenario: 'operations/moveout-notice'
   }
 ];
 

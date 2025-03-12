@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Check, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -39,10 +38,8 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
     let newSelectedValues: string[];
     
     if (allCategoryValuesSelected) {
-      // Deselect all options in the category
       newSelectedValues = selectedValues.filter(value => !categoryValues.includes(value));
     } else {
-      // Select all options in the category
       const valuesToAdd = categoryValues.filter(value => !selectedValues.includes(value));
       newSelectedValues = [...selectedValues, ...valuesToAdd];
     }
@@ -104,47 +101,57 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="justify-between min-w-[200px] max-w-[400px] overflow-hidden text-ellipsis whitespace-nowrap"
+          className="h-8 justify-between min-w-[150px] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap"
         >
           {getSelectedText()}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] max-h-[500px] overflow-auto p-0">
-        <div className="p-2 grid grid-cols-1 md:grid-cols-3 gap-2">
+      <PopoverContent className="w-[490px] p-4" align="end">
+        <div className="grid grid-cols-3 gap-10">
           {options.map((category) => (
-            <div key={category.name} className="space-y-2 p-2">
+            <div key={category.name} className="space-y-3">
               <div 
-                className="flex items-center gap-2 font-semibold cursor-pointer"
+                className="flex items-center gap-2 cursor-pointer hover:text-brand-600"
                 onClick={() => toggleCategory(category.name)}
               >
                 <div className={cn(
-                  "h-5 w-5 border border-gray-300 rounded flex items-center justify-center",
-                  isCategoryFullySelected(category.name) && "bg-primary border-primary"
+                  "h-5 w-5 rounded border flex items-center justify-center transition-colors",
+                  isCategoryFullySelected(category.name) && "bg-brand-600 border-brand-600",
+                  isCategorySelected(category.name) && !isCategoryFullySelected(category.name) && "border-brand-600",
+                  !isCategorySelected(category.name) && "border-gray-200"
                 )}>
                   {isCategoryFullySelected(category.name) && <Check className="h-4 w-4 text-white" />}
                   {isCategorySelected(category.name) && !isCategoryFullySelected(category.name) && (
-                    <div className="h-2 w-2 rounded-full bg-primary"></div>
+                    <div className="h-2.5 w-2.5 rounded-sm bg-brand-600"></div>
                   )}
                 </div>
-                <span className="text-sm">All {category.name}</span>
+                <span className="font-medium">{category.name}</span>
               </div>
-              <div className="ml-6 space-y-1">
-                {category.options.map((option) => (
-                  <div 
-                    key={option.value} 
-                    className="flex items-center gap-2 cursor-pointer"
-                    onClick={() => toggleOption(option.value)}
-                  >
-                    <div className={cn(
-                      "h-4 w-4 border border-gray-300 rounded flex items-center justify-center",
-                      selectedValues.includes(option.value) && "bg-primary border-primary"
-                    )}>
-                      {selectedValues.includes(option.value) && <Check className="h-3 w-3 text-white" />}
+              <div className="space-y-2 pl-4">
+                {category.options.map((option) => {
+                  const label = option.label.split('/').pop() || '';
+                  const formattedLabel = label.length < 20 ? `${label}\n\u00A0` : label;
+                  
+                  return (
+                    <div 
+                      key={option.value} 
+                      className="flex items-start gap-2 cursor-pointer text-[13px] hover:text-brand-600 h-[40px]"
+                      onClick={() => toggleOption(option.value)}
+                    >
+                      <div className={cn(
+                        "h-5 w-5 rounded border flex-shrink-0 flex items-center justify-center transition-colors mt-0.5",
+                        selectedValues.includes(option.value) && "bg-brand-600 border-brand-600",
+                        !selectedValues.includes(option.value) && "border-gray-200"
+                      )}>
+                        {selectedValues.includes(option.value) && <Check className="h-4 w-4 text-white" />}
+                      </div>
+                      <span className="leading-tight text-gray-600 whitespace-pre-line">
+                        {formattedLabel}
+                      </span>
                     </div>
-                    <span className="text-sm">{option.label.split('/').pop()}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}

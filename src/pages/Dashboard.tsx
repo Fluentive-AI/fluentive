@@ -116,7 +116,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Overview</h2>
+        <h2 className="text-2xl font-semibold">Overview</h2>
         <MarketFilter 
           selectedMarket={selectedMarket} 
           onMarketChange={setSelectedMarket} 
@@ -132,7 +132,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Leasing Section */}
         <div className="space-y-6">
-          <h2 className="text-lg font-semibold">Leasing</h2>
+          <h2 className="text-2xl font-semibold">Leasing</h2>
           <Card className="p-4">
             <SimpleLineChart 
               data={filterChartData(mockRenewalsTrendData)} 
@@ -156,7 +156,7 @@ const Dashboard = () => {
 
         {/* Property Ops Section */}
         <div className="space-y-6">
-          <h2 className="text-lg font-semibold">Property Operations</h2>
+          <h2 className="text-2xl font-semibold">Property Operations</h2>
           <Card className="p-4">
             <SimpleLineChart 
               data={filterChartData(mockOccupancyTrendData)} 
@@ -175,7 +175,7 @@ const Dashboard = () => {
 
         {/* Renovation, Maintenance, Turns Section */}
         <div className="space-y-6">
-          <h2 className="text-lg font-semibold">Renovation, Maintenance, and Turns</h2>
+          <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
           <Card className="p-4">
             <SimpleLineChart 
               data={filterChartData(mockBillHoursTrendData, false, true)} 

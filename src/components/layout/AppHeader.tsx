@@ -20,14 +20,15 @@ import {
 const getTitleFromPath = (pathname: string): string => {
   const pathMap: Record<string, string> = {
     '/': 'Dashboard',
-    '/leads': 'Leads & Tours',
-    '/applications': 'Applications',
-    '/tenants': 'Tenants',
-    '/rent': 'Rent Collection',
-    '/maintenance': 'Maintenance',
-    '/calendar': 'Calendar',
+    '/leads': 'Leasing',
+    '/applications': 'Leasing',
+    '/tenants': 'Property Operations',
+    '/rent': 'Property Operations',
+    '/maintenance': 'Renovation, Maintenance, and Turns',
+    '/calendar': 'Renovation, Maintenance, and Turns',
+    '/map': 'Renovation, Maintenance, and Turns',
     '/communications': 'AI Communications',
-    '/reports': 'Reports',
+    '/reports': 'Analytics',
     '/settings': 'Settings',
   };
   

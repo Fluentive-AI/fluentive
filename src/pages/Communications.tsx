@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import AIAgentConsole from '@/components/communications/AIAgentConsole';
 import CommunicationsAnalytics from '@/components/communications/CommunicationsAnalytics';
@@ -9,34 +8,35 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ScenarioFilter from '@/components/communications/ScenarioFilter';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import CommunicationTypeFilter from '@/components/communications/CommunicationTypeFilter';
 
 const SCENARIO_CATEGORIES = [
   {
     name: 'Leasing',
     options: [
-      { value: 'leasing/lead', label: 'Leasing/Lead Interaction' },
-      { value: 'leasing/application', label: 'Leasing/Application Support' },
-      { value: 'leasing/signing', label: 'Leasing/Lease Signing' },
-      { value: 'leasing/premove', label: 'Leasing/Pre-Move-in Prep' },
-      { value: 'leasing/onboarding', label: 'Leasing/Tenant Onboarding' },
+      { value: 'leasing/lead', label: 'Lead Interaction' },
+      { value: 'leasing/application', label: 'Application Support' },
+      { value: 'leasing/signing', label: 'Lease Signing' },
+      { value: 'leasing/premove', label: 'Pre-Move-in Prep' },
+      { value: 'leasing/onboarding', label: 'Tenant Onboarding' },
     ]
   },
   {
     name: 'Operations',
     options: [
-      { value: 'operations/rent', label: 'Operations/Rent Collection' },
-      { value: 'operations/renewal', label: 'Operations/Lease Renewals' },
-      { value: 'operations/moveout-notice', label: 'Operations/Move-Out Notices' },
-      { value: 'operations/moveout-coordination', label: 'Operations/Move-Out Coordination' },
+      { value: 'operations/rent', label: 'Rent Collection' },
+      { value: 'operations/renewal', label: 'Lease Renewals' },
+      { value: 'operations/moveout-notice', label: 'Move-Out Notices' },
+      { value: 'operations/moveout-coordination', label: 'Move-Out Coordination' },
     ]
   },
   {
     name: 'Maintenance',
     options: [
-      { value: 'maintenance/request', label: 'Maintenance/Maintenance Requests' },
-      { value: 'maintenance/workorder', label: 'Maintenance/Work Order Triage' },
-      { value: 'maintenance/scheduling', label: 'Maintenance/Maintenance Scheduling' },
-      { value: 'maintenance/relationship', label: 'Maintenance/Tenant Relationship' }
+      { value: 'maintenance/maintenance-requests', label: 'Maintenance Requests' },
+      { value: 'maintenance/workorder', label: 'Work Order Triage' },
+      { value: 'maintenance/scheduling', label: 'Maintenance Scheduling' },
+      { value: 'maintenance/relationship', label: 'Tenant Relationship' }
     ]
   }
 ];
@@ -50,27 +50,37 @@ const COMMUNICATION_TYPES = [
 
 const Communications = () => {
   const [selectedScenarios, setSelectedScenarios] = useState<string[]>([]);
-  const [commTypeFilter, setCommTypeFilter] = useState('all');
+  const [selectedCommTypes, setSelectedCommTypes] = useState<string[]>([]);
   
+  console.log('Selected scenario value:', selectedScenarios[0]);
+  console.log('All scenario options:', SCENARIO_CATEGORIES.map(cat => 
+    cat.options.map(opt => opt.value)
+  ).flat());
+
   // Filter conversations based on selected filters
   const filteredConversations = mockAIConversations.filter(conversation => {
     // Filter by scenario
-    if (selectedScenarios.length > 0 && (!conversation.scenario || !selectedScenarios.includes(conversation.scenario))) {
-      return false;
+    if (selectedScenarios.length > 0) {
+      const matchesScenario = selectedScenarios.some(selectedScenario => 
+        conversation.scenario?.toLowerCase().includes(selectedScenario.toLowerCase())
+      );
+      if (!matchesScenario) return false;
     }
     
     // Filter by communication type
-    if (commTypeFilter !== 'all' && conversation.channel !== commTypeFilter) {
+    if (selectedCommTypes.length > 0 && !selectedCommTypes.includes(conversation.channel)) {
       return false;
     }
     
     return true;
   });
+
+  console.log('Filtered conversations:', filteredConversations);
   
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">AI Communications</h1>
+        <h1 className="text-2xl font-bold">AI Agent Activity</h1>
         
         <div className="flex gap-3">
           <Button variant="outline" size="sm">
@@ -93,52 +103,41 @@ const Communications = () => {
       </div>
       
       <Card>
-        <CardHeader className="pb-3 flex flex-row items-center justify-between flex-wrap gap-3">
-          <CardTitle>AI Agent Activity</CardTitle>
-          
-          <div className="flex gap-2 items-center flex-wrap">
-            {/* Communication Type Filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8">
-                  <Filter className="h-3.5 w-3.5 mr-2" />
-                  {COMMUNICATION_TYPES.find(t => t.value === commTypeFilter)?.label || 'All Communications'}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {COMMUNICATION_TYPES.map(type => (
-                  <DropdownMenuItem key={type.value} onClick={() => setCommTypeFilter(type.value)}>
-                    {type.icon && <type.icon className="h-4 w-4 mr-2" />}
-                    {type.label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            {/* Scenario Filter */}
-            <ScenarioFilter 
-              options={SCENARIO_CATEGORIES}
-              selectedValues={selectedScenarios}
-              onChange={setSelectedScenarios}
-            />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="console">
-            <TabsList className="mb-4">
-              <TabsTrigger value="console">Agent Console</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="console">
+        <Tabs defaultValue="console" className="w-full">
+          <CardHeader className="pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <TabsList>
+                <TabsTrigger value="console">Agent Console</TabsTrigger>
+                <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              </TabsList>
+              
+              <div className="flex flex-wrap gap-2 items-center">
+                {/* Communication Type Filter */}
+                <CommunicationTypeFilter 
+                  selectedValues={selectedCommTypes}
+                  onChange={setSelectedCommTypes}
+                />
+                
+                {/* Scenario Filter */}
+                <ScenarioFilter 
+                  options={SCENARIO_CATEGORIES}
+                  selectedValues={selectedScenarios}
+                  onChange={setSelectedScenarios}
+                  className="w-full sm:w-auto"
+                />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="max-h-[calc(100vh-12rem)] overflow-y-auto">
+            <TabsContent value="console" className="overflow-hidden">
               <AIAgentConsole conversations={filteredConversations} />
             </TabsContent>
             
-            <TabsContent value="analytics">
+            <TabsContent value="analytics" className="overflow-hidden">
               <CommunicationsAnalytics conversations={filteredConversations} />
             </TabsContent>
-          </Tabs>
-        </CardContent>
+          </CardContent>
+        </Tabs>
       </Card>
     </div>
   );
