@@ -54,7 +54,7 @@ const SuperintendentDashboard = () => {
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="w-full justify-start mb-6">
+        <TabsList className="inline-flex justify-start mb-6">
           <TabsTrigger value="workorders">Work Orders</TabsTrigger>
           <TabsTrigger value="upcoming">Upcoming Tasks</TabsTrigger>
           <TabsTrigger value="completed">Completed</TabsTrigger>

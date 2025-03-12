@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MaintenanceRequest } from '@/types';
 import StatusBadge from '../shared/StatusBadge';
@@ -19,13 +18,13 @@ const MaintenanceTable = ({ requests }: MaintenanceTableProps) => {
           <tr>
             <th className="w-[13%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Tenant</th>
             <th className="w-[12%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Unit</th>
-            <th className="w-[19%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Issue</th>
+            <th className="w-[15%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Issue</th>
             <th className="w-[14%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Date</th>
             <th className="w-[10%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Assigned To</th>
             <th className="w-[6%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Priority</th>
             <th className="w-[6%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Status</th>
             <th className="w-[14%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">Scheduled</th>
-            <th className="w-[6%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">See in Yardi</th>
+            <th className="w-[10%] px-4 py-3 text-left text-sm font-medium text-muted-foreground">See in Yardi</th>
           </tr>
         </thead>
         <tbody className="divide-y">
@@ -37,7 +36,7 @@ const MaintenanceTable = ({ requests }: MaintenanceTableProps) => {
                 <tr className="hover:bg-muted/50 cursor-pointer">
                   <td className="w-[13%] px-4 py-3">{request.tenantName}</td>
                   <td className="w-[12%] px-4 py-3">{request.unit}</td>
-                  <td className="w-[19%] px-4 py-3">
+                  <td className="w-[15%] px-4 py-3">
                     <div>
                       <div className="font-medium">{request.issue}</div>
                       <div className="text-sm text-gray-500 truncate max-w-xs">{request.description}</div>
@@ -56,7 +55,7 @@ const MaintenanceTable = ({ requests }: MaintenanceTableProps) => {
                       ? format(new Date(request.scheduledDate), 'yyyy-MM-dd hh:mm a')
                       : 'Not scheduled'}
                   </td>
-                  <td className="w-[6%] px-4 py-3">
+                  <td className="w-[10%] px-4 py-3">
                     <Button 
                       variant="ghost" 
                       size="icon" 
