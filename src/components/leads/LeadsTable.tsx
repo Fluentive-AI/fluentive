@@ -2,6 +2,8 @@
 import React from 'react';
 import { Lead } from '@/types';
 import StatusBadge from '../shared/StatusBadge';
+import { ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface LeadsTableProps {
   leads: Lead[];
@@ -20,6 +22,7 @@ const LeadsTable = ({ leads }: LeadsTableProps) => {
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Status</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Date Created</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Tour Date</th>
+            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y">
@@ -39,11 +42,22 @@ const LeadsTable = ({ leads }: LeadsTableProps) => {
               </td>
               <td className="px-4 py-3">{lead.dateCreated}</td>
               <td className="px-4 py-3">{lead.tourScheduled || 'Not scheduled'}</td>
+              <td className="px-4 py-3">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8" 
+                  title="See in Yardi"
+                  onClick={() => window.open('https://www.yardi.com', '_blank')}
+                >
+                  <ExternalLink className="h-4 w-4" />
+                </Button>
+              </td>
             </tr>
           ))}
           {leads.length === 0 && (
             <tr>
-              <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
+              <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">
                 No leads found matching the selected filters.
               </td>
             </tr>

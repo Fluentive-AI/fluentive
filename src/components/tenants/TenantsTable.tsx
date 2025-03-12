@@ -2,6 +2,8 @@
 import React from 'react';
 import { Tenant } from '@/types';
 import StatusBadge from '../shared/StatusBadge';
+import { ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface TenantsTableProps {
   tenants: Tenant[];
@@ -20,6 +22,7 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
             <th>Rent</th>
             <th>Status</th>
             <th>Rent Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -40,6 +43,17 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
               </td>
               <td>
                 <StatusBadge status={tenant.rentStatus as any} />
+              </td>
+              <td>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8" 
+                  title="See in Yardi"
+                  onClick={() => window.open('https://www.yardi.com', '_blank')}
+                >
+                  <ExternalLink className="h-4 w-4" />
+                </Button>
               </td>
             </tr>
           ))}
