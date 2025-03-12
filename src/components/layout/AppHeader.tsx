@@ -1,11 +1,13 @@
-
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   Bell, 
   Search, 
   User,
-  ChevronDown
+  ChevronDown,
+  Settings,
+  LogOut,
+  HardHat
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,6 +18,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const getTitleFromPath = (pathname: string): string => {
   const pathMap: Record<string, string> = {
@@ -37,7 +45,22 @@ const getTitleFromPath = (pathname: string): string => {
 
 const AppHeader = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const title = getTitleFromPath(location.pathname);
+  const [profileSwitcherOpen, setProfileSwitcherOpen] = useState(false);
+  
+  // Check if we're in the superintendent section
+  const isSuperintendentView = location.pathname.startsWith('/super');
+  
+  const handleSwitchToSuperintendent = () => {
+    navigate('/super');
+    setProfileSwitcherOpen(false);
+  };
+  
+  const handleSwitchToAdmin = () => {
+    navigate('/dashboard');
+    setProfileSwitcherOpen(false);
+  };
   
   return (
     <header className="h-16 border-b border-border flex items-center justify-between px-6 bg-background fixed top-0 left-64 right-0 z-10">
@@ -65,10 +88,21 @@ const AppHeader = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
-                <User className="h-4 w-4" />
-              </div>
-              <span>Admin</span>
+              {isSuperintendentView ? (
+                <>
+                  <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                    <HardHat className="h-4 w-4" />
+                  </div>
+                  <span>Mike Johnson</span>
+                </>
+              ) : (
+                <>
+                  <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+                    <User className="h-4 w-4" />
+                  </div>
+                  <span>Admin</span>
+                </>
+              )}
               <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -78,10 +112,48 @@ const AppHeader = () => {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => setProfileSwitcherOpen(true)}>
+              Switch Profile
+            </DropdownMenuItem>
             <DropdownMenuItem>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      
+      <Dialog open={profileSwitcherOpen} onOpenChange={setProfileSwitcherOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Switch Profile</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div 
+              className="flex items-center gap-4 p-4 rounded-lg border hover:bg-gray-50 cursor-pointer"
+              onClick={handleSwitchToAdmin}
+            >
+              <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+                <User className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="font-medium">Admin</div>
+                <div className="text-sm text-gray-500">Property Manager</div>
+              </div>
+            </div>
+            
+            <div 
+              className="flex items-center gap-4 p-4 rounded-lg border hover:bg-gray-50 cursor-pointer"
+              onClick={handleSwitchToSuperintendent}
+            >
+              <div className="h-12 w-12 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                <HardHat className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="font-medium">Mike Johnson</div>
+                <div className="text-sm text-gray-500">Superintendent</div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 };
