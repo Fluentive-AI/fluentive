@@ -13,11 +13,24 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { useLocation } from 'react-router-dom';
+
+// Define the current leasing agent name
+const CURRENT_AGENT = "Emily Wilson";
 
 const ApplicationPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const location = useLocation();
   
-  const filteredApplications = mockApplications.filter(app => 
+  // Check if we're in the agent view
+  const isAgentView = location.pathname.startsWith('/agent');
+  
+  // Filter applications based on the current view
+  const applicationsData = isAgentView 
+    ? mockApplications.filter(app => app.assignedTo === CURRENT_AGENT)
+    : mockApplications;
+  
+  const filteredApplications = applicationsData.filter(app => 
     app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     app.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     app.propertyInterest.toLowerCase().includes(searchTerm.toLowerCase())
@@ -39,7 +52,9 @@ const ApplicationPage = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Tenant Applications</h1>
+        <h1 className="text-2xl font-bold">
+          {isAgentView ? 'My Applications' : 'All Tenant Applications'}
+        </h1>
         <div className="relative w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -53,7 +68,9 @@ const ApplicationPage = () => {
       
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle>Active Applications</CardTitle>
+          <CardTitle>
+            {isAgentView ? 'Applications Assigned to Me' : 'Active Applications'}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {filteredApplications.length > 0 ? (

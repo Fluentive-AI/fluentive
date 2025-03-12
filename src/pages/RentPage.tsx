@@ -14,27 +14,40 @@ import { Badge } from '@/components/ui/badge';
 import { Search, DollarSign } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
+import { useLocation } from 'react-router-dom';
+
+// Define the current property manager
+const CURRENT_PROPERTY_MANAGER = "John Davis";
 
 const RentPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const location = useLocation();
   
-  const filteredPayments = mockRentPayments.filter(payment => 
+  // Check if we're in the property manager view
+  const isManagerView = location.pathname.startsWith('/manager');
+  
+  // Filter payments based on the current view
+  const paymentsData = isManagerView 
+    ? mockRentPayments.filter(payment => payment.propertyManager === CURRENT_PROPERTY_MANAGER)
+    : mockRentPayments;
+  
+  const filteredPayments = paymentsData.filter(payment => 
     payment.tenantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     payment.unit.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Calculate summary statistics
-  const totalRent = mockRentPayments.reduce((sum, payment) => sum + payment.amount, 0);
-  const collectedRent = mockRentPayments
+  const totalRent = paymentsData.reduce((sum, payment) => sum + payment.amount, 0);
+  const collectedRent = paymentsData
     .filter(payment => payment.status === 'paid')
     .reduce((sum, payment) => sum + payment.amount, 0);
   const collectionRate = Math.round((collectedRent / totalRent) * 100);
   
-  const pendingRent = mockRentPayments
+  const pendingRent = paymentsData
     .filter(payment => payment.status === 'pending')
     .reduce((sum, payment) => sum + payment.amount, 0);
   
-  const delinquentRent = mockRentPayments
+  const delinquentRent = paymentsData
     .filter(payment => payment.status === 'delinquent')
     .reduce((sum, payment) => sum + payment.amount, 0);
 
@@ -54,7 +67,9 @@ const RentPage = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Rent Collection</h1>
+        <h1 className="text-2xl font-bold">
+          {isManagerView ? 'My Properties Rent Collection' : 'Rent Collection'}
+        </h1>
         <div className="relative w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -112,7 +127,9 @@ const RentPage = () => {
       
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle>Rent Payments</CardTitle>
+          <CardTitle>
+            {isManagerView ? 'My Properties Rent Payments' : 'Rent Payments'}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {filteredPayments.length > 0 ? (
