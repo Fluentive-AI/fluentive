@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -28,7 +27,27 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+// Define the current superintendent name
+const CURRENT_SUPER = "Mike Johnson";
+
 const getTitleFromPath = (pathname: string): string => {
+  // Check if we're in the superintendent section
+  const isSuperPath = pathname.startsWith('/super');
+  
+  // Handle superintendent specific pages
+  if (isSuperPath) {
+    if (pathname === '/super' || pathname === '/super/dashboard' || pathname === '/super/calendar' || pathname === '/super/map') {
+      return `${CURRENT_SUPER}'s Dashboard`;
+    }
+    
+    // For other superintendent pages, extract the page name
+    const pageName = pathname.split('/').pop();
+    if (pageName) {
+      return pageName.charAt(0).toUpperCase() + pageName.slice(1);
+    }
+  }
+  
+  // For property manager pages
   const pathMap: Record<string, string> = {
     '/': 'Dashboard',
     '/leads': 'Leasing',
@@ -41,15 +60,6 @@ const getTitleFromPath = (pathname: string): string => {
     '/communications': 'AI Communications',
     '/reports': 'Analytics',
     '/settings': 'Settings',
-    '/agent': 'My Day',
-    '/agent/leads': 'Leads & Tours',
-    '/agent/applications': 'Applications',
-    '/agent/calendar': 'Calendar',
-    '/agent/settings': 'Settings',
-    '/manager': 'My Day',
-    '/manager/tenants': 'Tenants',
-    '/manager/rent': 'Rent Collection',
-    '/manager/settings': 'Settings',
   };
   
   return pathMap[pathname] || 'Dashboard';
@@ -116,7 +126,7 @@ const AppHeader = () => {
                   <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center text-white">
                     <Users className="h-4 w-4" />
                   </div>
-                  <span>Sarah Parker</span>
+                  <span>Emily Wilson</span>
                 </>
               ) : isPropertyManagerView ? (
                 <>
@@ -130,7 +140,7 @@ const AppHeader = () => {
                   <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
                     <HardHat className="h-4 w-4" />
                   </div>
-                  <span>Mike Johnson</span>
+                  <span>{CURRENT_SUPER}</span>
                 </>
               ) : (
                 <>
@@ -172,10 +182,24 @@ const AppHeader = () => {
               </div>
               <div>
                 <div className="font-medium">Admin</div>
-                <div className="text-sm text-gray-500">Property Manager</div>
+                <div className="text-sm text-gray-500">Administrator</div>
               </div>
             </div>
             
+            <div 
+              className="flex items-center gap-4 p-4 rounded-lg border hover:bg-gray-50 cursor-pointer"
+              onClick={handleSwitchToLeasingAgent}
+            >
+              <div className="h-12 w-12 rounded-full bg-green-500 flex items-center justify-center text-white">
+                <Users className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="font-medium">Emily Wilson</div>
+                <div className="text-sm text-gray-500">Leasing Agent</div>
+              </div>
+            </div>
+
+          
             <div 
               className="flex items-center gap-4 p-4 rounded-lg border hover:bg-gray-50 cursor-pointer"
               onClick={handleSwitchToPropertyManager}
@@ -188,7 +212,7 @@ const AppHeader = () => {
                 <div className="text-sm text-gray-500">Property Manager</div>
               </div>
             </div>
-            
+
             <div 
               className="flex items-center gap-4 p-4 rounded-lg border hover:bg-gray-50 cursor-pointer"
               onClick={handleSwitchToSuperintendent}
@@ -197,23 +221,11 @@ const AppHeader = () => {
                 <HardHat className="h-6 w-6" />
               </div>
               <div>
-                <div className="font-medium">Mike Johnson</div>
+                <div className="font-medium">{CURRENT_SUPER}</div>
                 <div className="text-sm text-gray-500">Superintendent</div>
               </div>
             </div>
 
-            <div 
-              className="flex items-center gap-4 p-4 rounded-lg border hover:bg-gray-50 cursor-pointer"
-              onClick={handleSwitchToLeasingAgent}
-            >
-              <div className="h-12 w-12 rounded-full bg-green-500 flex items-center justify-center text-white">
-                <Users className="h-6 w-6" />
-              </div>
-              <div>
-                <div className="font-medium">Sarah Parker</div>
-                <div className="text-sm text-gray-500">Leasing Agent</div>
-              </div>
-            </div>
           </div>
         </DialogContent>
       </Dialog>

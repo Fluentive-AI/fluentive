@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { mockLeads } from '@/data/mockData';
 import LeadsTable from '@/components/leads/LeadsTable';
 
-const CURRENT_AGENT = "Sarah Parker";
+const CURRENT_AGENT = "Emily Wilson";
 
 const LeasingAgentMyDay = () => {
   const navigate = useNavigate();

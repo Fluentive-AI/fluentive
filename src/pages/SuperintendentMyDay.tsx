@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin } from 'lucide-react';
+import { Calendar, MapPin, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { mockMaintenanceRequests } from '@/data/mockData';
 import MaintenanceTable from '@/components/maintenance/MaintenanceTable';
@@ -23,12 +22,12 @@ const SuperintendentMyDay = () => {
       <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">My Day</h1>
-          <p className="text-muted-foreground">Your scheduled tasks for today</p>
+          <p className="text-muted-foreground">Welcome back, {CURRENT_SUPER}</p>
         </div>
         
         <div className="flex gap-3 w-full md:w-auto">
           <Button 
-            className="flex-1 md:flex-auto" 
+            className="flex-1 md:flex-auto bg-white text-black border border-gray-200 hover:bg-gray-100" 
             onClick={() => navigate('/super/calendar')}
           >
             <Calendar className="h-4 w-4 mr-2" />
@@ -40,7 +39,14 @@ const SuperintendentMyDay = () => {
             onClick={() => window.open('https://maps.google.com', '_blank')}
           >
             <MapPin className="h-4 w-4 mr-2" />
-            Open Google Maps
+            See Today's Route
+          </Button>
+          <Button 
+            className="flex-1 md:flex-auto" 
+            onClick={() => window.open('https://www.yardi.com', '_blank')}
+          >
+            <ExternalLink className="h-4 w-4 mr-2" />
+            Open in Yardi
           </Button>
         </div>
       </div>

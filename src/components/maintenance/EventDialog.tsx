@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { ImageIcon, Info, MapPin } from "lucide-react";
+import { ExternalLink, ImageIcon, Info, MapPin } from "lucide-react";
 import { MaintenanceRequest } from "@/types";
 
 interface EventDialogProps {
@@ -76,9 +76,15 @@ const EventDialog = ({ event, trigger }: EventDialogProps) => {
               <ImageIcon className="h-4 w-4" />
               View Images
             </Button>
-            <Button className="flex items-center gap-1">
-              <Info className="h-4 w-4" />
-              Full Details
+            <Button 
+              className="flex items-center gap-1"
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open('https://www.yardi.com', '_blank');
+              }}
+            >
+              <ExternalLink className="h-4 w-4" />
+              See in Yardi
             </Button>
             <a 
               href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.unit + ' ' + event.community)}`}

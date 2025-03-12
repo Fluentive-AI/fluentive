@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { InfoIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { InfoIcon, ExternalLink } from 'lucide-react';
 import { mockMaintenanceRequests } from '@/data/mockData';
 import MaintenanceTable from '@/components/maintenance/MaintenanceTable';
 
@@ -23,6 +24,14 @@ const SuperintendentMap = () => {
           <h1 className="text-2xl font-bold">Map</h1>
           <p className="text-muted-foreground">Welcome back, {CURRENT_SUPER}</p>
         </div>
+
+        <Button 
+          className="flex items-center gap-1 px-5 py-2.5 min-w-[130px]"
+          onClick={() => window.open('https://www.yardi.com', '_blank')}
+        >
+          <ExternalLink className="h-4 w-4 mr-2" />
+          Open in Yardi
+        </Button>
       </div>
 
       <div className="mb-6">

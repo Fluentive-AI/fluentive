@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LeadsTable from '@/components/leads/LeadsTable';
 import { mockLeads } from '@/data/mockData';
 import { Button } from '@/components/ui/button';
-import { Plus, FileText, BarChart } from 'lucide-react';
+import { Plus, FileText, BarChart, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
@@ -133,6 +133,14 @@ const Leads = () => {
           <Button variant="outline" size="sm">
             <FileText className="h-4 w-4 mr-2" />
             Export
+          </Button>
+          <Button 
+            size="sm"
+            className="flex items-center gap-1"
+            onClick={() => window.open('https://www.yardi.com', '_blank')}
+          >
+            <ExternalLink className="h-4 w-4 mr-2" />
+            Open in Yardi
           </Button>
         </div>
       </div>
