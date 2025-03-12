@@ -13,21 +13,52 @@ interface CategoryOption {
   options: { value: string; label: string }[];
 }
 
-interface ScenarioFilterProps {
-  options: CategoryOption[];
+interface MarketCommunityFilterProps {
   selectedValues: string[];
   onChange: (values: string[]) => void;
 }
 
-const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
-  options,
+const MARKET_COMMUNITY_OPTIONS: CategoryOption[] = [
+  {
+    name: 'Atlanta',
+    options: [
+      { value: 'Atlanta/Osborne Farms', label: 'Osborne Farms' },
+      { value: 'Atlanta/Suwanee Square', label: 'Suwanee Square' },
+      { value: 'Atlanta/Scattered', label: 'Scattered' }
+    ]
+  },
+  {
+    name: 'Tampa',
+    options: [
+      { value: 'Tampa/Preserve at Pine Grove', label: 'Preserve at Pine Grove' },
+      { value: 'Tampa/Avila Bay', label: 'Avila Bay' },
+      { value: 'Tampa/Belmont', label: 'Belmont' },
+      { value: 'Tampa/Scattered', label: 'Scattered' }
+    ]
+  },
+  {
+    name: 'Jacksonville',
+    options: [
+      { value: 'Jacksonville/Sawyer\'s Preserve', label: 'Sawyer\'s Preserve' },
+      { value: 'Jacksonville/Scattered', label: 'Scattered' }
+    ]
+  },
+  {
+    name: 'Orlando',
+    options: [
+      { value: 'Orlando/Scattered', label: 'Scattered' }
+    ]
+  }
+];
+
+const MarketCommunityFilter: React.FC<MarketCommunityFilterProps> = ({
   selectedValues,
   onChange,
 }) => {
   const [open, setOpen] = useState(false);
 
   const toggleCategory = (categoryName: string) => {
-    const category = options.find(c => c.name === categoryName);
+    const category = MARKET_COMMUNITY_OPTIONS.find(c => c.name === categoryName);
     if (!category) return;
 
     const categoryValues = category.options.map(opt => opt.value);
@@ -56,7 +87,7 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
   };
 
   const isCategorySelected = (categoryName: string) => {
-    const category = options.find(c => c.name === categoryName);
+    const category = MARKET_COMMUNITY_OPTIONS.find(c => c.name === categoryName);
     if (!category) return false;
     
     const categoryValues = category.options.map(opt => opt.value);
@@ -64,7 +95,7 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
   };
 
   const isCategoryFullySelected = (categoryName: string) => {
-    const category = options.find(c => c.name === categoryName);
+    const category = MARKET_COMMUNITY_OPTIONS.find(c => c.name === categoryName);
     if (!category) return false;
     
     const categoryValues = category.options.map(opt => opt.value);
@@ -72,9 +103,9 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
   };
 
   const getSelectedText = () => {
-    if (selectedValues.length === 0) return 'All Scenarios';
+    if (selectedValues.length === 0) return 'All Markets';
     
-    const categorySelections = options
+    const categorySelections = MARKET_COMMUNITY_OPTIONS
       .filter(category => 
         category.options.some(option => selectedValues.includes(option.value))
       )
@@ -86,7 +117,7 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
         
         const selectedLabels = category.options
           .filter(option => selectedValues.includes(option.value))
-          .map(option => option.label.split('/').pop());
+          .map(option => option.label);
         
         return `${category.name} (${selectedLabels.join(', ')})`;
       });
@@ -107,9 +138,9 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[490px] p-4" align="end">
-        <div className="grid grid-cols-3 gap-10">
-          {options.map((category) => (
+      <PopoverContent className="w-[800px] p-4" align="end">
+        <div className="grid grid-cols-4 gap-6">
+          {MARKET_COMMUNITY_OPTIONS.map((category) => (
             <div key={category.name} className="space-y-2">
               <div 
                 className="flex items-center gap-2 cursor-pointer hover:text-brand-600"
@@ -130,24 +161,21 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
               </div>
               <div className="space-y-2 pl-4">
                 {category.options.map((option) => {
-                  const label = option.label.split('/').pop() || '';
-                  const formattedLabel = label.length < 20 ? `${label}\n\u00A0` : label;
-                  
                   return (
                     <div 
                       key={option.value} 
-                      className="flex items-start gap-2 cursor-pointer text-[13px] hover:text-brand-600 h-[40px]"
+                      className="flex items-center gap-2 cursor-pointer text-[13px] hover:text-brand-600 h-[32px]"
                       onClick={() => toggleOption(option.value)}
                     >
                       <div className={cn(
-                        "h-5 w-5 rounded border flex-shrink-0 flex items-center justify-center transition-colors mt-0.5",
+                        "h-5 w-5 rounded border flex-shrink-0 flex items-center justify-center transition-colors",
                         selectedValues.includes(option.value) && "bg-brand-600 border-brand-600",
                         !selectedValues.includes(option.value) && "border-gray-200"
                       )}>
                         {selectedValues.includes(option.value) && <Check className="h-4 w-4 text-white" />}
                       </div>
-                      <span className="leading-tight text-gray-600 whitespace-pre-line">
-                        {formattedLabel}
+                      <span className="text-gray-600">
+                        {option.label}
                       </span>
                     </div>
                   );
@@ -161,4 +189,4 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
   );
 };
 
-export default ScenarioFilter;
+export default MarketCommunityFilter; 

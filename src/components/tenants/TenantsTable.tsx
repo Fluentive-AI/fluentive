@@ -15,6 +15,7 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
           <tr>
             <th>Name</th>
             <th>Unit</th>
+            <th>Community (Market)</th>
             <th>Lease End</th>
             <th>Rent</th>
             <th>Status</th>
@@ -31,6 +32,7 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
                 </div>
               </td>
               <td>{tenant.unit}</td>
+              <td>{tenant.community} ({tenant.market})</td>
               <td>{tenant.leaseEnd}</td>
               <td>${tenant.rentAmount.toLocaleString()}</td>
               <td>

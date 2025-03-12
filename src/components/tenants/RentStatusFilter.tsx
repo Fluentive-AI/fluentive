@@ -8,18 +8,18 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-interface CommunicationTypeFilterProps {
+interface RentStatusFilterProps {
   selectedValues: string[];
   onChange: (values: string[]) => void;
 }
 
-const COMMUNICATION_TYPES = [
-  { value: 'voice', label: 'Voice Calls' },
-  { value: 'sms', label: 'Text Messages' },
-  { value: 'email', label: 'Emails' }
+const RENT_STATUSES = [
+  { value: 'paid', label: 'Paid' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'delinquent', label: 'Delinquent' }
 ];
 
-const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
+const RentStatusFilter: React.FC<RentStatusFilterProps> = ({
   selectedValues,
   onChange,
 }) => {
@@ -33,18 +33,18 @@ const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
   };
 
   const toggleAll = () => {
-    const allValues = COMMUNICATION_TYPES.map(type => type.value);
+    const allValues = RENT_STATUSES.map(status => status.value);
     const hasAll = allValues.every(value => selectedValues.includes(value));
     onChange(hasAll ? [] : allValues);
   };
 
   const getSelectedText = () => {
-    if (selectedValues.length === 0) return 'All Channels';
-    if (selectedValues.length === COMMUNICATION_TYPES.length) return 'All Channels';
+    if (selectedValues.length === 0) return 'All Rent Statuses';
+    if (selectedValues.length === RENT_STATUSES.length) return 'All Rent Statuses';
     
-    const selectedLabels = COMMUNICATION_TYPES
-      .filter(type => selectedValues.includes(type.value))
-      .map(type => type.label);
+    const selectedLabels = RENT_STATUSES
+      .filter(status => selectedValues.includes(status.value))
+      .map(status => status.label);
     
     if (selectedLabels.length <= 2) {
       return selectedLabels.join(', ');
@@ -74,36 +74,34 @@ const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
           >
             <div className={cn(
               "h-5 w-5 rounded border flex items-center justify-center transition-colors",
-              selectedValues.length === COMMUNICATION_TYPES.length && "bg-brand-600 border-brand-600",
-              selectedValues.length > 0 && selectedValues.length < COMMUNICATION_TYPES.length && "border-brand-600",
+              selectedValues.length === RENT_STATUSES.length && "bg-brand-600 border-brand-600",
+              selectedValues.length > 0 && selectedValues.length < RENT_STATUSES.length && "border-brand-600",
               selectedValues.length === 0 && "border-gray-200"
             )}>
-              {selectedValues.length === COMMUNICATION_TYPES.length && <Check className="h-4 w-4 text-white" />}
-              {selectedValues.length > 0 && selectedValues.length < COMMUNICATION_TYPES.length && (
+              {selectedValues.length === RENT_STATUSES.length && <Check className="h-4 w-4 text-white" />}
+              {selectedValues.length > 0 && selectedValues.length < RENT_STATUSES.length && (
                 <div className="h-2.5 w-2.5 rounded-sm bg-brand-600"></div>
               )}
             </div>
-            <span className="font-medium">All Channels</span>
+            <span className="font-medium">All Rent Statuses</span>
           </div>
           <div className="space-y-2 pl-4">
-            {COMMUNICATION_TYPES.map((type) => {
-              const formattedLabel = type.label.length < 20 ? `${type.label}\n\u00A0` : type.label;
-              
+            {RENT_STATUSES.map((status) => {
               return (
                 <div 
-                  key={type.value} 
+                  key={status.value} 
                   className="grid grid-cols-[20px,1fr] gap-2 cursor-pointer text-[13px] hover:text-brand-600 h-[40px] items-center"
-                  onClick={() => toggleOption(type.value)}
+                  onClick={() => toggleOption(status.value)}
                 >
                   <div className={cn(
                     "h-5 w-5 rounded border flex-shrink-0 flex items-center justify-center transition-colors",
-                    selectedValues.includes(type.value) && "bg-brand-600 border-brand-600",
-                    !selectedValues.includes(type.value) && "border-gray-200"
+                    selectedValues.includes(status.value) && "bg-brand-600 border-brand-600",
+                    !selectedValues.includes(status.value) && "border-gray-200"
                   )}>
-                    {selectedValues.includes(type.value) && <Check className="h-4 w-4 text-white" />}
+                    {selectedValues.includes(status.value) && <Check className="h-4 w-4 text-white" />}
                   </div>
-                  <span className="leading-tight text-gray-600 whitespace-pre-line">
-                    {formattedLabel}
+                  <span className="leading-tight text-gray-600">
+                    {status.label}
                   </span>
                 </div>
               );
@@ -115,4 +113,4 @@ const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
   );
 };
 
-export default CommunicationTypeFilter; 
+export default RentStatusFilter; 

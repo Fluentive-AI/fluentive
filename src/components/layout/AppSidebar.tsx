@@ -13,7 +13,8 @@ import {
   Building,
   Calendar,
   CreditCard,
-  Map
+  Map,
+  Bot
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -79,7 +80,7 @@ const AppSidebar = () => {
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
             Communication
           </div>
-          <NavItem to="/communications" icon={<MessageCircle className="h-5 w-5" />} label="AI Agent" />
+          <NavItem to="/communications" icon={<Bot className="h-5 w-5" />} label="AI Agent" />
         </div>
         
         <div className="pt-4 pb-2">

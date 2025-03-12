@@ -46,7 +46,7 @@ import {
 import EventDialog from '@/components/maintenance/EventDialog';
 
 const SUPERINTENDENTS = [
-  { id: 'all', name: 'All Supers' },
+  { id: 'all', name: 'All Technicians' },
   { id: 'mike', name: 'Mike Johnson' },
   { id: 'alex', name: 'Alex Rodriguez' },
   // Add more superintendents as needed

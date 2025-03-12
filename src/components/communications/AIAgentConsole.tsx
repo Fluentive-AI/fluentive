@@ -8,6 +8,11 @@ import ConversationView from '@/components/communications/ConversationView';
 import { Badge } from "@/components/ui/badge";
 import PhoneInterface from '@/components/tenant/PhoneInterface';
 import TenantVoiceAgent, { TenantVoiceAgentRef } from '@/components/tenant/TenantVoiceAgent';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface AIAgentConsoleProps {
   conversations: AIConversation[];
@@ -51,6 +56,19 @@ const formatSubcategory = (scenario: string) => {
   return type.charAt(0).toUpperCase() + type.slice(1).replace(/-/g, ' ');
 };
 
+const getChannelDisplayName = (channel: string) => {
+  switch (channel.toLowerCase()) {
+    case 'voice':
+      return 'Phone Call';
+    case 'sms':
+      return 'Text Message';
+    case 'email':
+      return 'Email';
+    default:
+      return channel;
+  }
+};
+
 const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
   const [selectedConversation, setSelectedConversation] = useState<AIConversation | null>(null);
   const [inputText, setInputText] = useState('');
@@ -86,7 +104,7 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
     });
   };
   
-  const getChannelIcon = (channel: 'voice' | 'sms' | 'email') => {
+  const getChannelIcon = (channel: string) => {
     switch (channel) {
       case 'voice':
         return <Phone className="h-4 w-4" />;
@@ -145,7 +163,14 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
                 {conversation.summary}
               </div>
               <div className="text-xs text-gray-500 mt-1">
-                {new Date(conversation.dateTime).toLocaleString()}
+                {new Date(conversation.dateTime).toLocaleString(undefined, {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: true
+                })}
               </div>
               {conversation.scenario && (
                 <div className="mt-1 flex gap-1.5">
@@ -180,9 +205,52 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
                     {getChannelIcon(selectedConversation.channel)}
                   </div>
                   <div>
-                    <div className="font-medium">{selectedConversation.contactName}</div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{selectedConversation.contactName}</span>
+                      
+                      {/* Contact Button with Dialog */}
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" className="h-5.5 px-2 text-xs">
+                            Contact
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[280px]">
+                          <div className="grid gap-4 py-4">
+                            <div className="flex flex-col gap-3">
+                              <Button 
+                                variant="outline" 
+                                className="flex items-center justify-start gap-2 h-10"
+                                onClick={() => window.open(`tel:${selectedConversation.contactPhone || '555-123-4567'}`)}
+                              >
+                                <Phone className="h-4 w-4 text-brand-600" />
+                                <span>Call {selectedConversation.contactName}</span>
+                              </Button>
+                              
+                              <Button 
+                                variant="outline" 
+                                className="flex items-center justify-start gap-2 h-10"
+                                onClick={() => window.open(`sms:${selectedConversation.contactPhone || '555-123-4567'}`)}
+                              >
+                                <MessageSquare className="h-4 w-4 text-brand-600" />
+                                <span>Text {selectedConversation.contactName}</span>
+                              </Button>
+                              
+                              <Button 
+                                variant="outline" 
+                                className="flex items-center justify-start gap-2 h-10"
+                                onClick={() => window.open(`mailto:${selectedConversation.contactEmail || 'contact@example.com'}`)}
+                              >
+                                <Mail className="h-4 w-4 text-brand-600" />
+                                <span>Email {selectedConversation.contactName}</span>
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                     <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <span>{selectedConversation.channel}</span>
+                      <span>{getChannelDisplayName(selectedConversation.channel)}</span>
                       <span>•</span>
                       <div className="flex gap-1.5">
                         <Badge 
@@ -210,20 +278,37 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
                     <List className="h-4 w-4 mr-2" />
                     Summary
                   </button>
-                  <button 
-                    onClick={() => setActiveTab('transcript')}
-                    className={`flex items-center px-3 py-1.5 text-sm ${activeTab === 'transcript' ? 'bg-brand-100 text-brand-800' : 'bg-gray-100 text-gray-600'}`}
-                  >
-                    <MessageCircle className="h-4 w-4 mr-2" />
-                    Transcript
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('conversation')}
-                    className={`flex items-center px-3 py-1.5 text-sm rounded-r-md ${activeTab === 'conversation' ? 'bg-brand-100 text-brand-800' : 'bg-gray-100 text-gray-600'}`}
-                  >
-                    <Phone className="h-4 w-4 mr-2" />
-                    Conversation
-                  </button>
+                  
+                  {selectedConversation.channel === 'voice' ? (
+                    <>
+                      <button 
+                        onClick={() => setActiveTab('transcript')}
+                        className={`flex items-center px-3 py-1.5 text-sm ${activeTab === 'transcript' ? 'bg-brand-100 text-brand-800' : 'bg-gray-100 text-gray-600'}`}
+                      >
+                        <MessageCircle className="h-4 w-4 mr-2" />
+                        Transcript
+                      </button>
+                      <button 
+                        onClick={() => setActiveTab('conversation')}
+                        className={`flex items-center px-3 py-1.5 text-sm rounded-r-md ${activeTab === 'conversation' ? 'bg-brand-100 text-brand-800' : 'bg-gray-100 text-gray-600'}`}
+                      >
+                        <Phone className="h-4 w-4 mr-2" />
+                        Conversation
+                      </button>
+                    </>
+                  ) : (
+                    <button 
+                      onClick={() => setActiveTab('transcript')}
+                      className={`flex items-center px-3 py-1.5 text-sm rounded-r-md ${activeTab === 'transcript' ? 'bg-brand-100 text-brand-800' : 'bg-gray-100 text-gray-600'}`}
+                    >
+                      {selectedConversation.channel === 'sms' ? (
+                        <MessageSquare className="h-4 w-4 mr-2" />
+                      ) : (
+                        <Mail className="h-4 w-4 mr-2" />
+                      )}
+                      Conversation
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -243,22 +328,48 @@ const AIAgentConsole = ({ conversations }: AIAgentConsoleProps) => {
                   </div>
                   
                   <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                    <h4 className="font-medium mb-2">Action Items</h4>
+                    <h4 className="font-medium mb-2">System Actions</h4>
                     <ul className="list-disc list-inside">
                       {selectedConversation.actionItems.map((item, index) => (
                         <li key={index}>{item}</li>
                       ))}
                     </ul>
                   </div>
-
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium mb-2">System Actions</h4>
-                    <ul className="list-disc list-inside">
-                      <li>Contact information saved to Yardi</li>
-                      <li>Property tour scheduled for {new Date().toLocaleDateString()} at 3:00 PM</li>
-                      <li>Follow-up email sent with property details</li>
-                    </ul>
-                  </div>
+                  
+                  {/* Add System Links */}
+                  {selectedConversation.systemLinks && (
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">Monitor System Actions</h4>
+                      <div className="flex flex-col gap-2">
+                        {Object.entries(selectedConversation.systemLinks).map(([key, url]) => (
+                          <a 
+                            key={key} 
+                            href={url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-brand-600 hover:text-brand-800 flex items-center"
+                          >
+                            {key === 'yardi' ? (
+                              <img src="yardi.png" alt="Yardi" className="w-4 h-4 mr-2" />
+                            ) : key === 'posting' ? (
+                              <img src="brandywine_homes.png" alt="Brandywine Homes" className="w-4 h-4 mr-2" />
+                            ) : key === 'calendar' ? (
+                              <img src="google_calendar.png" alt="Google Calendar" className="w-4 h-4 mr-2" />
+                            ) : key === 'maintenance' ? (
+                              <span className="mr-2">🔧</span>
+                            ) : key === 'leases' ? (
+                              <span className="mr-2">📄</span>
+                            ) : key === 'moveout' ? (
+                              <span className="mr-2">🚚</span>
+                            ) : (
+                              <span className="mr-2">🔗</span>
+                            )}
+                            {key.charAt(0).toUpperCase() + key.slice(1)} - View in system
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               

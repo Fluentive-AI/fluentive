@@ -81,25 +81,7 @@ const Communications = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">AI Agent Activity</h1>
-        
-        <div className="flex gap-3">
-          <Button variant="outline" size="sm">
-            <Phone className="h-4 w-4 mr-2" />
-            Call
-          </Button>
-          <Button variant="outline" size="sm">
-            <MessageSquare className="h-4 w-4 mr-2" />
-            Text
-          </Button>
-          <Button variant="outline" size="sm">
-            <Mail className="h-4 w-4 mr-2" />
-            Email
-          </Button>
-          <Button size="sm">
-            <Plus className="h-4 w-4 mr-2" />
-            New Conversation
-          </Button>
-        </div>
+
       </div>
       
       <Card>

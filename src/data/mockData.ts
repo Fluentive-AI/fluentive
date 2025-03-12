@@ -16,71 +16,113 @@ export const mockLeads: Lead[] = [
     name: 'John Smith',
     email: 'john.smith@example.com',
     phone: '(555) 123-4567',
-    propertyInterest: 'Oakwood Apartments - 2BR',
+    propertyInterest: '123 Maple Street',
     source: 'Website',
     status: 'pending',
     notes: 'Interested in touring this weekend',
     dateCreated: '2025-03-15',
     nextFollowUp: '2025-03-18',
     tourScheduled: '2025-03-20',
-    assignedTo: 'Sarah Johnson'
+    assignedTo: 'Sarah Johnson',
+    market: 'Tampa',
+    community: 'Preserve at Pine Grove'
   },
   {
     id: '2',
     name: 'Sarah Johnson',
     email: 'sarah.j@example.com',
     phone: '(555) 987-6543',
-    propertyInterest: 'Riverfront Condos - 1BR',
+    propertyInterest: '456 Oak Avenue',
     source: 'Zillow',
     status: 'active',
     notes: 'Very interested in the downtown location',
     dateCreated: '2025-03-10',
     nextFollowUp: '2025-03-17',
     tourScheduled: '2025-03-19',
-    assignedTo: 'Mike Brown'
+    assignedTo: 'Mike Brown',
+    market: 'Atlanta',
+    community: 'Osborne Farms'
   },
   {
     id: '3',
     name: 'Michael Brown',
     email: 'mbrown@example.com',
     phone: '(555) 456-7890',
-    propertyInterest: 'Sunset Apartments - 3BR',
+    propertyInterest: '789 Pine Court',
     source: 'Referral',
     status: 'completed',
     notes: 'Completed tour, seems very interested',
     dateCreated: '2025-03-05',
     nextFollowUp: '2025-03-16',
     tourScheduled: null,
-    assignedTo: 'Alex Rodriguez'
+    assignedTo: 'Alex Rodriguez',
+    market: 'Atlanta',
+    community: 'Suwanee Square'
   },
   {
     id: '4',
     name: 'Emma Davis',
     email: 'emma.d@example.com',
     phone: '(555) 234-5678',
-    propertyInterest: 'Oakwood Apartments - 1BR',
+    propertyInterest: '321 Willow Drive',
     source: 'Facebook',
     status: 'pending',
     notes: 'Looking for immediate move-in',
     dateCreated: '2025-03-12',
     nextFollowUp: '2025-03-19',
     tourScheduled: '2025-03-21',
-    assignedTo: 'Emily Wilson'
+    assignedTo: 'Emily Wilson',
+    market: 'Jacksonville',
+    community: 'Sawyer\'s Preserve'
   },
   {
     id: '5',
     name: 'David Wilson',
     email: 'dwilson@example.com',
     phone: '(555) 345-6789',
-    propertyInterest: 'Riverfront Condos - 2BR',
+    propertyInterest: '654 Cedar Lane',
     source: 'Instagram',
     status: 'active',
     notes: 'Interested in amenities and pet policy',
     dateCreated: '2025-03-08',
     nextFollowUp: '2025-03-18',
     tourScheduled: '2025-03-22',
-    assignedTo: 'James Taylor'
+    assignedTo: 'James Taylor',
+    market: 'Tampa',
+    community: 'Avila Bay'
   },
+  {
+    id: '6',
+    name: 'Jennifer Lopez',
+    email: 'jlopez@example.com',
+    phone: '(555) 678-9012',
+    propertyInterest: '987 Birch Street',
+    source: 'Apartments.com',
+    status: 'pending',
+    notes: 'Interested in fenced yard for pets',
+    dateCreated: '2025-03-14',
+    nextFollowUp: '2025-03-20',
+    tourScheduled: '2025-03-23',
+    assignedTo: 'Alex Rodriguez',
+    market: 'Tampa',
+    community: 'Belmont'
+  },
+  {
+    id: '7',
+    name: 'Robert Garcia',
+    email: 'rgarcia@example.com',
+    phone: '(555) 789-0123',
+    propertyInterest: '135 Spruce Road',
+    source: 'Trulia',
+    status: 'active',
+    notes: 'Looking for home office space',
+    dateCreated: '2025-03-09',
+    nextFollowUp: '2025-03-16',
+    tourScheduled: '2025-03-18',
+    assignedTo: 'Emily Wilson',
+    market: 'Orlando',
+    community: 'Scattered'
+  }
 ];
 
 // Mock Applications
@@ -97,7 +139,9 @@ export const mockApplications: Application[] = [
     backgroundCheck: 'approved',
     creditCheck: 'pending',
     incomeVerification: 'approved',
-    assignedTo: 'Sarah Johnson'
+    assignedTo: 'Sarah Johnson',
+    market: 'Atlanta',
+    community: 'Osborne Farms'
   },
   {
     id: '2',
@@ -111,7 +155,9 @@ export const mockApplications: Application[] = [
     backgroundCheck: 'approved',
     creditCheck: 'approved',
     incomeVerification: 'approved',
-    assignedTo: 'Mike Brown'
+    assignedTo: 'Mike Brown',
+    market: 'Tampa',
+    community: 'Avila Bay'
   },
   {
     id: '3',
@@ -125,7 +171,9 @@ export const mockApplications: Application[] = [
     backgroundCheck: 'pending',
     creditCheck: 'pending',
     incomeVerification: 'pending',
-    assignedTo: 'Emily Wilson'
+    assignedTo: 'Emily Wilson',
+    market: 'Jacksonville',
+    community: 'Sawyer\'s Preserve'
   },
 ];
 
@@ -142,7 +190,9 @@ export const mockTenants: Tenant[] = [
     rentAmount: 1450,
     status: 'active',
     rentStatus: 'paid',
-    region: 'North'
+    region: 'North',
+    market: 'Tampa',
+    community: 'Avila Bay'
   },
   {
     id: '2',
@@ -155,7 +205,9 @@ export const mockTenants: Tenant[] = [
     rentAmount: 1700,
     status: 'active',
     rentStatus: 'pending',
-    region: 'South'
+    region: 'South',
+    market: 'Tampa',
+    community: 'Belmont'
   },
   {
     id: '3',
@@ -167,8 +219,10 @@ export const mockTenants: Tenant[] = [
     leaseEnd: '2025-10-31',
     rentAmount: 1950,
     status: 'active',
-    rentStatus: 'overdue',
-    region: 'East'
+    rentStatus: 'delinquent',
+    region: 'East',
+    market: 'Atlanta',
+    community: 'Suwanee Square'
   },
   {
     id: '4',
@@ -181,7 +235,9 @@ export const mockTenants: Tenant[] = [
     rentAmount: 1500,
     status: 'active',
     rentStatus: 'paid',
-    region: 'West'
+    region: 'West',
+    market: 'Atlanta',
+    community: 'Osborne Farms'
   },
   {
     id: '5',
@@ -194,7 +250,9 @@ export const mockTenants: Tenant[] = [
     rentAmount: 1650,
     status: 'active',
     rentStatus: 'paid',
-    region: 'Central'
+    region: 'Central',
+    market: 'Orlando',
+    community: 'Scattered'
   },
 ];
 
@@ -214,7 +272,8 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     scheduledDate: '2025-03-18T10:30:00',
     endDate: '2025-03-18T12:30:00',
     community: 'Avila Bay',
-    type: 'maintenance'
+    type: 'maintenance',
+    market: 'Tampa'
   },
   {
     id: '2',
@@ -231,6 +290,7 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     endDate: '2025-03-15T11:00:00',
     community: 'Belmont',
     type: 'maintenance',
+    market: 'Tampa'
   },
   {
     id: '3',
@@ -247,6 +307,7 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     endDate: '2025-03-11T15:00:00',
     community: 'Preserve at Pine Grove',
     type: 'maintenance',
+    market: 'Tampa'
   },
   {
     id: '4',
@@ -260,9 +321,10 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     priority: 'normal',
     assignedTo: 'Mike Johnson',
     scheduledDate: '2025-03-14T09:45:00',
-    endDate: '2025-03-14T11:45:00', // 1 hour duration
-    community: 'Crestview at Towne Lake',
+    endDate: '2025-03-14T11:45:00',
+    community: 'Scattered',
     type: 'maintenance',
+    market: 'Orlando'
   },
   {
     id: '5',
@@ -279,6 +341,7 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     endDate: '2025-03-19T16:00:00',
     community: 'Osborne Farms',
     type: 'maintenance',
+    market: 'Atlanta'
   },
 ];
 
@@ -288,28 +351,34 @@ export const mockAIConversations: AIConversation[] = [
     id: '1',
     contactName: 'John Smith',
     channel: 'voice' as 'voice' | 'sms' | 'email',
-    dateTime: '2025-03-12T14:30:00',
-    summary: 'Inquired about 2-bedroom apartment availability and pricing at Riverside Apartments.',
+    dateTime: '2025-03-12T14:32',
+    summary: 'Inquired about 2-bedroom house availability and pricing near Riverview, FL. Wants to visit 123 Maple Street on Saturday, March 15th at 1:00 PM.',
     transcript: `AI: Hello, thank you for calling PropertyAI. How can I assist you today?
-John: Hi, I'm looking for information about the 2 bedroom apartments at Riverside.
-AI: I'd be happy to help you with that. We do have 2-bedroom apartments available at Riverside Apartments. The units start at $1,850 per month for a standard 2-bedroom and go up to $2,200 for a deluxe unit with a view. Would you like to know more specific details about the layouts or amenities?
-John: Yes, could you tell me about the amenities?
-AI: Of course. Riverside Apartments offers a fitness center, swimming pool, covered parking, in-unit washer and dryer, pet-friendly units with a dog park, 24-hour maintenance, and a clubhouse with a business center. All units have updated kitchens with stainless steel appliances and quartz countertops. Would you be interested in scheduling a tour to see the property?
-John: That sounds good. Do you have any availability next weekend?
+John: Hi, I'm looking for information about 2-bedroom houses near Riverview or in the Tampa area.
+AI: I'd be happy to help! We currently have two 2-bedroom houses available in the Riverview area. The first one is located at 123 Maple Street, Riverview, FL, and rents for $1,900 per month. House #2 is located at 456 Oakview Drive, Riverview, FL, and rents for $2,100 per month. Would you like to hear more about their amenities?
+John: That sounds great. Yes sure!
+AI: Of course. Both houses include updated kitchens with stainless steel appliances and quartz countertops, in-unit washer and dryer, and private driveways for convenient parking. Each also offers spacious living areas and bedrooms. The second house also features a nice sunroom and a renovated master bathroom. Would you like to schedule a tour of either house?
+John: That sounds good. Let's do the first one the second one is a bit out of budget for me. Do you have any availability next weekend?
 AI: Let me check our calendar. Yes, we have tour slots available next Saturday at 10:00 AM, 1:00 PM, and 3:00 PM, or Sunday at 1:00 PM and 3:00 PM. Would any of those times work for you?
 John: Saturday at 1 PM would be perfect.
-AI: Great! I'll schedule you for a tour this Saturday at 1:00 PM. Could I get your full name, email, and phone number to confirm the appointment?
-John: John Smith, john.smith@email.com, and my phone is 555-123-4567.
-AI: Thank you, John. I've scheduled your tour for Saturday, March 15th at 1:00 PM at Riverside Apartments. You'll receive a confirmation email shortly with the details and directions to the property. Is there anything else I can help you with today?
+AI: Great! I'll schedule you for a tour of 123 Maple Street on Saturday, March 15th at 1:00 PM. Could I get your full name, email, and phone number to confirm the appointment?
+John: Sure. It's John Smith, john.smith@email.com, and my phone number is 555-123-4567.
+AI: Thank you, John. I've got you scheduled for Saturday, March 15th at 1:00 PM. You'll receive a confirmation email shortly with the details and directions to both houses. Is there anything else I can help you with today?
 John: No, that's all. Thank you!
 AI: You're welcome, John. We look forward to seeing you on Saturday. Feel free to call back if you have any other questions. Have a great day!`,
     sentiment: 'positive',
     actionItems: [
-      'Schedule tour for Saturday, March 15th at 1:00 PM',
-      'Send confirmation email with property details',
-      'Add to CRM for follow-up'
+      'Will tour 123 Maple Street',
+      'Scheduled tour for Saturday, March 15th at 1:00 PM',
+      'Sent confirmation email with property details',
+      'Added to Yardi'
     ],
-    scenario: 'leasing/lead'
+    scenario: 'leasing/lead',
+    systemLinks: {
+      yardi: 'https://www.yardi.com/',
+      calendar: 'https://calendar.google.com/calendar/u/0/r?pli=1',
+      posting: 'https://www.brandywinehomesusa.com/'
+    }
   },
   {
     id: '2',
@@ -334,7 +403,12 @@ AI: You're welcome, Jennifer! If you have any questions while completing your ap
       'Update CRM with preference for 2-bedroom with garage',
       'Follow up in 2 days if application not received'
     ],
-    scenario: 'operations/renewal'
+    scenario: 'operations/renewal',
+    systemLinks: {
+      yardi: 'https://www.yardi.com/',
+      calendar: 'https://calendar.google.com/calendar/u/0/r?pli=1',
+      posting: 'https://www.brandywinehomesusa.com/'
+    }
   },
   {
     id: '3',
@@ -359,7 +433,12 @@ AI: You're welcome! If you need anything else, feel free to text us anytime. Hav
       'Schedule repair for tomorrow 1-3 PM',
       'Send confirmation text with scheduled time'
     ],
-    scenario: 'maintenance/maintenance-requests'
+    scenario: 'maintenance/maintenance-requests',
+    systemLinks: {
+      yardi: 'https://www.yardi.com/',
+      calendar: 'https://calendar.google.com/calendar/u/0/r?pli=1',
+      maintenance: 'https://example.com/maintenance-portal/requests/34567'
+    }
   },
   {
     id: '4',
@@ -384,7 +463,12 @@ AI: You're very welcome, Ms. Johnson. We value you as a resident and appreciate 
       'Send renewal documents for electronic signature',
       'Update CRM with negotiated terms'
     ],
-    scenario: 'operations/renewal'
+    scenario: 'operations/renewal',
+    systemLinks: {
+      yardi: 'https://www.yardi.com/',
+      calendar: 'https://calendar.google.com/calendar/u/0/r?pli=1',
+      leases: 'https://example.com/lease-portal/renewals/67890'
+    }
   },
   {
     id: '5',
@@ -413,7 +497,12 @@ AI: You're welcome, Mr. Chen. If you have any other questions before your move-o
       'Send move-out checklist via email',
       'Update system with forwarding address'
     ],
-    scenario: 'operations/moveout-notice'
+    scenario: 'operations/moveout-notice',
+    systemLinks: {
+      yardi: 'https://www.yardi.com/',
+      calendar: 'https://calendar.google.com/calendar/u/0/r?pli=1',
+      moveout: 'https://example.com/resident-portal/moveout/01234'
+    }
   }
 ];
 
@@ -449,7 +538,7 @@ export const mockRentPayments: RentPayment[] = [
     amount: 1950,
     dueDate: '2025-03-01',
     datePaid: null,
-    status: 'overdue',
+    status: 'delinquent',
     paymentMethod: null,
   },
   {

@@ -16,7 +16,7 @@ const LeadsTable = ({ leads }: LeadsTableProps) => {
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Name</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Property Interest</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Leasing Agent</th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Source</th>
+            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Community (Market)</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Status</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Date Created</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Tour Date</th>
@@ -33,7 +33,7 @@ const LeadsTable = ({ leads }: LeadsTableProps) => {
               </td>
               <td className="px-4 py-3">{lead.propertyInterest}</td>
               <td className="px-4 py-3">{lead.assignedTo || 'Unassigned'}</td>
-              <td className="px-4 py-3">{lead.source}</td>
+              <td className="px-4 py-3">{lead.community} ({lead.market})</td>
               <td className="px-4 py-3">
                 <StatusBadge status={lead.status} />
               </td>

@@ -17,7 +17,7 @@ const StatusBadge = ({ status, className }: StatusBadgeProps) => {
       case 'approved':
       case 'completed':
         return 'bg-green-100 text-green-800';
-      case 'overdue':
+      case 'delinquent':
       case 'rejected':
       case 'canceled':
         return 'bg-red-100 text-red-800';

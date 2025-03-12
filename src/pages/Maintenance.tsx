@@ -45,10 +45,6 @@ const Maintenance = () => {
             <FileText className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Button size="sm">
-            <Plus className="h-4 w-4 mr-2" />
-            Create Request
-          </Button>
         </div>
       </div>
       
@@ -62,7 +58,7 @@ const Maintenance = () => {
                 <SelectValue placeholder="Maintenance Super" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Supers</SelectItem>
+                <SelectItem value="all">All Technicians</SelectItem>
                 {supers.map(sup => sup && (
                   <SelectItem key={sup} value={sup}>{sup}</SelectItem>
                 ))}

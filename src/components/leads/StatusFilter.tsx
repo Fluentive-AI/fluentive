@@ -8,18 +8,20 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-interface CommunicationTypeFilterProps {
+interface StatusFilterProps {
   selectedValues: string[];
   onChange: (values: string[]) => void;
 }
 
-const COMMUNICATION_TYPES = [
-  { value: 'voice', label: 'Voice Calls' },
-  { value: 'sms', label: 'Text Messages' },
-  { value: 'email', label: 'Emails' }
+const STATUS_TYPES = [
+  { value: 'pending', label: 'Initial Contact' },
+  { value: 'scheduled', label: 'Tour Scheduled' },
+  { value: 'completed', label: 'Application Completed' },
+  { value: 'approved', label: 'Lease Signed' },
+  { value: 'active', label: 'Onboarded' }
 ];
 
-const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
+const StatusFilter: React.FC<StatusFilterProps> = ({
   selectedValues,
   onChange,
 }) => {
@@ -33,16 +35,16 @@ const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
   };
 
   const toggleAll = () => {
-    const allValues = COMMUNICATION_TYPES.map(type => type.value);
+    const allValues = STATUS_TYPES.map(type => type.value);
     const hasAll = allValues.every(value => selectedValues.includes(value));
     onChange(hasAll ? [] : allValues);
   };
 
   const getSelectedText = () => {
-    if (selectedValues.length === 0) return 'All Channels';
-    if (selectedValues.length === COMMUNICATION_TYPES.length) return 'All Channels';
+    if (selectedValues.length === 0) return 'All Statuses';
+    if (selectedValues.length === STATUS_TYPES.length) return 'All Statuses';
     
-    const selectedLabels = COMMUNICATION_TYPES
+    const selectedLabels = STATUS_TYPES
       .filter(type => selectedValues.includes(type.value))
       .map(type => type.label);
     
@@ -74,25 +76,23 @@ const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
           >
             <div className={cn(
               "h-5 w-5 rounded border flex items-center justify-center transition-colors",
-              selectedValues.length === COMMUNICATION_TYPES.length && "bg-brand-600 border-brand-600",
-              selectedValues.length > 0 && selectedValues.length < COMMUNICATION_TYPES.length && "border-brand-600",
+              selectedValues.length === STATUS_TYPES.length && "bg-brand-600 border-brand-600",
+              selectedValues.length > 0 && selectedValues.length < STATUS_TYPES.length && "border-brand-600",
               selectedValues.length === 0 && "border-gray-200"
             )}>
-              {selectedValues.length === COMMUNICATION_TYPES.length && <Check className="h-4 w-4 text-white" />}
-              {selectedValues.length > 0 && selectedValues.length < COMMUNICATION_TYPES.length && (
+              {selectedValues.length === STATUS_TYPES.length && <Check className="h-4 w-4 text-white" />}
+              {selectedValues.length > 0 && selectedValues.length < STATUS_TYPES.length && (
                 <div className="h-2.5 w-2.5 rounded-sm bg-brand-600"></div>
               )}
             </div>
-            <span className="font-medium">All Channels</span>
+            <span className="font-medium">All Statuses</span>
           </div>
-          <div className="space-y-2 pl-4">
-            {COMMUNICATION_TYPES.map((type) => {
-              const formattedLabel = type.label.length < 20 ? `${type.label}\n\u00A0` : type.label;
-              
+          <div className="space-y-1 pl-4">
+            {STATUS_TYPES.map((type) => {
               return (
                 <div 
                   key={type.value} 
-                  className="grid grid-cols-[20px,1fr] gap-2 cursor-pointer text-[13px] hover:text-brand-600 h-[40px] items-center"
+                  className="grid grid-cols-[20px,1fr] gap-2 cursor-pointer text-[13px] hover:text-brand-600 h-[32px] items-center"
                   onClick={() => toggleOption(type.value)}
                 >
                   <div className={cn(
@@ -102,8 +102,8 @@ const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
                   )}>
                     {selectedValues.includes(type.value) && <Check className="h-4 w-4 text-white" />}
                   </div>
-                  <span className="leading-tight text-gray-600 whitespace-pre-line">
-                    {formattedLabel}
+                  <span className="leading-tight text-gray-600">
+                    {type.label}
                   </span>
                 </div>
               );
@@ -115,4 +115,4 @@ const CommunicationTypeFilter: React.FC<CommunicationTypeFilterProps> = ({
   );
 };
 
-export default CommunicationTypeFilter; 
+export default StatusFilter; 
