@@ -32,6 +32,8 @@ import ApplicationPage from "./pages/ApplicationPage";
 import RentPage from "./pages/RentPage";
 import ReportsPage from "./pages/ReportsPage";
 import SettingsPage from "./pages/SettingsPage";
+import PropertyManagerTenants from "./pages/PropertyManagerTenants";
+import PropertyManagerRent from "./pages/PropertyManagerRent";
 
 const queryClient = new QueryClient();
 
@@ -59,8 +61,8 @@ const App = () => (
           
           {/* Property Manager Routes */}
           <Route path="/manager" element={<PropertyManagerLayout><PropertyManagerMyDay /></PropertyManagerLayout>} />
-          <Route path="/manager/tenants" element={<PropertyManagerLayout><Tenants /></PropertyManagerLayout>} />
-          <Route path="/manager/rent" element={<PropertyManagerLayout><PlaceholderPage /></PropertyManagerLayout>} />
+          <Route path="/manager/tenants" element={<PropertyManagerLayout><PropertyManagerTenants /></PropertyManagerLayout>} />
+          <Route path="/manager/rent" element={<PropertyManagerLayout><PropertyManagerRent /></PropertyManagerLayout>} />
           <Route path="/manager/settings" element={<PropertyManagerLayout><PlaceholderPage /></PropertyManagerLayout>} />
           
           {/* Superintendent Routes */}

@@ -33,15 +33,7 @@ const LandingPage = () => {
           >
             Property Manager Dashboard
           </Button>
-          
-          <Button 
-            size="lg" 
-            variant="outline"
-            className="text-lg px-8 py-6 h-auto"
-            onClick={() => navigate('/super')}
-          >
-            Superintendent Access
-          </Button>
+
           
           <Button 
             size="lg" 

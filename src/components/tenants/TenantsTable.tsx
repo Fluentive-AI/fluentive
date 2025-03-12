@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ChevronRight } from 'lucide-react';
 import { Tenant } from '@/types';
 import StatusBadge from '../shared/StatusBadge';
 import { ExternalLink } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import TenantDialog from './TenantDialog';
 
 interface TenantsTableProps {
@@ -10,6 +13,11 @@ interface TenantsTableProps {
 }
 
 const TenantsTable = ({ tenants }: TenantsTableProps) => {
+  const navigate = useNavigate();
+
+  // Sort tenants by delinquent amount (highest to lowest)
+  const sortedTenants = [...tenants].sort((a, b) => b.amountDQ - a.amountDQ);
+
   return (
     <div className="table-container overflow-x-auto">
       <table className="w-full border-collapse">
@@ -20,13 +28,13 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Community (Market)</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Lease End</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Rent</th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Status</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Rent Status</th>
+            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Amount Delinquent</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">See in Yardi</th>
           </tr>
         </thead>
         <tbody className="divide-y">
-          {tenants.map((tenant) => (
+          {sortedTenants.map((tenant) => (
             <TenantDialog
               key={tenant.id}
               tenant={tenant}
@@ -43,10 +51,14 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
                   <td className="px-4 py-3">{tenant.leaseEnd}</td>
                   <td className="px-4 py-3">${tenant.rentAmount.toLocaleString()}</td>
                   <td className="px-4 py-3">
-                    <StatusBadge status={tenant.status as any} />
+                    <StatusBadge status={tenant.rentStatus as any} />
                   </td>
                   <td className="px-4 py-3">
-                    <StatusBadge status={tenant.rentStatus as any} />
+                    {tenant.amountDQ > 0 ? (
+                      <span className="text-red-500 font-medium">{tenant.amountDQ.toLocaleString()}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <Button 

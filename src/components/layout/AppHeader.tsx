@@ -222,7 +222,7 @@ const AppHeader = () => {
               </div>
               <div>
                 <div className="font-medium">{CURRENT_SUPER}</div>
-                <div className="text-sm text-gray-500">Superintendent</div>
+                <div className="text-sm text-gray-500">Technician</div>
               </div>
             </div>
 
