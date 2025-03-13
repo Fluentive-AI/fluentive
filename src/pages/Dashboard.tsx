@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MetricsGrid from '@/components/dashboard/MetricsGrid';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
 import SimpleBarChart from '@/components/dashboard/SimpleBarChart';
@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from '@/components/ui/button';
 import DashboardSelector from '@/components/dashboard/DashboardSelector';
+import CreateDashboardDialog from '@/components/dashboard/CreateDashboardDialog';
+import { toast } from 'sonner';
 
 // Sample personalized dashboards
 const personalizedDashboards = [
@@ -39,6 +41,23 @@ const Dashboard = () => {
   const [selectedMarketCommunities, setSelectedMarketCommunities] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'market' | 'community'>('market');
   const [activeDashboard, setActiveDashboard] = useState(personalizedDashboards[0]);
+  const [createDashboardOpen, setCreateDashboardOpen] = useState(false);
+  const [dashboards, setDashboards] = useState(personalizedDashboards);
+
+  // Add event listener for opening create dashboard dialog
+  useEffect(() => {
+    const handleCreateDashboardEvent = (event: CustomEvent) => {
+      if (event.detail?.action === 'open') {
+        setCreateDashboardOpen(true);
+      }
+    };
+
+    document.addEventListener('create-dashboard', handleCreateDashboardEvent as EventListener);
+    
+    return () => {
+      document.removeEventListener('create-dashboard', handleCreateDashboardEvent as EventListener);
+    };
+  }, []);
 
   // Helper function to extract market from community string (e.g., "Atlanta/Osborne Farms" -> "Atlanta")
   const getMarketFromCommunity = (community: string): string => {
@@ -221,6 +240,20 @@ const Dashboard = () => {
     }
   };
 
+  const handleCreateDashboard = (newDashboard: { name: string; cards: any[] }) => {
+    const dashboardToAdd = {
+      id: Date.now().toString(),
+      name: newDashboard.name,
+      isDefault: false
+    };
+    
+    setDashboards([...dashboards, dashboardToAdd]);
+    setActiveDashboard(dashboardToAdd);
+    setCreateDashboardOpen(false);
+    
+    toast.success(`Dashboard "${newDashboard.name}" created successfully`);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -229,7 +262,7 @@ const Dashboard = () => {
             {activeDashboard.name}
           </h2>
           <DashboardSelector 
-            dashboards={personalizedDashboards}
+            dashboards={dashboards}
             activeDashboard={activeDashboard}
             onSelect={setActiveDashboard}
           />
@@ -323,6 +356,12 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
+
+      <CreateDashboardDialog 
+        open={createDashboardOpen}
+        onOpenChange={setCreateDashboardOpen}
+        onSave={handleCreateDashboard}
+      />
     </div>
   );
 };

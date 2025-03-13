@@ -32,8 +32,11 @@ const DashboardSelector: React.FC<DashboardSelectorProps> = ({
   const navigate = useNavigate();
 
   const handleCreateNew = () => {
-    // Navigate to the reports page with the create dashboard tab active
-    navigate('/reports?tab=personalized&action=create');
+    // This will be handled by the CreateDashboardDialog component
+    const createDashboardEvent = new CustomEvent('create-dashboard', {
+      detail: { action: 'open' }
+    });
+    document.dispatchEvent(createDashboardEvent);
   };
 
   return (
