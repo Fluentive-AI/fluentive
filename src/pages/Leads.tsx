@@ -2,43 +2,69 @@ import React, { useState } from 'react';
 import LeadsTable from '@/components/leads/LeadsTable';
 import { mockLeads } from '@/data/mockData';
 import { Button } from '@/components/ui/button';
-import { Plus, FileText, BarChart, ExternalLink } from 'lucide-react';
+import { Plus, FileText, BarChart, ExternalLink, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
 import StatusFilter from '@/components/leads/StatusFilter';
 import AgentFilter from '@/components/leads/AgentFilter';
+import { Input } from '@/components/ui/input';
 
 const Leads = () => {
+  // Search state
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  
   // State for All Leads tab
   const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
   const [selectedMarketCommunities, setSelectedMarketCommunities] = useState<string[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   
-  // State for Initial Contact tab
-  const [initialAgents, setInitialAgents] = useState<string[]>([]);
-  const [initialMarketCommunities, setInitialMarketCommunities] = useState<string[]>([]);
+  // State for New Leads tab
+  const [newAgents, setNewAgents] = useState<string[]>([]);
+  const [newMarketCommunities, setNewMarketCommunities] = useState<string[]>([]);
+  
+  // State for Contacted tab
+  const [contactedAgents, setContactedAgents] = useState<string[]>([]);
+  const [contactedMarketCommunities, setContactedMarketCommunities] = useState<string[]>([]);
   
   // State for Tour Scheduled tab
   const [scheduledAgents, setScheduledAgents] = useState<string[]>([]);
   const [scheduledMarketCommunities, setScheduledMarketCommunities] = useState<string[]>([]);
   
-  // State for Completed Application tab
-  const [completedAgents, setCompletedAgents] = useState<string[]>([]);
-  const [completedMarketCommunities, setCompletedMarketCommunities] = useState<string[]>([]);
+  // State for Application Sent tab
+  const [applicationSentAgents, setApplicationSentAgents] = useState<string[]>([]);
+  const [applicationSentMarketCommunities, setApplicationSentMarketCommunities] = useState<string[]>([]);
   
-  // State for Lease Signed tab
-  const [signedAgents, setSignedAgents] = useState<string[]>([]);
-  const [signedMarketCommunities, setSignedMarketCommunities] = useState<string[]>([]);
+  // State for Application Received tab
+  const [applicationReceivedAgents, setApplicationReceivedAgents] = useState<string[]>([]);
+  const [applicationReceivedMarketCommunities, setApplicationReceivedMarketCommunities] = useState<string[]>([]);
   
-  // State for Onboarded tab
-  const [onboardedAgents, setOnboardedAgents] = useState<string[]>([]);
-  const [onboardedMarketCommunities, setOnboardedMarketCommunities] = useState<string[]>([]);
+  // State for Closed Won tab
+  const [closedWonAgents, setClosedWonAgents] = useState<string[]>([]);
+  const [closedWonMarketCommunities, setClosedWonMarketCommunities] = useState<string[]>([]);
+  
+  // State for Closed Lost tab
+  const [closedLostAgents, setClosedLostAgents] = useState<string[]>([]);
+  const [closedLostMarketCommunities, setClosedLostMarketCommunities] = useState<string[]>([]);
 
   const leasingAgents = [...new Set(mockLeads.map(lead => lead.assignedTo))];
 
+  // Helper function to apply search filter
+  const applySearchFilter = (leads: typeof mockLeads) => {
+    if (!searchQuery) return leads;
+    
+    const query = searchQuery.toLowerCase();
+    return leads.filter(lead => 
+      lead.name.toLowerCase().includes(query) ||
+      lead.email.toLowerCase().includes(query) ||
+      lead.propertyInterest.toLowerCase().includes(query) ||
+      lead.community.toLowerCase().includes(query) ||
+      lead.market.toLowerCase().includes(query)
+    );
+  };
+
   // Filter functions for each tab
-  const filteredLeads = mockLeads.filter(lead => {
+  const filteredLeads = applySearchFilter(mockLeads.filter(lead => {
     if (selectedAgents.length > 0 && !selectedAgents.includes(lead.assignedTo)) {
       return false;
     }
@@ -52,24 +78,38 @@ const Leads = () => {
       }
     }
     return true;
-  });
+  }));
 
-  const initialLeads = mockLeads.filter(lead => {
-    if (lead.status !== 'pending') return false;
-    if (initialAgents.length > 0 && !initialAgents.includes(lead.assignedTo)) {
+  const newLeads = applySearchFilter(mockLeads.filter(lead => {
+    if (lead.status !== 'new') return false;
+    if (newAgents.length > 0 && !newAgents.includes(lead.assignedTo)) {
       return false;
     }
-    if (initialMarketCommunities.length > 0) {
+    if (newMarketCommunities.length > 0) {
       const marketCommunityValue = `${lead.market}/${lead.community}`;
-      if (!initialMarketCommunities.includes(marketCommunityValue)) {
+      if (!newMarketCommunities.includes(marketCommunityValue)) {
         return false;
       }
     }
     return true;
-  });
+  }));
 
-  const scheduledLeads = mockLeads.filter(lead => {
-    if (lead.status !== 'scheduled') return false;
+  const contactedLeads = applySearchFilter(mockLeads.filter(lead => {
+    if (lead.status !== 'contacted') return false;
+    if (contactedAgents.length > 0 && !contactedAgents.includes(lead.assignedTo)) {
+      return false;
+    }
+    if (contactedMarketCommunities.length > 0) {
+      const marketCommunityValue = `${lead.market}/${lead.community}`;
+      if (!contactedMarketCommunities.includes(marketCommunityValue)) {
+        return false;
+      }
+    }
+    return true;
+  }));
+
+  const scheduledLeads = applySearchFilter(mockLeads.filter(lead => {
+    if (lead.status !== 'tour_scheduled') return false;
     if (scheduledAgents.length > 0 && !scheduledAgents.includes(lead.assignedTo)) {
       return false;
     }
@@ -80,49 +120,63 @@ const Leads = () => {
       }
     }
     return true;
-  });
+  }));
 
-  const completedLeads = mockLeads.filter(lead => {
-    if (lead.status !== 'completed') return false;
-    if (completedAgents.length > 0 && !completedAgents.includes(lead.assignedTo)) {
+  const applicationSentLeads = applySearchFilter(mockLeads.filter(lead => {
+    if (lead.status !== 'application_sent') return false;
+    if (applicationSentAgents.length > 0 && !applicationSentAgents.includes(lead.assignedTo)) {
       return false;
     }
-    if (completedMarketCommunities.length > 0) {
+    if (applicationSentMarketCommunities.length > 0) {
       const marketCommunityValue = `${lead.market}/${lead.community}`;
-      if (!completedMarketCommunities.includes(marketCommunityValue)) {
+      if (!applicationSentMarketCommunities.includes(marketCommunityValue)) {
         return false;
       }
     }
     return true;
-  });
+  }));
 
-  const signedLeads = mockLeads.filter(lead => {
-    if (lead.status !== 'approved') return false;
-    if (signedAgents.length > 0 && !signedAgents.includes(lead.assignedTo)) {
+  const applicationReceivedLeads = applySearchFilter(mockLeads.filter(lead => {
+    if (lead.status !== 'application_received') return false;
+    if (applicationReceivedAgents.length > 0 && !applicationReceivedAgents.includes(lead.assignedTo)) {
       return false;
     }
-    if (signedMarketCommunities.length > 0) {
+    if (applicationReceivedMarketCommunities.length > 0) {
       const marketCommunityValue = `${lead.market}/${lead.community}`;
-      if (!signedMarketCommunities.includes(marketCommunityValue)) {
+      if (!applicationReceivedMarketCommunities.includes(marketCommunityValue)) {
         return false;
       }
     }
     return true;
-  });
+  }));
 
-  const onboardedLeads = mockLeads.filter(lead => {
-    if (lead.status !== 'active') return false;
-    if (onboardedAgents.length > 0 && !onboardedAgents.includes(lead.assignedTo)) {
+  const closedWonLeads = applySearchFilter(mockLeads.filter(lead => {
+    if (lead.status !== 'closed_won') return false;
+    if (closedWonAgents.length > 0 && !closedWonAgents.includes(lead.assignedTo)) {
       return false;
     }
-    if (onboardedMarketCommunities.length > 0) {
+    if (closedWonMarketCommunities.length > 0) {
       const marketCommunityValue = `${lead.market}/${lead.community}`;
-      if (!onboardedMarketCommunities.includes(marketCommunityValue)) {
+      if (!closedWonMarketCommunities.includes(marketCommunityValue)) {
         return false;
       }
     }
     return true;
-  });
+  }));
+
+  const closedLostLeads = applySearchFilter(mockLeads.filter(lead => {
+    if (lead.status !== 'closed_lost') return false;
+    if (closedLostAgents.length > 0 && !closedLostAgents.includes(lead.assignedTo)) {
+      return false;
+    }
+    if (closedLostMarketCommunities.length > 0) {
+      const marketCommunityValue = `${lead.market}/${lead.community}`;
+      if (!closedLostMarketCommunities.includes(marketCommunityValue)) {
+        return false;
+      }
+    }
+    return true;
+  }));
 
   return (
     <div>
@@ -148,34 +202,49 @@ const Leads = () => {
       <Tabs defaultValue="leads">
         <TabsList className="mb-6">
           <TabsTrigger value="leads">All Leads</TabsTrigger>
-          <TabsTrigger value="initial">Initial Contact</TabsTrigger>
-          <TabsTrigger value="scheduled">Tour Scheduled</TabsTrigger>
-          <TabsTrigger value="completed">Completed Application</TabsTrigger>
-          <TabsTrigger value="signed">Lease Signed</TabsTrigger>
-          <TabsTrigger value="onboarded">Onboarded</TabsTrigger>
+          <TabsTrigger value="new">New Leads</TabsTrigger>
+          <TabsTrigger value="contacted">Contacted</TabsTrigger>
+          <TabsTrigger value="tour_scheduled">Tour Scheduled</TabsTrigger>
+          <TabsTrigger value="application_sent">Application Sent</TabsTrigger>
+          <TabsTrigger value="application_received">Application Received</TabsTrigger>
+          <TabsTrigger value="closed_won">Closed Won</TabsTrigger>
+          <TabsTrigger value="closed_lost">Closed Lost</TabsTrigger>
         </TabsList>
         
         <TabsContent value="leads">
           <Card>
-            <CardHeader className="pb-3 flex flex-row justify-between items-center">
+            <CardHeader className="pb-3">
               <CardTitle>Current Leads</CardTitle>
               
-              <div className="flex gap-4">
-                <AgentFilter 
-                  agents={leasingAgents}
-                  selectedValues={selectedAgents}
-                  onChange={setSelectedAgents}
-                />
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search leads..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
                 
-                <MarketCommunityFilter 
-                  selectedValues={selectedMarketCommunities}
-                  onChange={setSelectedMarketCommunities}
-                />
-                
-                <StatusFilter
-                  selectedValues={selectedStatuses}
-                  onChange={setSelectedStatuses}
-                />
+                <div className="flex gap-2 flex-shrink-0">
+                  <AgentFilter 
+                    agents={leasingAgents}
+                    selectedValues={selectedAgents}
+                    onChange={setSelectedAgents}
+                  />
+                  
+                  <MarketCommunityFilter 
+                    selectedValues={selectedMarketCommunities}
+                    onChange={setSelectedMarketCommunities}
+                  />
+                  
+                  <StatusFilter
+                    selectedValues={selectedStatuses}
+                    onChange={setSelectedStatuses}
+                  />
+                </div>
               </div>
             </CardHeader>
             <CardContent>
@@ -184,46 +253,109 @@ const Leads = () => {
           </Card>
         </TabsContent>
         
-        <TabsContent value="initial">
+        <TabsContent value="new">
           <Card>
-            <CardHeader className="pb-3 flex flex-row justify-between items-center">
-              <CardTitle>Initial Contact Leads</CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle>New Leads</CardTitle>
               
-              <div className="flex gap-4">
-                <AgentFilter 
-                  agents={leasingAgents}
-                  selectedValues={initialAgents}
-                  onChange={setInitialAgents}
-                />
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search leads..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
                 
-                <MarketCommunityFilter 
-                  selectedValues={initialMarketCommunities}
-                  onChange={setInitialMarketCommunities}
-                />
+                <div className="flex gap-2 flex-shrink-0">
+                  <AgentFilter 
+                    agents={leasingAgents}
+                    selectedValues={newAgents}
+                    onChange={setNewAgents}
+                  />
+                  
+                  <MarketCommunityFilter 
+                    selectedValues={newMarketCommunities}
+                    onChange={setNewMarketCommunities}
+                  />
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <LeadsTable leads={initialLeads} />
+              <LeadsTable leads={newLeads} />
             </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="scheduled">
+        <TabsContent value="contacted">
           <Card>
-            <CardHeader className="pb-3 flex flex-row justify-between items-center">
+            <CardHeader className="pb-3">
+              <CardTitle>Contacted Leads</CardTitle>
+              
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search leads..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex gap-2 flex-shrink-0">
+                  <AgentFilter 
+                    agents={leasingAgents}
+                    selectedValues={contactedAgents}
+                    onChange={setContactedAgents}
+                  />
+                  
+                  <MarketCommunityFilter 
+                    selectedValues={contactedMarketCommunities}
+                    onChange={setContactedMarketCommunities}
+                  />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <LeadsTable leads={contactedLeads} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="tour_scheduled">
+          <Card>
+            <CardHeader className="pb-3">
               <CardTitle>Tour Scheduled Leads</CardTitle>
               
-              <div className="flex gap-4">
-                <AgentFilter 
-                  agents={leasingAgents}
-                  selectedValues={scheduledAgents}
-                  onChange={setScheduledAgents}
-                />
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search leads..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
                 
-                <MarketCommunityFilter 
-                  selectedValues={scheduledMarketCommunities}
-                  onChange={setScheduledMarketCommunities}
-                />
+                <div className="flex gap-2 flex-shrink-0">
+                  <AgentFilter 
+                    agents={leasingAgents}
+                    selectedValues={scheduledAgents}
+                    onChange={setScheduledAgents}
+                  />
+                  
+                  <MarketCommunityFilter 
+                    selectedValues={scheduledMarketCommunities}
+                    onChange={setScheduledMarketCommunities}
+                  />
+                </div>
               </div>
             </CardHeader>
             <CardContent>
@@ -232,74 +364,150 @@ const Leads = () => {
           </Card>
         </TabsContent>
         
-        <TabsContent value="completed">
+        <TabsContent value="application_sent">
           <Card>
-            <CardHeader className="pb-3 flex flex-row justify-between items-center">
-              <CardTitle>Completed Application Leads</CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle>Application Sent Leads</CardTitle>
               
-              <div className="flex gap-4">
-                <AgentFilter 
-                  agents={leasingAgents}
-                  selectedValues={completedAgents}
-                  onChange={setCompletedAgents}
-                />
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search leads..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
                 
-                <MarketCommunityFilter 
-                  selectedValues={completedMarketCommunities}
-                  onChange={setCompletedMarketCommunities}
-                />
+                <div className="flex gap-2 flex-shrink-0">
+                  <AgentFilter 
+                    agents={leasingAgents}
+                    selectedValues={applicationSentAgents}
+                    onChange={setApplicationSentAgents}
+                  />
+                  
+                  <MarketCommunityFilter 
+                    selectedValues={applicationSentMarketCommunities}
+                    onChange={setApplicationSentMarketCommunities}
+                  />
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <LeadsTable leads={completedLeads} />
+              <LeadsTable leads={applicationSentLeads} />
             </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="signed">
+        <TabsContent value="application_received">
           <Card>
-            <CardHeader className="pb-3 flex flex-row justify-between items-center">
-              <CardTitle>Lease Signed Leads</CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle>Application Received Leads</CardTitle>
               
-              <div className="flex gap-4">
-                <AgentFilter 
-                  agents={leasingAgents}
-                  selectedValues={signedAgents}
-                  onChange={setSignedAgents}
-                />
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search leads..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
                 
-                <MarketCommunityFilter 
-                  selectedValues={signedMarketCommunities}
-                  onChange={setSignedMarketCommunities}
-                />
+                <div className="flex gap-2 flex-shrink-0">
+                  <AgentFilter 
+                    agents={leasingAgents}
+                    selectedValues={applicationReceivedAgents}
+                    onChange={setApplicationReceivedAgents}
+                  />
+                  
+                  <MarketCommunityFilter 
+                    selectedValues={applicationReceivedMarketCommunities}
+                    onChange={setApplicationReceivedMarketCommunities}
+                  />
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <LeadsTable leads={signedLeads} />
+              <LeadsTable leads={applicationReceivedLeads} />
             </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="onboarded">
+        <TabsContent value="closed_won">
           <Card>
-            <CardHeader className="pb-3 flex flex-row justify-between items-center">
-              <CardTitle>Onboarded Leads</CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle>Closed Won Leads</CardTitle>
               
-              <div className="flex gap-4">
-                <AgentFilter 
-                  agents={leasingAgents}
-                  selectedValues={onboardedAgents}
-                  onChange={setOnboardedAgents}
-                />
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search leads..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
                 
-                <MarketCommunityFilter 
-                  selectedValues={onboardedMarketCommunities}
-                  onChange={setOnboardedMarketCommunities}
-                />
+                <div className="flex gap-2 flex-shrink-0">
+                  <AgentFilter 
+                    agents={leasingAgents}
+                    selectedValues={closedWonAgents}
+                    onChange={setClosedWonAgents}
+                  />
+                  
+                  <MarketCommunityFilter 
+                    selectedValues={closedWonMarketCommunities}
+                    onChange={setClosedWonMarketCommunities}
+                  />
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <LeadsTable leads={onboardedLeads} />
+              <LeadsTable leads={closedWonLeads} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="closed_lost">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle>Closed Lost Leads</CardTitle>
+              
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search leads..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex gap-2 flex-shrink-0">
+                  <AgentFilter 
+                    agents={leasingAgents}
+                    selectedValues={closedLostAgents}
+                    onChange={setClosedLostAgents}
+                  />
+                  
+                  <MarketCommunityFilter 
+                    selectedValues={closedLostMarketCommunities}
+                    onChange={setClosedLostMarketCommunities}
+                  />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <LeadsTable leads={closedLostLeads} />
             </CardContent>
           </Card>
         </TabsContent>

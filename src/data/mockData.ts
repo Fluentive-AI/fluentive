@@ -10,6 +10,16 @@ import {
   RentCommunication
 } from '@/types';
 
+// Helper to generate today's date string in ISO format
+const todayISO = new Date().toISOString().split('T')[0];
+
+// Generate a datetime string for today at a specified hour and minute
+const getTodayAt = (hour: number, minute: number = 0): string => {
+  const date = new Date();
+  date.setHours(hour, minute, 0, 0);
+  return date.toISOString();
+};
+
 // Mock Leads
 export const mockLeads: Lead[] = [
   {
@@ -19,7 +29,7 @@ export const mockLeads: Lead[] = [
     phone: '(555) 123-4567',
     propertyInterest: '123 Maple Street',
     source: 'Website',
-    status: 'pending',
+    status: 'new',
     notes: 'Interested in touring this weekend',
     dateCreated: '2025-03-15',
     nextFollowUp: '2025-03-18',
@@ -35,7 +45,7 @@ export const mockLeads: Lead[] = [
     phone: '(555) 987-6543',
     propertyInterest: '456 Oak Avenue',
     source: 'Zillow',
-    status: 'active',
+    status: 'contacted',
     notes: 'Very interested in the downtown location',
     dateCreated: '2025-03-10',
     nextFollowUp: '2025-03-17',
@@ -51,11 +61,12 @@ export const mockLeads: Lead[] = [
     phone: '(555) 456-7890',
     propertyInterest: '789 Pine Court',
     source: 'Referral',
-    status: 'completed',
+    status: 'tour_scheduled',
     notes: 'Completed tour, seems very interested',
     dateCreated: '2025-03-05',
     nextFollowUp: '2025-03-16',
-    tourScheduled: null,
+    tourScheduled: todayISO,
+    tourDateTime: getTodayAt(14, 0),
     assignedTo: 'Alex Rodriguez',
     market: 'Atlanta',
     community: 'Suwanee Square'
@@ -67,7 +78,7 @@ export const mockLeads: Lead[] = [
     phone: '(555) 234-5678',
     propertyInterest: '321 Willow Drive',
     source: 'Facebook',
-    status: 'pending',
+    status: 'application_sent',
     notes: 'Looking for immediate move-in',
     dateCreated: '2025-03-12',
     nextFollowUp: '2025-03-19',
@@ -83,7 +94,7 @@ export const mockLeads: Lead[] = [
     phone: '(555) 345-6789',
     propertyInterest: '654 Cedar Lane',
     source: 'Instagram',
-    status: 'active',
+    status: 'application_received',
     notes: 'Interested in amenities and pet policy',
     dateCreated: '2025-03-08',
     nextFollowUp: '2025-03-18',
@@ -99,7 +110,7 @@ export const mockLeads: Lead[] = [
     phone: '(555) 678-9012',
     propertyInterest: '987 Birch Street',
     source: 'Apartments.com',
-    status: 'pending',
+    status: 'closed_won',
     notes: 'Interested in fenced yard for pets',
     dateCreated: '2025-03-14',
     nextFollowUp: '2025-03-20',
@@ -115,7 +126,7 @@ export const mockLeads: Lead[] = [
     phone: '(555) 789-0123',
     propertyInterest: '135 Spruce Road',
     source: 'Trulia',
-    status: 'active',
+    status: 'closed_lost',
     notes: 'Looking for home office space',
     dateCreated: '2025-03-09',
     nextFollowUp: '2025-03-16',
@@ -123,8 +134,143 @@ export const mockLeads: Lead[] = [
     assignedTo: 'Emily Wilson',
     market: 'Orlando',
     community: 'Scattered'
+  },
+  {
+    id: "lead-tampa-101",
+    name: "Sarah Johnson",
+    email: "sarah.johnson@example.com",
+    phone: "(813) 555-1234",
+    propertyInterest: "1542 Bayshore Drive",
+    source: "Website",
+    dateCreated: todayISO,
+    market: "Tampa",
+    community: "Avila Bay",
+    assignedTo: "Emily Wilson",
+    status: "new",
+    lastContact: getTodayAt(9, 15)
+  },
+  {
+    id: "lead-tampa-102",
+    name: "Mark Davis",
+    email: "mark.davis@example.com",
+    phone: "(813) 555-2345",
+    propertyInterest: "3678 Belmont Avenue",
+    source: "Zillow",
+    dateCreated: todayISO,
+    market: "Tampa",
+    community: "Belmont",
+    assignedTo: "Emily Wilson",
+    status: "contacted",
+    lastContact: getTodayAt(10, 30)
+  },
+  {
+    id: "lead-tampa-103",
+    name: "Jennifer Martinez",
+    email: "jennifer.martinez@example.com",
+    phone: "(813) 555-3456",
+    propertyInterest: "2145 Harbor View Lane",
+    source: "Referral",
+    dateCreated: todayISO,
+    market: "Tampa",
+    community: "Avila Bay",
+    assignedTo: "Emily Wilson",
+    status: "tour_scheduled",
+    tourScheduled: todayISO,
+    tourDateTime: getTodayAt(13, 0), // 1:00 PM today
+    notes: "Client is very interested in the bay view property."
+  },
+  {
+    id: "lead-tampa-104",
+    name: "Robert Wilson",
+    email: "robert.wilson@example.com",
+    phone: "(813) 555-4567",
+    propertyInterest: "4290 Belmont Heights Road",
+    source: "Facebook",
+    dateCreated: todayISO,
+    market: "Tampa",
+    community: "Belmont",
+    assignedTo: "Emily Wilson",
+    status: "tour_scheduled",
+    tourScheduled: todayISO,
+    tourDateTime: getTodayAt(15, 30), // 3:30 PM today
+    notes: "Looking for pet-friendly options. Has a golden retriever."
+  },
+  {
+    id: "lead-tampa-105",
+    name: "Maria Lopez",
+    email: "maria.lopez@example.com",
+    phone: "(813) 555-5678",
+    propertyInterest: "7823 Pine Grove Circle",
+    source: "Instagram",
+    dateCreated: todayISO,
+    market: "Tampa",
+    community: "Preserve at Pine Grove",
+    assignedTo: "Emily Wilson",
+    status: "application_sent",
+    lastContact: getTodayAt(11, 15)
+  },
+  {
+    id: "lead-tampa-106",
+    name: "David Brown",
+    email: "david.brown@example.com",
+    phone: "(813) 555-6789",
+    propertyInterest: "1876 Avila Bay Drive",
+    source: "Apartments.com",
+    dateCreated: "2023-06-08",
+    market: "Tampa",
+    community: "Avila Bay",
+    assignedTo: "Emily Wilson",
+    status: "application_received",
+    lastContact: "2023-06-10T09:30:00Z"
+  },
+  {
+    id: "lead-atlanta-201",
+    name: "Thomas Clark",
+    email: "thomas.clark@example.com",
+    phone: "(404) 555-1234",
+    propertyInterest: "5432 Osborne Road",
+    source: "Trulia",
+    dateCreated: todayISO,
+    market: "Atlanta",
+    community: "Osborne Farms",
+    assignedTo: "John Smith",
+    status: "tour_scheduled",
+    tourScheduled: todayISO,
+    tourDateTime: getTodayAt(11, 0) // 11:00 AM today
+  },
+  {
+    id: "lead-atlanta-202",
+    name: "Patricia Lee",
+    email: "patricia.lee@example.com",
+    phone: "(404) 555-2345",
+    propertyInterest: "8901 Suwanee Creek Drive",
+    source: "Website",
+    dateCreated: todayISO,
+    market: "Atlanta",
+    community: "Suwanee Square",
+    assignedTo: "John Smith",
+    status: "new",
+    lastContact: getTodayAt(8, 45)
+  },
+  {
+    id: "lead-jacksonville-301",
+    name: "James Wilson",
+    email: "james.wilson@example.com",
+    phone: "(904) 555-1234",
+    propertyInterest: "3214 Sawyer's Creek Road",
+    source: "Zillow",
+    dateCreated: todayISO,
+    market: "Jacksonville",
+    community: "Sawyer's Preserve",
+    assignedTo: "Lisa Johnson",
+    status: "tour_scheduled",
+    tourScheduled: todayISO,
+    tourDateTime: getTodayAt(14, 15) // 2:15 PM today
   }
 ];
+
+// Export the current leasing agent constant
+export const CURRENT_LEASING_AGENT = "Emily Wilson";
 
 // Mock Applications
 export const mockApplications: Application[] = [
@@ -134,7 +280,7 @@ export const mockApplications: Application[] = [
     name: 'Michael Brown',
     email: 'mbrown@example.com',
     phone: '(555) 456-7890',
-    propertyInterest: 'Sunset Apartments - 3BR',
+    propertyInterest: '5678 Osborne Road',
     status: 'reviewing',
     dateSubmitted: '2025-03-12',
     backgroundCheck: 'approved',
@@ -150,7 +296,7 @@ export const mockApplications: Application[] = [
     name: 'David Wilson',
     email: 'dwilson@example.com',
     phone: '(555) 345-6789',
-    propertyInterest: 'Riverfront Condos - 2BR',
+    propertyInterest: '2145 Avila Bay Drive',
     status: 'approved',
     dateSubmitted: '2025-03-10',
     backgroundCheck: 'approved',
@@ -166,7 +312,7 @@ export const mockApplications: Application[] = [
     name: 'Emma Davis',
     email: 'emma.d@example.com',
     phone: '(555) 234-5678',
-    propertyInterest: 'Oakwood Apartments - 1BR',
+    propertyInterest: '3214 Sawyer\'s Creek Road',
     status: 'pending',
     dateSubmitted: '2025-03-14',
     backgroundCheck: 'pending',
@@ -176,6 +322,87 @@ export const mockApplications: Application[] = [
     market: 'Jacksonville',
     community: 'Sawyer\'s Preserve'
   },
+  // Adding 5 more active applications
+  {
+    id: '4',
+    leadId: 'lead-tampa-106',
+    name: 'David Brown',
+    email: 'david.brown@example.com',
+    phone: '(813) 555-6789',
+    propertyInterest: '1876 Avila Bay Drive',
+    status: 'reviewing',
+    dateSubmitted: '2025-03-15',
+    backgroundCheck: 'approved',
+    creditCheck: 'pending',
+    incomeVerification: 'approved',
+    assignedTo: 'Emily Wilson',
+    market: 'Tampa',
+    community: 'Avila Bay'
+  },
+  {
+    id: '5',
+    leadId: 'lead-tampa-105',
+    name: 'Maria Lopez',
+    email: 'maria.lopez@example.com',
+    phone: '(813) 555-5678',
+    propertyInterest: '7823 Pine Grove Circle',
+    status: 'pending',
+    dateSubmitted: '2025-03-16',
+    backgroundCheck: 'pending',
+    creditCheck: 'pending',
+    incomeVerification: 'pending',
+    assignedTo: 'Emily Wilson',
+    market: 'Tampa',
+    community: 'Preserve at Pine Grove'
+  },
+  {
+    id: '6',
+    leadId: 'lead-atlanta-201',
+    name: 'Thomas Clark',
+    email: 'thomas.clark@example.com',
+    phone: '(404) 555-1234',
+    propertyInterest: '5432 Osborne Road',
+    status: 'approved',
+    dateSubmitted: '2025-03-11',
+    backgroundCheck: 'approved',
+    creditCheck: 'approved',
+    incomeVerification: 'approved',
+    assignedTo: 'John Smith',
+    market: 'Atlanta',
+    community: 'Osborne Farms'
+  },
+  {
+    id: '7',
+    leadId: 'lead-atlanta-202',
+    name: 'Patricia Lee',
+    email: 'patricia.lee@example.com',
+    phone: '(404) 555-2345',
+    propertyInterest: '8901 Suwanee Creek Drive',
+    status: 'reviewing',
+    dateSubmitted: '2025-03-13',
+    backgroundCheck: 'approved',
+    creditCheck: 'pending',
+    incomeVerification: 'approved',
+    assignedTo: 'John Smith',
+    market: 'Atlanta',
+    community: 'Suwanee Square'
+  },
+  {
+    id: '8',
+    leadId: 'lead-jacksonville-301',
+    name: 'James Wilson',
+    email: 'james.wilson@example.com',
+    phone: '(904) 555-1234',
+    propertyInterest: '3214 Sawyer\'s Creek Road',
+    status: 'denied',
+    dateSubmitted: '2025-03-09',
+    backgroundCheck: 'denied',
+    creditCheck: 'approved',
+    incomeVerification: 'approved',
+    assignedTo: 'Lisa Johnson',
+    market: 'Jacksonville',
+    community: 'Sawyer\'s Preserve'
+  }
 ];
 
 // Mock Tenants

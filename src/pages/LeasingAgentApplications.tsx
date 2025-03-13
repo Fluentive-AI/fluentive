@@ -1,92 +1,63 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, FileText } from 'lucide-react';
-import { mockLeasingApplications, CURRENT_LEASING_AGENT } from '@/data/leasingMockData';
-import { Application } from '@/types';
+import { ExternalLink, FileText, Search } from 'lucide-react';
+import { mockApplications, CURRENT_LEASING_AGENT } from '@/data/mockData';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { format } from 'date-fns';
-import StatusBadge from '@/components/shared/StatusBadge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import ApplicationsTable from '@/components/applications/ApplicationsTable';
+import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
+import ApplicationStatusFilter from '@/components/applications/ApplicationStatusFilter';
 
 const LeasingAgentApplications = () => {
   const [activeTab, setActiveTab] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedMarketCommunities, setSelectedMarketCommunities] = useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   
   // Filter applications for the current leasing agent
-  const agentApplications = mockLeasingApplications.filter(
+  const agentApplications = mockApplications.filter(
     app => app.assignedTo === CURRENT_LEASING_AGENT
   );
   
-  // Filter applications by status
-  const pendingApplications = agentApplications.filter(app => app.status === 'pending');
-  const reviewingApplications = agentApplications.filter(app => app.status === 'reviewing');
-  const approvedApplications = agentApplications.filter(app => app.status === 'approved');
-  const deniedApplications = agentApplications.filter(app => app.status === 'denied');
+  // Apply search and filter
+  const applyFilters = (applications: typeof mockApplications) => {
+    return applications.filter(app => {
+      // Apply search filter
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesSearch = 
+          app.name.toLowerCase().includes(query) ||
+          app.email.toLowerCase().includes(query) ||
+          app.propertyInterest.toLowerCase().includes(query) ||
+          (app.assignedTo && app.assignedTo.toLowerCase().includes(query));
+        
+        if (!matchesSearch) return false;
+      }
+      
+      // Apply market/community filter
+      if (selectedMarketCommunities.length > 0) {
+        const marketCommunity = `${app.market}/${app.community}`;
+        if (!selectedMarketCommunities.some(mc => marketCommunity.includes(mc))) {
+          return false;
+        }
+      }
+      
+      // Apply status filter
+      if (selectedStatuses.length > 0 && !selectedStatuses.includes(app.status)) {
+        return false;
+      }
+      
+      return true;
+    });
+  };
   
-  // Component to display application data
-  const ApplicationTable = ({ applications }: { applications: Application[] }) => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Applicant</TableHead>
-          <TableHead>Property</TableHead>
-          <TableHead>Unit Type</TableHead>
-          <TableHead>Date Submitted</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Background Check</TableHead>
-          <TableHead>Credit Check</TableHead>
-          <TableHead>Income Verification</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {applications.length > 0 ? (
-          applications.map(app => (
-            <TableRow key={app.id}>
-              <TableCell>
-                <div>
-                  <div className="font-medium">{app.applicantName}</div>
-                  <div className="text-sm text-gray-500">{app.email}</div>
-                </div>
-              </TableCell>
-              <TableCell>{app.propertyInterest}</TableCell>
-              <TableCell>{app.unitType}</TableCell>
-              <TableCell>{format(new Date(app.dateSubmitted), 'MM/dd/yyyy')}</TableCell>
-              <TableCell>
-                <StatusBadge status={app.status} />
-              </TableCell>
-              <TableCell>
-                <StatusBadge status={app.backgroundCheck?.status || 'pending'} />
-              </TableCell>
-              <TableCell>
-                <StatusBadge status={app.creditCheck?.status || 'pending'} />
-              </TableCell>
-              <TableCell>
-                <StatusBadge status={app.incomeVerification?.status || 'pending'} />
-              </TableCell>
-              <TableCell>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8" 
-                  title="See in Yardi"
-                  onClick={() => window.open('https://www.yardi.com', '_blank')}
-                >
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={9} className="text-center py-6">
-              No applications found.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
-  );
+  // Filter applications by status and search query
+  const filteredApplications = applyFilters(agentApplications);
+  const pendingApplications = applyFilters(agentApplications.filter(app => app.status === 'pending'));
+  const reviewingApplications = applyFilters(agentApplications.filter(app => app.status === 'reviewing'));
+  const approvedApplications = applyFilters(agentApplications.filter(app => app.status === 'approved'));
+  const deniedApplications = applyFilters(agentApplications.filter(app => app.status === 'denied'));
   
   return (
     <div>
@@ -125,9 +96,32 @@ const LeasingAgentApplications = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle>All Applications</CardTitle>
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search applications..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex gap-2 flex-shrink-0">
+                  <MarketCommunityFilter 
+                    selectedValues={selectedMarketCommunities}
+                    onChange={setSelectedMarketCommunities}
+                  />
+                  <ApplicationStatusFilter 
+                    selectedValues={selectedStatuses}
+                    onChange={setSelectedStatuses}
+                  />
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <ApplicationTable applications={agentApplications} />
+              <ApplicationsTable applications={filteredApplications} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -136,9 +130,28 @@ const LeasingAgentApplications = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle>Pending Applications</CardTitle>
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search pending applications..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex gap-2 flex-shrink-0">
+                  <MarketCommunityFilter 
+                    selectedValues={selectedMarketCommunities}
+                    onChange={setSelectedMarketCommunities}
+                  />
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <ApplicationTable applications={pendingApplications} />
+              <ApplicationsTable applications={pendingApplications} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -147,9 +160,28 @@ const LeasingAgentApplications = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle>Applications Under Review</CardTitle>
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search applications under review..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex gap-2 flex-shrink-0">
+                  <MarketCommunityFilter 
+                    selectedValues={selectedMarketCommunities}
+                    onChange={setSelectedMarketCommunities}
+                  />
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <ApplicationTable applications={reviewingApplications} />
+              <ApplicationsTable applications={reviewingApplications} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -158,9 +190,28 @@ const LeasingAgentApplications = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle>Approved Applications</CardTitle>
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search approved applications..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex gap-2 flex-shrink-0">
+                  <MarketCommunityFilter 
+                    selectedValues={selectedMarketCommunities}
+                    onChange={setSelectedMarketCommunities}
+                  />
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <ApplicationTable applications={approvedApplications} />
+              <ApplicationsTable applications={approvedApplications} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -169,9 +220,28 @@ const LeasingAgentApplications = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle>Denied Applications</CardTitle>
+              <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search denied applications..."
+                    className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex gap-2 flex-shrink-0">
+                  <MarketCommunityFilter 
+                    selectedValues={selectedMarketCommunities}
+                    onChange={setSelectedMarketCommunities}
+                  />
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <ApplicationTable applications={deniedApplications} />
+              <ApplicationsTable applications={deniedApplications} />
             </CardContent>
           </Card>
         </TabsContent>

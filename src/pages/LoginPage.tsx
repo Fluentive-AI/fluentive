@@ -38,38 +38,8 @@ const LoginPage = () => {
         </div>
 
         <Card className="w-full shadow-lg border-0">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-xl">Sign in</CardTitle>
-            <CardDescription>Enter your credentials to access your account</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex gap-4 mb-6">
-              <Button 
-                type="button" 
-                variant={userType === 'propertyManager' ? 'default' : 'outline'} 
-                className="flex-1"
-                onClick={() => setUserType('propertyManager')}
-              >
-                Manager
-              </Button>
-              <Button 
-                type="button" 
-                variant={userType === 'agent' ? 'default' : 'outline'} 
-                className="flex-1"
-                onClick={() => setUserType('agent')}
-              >
-                Agent
-              </Button>
-              <Button 
-                type="button" 
-                variant={userType === 'tenant' ? 'default' : 'outline'} 
-                className="flex-1"
-                onClick={() => setUserType('tenant')}
-              >
-                Tenant
-              </Button>
-            </div>
 
+          <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>

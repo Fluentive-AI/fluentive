@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Users, Phone } from 'lucide-react';
+import { Calendar, Users, ExternalLink, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LeadsTable from '@/components/leads/LeadsTable';
-import { mockLeasingAgentLeads, CURRENT_LEASING_AGENT } from '@/data/leasingMockData';
+import { mockLeads, CURRENT_LEASING_AGENT } from '@/data/mockData';
 import { format } from 'date-fns';
 
 const LeasingAgentMyDay = () => {
@@ -15,14 +14,14 @@ const LeasingAgentMyDay = () => {
   const todayISO = new Date().toISOString().split('T')[0];
   
   // Filter leads for today's appointments and contacts for the current agent
-  const todaysTours = mockLeasingAgentLeads.filter(
+  const todaysTours = mockLeads.filter(
     lead => lead.assignedTo === CURRENT_LEASING_AGENT && 
             lead.status === 'tour_scheduled' &&
             lead.tourScheduled === todayISO
   );
   
   // Leads that need to be contacted today
-  const todaysContacts = mockLeasingAgentLeads.filter(
+  const todaysContacts = mockLeads.filter(
     lead => lead.assignedTo === CURRENT_LEASING_AGENT && 
             lead.dateCreated === todayISO &&
             (lead.status === 'new' || lead.status === 'contacted')
@@ -38,6 +37,7 @@ const LeasingAgentMyDay = () => {
         
         <div className="flex gap-3 w-full md:w-auto">
           <Button 
+            variant="outline"
             className="flex-1 md:flex-auto" 
             onClick={() => navigate('/agent/calendar')}
           >
@@ -47,10 +47,25 @@ const LeasingAgentMyDay = () => {
           <Button 
             variant="outline" 
             className="flex-1 md:flex-auto" 
+            onClick={() => navigate('/agent/applications')}
+          >
+            <FileText className="h-4 w-4 mr-2" />
+            All Applications
+          </Button>
+          <Button 
+            variant="outline" 
+            className="flex-1 md:flex-auto" 
             onClick={() => navigate('/agent/leads')}
           >
             <Users className="h-4 w-4 mr-2" />
             All Leads
+          </Button>
+          <Button 
+            className="flex-1 md:flex-auto" 
+            onClick={() => window.open('https://www.yardi.com', '_blank')}
+          >
+            <ExternalLink className="h-4 w-4 mr-2" />
+            Open in Yardi
           </Button>
         </div>
       </div>

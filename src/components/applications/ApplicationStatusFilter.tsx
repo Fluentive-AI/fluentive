@@ -8,22 +8,19 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-interface StatusFilterProps {
+interface ApplicationStatusFilterProps {
   selectedValues: string[];
   onChange: (values: string[]) => void;
 }
 
-const STATUS_TYPES = [
-  { value: 'new', label: 'New Lead' },
-  { value: 'contacted', label: 'Contacted' },
-  { value: 'tour_scheduled', label: 'Scheduled Tour' },
-  { value: 'application_sent', label: 'Application Sent' },
-  { value: 'application_received', label: 'Application Received' },
-  { value: 'closed_won', label: 'Closed Won' },
-  { value: 'closed_lost', label: 'Closed Lost' }
+const APPLICATION_STATUS_TYPES = [
+  { value: 'pending', label: 'Pending' },
+  { value: 'reviewing', label: 'Under Review' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'denied', label: 'Denied' }
 ];
 
-const StatusFilter: React.FC<StatusFilterProps> = ({
+const ApplicationStatusFilter: React.FC<ApplicationStatusFilterProps> = ({
   selectedValues,
   onChange,
 }) => {
@@ -37,16 +34,16 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
   };
 
   const toggleAll = () => {
-    const allValues = STATUS_TYPES.map(type => type.value);
+    const allValues = APPLICATION_STATUS_TYPES.map(type => type.value);
     const hasAll = allValues.every(value => selectedValues.includes(value));
     onChange(hasAll ? [] : allValues);
   };
 
   const getSelectedText = () => {
     if (selectedValues.length === 0) return 'All Statuses';
-    if (selectedValues.length === STATUS_TYPES.length) return 'All Statuses';
+    if (selectedValues.length === APPLICATION_STATUS_TYPES.length) return 'All Statuses';
     
-    const selectedLabels = STATUS_TYPES
+    const selectedLabels = APPLICATION_STATUS_TYPES
       .filter(type => selectedValues.includes(type.value))
       .map(type => type.label);
     
@@ -78,19 +75,19 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
           >
             <div className={cn(
               "h-5 w-5 rounded border flex items-center justify-center transition-colors",
-              selectedValues.length === STATUS_TYPES.length && "bg-brand-600 border-brand-600",
-              selectedValues.length > 0 && selectedValues.length < STATUS_TYPES.length && "border-brand-600",
+              selectedValues.length === APPLICATION_STATUS_TYPES.length && "bg-brand-600 border-brand-600",
+              selectedValues.length > 0 && selectedValues.length < APPLICATION_STATUS_TYPES.length && "border-brand-600",
               selectedValues.length === 0 && "border-gray-200"
             )}>
-              {selectedValues.length === STATUS_TYPES.length && <Check className="h-4 w-4 text-white" />}
-              {selectedValues.length > 0 && selectedValues.length < STATUS_TYPES.length && (
+              {selectedValues.length === APPLICATION_STATUS_TYPES.length && <Check className="h-4 w-4 text-white" />}
+              {selectedValues.length > 0 && selectedValues.length < APPLICATION_STATUS_TYPES.length && (
                 <div className="h-2.5 w-2.5 rounded-sm bg-brand-600"></div>
               )}
             </div>
             <span className="font-medium">All Statuses</span>
           </div>
           <div className="space-y-1 pl-4">
-            {STATUS_TYPES.map((type) => {
+            {APPLICATION_STATUS_TYPES.map((type) => {
               return (
                 <div 
                   key={type.value} 
@@ -117,4 +114,4 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
   );
 };
 
-export default StatusFilter; 
+export default ApplicationStatusFilter; 
