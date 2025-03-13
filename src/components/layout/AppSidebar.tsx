@@ -14,7 +14,7 @@ import {
   Calendar,
   Map,
   Bot,
-  MessageSquareQuestion,
+  MessageSquare,
   LineChart
 } from 'lucide-react';
 
