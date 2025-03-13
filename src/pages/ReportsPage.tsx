@@ -34,7 +34,8 @@ import {
   Download,
   Edit,
   Trash,
-  MoreVertical
+  MoreVertical,
+  Save
 } from 'lucide-react';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
 import SimpleBarChart from '@/components/dashboard/SimpleBarChart';
@@ -44,6 +45,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import DashboardSelector from '@/components/dashboard/DashboardSelector';
 
 const ReportsPage = () => {
   const [selectedMarket, setSelectedMarket] = useState('Average');
@@ -52,12 +54,32 @@ const ReportsPage = () => {
   const [agentPrompt, setAgentPrompt] = useState('');
   const [agentResponses, setAgentResponses] = useState<{question: string, answer: string}[]>([]);
   
+  // Dashboard management state
   const [dashboardCards, setDashboardCards] = useState([
     { id: 1, title: 'Occupancy Rate', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all', category: 'leasing' },
     { id: 2, title: 'Leasing Velocity', type: 'bar', kpi: 'leasing-velocity', timeframe: 'quarter', market: 'all', category: 'leasing' },
     { id: 3, title: 'Rent Collection', type: 'line', kpi: 'rent-collection', timeframe: 'year', market: 'all', category: 'operations' },
     { id: 4, title: 'Work Order Resolution Time', type: 'line', kpi: 'resolution-time', timeframe: 'year', market: 'all', category: 'maintenance' },
   ]);
+  
+  // Saved dashboards
+  const [savedDashboards, setSavedDashboards] = useState([
+    { id: '1', name: 'Default Dashboard', cards: [...dashboardCards], isDefault: true },
+    { id: '2', name: 'Leasing Performance', cards: [
+      { id: 1, title: 'Occupancy Rate', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all', category: 'leasing' },
+      { id: 2, title: 'Leasing Velocity', type: 'bar', kpi: 'leasing-velocity', timeframe: 'quarter', market: 'all', category: 'leasing' },
+      { id: 3, title: 'Renewal Rate', type: 'line', kpi: 'renewals', timeframe: 'year', market: 'all', category: 'leasing' },
+    ]},
+    { id: '3', name: 'Maintenance Overview', cards: [
+      { id: 1, title: 'Work Order Resolution Time', type: 'line', kpi: 'resolution-time', timeframe: 'month', market: 'all', category: 'maintenance' },
+      { id: 2, title: 'Work Order Types', type: 'pie', kpi: 'work-order-types', timeframe: 'quarter', market: 'all', category: 'maintenance' },
+    ]},
+  ]);
+  
+  const [activeDashboard, setActiveDashboard] = useState(savedDashboards[0]);
+  const [saveDashboardDialogOpen, setSaveDashboardDialogOpen] = useState(false);
+  const [newDashboardName, setNewDashboardName] = useState('');
+  const [isEditingDashboard, setIsEditingDashboard] = useState(false);
   
   const [addCardDialogOpen, setAddCardDialogOpen] = useState(false);
   const [createReportDialogOpen, setCreateReportDialogOpen] = useState(false);
@@ -106,6 +128,55 @@ const ReportsPage = () => {
       recipients: ['operations@example.com']
     }
   ]);
+
+  // Handle dashboard selection
+  const handleDashboardSelect = (dashboard: typeof savedDashboards[0]) => {
+    setActiveDashboard(dashboard);
+    setDashboardCards(dashboard.cards);
+  };
+
+  // Save current dashboard
+  const handleSaveDashboard = () => {
+    if (!newDashboardName.trim()) {
+      toast.error("Please enter a name for your dashboard");
+      return;
+    }
+
+    if (isEditingDashboard) {
+      // Update existing dashboard
+      const updatedDashboards = savedDashboards.map(dashboard => 
+        dashboard.id === activeDashboard.id 
+          ? { ...dashboard, name: newDashboardName, cards: [...dashboardCards] }
+          : dashboard
+      );
+      setSavedDashboards(updatedDashboards);
+      setActiveDashboard({ ...activeDashboard, name: newDashboardName, cards: [...dashboardCards] });
+      toast.success(`Dashboard "${newDashboardName}" updated successfully`);
+    } else {
+      // Create new dashboard
+      const newDashboard = {
+        id: Date.now().toString(),
+        name: newDashboardName,
+        cards: [...dashboardCards],
+        isDefault: false
+      };
+      
+      setSavedDashboards([...savedDashboards, newDashboard]);
+      setActiveDashboard(newDashboard);
+      toast.success(`Dashboard "${newDashboardName}" created successfully`);
+    }
+    
+    setNewDashboardName('');
+    setSaveDashboardDialogOpen(false);
+    setIsEditingDashboard(false);
+  };
+
+  // Handle dashboard action from selector
+  const handleCreateNewDashboard = () => {
+    setIsEditingDashboard(false);
+    setNewDashboardName('');
+    setSaveDashboardDialogOpen(true);
+  };
   
   const formatYAxis = (value: number) => `${value}%`;
   
@@ -492,6 +563,43 @@ const ReportsPage = () => {
       
       {mainTab === 'dashboard' && (
         <div className="space-y-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-medium">{activeDashboard.name}</h2>
+              <DashboardSelector 
+                dashboards={savedDashboards}
+                activeDashboard={activeDashboard}
+                onSelect={handleDashboardSelect}
+              />
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1"
+                onClick={() => {
+                  setIsEditingDashboard(true);
+                  setNewDashboardName(activeDashboard.name);
+                  setSaveDashboardDialogOpen(true);
+                }}
+              >
+                <Save className="h-4 w-4" />
+                Save Dashboard
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1"
+                onClick={handleCreateNewDashboard}
+              >
+                <Plus className="h-4 w-4" />
+                New Dashboard
+              </Button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {dashboardCards.map((card) => (
               <Card key={card.id}>
@@ -682,179 +790,4 @@ const ReportsPage = () => {
               </Select>
             </div>
             
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="card-type" className="text-right">
-                Visualization
-              </Label>
-              <Select value={newCardType} onValueChange={setNewCardType}>
-                <SelectTrigger id="card-type" className="col-span-3">
-                  <SelectValue placeholder="Select visualization type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="line">Line Chart</SelectItem>
-                  <SelectItem value="bar">Bar Chart</SelectItem>
-                  <SelectItem value="pie">Pie Chart</SelectItem>
-                  <SelectItem value="table">Table</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="card-timeframe" className="text-right">
-                Timeframe
-              </Label>
-              <Select value={newCardTimeframe} onValueChange={setNewCardTimeframe}>
-                <SelectTrigger id="card-timeframe" className="col-span-3">
-                  <SelectValue placeholder="Select timeframe" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="month">Month</SelectItem>
-                  <SelectItem value="quarter">Quarter</SelectItem>
-                  <SelectItem value="year">Year</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="card-market" className="text-right">
-                Market
-              </Label>
-              <Select value={newCardMarket} onValueChange={setNewCardMarket}>
-                <SelectTrigger id="card-market" className="col-span-3">
-                  <SelectValue placeholder="Select market" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Markets</SelectItem>
-                  <SelectItem value="atlanta">Atlanta</SelectItem>
-                  <SelectItem value="tampa">Tampa</SelectItem>
-                  <SelectItem value="orlando">Orlando</SelectItem>
-                  <SelectItem value="jacksonville">Jacksonville</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setAddCardDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleAddNewCard}>
-              Add Card
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      
-      <Dialog open={createReportDialogOpen} onOpenChange={setCreateReportDialogOpen}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Create Personalized Report</DialogTitle>
-            <DialogDescription>
-              Configure a custom report to be generated and shared with your team.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="report-name" className="text-right">
-                Report Name
-              </Label>
-              <Input
-                id="report-name"
-                value={reportName}
-                onChange={(e) => setReportName(e.target.value)}
-                placeholder="Monthly Leasing Performance"
-                className="col-span-3"
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="report-description" className="text-right">
-                Description
-              </Label>
-              <Input
-                id="report-description"
-                value={reportDescription}
-                onChange={(e) => setReportDescription(e.target.value)}
-                placeholder="Overview of leasing performance across all markets"
-                className="col-span-3"
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="report-recipients" className="text-right">
-                Recipients
-              </Label>
-              <Input
-                id="report-recipients"
-                value={reportRecipients}
-                onChange={(e) => setReportRecipients(e.target.value)}
-                placeholder="email@example.com, email2@example.com"
-                className="col-span-3"
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="report-frequency" className="text-right">
-                Frequency
-              </Label>
-              <Select value={reportFrequency} onValueChange={setReportFrequency}>
-                <SelectTrigger id="report-frequency" className="col-span-3">
-                  <SelectValue placeholder="Select frequency" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="quarterly">Quarterly</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="report-format" className="text-right">
-                Format
-              </Label>
-              <Select value={reportFormat} onValueChange={setReportFormat}>
-                <SelectTrigger id="report-format" className="col-span-3">
-                  <SelectValue placeholder="Select format" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pdf">PDF</SelectItem>
-                  <SelectItem value="excel">Excel</SelectItem>
-                  <SelectItem value="csv">CSV</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label className="text-right pt-2">
-                Include Metrics
-              </Label>
-              <div className="col-span-3 space-y-2">
-                {['Occupancy Rate', 'Leasing Velocity', 'Rent Collection', 'Delinquency Rate', 'Work Order Resolution Time'].map((metric) => (
-                  <div key={metric} className="flex items-center space-x-2">
-                    <input type="checkbox" id={`metric-${metric}`} defaultChecked />
-                    <Label htmlFor={`metric-${metric}`}>{metric}</Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateReportDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleCreateReport}>
-              Create Report
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-};
-
-export default ReportsPage;
-
+            <div
