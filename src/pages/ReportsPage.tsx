@@ -18,11 +18,14 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { MessageCircle, Users, Building, Wrench, BarChart, PieChart, LineChart as LineChartIcon, Table as TableIcon } from 'lucide-react';
+import { MessageCircle, Users, Building, Wrench, BarChart, PieChart, LineChart as LineChartIcon, Table as TableIcon, X, Plus } from 'lucide-react';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
 import SimpleBarChart from '@/components/dashboard/SimpleBarChart';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 const ReportsPage = () => {
   const [selectedMarket, setSelectedMarket] = useState('Average');
@@ -45,6 +48,13 @@ const ReportsPage = () => {
     { id: 1, title: 'Work Order Resolution Time', type: 'line', kpi: 'resolution-time', timeframe: 'year', market: 'all' },
     { id: 2, title: 'Work Orders by Type', type: 'pie', kpi: 'work-order-types', timeframe: 'quarter', market: 'all' }
   ]);
+  
+  const [addCardDialogOpen, setAddCardDialogOpen] = useState(false);
+  const [newCardTitle, setNewCardTitle] = useState('');
+  const [newCardKpi, setNewCardKpi] = useState('occupancy');
+  const [newCardType, setNewCardType] = useState('line');
+  const [newCardTimeframe, setNewCardTimeframe] = useState('month');
+  const [newCardMarket, setNewCardMarket] = useState('all');
   
   const formatYAxis = (value: number) => `${value}%`;
   
@@ -91,6 +101,50 @@ const ReportsPage = () => {
         card.id === cardId ? { ...card, type: newType } : card
       ));
     }
+  };
+
+  const handleDeleteCard = (cardId: number, tabName: string) => {
+    if (tabName === 'leasing') {
+      setLeasingCards(leasingCards.filter(card => card.id !== cardId));
+    } else if (tabName === 'operations') {
+      setOperationsCards(operationsCards.filter(card => card.id !== cardId));
+    } else if (tabName === 'maintenance') {
+      setMaintenanceCards(maintenanceCards.filter(card => card.id !== cardId));
+    }
+    toast.success("Card removed successfully");
+  };
+
+  const handleAddNewCard = () => {
+    if (!newCardTitle.trim()) {
+      toast.error("Please enter a title for the new card");
+      return;
+    }
+    
+    const newCard = {
+      id: Date.now(),
+      title: newCardTitle,
+      type: newCardType,
+      kpi: newCardKpi,
+      timeframe: newCardTimeframe,
+      market: newCardMarket
+    };
+    
+    if (mainTab === 'leasing') {
+      setLeasingCards([...leasingCards, newCard]);
+    } else if (mainTab === 'operations') {
+      setOperationsCards([...operationsCards, newCard]);
+    } else if (mainTab === 'maintenance') {
+      setMaintenanceCards([...maintenanceCards, newCard]);
+    }
+    
+    setNewCardTitle('');
+    setNewCardKpi('occupancy');
+    setNewCardType('line');
+    setNewCardTimeframe('month');
+    setNewCardMarket('all');
+    setAddCardDialogOpen(false);
+    
+    toast.success("New card added successfully");
   };
 
   const renderCardContent = (card: any) => {
@@ -312,7 +366,15 @@ const ReportsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {leasingCards.map((card) => (
             <Card key={card.id}>
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-2 relative">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute right-4 top-4 h-6 w-6 rounded-full" 
+                  onClick={() => handleDeleteCard(card.id, 'leasing')}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
                 <CardTitle>{card.title}</CardTitle>
                 {renderCardControls(card, 'leasing')}
               </CardHeader>
@@ -322,7 +384,12 @@ const ReportsPage = () => {
             </Card>
           ))}
           <Card className="border-dashed flex items-center justify-center h-48">
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setAddCardDialogOpen(true)}
+            >
+              <Plus className="h-4 w-4" />
               Add new card
             </Button>
           </Card>
@@ -333,7 +400,15 @@ const ReportsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {operationsCards.map((card) => (
             <Card key={card.id}>
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-2 relative">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute right-4 top-4 h-6 w-6 rounded-full" 
+                  onClick={() => handleDeleteCard(card.id, 'operations')}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
                 <CardTitle>{card.title}</CardTitle>
                 {renderCardControls(card, 'operations')}
               </CardHeader>
@@ -343,7 +418,12 @@ const ReportsPage = () => {
             </Card>
           ))}
           <Card className="border-dashed flex items-center justify-center h-48">
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setAddCardDialogOpen(true)}
+            >
+              <Plus className="h-4 w-4" />
               Add new card
             </Button>
           </Card>
@@ -354,7 +434,15 @@ const ReportsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {maintenanceCards.map((card) => (
             <Card key={card.id}>
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-2 relative">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute right-4 top-4 h-6 w-6 rounded-full" 
+                  onClick={() => handleDeleteCard(card.id, 'maintenance')}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
                 <CardTitle>{card.title}</CardTitle>
                 {renderCardControls(card, 'maintenance')}
               </CardHeader>
@@ -364,7 +452,12 @@ const ReportsPage = () => {
             </Card>
           ))}
           <Card className="border-dashed flex items-center justify-center h-48">
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setAddCardDialogOpen(true)}
+            >
+              <Plus className="h-4 w-4" />
               Add new card
             </Button>
           </Card>
@@ -494,6 +587,112 @@ const ReportsPage = () => {
           </TabsContent>
         </Tabs>
       )}
+      
+      <Dialog open={addCardDialogOpen} onOpenChange={setAddCardDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add New Report Card</DialogTitle>
+            <DialogDescription>
+              Create a new card to visualize your property data.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-title" className="text-right">
+                Title
+              </Label>
+              <Input
+                id="card-title"
+                value={newCardTitle}
+                onChange={(e) => setNewCardTitle(e.target.value)}
+                placeholder="Card title"
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-kpi" className="text-right">
+                KPI
+              </Label>
+              <Select value={newCardKpi} onValueChange={setNewCardKpi}>
+                <SelectTrigger id="card-kpi" className="col-span-3">
+                  <SelectValue placeholder="Select KPI" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="occupancy">Occupancy Rate</SelectItem>
+                  <SelectItem value="leasing-velocity">Leasing Velocity</SelectItem>
+                  <SelectItem value="rent-collection">Rent Collection</SelectItem>
+                  <SelectItem value="delinquency">Delinquency Rate</SelectItem>
+                  <SelectItem value="resolution-time">Work Order Resolution Time</SelectItem>
+                  <SelectItem value="work-order-types">Work Order Types</SelectItem>
+                  <SelectItem value="renewals">Renewal Rate</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-type" className="text-right">
+                Visualization
+              </Label>
+              <Select value={newCardType} onValueChange={setNewCardType}>
+                <SelectTrigger id="card-type" className="col-span-3">
+                  <SelectValue placeholder="Select visualization type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="line">Line Chart</SelectItem>
+                  <SelectItem value="bar">Bar Chart</SelectItem>
+                  <SelectItem value="pie">Pie Chart</SelectItem>
+                  <SelectItem value="table">Table</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-timeframe" className="text-right">
+                Timeframe
+              </Label>
+              <Select value={newCardTimeframe} onValueChange={setNewCardTimeframe}>
+                <SelectTrigger id="card-timeframe" className="col-span-3">
+                  <SelectValue placeholder="Select timeframe" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="month">Month</SelectItem>
+                  <SelectItem value="quarter">Quarter</SelectItem>
+                  <SelectItem value="year">Year</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-market" className="text-right">
+                Market
+              </Label>
+              <Select value={newCardMarket} onValueChange={setNewCardMarket}>
+                <SelectTrigger id="card-market" className="col-span-3">
+                  <SelectValue placeholder="Select market" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Markets</SelectItem>
+                  <SelectItem value="atlanta">Atlanta</SelectItem>
+                  <SelectItem value="tampa">Tampa</SelectItem>
+                  <SelectItem value="orlando">Orlando</SelectItem>
+                  <SelectItem value="jacksonville">Jacksonville</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAddCardDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAddNewCard}>
+              Add Card
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
