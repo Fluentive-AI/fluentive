@@ -37,6 +37,7 @@ import PropertyManagerRent from "./pages/PropertyManagerRent";
 import LeasingAgentLeads from "./pages/LeasingAgentLeads";
 import LeasingAgentApplications from "./pages/LeasingAgentApplications";
 import LeasingAgentCalendar from "./pages/LeasingAgentCalendar";
+import LoginPage from "./pages/LoginPage";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
           
           {/* Admin/Property Manager Routes */}
           <Route path="/dashboard" element={<AppLayout><Dashboard /></AppLayout>} />
