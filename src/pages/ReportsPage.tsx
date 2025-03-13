@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { 
@@ -790,4 +791,190 @@ const ReportsPage = () => {
               </Select>
             </div>
             
-            <div
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-type" className="text-right">
+                Visualization
+              </Label>
+              <Select value={newCardType} onValueChange={setNewCardType}>
+                <SelectTrigger id="card-type" className="col-span-3">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="line">Line Chart</SelectItem>
+                  <SelectItem value="bar">Bar Chart</SelectItem>
+                  <SelectItem value="pie">Pie Chart</SelectItem>
+                  <SelectItem value="table">Table</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-timeframe" className="text-right">
+                Timeframe
+              </Label>
+              <Select value={newCardTimeframe} onValueChange={setNewCardTimeframe}>
+                <SelectTrigger id="card-timeframe" className="col-span-3">
+                  <SelectValue placeholder="Select timeframe" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="month">Month</SelectItem>
+                  <SelectItem value="quarter">Quarter</SelectItem>
+                  <SelectItem value="year">Year</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-market" className="text-right">
+                Market
+              </Label>
+              <Select value={newCardMarket} onValueChange={setNewCardMarket}>
+                <SelectTrigger id="card-market" className="col-span-3">
+                  <SelectValue placeholder="Select market" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Markets</SelectItem>
+                  <SelectItem value="atlanta">Atlanta</SelectItem>
+                  <SelectItem value="tampa">Tampa</SelectItem>
+                  <SelectItem value="orlando">Orlando</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAddCardDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleAddNewCard}>Add Card</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={saveDashboardDialogOpen} onOpenChange={setSaveDashboardDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{isEditingDashboard ? 'Save Dashboard' : 'Create New Dashboard'}</DialogTitle>
+            <DialogDescription>
+              {isEditingDashboard 
+                ? 'Update your dashboard with a new name.' 
+                : 'Give your new dashboard a name.'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="dashboard-name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="dashboard-name"
+                value={newDashboardName}
+                onChange={(e) => setNewDashboardName(e.target.value)}
+                placeholder="Dashboard name"
+                className="col-span-3"
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSaveDashboardDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSaveDashboard}>
+              {isEditingDashboard ? 'Save Changes' : 'Create Dashboard'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={createReportDialogOpen} onOpenChange={setCreateReportDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Create Personalized Report</DialogTitle>
+            <DialogDescription>
+              Configure your report settings and recipients.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="report-name"
+                value={reportName}
+                onChange={(e) => setReportName(e.target.value)}
+                placeholder="Report name"
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-description" className="text-right">
+                Description
+              </Label>
+              <Input
+                id="report-description"
+                value={reportDescription}
+                onChange={(e) => setReportDescription(e.target.value)}
+                placeholder="Brief description"
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-frequency" className="text-right">
+                Frequency
+              </Label>
+              <Select value={reportFrequency} onValueChange={setReportFrequency}>
+                <SelectTrigger id="report-frequency" className="col-span-3">
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="quarterly">Quarterly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-format" className="text-right">
+                Format
+              </Label>
+              <Select value={reportFormat} onValueChange={setReportFormat}>
+                <SelectTrigger id="report-format" className="col-span-3">
+                  <SelectValue placeholder="Select format" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                  <SelectItem value="excel">Excel</SelectItem>
+                  <SelectItem value="csv">CSV</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-recipients" className="text-right">
+                Recipients
+              </Label>
+              <Input
+                id="report-recipients"
+                value={reportRecipients}
+                onChange={(e) => setReportRecipients(e.target.value)}
+                placeholder="Email addresses (comma separated)"
+                className="col-span-3"
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateReportDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleCreateReport}>Create Report</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default ReportsPage;
