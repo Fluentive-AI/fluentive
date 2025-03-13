@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from 'sonner';
-import { BarChart, LineChart, PieChart, PlusCircle } from 'lucide-react';
+import { BarChart, LineChart, PieChart, Plus } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 
 interface DashboardCard {
@@ -81,9 +81,9 @@ const AddGraphDialog: React.FC<AddGraphDialogProps> = ({
     }}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Add Graph</DialogTitle>
+          <DialogTitle>Add New Card</DialogTitle>
           <DialogDescription>
-            Create a new graph to display on your dashboard.
+            Create a new graph card to display on your dashboard.
           </DialogDescription>
         </DialogHeader>
 
@@ -210,8 +210,8 @@ const AddGraphDialog: React.FC<AddGraphDialogProps> = ({
             Cancel
           </Button>
           <Button onClick={handleSaveCard} className="flex items-center gap-2">
-            <PlusCircle className="h-4 w-4" />
-            Add Graph
+            <Plus className="h-4 w-4" />
+            Add Card
           </Button>
         </DialogFooter>
       </DialogContent>

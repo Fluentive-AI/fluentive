@@ -105,6 +105,15 @@
   }
 }
 
+/* Add card button styles */
+.add-card-button {
+  @apply flex items-center justify-center gap-2 h-24 w-full border-dashed border-2 border-gray-200 rounded-lg bg-white text-gray-500 hover:bg-gray-50 transition-colors;
+}
+
+.add-card-button-sm {
+  @apply flex items-center justify-center gap-2 h-10 border-dashed border-2 border-gray-200 rounded-lg bg-white text-gray-500 hover:bg-gray-50 transition-colors px-4;
+}
+
 /* Table styles */
 .table-container {
   @apply w-full overflow-x-auto;

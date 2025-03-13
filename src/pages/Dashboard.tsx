@@ -16,7 +16,7 @@ import {
 } from '@/data/mockData';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChevronDown, PlusCircle } from 'lucide-react';
+import { ChevronDown, Plus } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -366,11 +366,11 @@ const Dashboard = () => {
         <Button 
           variant="outline" 
           size="sm"
-          className="flex items-center gap-1 ml-2"
+          className="flex items-center gap-2 h-24 bg-white border-dashed border-2 border-gray-200 rounded-lg ml-2 px-4"
           onClick={() => setAddMetricCardOpen(true)}
         >
-          <PlusCircle className="h-4 w-4" />
-          Add Metric
+          <Plus className="h-5 w-5" />
+          <span>Add new card</span>
         </Button>
       </div>
       
@@ -383,13 +383,13 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
                   onClick={() => {
                     setAddGraphOpen(true);
                   }}
                 >
-                  <PlusCircle className="h-4 w-4" />
-                  Add Graph
+                  <Plus className="h-5 w-5" />
+                  <span>Add new card</span>
                 </Button>
               </div>
             )}
@@ -399,13 +399,13 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
                   onClick={() => {
                     setAddGraphOpen(true);
                   }}
                 >
-                  <PlusCircle className="h-4 w-4" />
-                  Add Graph
+                  <Plus className="h-5 w-5" />
+                  <span>Add new card</span>
                 </Button>
               </div>
             )}
@@ -415,13 +415,13 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
                   onClick={() => {
                     setAddGraphOpen(true);
                   }}
                 >
-                  <PlusCircle className="h-4 w-4" />
-                  Add Graph
+                  <Plus className="h-5 w-5" />
+                  <span>Add new card</span>
                 </Button>
               </div>
             )}
@@ -472,13 +472,13 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
                   onClick={() => {
                     setAddGraphOpen(true);
                   }}
                 >
-                  <PlusCircle className="h-4 w-4" />
-                  Add Graph
+                  <Plus className="h-5 w-5" />
+                  <span>Add new card</span>
                 </Button>
               </div>
               <Card className="p-4">
@@ -510,13 +510,13 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
                   onClick={() => {
                     setAddGraphOpen(true);
                   }}
                 >
-                  <PlusCircle className="h-4 w-4" />
-                  Add Graph
+                  <Plus className="h-5 w-5" />
+                  <span>Add new card</span>
                 </Button>
               </div>
               <Card className="p-4">
@@ -543,13 +543,13 @@ const Dashboard = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
                   onClick={() => {
                     setAddGraphOpen(true);
                   }}
                 >
-                  <PlusCircle className="h-4 w-4" />
-                  Add Graph
+                  <Plus className="h-5 w-5" />
+                  <span>Add new card</span>
                 </Button>
               </div>
               <Card className="p-4">
