@@ -14,9 +14,9 @@ import {
   mockLeasingTimelineTrendData,
   technicianLocations
 } from '@/data/mockData';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChevronDown, Plus } from 'lucide-react';
+import { ChevronDown, Plus, X, MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -331,6 +331,63 @@ const Dashboard = () => {
     toast.success("New graph added successfully");
   };
 
+  const handleDeleteMetric = (metricId: number) => {
+    setCustomMetrics(customMetrics.filter(metric => metric.id !== metricId));
+    toast.success("Metric card removed successfully");
+  };
+
+  const handleDeleteCard = (cardId: number) => {
+    const updatedDashboard = { 
+      ...activeDashboard,
+      cards: activeDashboard.cards?.filter(card => card.id !== cardId) || []
+    };
+    
+    const updatedDashboards = dashboards.map(d => 
+      d.id === activeDashboard.id ? updatedDashboard : d
+    );
+    
+    setDashboards(updatedDashboards);
+    setActiveDashboard(updatedDashboard);
+    
+    toast.success("Card removed successfully");
+  };
+
+  const renderCardOptions = (cardId: number) => {
+    return (
+      <div className="absolute top-2 right-2 flex items-center gap-1 z-10">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                Edit card
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Change visualization
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                Move position
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="h-7 w-7 rounded-full" 
+          onClick={() => handleDeleteCard(cardId)}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -360,11 +417,43 @@ const Dashboard = () => {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
         {filterMetricsBySelection([...mockDashboardMetrics, ...customMetrics]).map((metric, index) => (
-          <MetricCard 
-            key={index} 
-            metric={metric as MetricData} 
-            selectedMarket={viewMode}
-          />
+          <div key={index} className="relative">
+            <div className="absolute top-2 right-2 flex items-center gap-1 z-10">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      View details
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      Edit metric
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              {customMetrics.some(m => m.id === metric.id) && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-7 w-7 rounded-full" 
+                  onClick={() => handleDeleteMetric(metric.id)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+            <MetricCard 
+              key={index} 
+              metric={metric as MetricData} 
+              selectedMarket={viewMode}
+            />
+          </div>
         ))}
         <Card className="add-card-button h-full flex flex-col items-center justify-center" onClick={() => setAddMetricCardOpen(true)}>
           <Plus className="h-5 w-5 mb-1" />
@@ -391,7 +480,8 @@ const Dashboard = () => {
               </div>
             )}
             
-            <Card className="p-4">
+            <Card className="p-4 relative">
+              {renderCardOptions(card.id)}
               {card.type === 'line' ? (
                 <SimpleLineChart 
                   data={filterChartData(
@@ -435,7 +525,8 @@ const Dashboard = () => {
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Leasing</h2>
               </div>
-              <Card className="p-4">
+              <Card className="p-4 relative">
+                {renderCardOptions(-1)}
                 <SimpleLineChart 
                   data={filterChartData(mockRenewalsTrendData)} 
                   title="Renewals (%) trend by market"
@@ -443,7 +534,8 @@ const Dashboard = () => {
                   key={`renewals-${viewMode}-${selectedMarketCommunities.join('-')}`}
                 />
               </Card>
-              <Card className="p-4">
+              <Card className="p-4 relative">
+                {renderCardOptions(-2)}
                 <SimpleBarChart 
                   data={filterChartData(mockLeasingTimelineTrendData, true)} 
                   title="Leasing Timeline Trend"
@@ -462,7 +554,8 @@ const Dashboard = () => {
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Property Operations</h2>
               </div>
-              <Card className="p-4">
+              <Card className="p-4 relative">
+                {renderCardOptions(-3)}
                 <SimpleLineChart 
                   data={filterChartData(mockOccupancyTrendData)} 
                   title="Occupancy Rate (%) trend by market"
@@ -470,7 +563,8 @@ const Dashboard = () => {
                   key={`occupancy-${viewMode}-${selectedMarketCommunities.join('-')}`}
                 />
               </Card>
-              <Card className="p-4">
+              <Card className="p-4 relative">
+                {renderCardOptions(-4)}
                 <SimpleLineChart 
                   data={filterChartData(mockDelinquencyTrendData)} 
                   title="Delinquency Rate (%) trend by market"
@@ -484,7 +578,8 @@ const Dashboard = () => {
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
               </div>
-              <Card className="p-4">
+              <Card className="p-4 relative">
+                {renderCardOptions(-5)}
                 <SimpleLineChart 
                   data={filterChartData(mockBillHoursTrendData, false, true)} 
                   title="Billable Hours/ Day/ Technician"
@@ -492,7 +587,8 @@ const Dashboard = () => {
                   key={`billhours-${viewMode}-${selectedMarketCommunities.join('-')}`}
                 />
               </Card>
-              <Card className="p-4">
+              <Card className="p-4 relative">
+                {renderCardOptions(-6)}
                 <SimpleLineChart 
                   data={filterChartData(mockWorkOrdersTrendData, false, true)} 
                   title="Work Orders/ Day/ Technician"

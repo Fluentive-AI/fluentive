@@ -114,6 +114,11 @@
   @apply flex items-center justify-center gap-2 h-10 border-dashed border-2 border-gray-200 rounded-lg bg-white text-gray-500 hover:bg-gray-50 transition-colors px-4;
 }
 
+/* Card action buttons */
+.card-actions {
+  @apply opacity-0 transition-opacity group-hover:opacity-100 absolute top-2 right-2 flex items-center gap-1 z-10;
+}
+
 /* Table styles */
 .table-container {
   @apply w-full overflow-x-auto;
