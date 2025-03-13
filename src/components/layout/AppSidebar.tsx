@@ -13,7 +13,9 @@ import {
   Building,
   Calendar,
   Map,
-  Bot
+  Bot,
+  MessageSquareQuestion,
+  LineChart
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -21,9 +23,16 @@ interface NavItemProps {
   icon: React.ReactNode;
   label: string;
   isActive?: boolean;
+  className?: string;
 }
 
-const NavItem = ({ to, icon, label, isActive }: NavItemProps) => (
+interface SubNavItemProps {
+  to: string;
+  label: string;
+  isActive?: boolean;
+}
+
+const NavItem = ({ to, icon, label, isActive, className }: NavItemProps) => (
   <NavLink
     to={to}
     className={({ isActive: linkActive }) => 
@@ -31,10 +40,25 @@ const NavItem = ({ to, icon, label, isActive }: NavItemProps) => (
         isActive || linkActive
           ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium' 
           : 'text-sidebar-foreground hover:bg-sidebar-border hover:text-sidebar-foreground'
-      }`
+      } ${className || ''}`
     }
   >
     {icon}
+    <span>{label}</span>
+  </NavLink>
+);
+
+const SubNavItem = ({ to, label, isActive }: SubNavItemProps) => (
+  <NavLink
+    to={to}
+    className={({ isActive: linkActive }) => 
+      `flex items-center pl-11 py-2 rounded-md transition-colors text-sm ${
+        isActive || linkActive
+          ? 'text-sidebar-accent-foreground font-medium' 
+          : 'text-sidebar-foreground hover:bg-sidebar-border hover:text-sidebar-foreground'
+      }`
+    }
+  >
     <span>{label}</span>
   </NavLink>
 );
@@ -46,6 +70,15 @@ const AppSidebar = () => {
   const isReportsActive = 
     location.pathname === '/reports' || 
     (location.pathname === '/dashboard' && location.search.includes('create'));
+    
+  // Check if we're on specific reports tabs
+  const isAskAgentActive = location.pathname === '/reports' && 
+    (!location.search || location.search.includes('tab=ask'));
+  
+  const isMyReportsActive = location.pathname === '/reports' && 
+    location.search.includes('tab=myreports');
+
+  const isAnalyticsExpanded = isReportsActive || isAskAgentActive || isMyReportsActive;
 
   return (
     <div className="h-screen w-64 border-r border-sidebar-border bg-sidebar fixed left-0 top-0 flex flex-col">
@@ -98,7 +131,22 @@ const AppSidebar = () => {
             icon={<BarChart className="h-5 w-5" />} 
             label="Reports" 
             isActive={isReportsActive}
+            className={isAnalyticsExpanded ? "mb-1" : ""}
           />
+          {isAnalyticsExpanded && (
+            <>
+              <SubNavItem 
+                to="/reports?tab=ask" 
+                label="Ask our Agent" 
+                isActive={isAskAgentActive} 
+              />
+              <SubNavItem 
+                to="/reports?tab=myreports" 
+                label="My Reports" 
+                isActive={isMyReportsActive} 
+              />
+            </>
+          )}
         </div>
       </nav>
       
