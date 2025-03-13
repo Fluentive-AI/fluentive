@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import MetricsGrid from '@/components/dashboard/MetricsGrid';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
@@ -29,22 +28,72 @@ import DashboardSelector from '@/components/dashboard/DashboardSelector';
 import CreateDashboardDialog from '@/components/dashboard/CreateDashboardDialog';
 import { toast } from 'sonner';
 
-// Sample personalized dashboards
-const personalizedDashboards = [
-  { id: '1', name: 'Default Overview', isDefault: true },
-  { id: '2', name: 'Leasing Focus', isDefault: false },
-  { id: '3', name: 'Maintenance KPIs', isDefault: false },
-  { id: '4', name: 'Occupancy Tracker', isDefault: false }
+interface DashboardCard {
+  id: number;
+  title: string;
+  type: string;
+  kpi: string;
+  timeframe: string;
+  market: string;
+  category: string;
+}
+
+interface Dashboard {
+  id: string;
+  name: string;
+  isDefault?: boolean;
+  cards?: DashboardCard[];
+}
+
+const initialDashboards: Dashboard[] = [
+  { 
+    id: '1', 
+    name: 'Default Overview', 
+    isDefault: true,
+    cards: [
+      { id: 1, title: 'Occupancy Rate', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all', category: 'leasing' },
+      { id: 2, title: 'Renewals', type: 'line', kpi: 'renewals', timeframe: 'year', market: 'all', category: 'leasing' },
+      { id: 3, title: 'Maintenance Metrics', type: 'line', kpi: 'resolution-time', timeframe: 'month', market: 'all', category: 'maintenance' }
+    ]
+  },
+  { 
+    id: '2', 
+    name: 'Leasing Focus', 
+    isDefault: false,
+    cards: [
+      { id: 1, title: 'Leasing Velocity', type: 'bar', kpi: 'leasing-velocity', timeframe: 'quarter', market: 'all', category: 'leasing' },
+      { id: 2, title: 'Occupancy by Market', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all', category: 'leasing' },
+      { id: 3, title: 'Renewal Trends', type: 'line', kpi: 'renewals', timeframe: 'year', market: 'all', category: 'leasing' }
+    ]
+  },
+  { 
+    id: '3', 
+    name: 'Maintenance KPIs', 
+    isDefault: false,
+    cards: [
+      { id: 1, title: 'Work Order Resolution', type: 'line', kpi: 'resolution-time', timeframe: 'month', market: 'all', category: 'maintenance' },
+      { id: 2, title: 'Billable Hours', type: 'line', kpi: 'billable-hours', timeframe: 'month', market: 'all', category: 'maintenance' },
+      { id: 3, title: 'Work Orders per Tech', type: 'bar', kpi: 'work-orders', timeframe: 'month', market: 'all', category: 'maintenance' }
+    ]
+  },
+  { 
+    id: '4', 
+    name: 'Occupancy Tracker', 
+    isDefault: false,
+    cards: [
+      { id: 1, title: 'Occupancy Trends', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all', category: 'leasing' },
+      { id: 2, title: 'Delinquency Rate', type: 'line', kpi: 'delinquency', timeframe: 'quarter', market: 'all', category: 'operations' }
+    ] 
+  }
 ];
 
 const Dashboard = () => {
   const [selectedMarketCommunities, setSelectedMarketCommunities] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'market' | 'community'>('market');
-  const [activeDashboard, setActiveDashboard] = useState(personalizedDashboards[0]);
+  const [dashboards, setDashboards] = useState<Dashboard[]>(initialDashboards);
+  const [activeDashboard, setActiveDashboard] = useState<Dashboard>(dashboards[0]);
   const [createDashboardOpen, setCreateDashboardOpen] = useState(false);
-  const [dashboards, setDashboards] = useState(personalizedDashboards);
 
-  // Add event listener for opening create dashboard dialog
   useEffect(() => {
     const handleCreateDashboardEvent = (event: CustomEvent) => {
       if (event.detail?.action === 'open') {
@@ -59,17 +108,15 @@ const Dashboard = () => {
     };
   }, []);
 
-  // Helper function to extract market from community string (e.g., "Atlanta/Osborne Farms" -> "Atlanta")
   const getMarketFromCommunity = (community: string): string => {
     return community.split('/')[0];
   };
 
-  // Get the currently selected markets based on the selected communities
   const getSelectedMarkets = (): string[] => {
     if (selectedMarketCommunities.length === 0) return ['all'];
     
     const markets = selectedMarketCommunities.map(getMarketFromCommunity);
-    return [...new Set(markets)]; // Remove duplicates
+    return [...new Set(markets)];
   };
 
   const filterMetricsBySelection = (metrics: typeof mockDashboardMetrics) => {
@@ -88,8 +135,6 @@ const Dashboard = () => {
       }));
     }
 
-    // In community view with selections, we would ideally have community-specific data
-    // For now, default to the market data of the first selected community
     return metrics.map(metric => ({
       ...metric,
       value: metric.markets?.[getMarketFromCommunity(selectedMarketCommunities[0])]?.value ?? metric.value,
@@ -104,9 +149,8 @@ const Dashboard = () => {
     if (isTechnicianData) {
       if (selectedMarketCommunities.length === 0 || selectedMarkets.includes('all')) {
         if (viewMode === 'market') {
-          return data; // Show all markets in market view
+          return data;
         } else {
-          // In community view, show "Average" if no selection
           return data.map(item => ({
             month: item.month,
             Average: Number(item.Average.toFixed(1))
@@ -114,7 +158,6 @@ const Dashboard = () => {
         }
       }
       
-      // For specific market/community, only show technicians from that market
       const marketNames = selectedMarkets.map(market => 
         market.charAt(0).toUpperCase() + market.slice(1)
       );
@@ -134,12 +177,10 @@ const Dashboard = () => {
         const result = { month: item.month };
         
         if (viewMode === 'community') {
-          // In community view with selected communities, show individual technicians
           techniciansInMarkets.forEach(tech => {
             result[tech] = Number(item[tech].toFixed(1));
           });
         } else {
-          // In market view with selected markets, show market averages
           marketNames.forEach(market => {
             const techsInMarket = Object.entries(technicianLocations)
               .filter(([_, loc]) => loc === market)
@@ -152,7 +193,6 @@ const Dashboard = () => {
           });
         }
 
-        // Add overall average if multiple selections
         if (Object.keys(result).length > 2) {
           result['Average'] = Number(item.Average.toFixed(1));
         }
@@ -179,7 +219,6 @@ const Dashboard = () => {
         }));
       }
       
-      // Default to average for multiple selections or community view
       return data.map(item => ({
         month: item.month,
         'Lead to Sign': item.Average['Lead to Sign'],
@@ -187,12 +226,10 @@ const Dashboard = () => {
       }));
     }
 
-    // Logic for other charts
     if (selectedMarketCommunities.length === 0 || selectedMarkets.includes('all')) {
       if (viewMode === 'market') {
-        return data; // Show all markets in market view
+        return data;
       } else {
-        // In community view with no selection, show average
         return data.map(item => ({
           month: item.month,
           Average: Number(item.Average.toFixed(1))
@@ -201,7 +238,6 @@ const Dashboard = () => {
     }
 
     if (viewMode === 'market') {
-      // Filter data for selected markets
       return data.map(item => {
         const result = { month: item.month };
         
@@ -210,7 +246,6 @@ const Dashboard = () => {
           result[formattedMarket] = item[formattedMarket];
         });
         
-        // Add average if multiple markets selected
         if (selectedMarkets.length > 1) {
           result['Average'] = Number(item.Average.toFixed(1));
         }
@@ -218,8 +253,6 @@ const Dashboard = () => {
         return result;
       });
     } else {
-      // For community view, we would ideally have community-specific data
-      // For now, show the market data for the selected communities
       const markets = [...new Set(selectedMarketCommunities.map(getMarketFromCommunity))];
       
       return data.map(item => {
@@ -230,7 +263,6 @@ const Dashboard = () => {
           result[formattedMarket] = item[formattedMarket];
         });
         
-        // Add average if multiple markets
         if (markets.length > 1) {
           result['Average'] = Number(item.Average.toFixed(1));
         }
@@ -240,11 +272,16 @@ const Dashboard = () => {
     }
   };
 
-  const handleCreateDashboard = (newDashboard: { name: string; cards: any[] }) => {
-    const dashboardToAdd = {
+  const handleDashboardSelect = (dashboard: Dashboard) => {
+    setActiveDashboard(dashboard);
+  };
+
+  const handleCreateDashboard = (newDashboard: { name: string; cards: DashboardCard[] }) => {
+    const dashboardToAdd: Dashboard = {
       id: Date.now().toString(),
       name: newDashboard.name,
-      isDefault: false
+      isDefault: false,
+      cards: newDashboard.cards
     };
     
     setDashboards([...dashboards, dashboardToAdd]);
@@ -264,7 +301,7 @@ const Dashboard = () => {
           <DashboardSelector 
             dashboards={dashboards}
             activeDashboard={activeDashboard}
-            onSelect={setActiveDashboard}
+            onSelect={handleDashboardSelect}
           />
         </div>
         <div className="flex items-center gap-4">
@@ -288,73 +325,118 @@ const Dashboard = () => {
       />
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Leasing Section */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold">Leasing</h2>
-          <Card className="p-4">
-            <SimpleLineChart 
-              data={filterChartData(mockRenewalsTrendData)} 
-              title="Renewals (%) trend by market"
-              yAxisLabel="%"
-              key={`renewals-${viewMode}-${selectedMarketCommunities.join('-')}`}
-            />
-          </Card>
-          <Card className="p-4">
-            <SimpleBarChart 
-              data={filterChartData(mockLeasingTimelineTrendData, true)} 
-              title="Leasing Timeline Trend"
-              yAxisLabel="Days"
-              stacked={true}
-              bars={[
-                { dataKey: 'Lead to Sign', color: '#3391b1', stackId: 'a' },
-                { dataKey: 'Sign to Move', color: '#7bccee', stackId: 'a' }
-              ]}
-              key={`timeline-${viewMode}-${selectedMarketCommunities.join('-')}`}
-            />
-          </Card>
-        </div>
+        {activeDashboard.cards?.map((card, index) => (
+          <div key={card.id} className="space-y-6">
+            {index === 0 && <h2 className="text-2xl font-semibold">Leasing</h2>}
+            {index === 1 && <h2 className="text-2xl font-semibold">Property Operations</h2>}
+            {index === 2 && <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>}
+            
+            <Card className="p-4">
+              {card.type === 'line' ? (
+                <SimpleLineChart 
+                  data={filterChartData(
+                    card.kpi === 'occupancy' ? mockOccupancyTrendData :
+                    card.kpi === 'renewals' ? mockRenewalsTrendData :
+                    card.kpi === 'delinquency' ? mockDelinquencyTrendData :
+                    card.kpi === 'billable-hours' ? mockBillHoursTrendData :
+                    card.kpi === 'work-orders' ? mockWorkOrdersTrendData :
+                    mockRenewalsTrendData
+                  )} 
+                  title={card.title}
+                  yAxisLabel={card.kpi.includes('time') ? 'Days' : '%'}
+                  key={`${card.id}-${viewMode}-${selectedMarketCommunities.join('-')}`}
+                />
+              ) : (
+                <SimpleBarChart 
+                  data={filterChartData(
+                    card.kpi === 'leasing-velocity' ? mockLeasingTimelineTrendData :
+                    card.kpi === 'occupancy' ? mockOccupancyTrendData :
+                    card.kpi === 'work-orders' ? mockWorkOrdersTrendData :
+                    mockRenewalsTrendData,
+                    card.kpi === 'leasing-velocity'
+                  )} 
+                  title={card.title}
+                  yAxisLabel={card.kpi.includes('time') ? 'Days' : '%'}
+                  stacked={card.kpi === 'leasing-velocity'}
+                  bars={card.kpi === 'leasing-velocity' ? [
+                    { dataKey: 'Lead to Sign', color: '#3391b1', stackId: 'a' },
+                    { dataKey: 'Sign to Move', color: '#7bccee', stackId: 'a' }
+                  ] : undefined}
+                  key={`${card.id}-${viewMode}-${selectedMarketCommunities.join('-')}`}
+                />
+              )}
+            </Card>
+          </div>
+        ))}
 
-        {/* Property Ops Section */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold">Property Operations</h2>
-          <Card className="p-4">
-            <SimpleLineChart 
-              data={filterChartData(mockOccupancyTrendData)} 
-              title="Occupancy Rate (%) trend by market"
-              yAxisLabel="%"
-              key={`occupancy-${viewMode}-${selectedMarketCommunities.join('-')}`}
-            />
-          </Card>
-          <Card className="p-4">
-            <SimpleLineChart 
-              data={filterChartData(mockDelinquencyTrendData)} 
-              title="Delinquency Rate (%) trend by market"
-              yAxisLabel="%"
-              key={`delinquency-${viewMode}-${selectedMarketCommunities.join('-')}`}
-            />
-          </Card>
-        </div>
+        {(!activeDashboard.cards || activeDashboard.cards.length === 0) && (
+          <>
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">Leasing</h2>
+              <Card className="p-4">
+                <SimpleLineChart 
+                  data={filterChartData(mockRenewalsTrendData)} 
+                  title="Renewals (%) trend by market"
+                  yAxisLabel="%"
+                  key={`renewals-${viewMode}-${selectedMarketCommunities.join('-')}`}
+                />
+              </Card>
+              <Card className="p-4">
+                <SimpleBarChart 
+                  data={filterChartData(mockLeasingTimelineTrendData, true)} 
+                  title="Leasing Timeline Trend"
+                  yAxisLabel="Days"
+                  stacked={true}
+                  bars={[
+                    { dataKey: 'Lead to Sign', color: '#3391b1', stackId: 'a' },
+                    { dataKey: 'Sign to Move', color: '#7bccee', stackId: 'a' }
+                  ]}
+                  key={`timeline-${viewMode}-${selectedMarketCommunities.join('-')}`}
+                />
+              </Card>
+            </div>
 
-        {/* Renovation, Maintenance, Turns Section */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
-          <Card className="p-4">
-            <SimpleLineChart 
-              data={filterChartData(mockBillHoursTrendData, false, true)} 
-              title="Billable Hours/ Day/ Technician"
-              yAxisLabel="Hours"
-              key={`billhours-${viewMode}-${selectedMarketCommunities.join('-')}`}
-            />
-          </Card>
-          <Card className="p-4">
-            <SimpleLineChart 
-              data={filterChartData(mockWorkOrdersTrendData, false, true)} 
-              title="Work Orders/ Day/ Technician"
-              yAxisLabel="Orders"
-              key={`workorders-${viewMode}-${selectedMarketCommunities.join('-')}`}
-            />
-          </Card>
-        </div>
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">Property Operations</h2>
+              <Card className="p-4">
+                <SimpleLineChart 
+                  data={filterChartData(mockOccupancyTrendData)} 
+                  title="Occupancy Rate (%) trend by market"
+                  yAxisLabel="%"
+                  key={`occupancy-${viewMode}-${selectedMarketCommunities.join('-')}`}
+                />
+              </Card>
+              <Card className="p-4">
+                <SimpleLineChart 
+                  data={filterChartData(mockDelinquencyTrendData)} 
+                  title="Delinquency Rate (%) trend by market"
+                  yAxisLabel="%"
+                  key={`delinquency-${viewMode}-${selectedMarketCommunities.join('-')}`}
+                />
+              </Card>
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
+              <Card className="p-4">
+                <SimpleLineChart 
+                  data={filterChartData(mockBillHoursTrendData, false, true)} 
+                  title="Billable Hours/ Day/ Technician"
+                  yAxisLabel="Hours"
+                  key={`billhours-${viewMode}-${selectedMarketCommunities.join('-')}`}
+                />
+              </Card>
+              <Card className="p-4">
+                <SimpleLineChart 
+                  data={filterChartData(mockWorkOrdersTrendData, false, true)} 
+                  title="Work Orders/ Day/ Technician"
+                  yAxisLabel="Orders"
+                  key={`workorders-${viewMode}-${selectedMarketCommunities.join('-')}`}
+                />
+              </Card>
+            </div>
+          </>
+        )}
       </div>
 
       <CreateDashboardDialog 

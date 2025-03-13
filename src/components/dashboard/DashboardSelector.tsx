@@ -16,6 +16,7 @@ interface Dashboard {
   id: string;
   name: string;
   isDefault?: boolean;
+  cards?: any[]; // Added cards property
 }
 
 interface DashboardSelectorProps {
