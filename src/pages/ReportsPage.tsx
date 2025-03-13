@@ -30,7 +30,11 @@ import {
   Table as TableIcon, 
   X, 
   Plus, 
-  FileText 
+  FileText,
+  Clock,
+  Download,
+  Edit,
+  Trash
 } from 'lucide-react';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
 import SimpleBarChart from '@/components/dashboard/SimpleBarChart';
@@ -68,6 +72,40 @@ const ReportsPage = () => {
   const [reportRecipients, setReportRecipients] = useState('');
   const [reportFrequency, setReportFrequency] = useState('monthly');
   const [reportFormat, setReportFormat] = useState('pdf');
+  
+  // New state for personalized reports
+  const [personalizedReports, setPersonalizedReports] = useState([
+    { 
+      id: 1, 
+      name: 'Monthly Occupancy Overview', 
+      description: 'Detailed occupancy analysis across all markets',
+      created: '2023-05-15',
+      lastGenerated: '2023-07-01',
+      frequency: 'Monthly',
+      format: 'PDF',
+      recipients: ['john.smith@example.com', 'jane.doe@example.com']
+    },
+    { 
+      id: 2, 
+      name: 'Q2 Leasing Performance', 
+      description: 'Quarterly leasing metrics and conversion rates',
+      created: '2023-04-10',
+      lastGenerated: '2023-06-30',
+      frequency: 'Quarterly',
+      format: 'Excel',
+      recipients: ['marketing@example.com', 'leadership@example.com']
+    },
+    { 
+      id: 3, 
+      name: 'Maintenance Efficiency', 
+      description: 'Work order resolution times and tenant satisfaction',
+      created: '2023-06-22',
+      lastGenerated: '2023-07-01',
+      frequency: 'Weekly',
+      format: 'PDF',
+      recipients: ['operations@example.com']
+    }
+  ]);
   
   const formatYAxis = (value: number) => `${value}%`;
   
@@ -146,7 +184,18 @@ const ReportsPage = () => {
       return;
     }
     
-    // Here you would normally save the report configuration
+    const newReport = {
+      id: Date.now(),
+      name: reportName,
+      description: reportDescription,
+      created: new Date().toISOString().split('T')[0],
+      lastGenerated: new Date().toISOString().split('T')[0],
+      frequency: reportFrequency,
+      format: reportFormat,
+      recipients: reportRecipients.split(',').map(email => email.trim()).filter(email => email)
+    };
+    
+    setPersonalizedReports([...personalizedReports, newReport]);
     toast.success(`Report "${reportName}" created successfully`);
     
     // Reset form
@@ -156,6 +205,16 @@ const ReportsPage = () => {
     setReportFrequency('monthly');
     setReportFormat('pdf');
     setCreateReportDialogOpen(false);
+  };
+  
+  const handleDeleteReport = (reportId: number) => {
+    setPersonalizedReports(personalizedReports.filter(report => report.id !== reportId));
+    toast.success("Report deleted successfully");
+  };
+  
+  const handleGenerateReport = (reportName: string) => {
+    toast.success(`Generating report: ${reportName}...`);
+    // In a real app, this would trigger the report generation process
   };
 
   const renderCardContent = (card: any) => {
@@ -308,6 +367,23 @@ const ReportsPage = () => {
     }
   };
 
+  const getReportFormatIcon = (format: string) => {
+    switch (format.toLowerCase()) {
+      case 'pdf':
+        return <FileText className="h-4 w-4 text-red-500" />;
+      case 'excel':
+        return <TableIcon className="h-4 w-4 text-green-500" />;
+      case 'csv':
+        return <TableIcon className="h-4 w-4 text-blue-500" />;
+      default:
+        return <FileText className="h-4 w-4" />;
+    }
+  };
+
+  const getFrequencyIcon = (frequency: string) => {
+    return <Clock className="h-4 w-4 text-indigo-500" />;
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6">
@@ -354,6 +430,10 @@ const ReportsPage = () => {
         <ToggleGroupItem value="dashboard" aria-label="Dashboard" className="gap-2">
           <BarChart className="h-4 w-4" />
           <span>Dashboard</span>
+        </ToggleGroupItem>
+        <ToggleGroupItem value="myreports" aria-label="My Personalized Reports" className="gap-2">
+          <FileText className="h-4 w-4" />
+          <span>My Personalized Reports</span>
         </ToggleGroupItem>
       </ToggleGroup>
       
@@ -438,6 +518,96 @@ const ReportsPage = () => {
                 Add new card
               </Button>
             </Card>
+          </div>
+        </div>
+      )}
+      
+      {mainTab === 'myreports' && (
+        <div className="space-y-6">
+          <div className="rounded-md border">
+            <div className="py-3 px-4 border-b bg-muted">
+              <div className="grid grid-cols-12 gap-4 text-sm font-medium">
+                <div className="col-span-4">Report Name</div>
+                <div className="col-span-2">Format</div>
+                <div className="col-span-2">Frequency</div>
+                <div className="col-span-2">Last Generated</div>
+                <div className="col-span-2">Actions</div>
+              </div>
+            </div>
+            
+            <div className="divide-y">
+              {personalizedReports.map((report) => (
+                <div key={report.id} className="py-3 px-4 hover:bg-gray-50">
+                  <div className="grid grid-cols-12 gap-4 items-center">
+                    <div className="col-span-4">
+                      <div className="font-medium">{report.name}</div>
+                      <div className="text-sm text-muted-foreground">{report.description}</div>
+                    </div>
+                    <div className="col-span-2 flex items-center gap-2">
+                      {getReportFormatIcon(report.format)}
+                      <span>{report.format}</span>
+                    </div>
+                    <div className="col-span-2 flex items-center gap-2">
+                      {getFrequencyIcon(report.frequency)}
+                      <span>{report.frequency}</span>
+                    </div>
+                    <div className="col-span-2">
+                      {report.lastGenerated}
+                    </div>
+                    <div className="col-span-2 flex items-center gap-2">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => handleGenerateReport(report.name)}
+                        className="flex items-center gap-1"
+                      >
+                        <Download className="h-4 w-4" />
+                        <span className="sr-only md:not-sr-only md:inline-block">Generate</span>
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="flex items-center gap-1"
+                        onClick={() => {
+                          setReportName(report.name);
+                          setReportDescription(report.description);
+                          setReportFrequency(report.frequency.toLowerCase());
+                          setReportFormat(report.format.toLowerCase());
+                          setReportRecipients(report.recipients.join(', '));
+                          setCreateReportDialogOpen(true);
+                        }}
+                      >
+                        <Edit className="h-4 w-4" />
+                        <span className="sr-only md:not-sr-only md:inline-block">Edit</span>
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="flex items-center gap-1 text-red-500 hover:text-red-600 hover:bg-red-50"
+                        onClick={() => handleDeleteReport(report.id)}
+                      >
+                        <Trash className="h-4 w-4" />
+                        <span className="sr-only md:not-sr-only md:inline-block">Delete</span>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
+              {personalizedReports.length === 0 && (
+                <div className="py-8 text-center">
+                  <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
+                  <p className="text-muted-foreground">No personalized reports yet.</p>
+                  <Button 
+                    variant="outline" 
+                    className="mt-4"
+                    onClick={() => setCreateReportDialogOpen(true)}
+                  >
+                    Create your first report
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
