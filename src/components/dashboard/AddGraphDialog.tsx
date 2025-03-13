@@ -14,7 +14,8 @@ import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from 'sonner';
-import { BarChart, LineChart, PieChart } from 'lucide-react';
+import { BarChart, LineChart, PieChart, PlusCircle } from 'lucide-react';
+import { Card, CardContent } from "@/components/ui/card";
 
 interface DashboardCard {
   id: number;
@@ -86,125 +87,132 @@ const AddGraphDialog: React.FC<AddGraphDialogProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="card-title" className="text-right">
-              Title
-            </Label>
-            <Input
-              id="card-title"
-              value={cardTitle}
-              onChange={(e) => setCardTitle(e.target.value)}
-              placeholder="Graph title"
-              className="col-span-3"
-            />
-          </div>
-          
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">
-              Chart Type
-            </Label>
-            <div className="col-span-3">
-              <ToggleGroup 
-                type="single" 
-                value={cardType} 
-                onValueChange={(value) => value && setCardType(value)}
-                className="justify-start"
-              >
-                <ToggleGroupItem value="line" aria-label="Line Chart" className="flex items-center gap-2">
-                  <LineChart className="h-4 w-4" />
-                  <span>Line</span>
-                </ToggleGroupItem>
-                <ToggleGroupItem value="bar" aria-label="Bar Chart" className="flex items-center gap-2">
-                  <BarChart className="h-4 w-4" />
-                  <span>Bar</span>
-                </ToggleGroupItem>
-                <ToggleGroupItem value="pie" aria-label="Pie Chart" className="flex items-center gap-2">
-                  <PieChart className="h-4 w-4" />
-                  <span>Pie</span>
-                </ToggleGroupItem>
-              </ToggleGroup>
+        <Card>
+          <CardContent className="p-4 space-y-4">
+            <div className="grid gap-4 py-2">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="card-title" className="text-right">
+                  Title
+                </Label>
+                <Input
+                  id="card-title"
+                  value={cardTitle}
+                  onChange={(e) => setCardTitle(e.target.value)}
+                  placeholder="Graph title"
+                  className="col-span-3"
+                />
+              </div>
+              
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">
+                  Chart Type
+                </Label>
+                <div className="col-span-3">
+                  <ToggleGroup 
+                    type="single" 
+                    value={cardType} 
+                    onValueChange={(value) => value && setCardType(value)}
+                    className="justify-start"
+                  >
+                    <ToggleGroupItem value="line" aria-label="Line Chart" className="flex items-center gap-2">
+                      <LineChart className="h-4 w-4" />
+                      <span>Line</span>
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="bar" aria-label="Bar Chart" className="flex items-center gap-2">
+                      <BarChart className="h-4 w-4" />
+                      <span>Bar</span>
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="pie" aria-label="Pie Chart" className="flex items-center gap-2">
+                      <PieChart className="h-4 w-4" />
+                      <span>Pie</span>
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="card-category" className="text-right">
+                  Category
+                </Label>
+                <Select value={cardCategory} onValueChange={setCardCategory}>
+                  <SelectTrigger id="card-category" className="col-span-3">
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="leasing">Leasing</SelectItem>
+                    <SelectItem value="operations">Property Operations</SelectItem>
+                    <SelectItem value="maintenance">Maintenance</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="card-kpi" className="text-right">
+                  KPI
+                </Label>
+                <Select value={cardKpi} onValueChange={setCardKpi}>
+                  <SelectTrigger id="card-kpi" className="col-span-3">
+                    <SelectValue placeholder="Select KPI" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="occupancy">Occupancy Rate</SelectItem>
+                    <SelectItem value="leasing-velocity">Leasing Velocity</SelectItem>
+                    <SelectItem value="renewals">Renewal Rate</SelectItem>
+                    <SelectItem value="delinquency">Delinquency Rate</SelectItem>
+                    <SelectItem value="work-orders">Work Orders</SelectItem>
+                    <SelectItem value="billable-hours">Billable Hours</SelectItem>
+                    <SelectItem value="resolution-time">Resolution Time</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="card-timeframe" className="text-right">
+                  Timeframe
+                </Label>
+                <Select value={cardTimeframe} onValueChange={setCardTimeframe}>
+                  <SelectTrigger id="card-timeframe" className="col-span-3">
+                    <SelectValue placeholder="Select timeframe" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="month">Month</SelectItem>
+                    <SelectItem value="quarter">Quarter</SelectItem>
+                    <SelectItem value="year">Year</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="card-market" className="text-right">
+                  Market
+                </Label>
+                <Select value={cardMarket} onValueChange={setCardMarket}>
+                  <SelectTrigger id="card-market" className="col-span-3">
+                    <SelectValue placeholder="Select market" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Markets</SelectItem>
+                    <SelectItem value="atlanta">Atlanta</SelectItem>
+                    <SelectItem value="tampa">Tampa</SelectItem>
+                    <SelectItem value="orlando">Orlando</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
-          
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="card-category" className="text-right">
-              Category
-            </Label>
-            <Select value={cardCategory} onValueChange={setCardCategory}>
-              <SelectTrigger id="card-category" className="col-span-3">
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="leasing">Leasing</SelectItem>
-                <SelectItem value="operations">Property Operations</SelectItem>
-                <SelectItem value="maintenance">Maintenance</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="card-kpi" className="text-right">
-              KPI
-            </Label>
-            <Select value={cardKpi} onValueChange={setCardKpi}>
-              <SelectTrigger id="card-kpi" className="col-span-3">
-                <SelectValue placeholder="Select KPI" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="occupancy">Occupancy Rate</SelectItem>
-                <SelectItem value="leasing-velocity">Leasing Velocity</SelectItem>
-                <SelectItem value="renewals">Renewal Rate</SelectItem>
-                <SelectItem value="delinquency">Delinquency Rate</SelectItem>
-                <SelectItem value="work-orders">Work Orders</SelectItem>
-                <SelectItem value="billable-hours">Billable Hours</SelectItem>
-                <SelectItem value="resolution-time">Resolution Time</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="card-timeframe" className="text-right">
-              Timeframe
-            </Label>
-            <Select value={cardTimeframe} onValueChange={setCardTimeframe}>
-              <SelectTrigger id="card-timeframe" className="col-span-3">
-                <SelectValue placeholder="Select timeframe" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="month">Month</SelectItem>
-                <SelectItem value="quarter">Quarter</SelectItem>
-                <SelectItem value="year">Year</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="card-market" className="text-right">
-              Market
-            </Label>
-            <Select value={cardMarket} onValueChange={setCardMarket}>
-              <SelectTrigger id="card-market" className="col-span-3">
-                <SelectValue placeholder="Select market" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Markets</SelectItem>
-                <SelectItem value="atlanta">Atlanta</SelectItem>
-                <SelectItem value="tampa">Tampa</SelectItem>
-                <SelectItem value="orlando">Orlando</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <DialogFooter>
+        <DialogFooter className="mt-4">
           <Button 
             variant="outline" 
             onClick={() => onOpenChange(false)}
           >
             Cancel
           </Button>
-          <Button onClick={handleSaveCard}>Add Graph</Button>
+          <Button onClick={handleSaveCard} className="flex items-center gap-2">
+            <PlusCircle className="h-4 w-4" />
+            Add Graph
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
