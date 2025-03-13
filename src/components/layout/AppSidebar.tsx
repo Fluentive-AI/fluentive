@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import AppLogo from './AppLogo';
 import { 
   Home, 
@@ -20,14 +20,15 @@ interface NavItemProps {
   to: string;
   icon: React.ReactNode;
   label: string;
+  isActive?: boolean;
 }
 
-const NavItem = ({ to, icon, label }: NavItemProps) => (
+const NavItem = ({ to, icon, label, isActive }: NavItemProps) => (
   <NavLink
     to={to}
-    className={({ isActive }) => 
+    className={({ isActive: linkActive }) => 
       `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
-        isActive 
+        isActive || linkActive
           ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium' 
           : 'text-sidebar-foreground hover:bg-sidebar-border hover:text-sidebar-foreground'
       }`
@@ -39,6 +40,13 @@ const NavItem = ({ to, icon, label }: NavItemProps) => (
 );
 
 const AppSidebar = () => {
+  const location = useLocation();
+  
+  // Check if we're on reports page or creating a dashboard from dashboard page
+  const isReportsActive = 
+    location.pathname === '/reports' || 
+    (location.pathname === '/dashboard' && location.search.includes('create'));
+
   return (
     <div className="h-screen w-64 border-r border-sidebar-border bg-sidebar fixed left-0 top-0 flex flex-col">
       <div className="p-4 border-b border-sidebar-border">
@@ -85,7 +93,12 @@ const AppSidebar = () => {
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
             Analytics
           </div>
-          <NavItem to="/reports" icon={<BarChart className="h-5 w-5" />} label="Reports" />
+          <NavItem 
+            to="/reports" 
+            icon={<BarChart className="h-5 w-5" />} 
+            label="Reports" 
+            isActive={isReportsActive}
+          />
         </div>
       </nav>
       

@@ -16,10 +16,29 @@ import {
 } from '@/data/mockData';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ChevronDown } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from '@/components/ui/button';
+import DashboardSelector from '@/components/dashboard/DashboardSelector';
+
+// Sample personalized dashboards
+const personalizedDashboards = [
+  { id: '1', name: 'Default Overview', isDefault: true },
+  { id: '2', name: 'Leasing Focus', isDefault: false },
+  { id: '3', name: 'Maintenance KPIs', isDefault: false },
+  { id: '4', name: 'Occupancy Tracker', isDefault: false }
+];
 
 const Dashboard = () => {
   const [selectedMarketCommunities, setSelectedMarketCommunities] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'market' | 'community'>('market');
+  const [activeDashboard, setActiveDashboard] = useState(personalizedDashboards[0]);
 
   // Helper function to extract market from community string (e.g., "Atlanta/Osborne Farms" -> "Atlanta")
   const getMarketFromCommunity = (community: string): string => {
@@ -205,7 +224,16 @@ const Dashboard = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Overview</h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-2xl font-semibold">
+            {activeDashboard.name}
+          </h2>
+          <DashboardSelector 
+            dashboards={personalizedDashboards}
+            activeDashboard={activeDashboard}
+            onSelect={setActiveDashboard}
+          />
+        </div>
         <div className="flex items-center gap-4">
           <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as 'market' | 'community')} className="w-[250px]">
             <TabsList className="grid w-full grid-cols-2">
