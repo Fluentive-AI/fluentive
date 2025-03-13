@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import MetricsGrid from '@/components/dashboard/MetricsGrid';
+import MetricCard from '@/components/dashboard/MetricCard';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
 import SimpleBarChart from '@/components/dashboard/SimpleBarChart';
 import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
@@ -30,6 +30,7 @@ import CreateDashboardDialog from '@/components/dashboard/CreateDashboardDialog'
 import AddMetricCardDialog from '@/components/dashboard/AddMetricCardDialog';
 import AddGraphDialog from '@/components/dashboard/AddGraphDialog';
 import { toast } from 'sonner';
+import { MetricData } from '@/types';
 
 interface DashboardCard {
   id: number;
@@ -357,21 +358,18 @@ const Dashboard = () => {
         </div>
       </div>
       
-      <div className="flex items-center justify-between">
-        <MetricsGrid 
-          metrics={filterMetricsBySelection([...mockDashboardMetrics, ...customMetrics])} 
-          className="grid-cols-3 lg:grid-cols-6"
-          selectedMarket={viewMode}
-        />
-        <Button 
-          variant="outline" 
-          size="sm"
-          className="flex items-center gap-2 h-24 bg-white border-dashed border-2 border-gray-200 rounded-lg ml-2 px-4"
-          onClick={() => setAddMetricCardOpen(true)}
-        >
-          <Plus className="h-5 w-5" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+        {filterMetricsBySelection([...mockDashboardMetrics, ...customMetrics]).map((metric, index) => (
+          <MetricCard 
+            key={index} 
+            metric={metric as MetricData} 
+            selectedMarket={viewMode}
+          />
+        ))}
+        <Card className="add-card-button h-full flex flex-col items-center justify-center" onClick={() => setAddMetricCardOpen(true)}>
+          <Plus className="h-5 w-5 mb-1" />
           <span>Add new card</span>
-        </Button>
+        </Card>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -380,49 +378,16 @@ const Dashboard = () => {
             {index === 0 && (
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Leasing</h2>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
-                  onClick={() => {
-                    setAddGraphOpen(true);
-                  }}
-                >
-                  <Plus className="h-5 w-5" />
-                  <span>Add new card</span>
-                </Button>
               </div>
             )}
             {index === 1 && (
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Property Operations</h2>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
-                  onClick={() => {
-                    setAddGraphOpen(true);
-                  }}
-                >
-                  <Plus className="h-5 w-5" />
-                  <span>Add new card</span>
-                </Button>
               </div>
             )}
             {index === 2 && (
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
-                  onClick={() => {
-                    setAddGraphOpen(true);
-                  }}
-                >
-                  <Plus className="h-5 w-5" />
-                  <span>Add new card</span>
-                </Button>
               </div>
             )}
             
@@ -469,17 +434,6 @@ const Dashboard = () => {
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Leasing</h2>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
-                  onClick={() => {
-                    setAddGraphOpen(true);
-                  }}
-                >
-                  <Plus className="h-5 w-5" />
-                  <span>Add new card</span>
-                </Button>
               </div>
               <Card className="p-4">
                 <SimpleLineChart 
@@ -507,17 +461,6 @@ const Dashboard = () => {
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Property Operations</h2>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
-                  onClick={() => {
-                    setAddGraphOpen(true);
-                  }}
-                >
-                  <Plus className="h-5 w-5" />
-                  <span>Add new card</span>
-                </Button>
               </div>
               <Card className="p-4">
                 <SimpleLineChart 
@@ -540,17 +483,6 @@ const Dashboard = () => {
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 h-10 bg-white border-dashed border-2 border-gray-200 rounded-lg px-4"
-                  onClick={() => {
-                    setAddGraphOpen(true);
-                  }}
-                >
-                  <Plus className="h-5 w-5" />
-                  <span>Add new card</span>
-                </Button>
               </div>
               <Card className="p-4">
                 <SimpleLineChart 
@@ -571,6 +503,11 @@ const Dashboard = () => {
             </div>
           </>
         )}
+
+        <Card className="add-card-button h-64 flex flex-col items-center justify-center" onClick={() => setAddGraphOpen(true)}>
+          <Plus className="h-6 w-6 mb-2" />
+          <span>Add new card</span>
+        </Card>
       </div>
 
       <CreateDashboardDialog 
