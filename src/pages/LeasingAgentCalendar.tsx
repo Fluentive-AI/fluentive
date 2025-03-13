@@ -1,15 +1,12 @@
+
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
-  ChevronLeft, 
-  ChevronRight, 
   Clock, 
   MapPin, 
   ExternalLink, 
-  List,
-  CalendarClock,
   User,
   Info
 } from 'lucide-react';
@@ -27,7 +24,6 @@ import {
   parseISO
 } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { 
   Dialog,
   DialogContent,
@@ -36,29 +32,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { Lead } from '@/types';
 import { mockLeads, CURRENT_LEASING_AGENT } from '@/data/mockData';
-import { Badge } from "@/components/ui/badge";
 import CalendarTemplate from '@/components/CalendarTemplate';
 
-const viewOptions = {
-  day: { label: "Day", days: 1 },
-  '3day': { label: "Three Day", days: 3 },
-  '5day': { label: "Working Week", days: 5 },
-  week: { label: "Week", days: 7 },
-  month: { label: "Month", days: 31 }
-};
-
+// Define business hours for hourly view
 const BUSINESS_HOURS_START = 8; // 8 AM
 const BUSINESS_HOURS_END = 18; // 6 PM
-
-interface EventType {
-  id: string;
-  title: string;
-  start: Date;
-  end: Date;
-  resource: Lead;
-}
 
 const LeasingAgentCalendar = () => {
   const [calendarView, setCalendarView] = useState<string>('week');
@@ -92,6 +73,14 @@ const LeasingAgentCalendar = () => {
       });
     } else {
       // For other views, we show the selected number of days
+      const viewOptions = {
+        day: { label: "Day", days: 1 },
+        '3day': { label: "Three Day", days: 3 },
+        '5day': { label: "Working Week", days: 5 },
+        week: { label: "Week", days: 7 },
+        month: { label: "Month", days: 31 }
+      };
+      
       const days = viewOptions[calendarView as keyof typeof viewOptions]?.days || 7;
       
       let startDate = today;
@@ -238,13 +227,9 @@ const LeasingAgentCalendar = () => {
     );
   };
 
-  // Render day/week view
-  const renderDayView = () => {
-    if (displayMode === 'list') {
-      return renderListView();
-    } else {
-      return renderHourlyView();
-    }
+  // Render calendar content based on display mode
+  const renderCalendarContent = () => {
+    return displayMode === 'list' ? renderListView() : renderHourlyView();
   };
 
   // Render list view
@@ -371,11 +356,6 @@ const LeasingAgentCalendar = () => {
         </CardContent>
       </Card>
     );
-  };
-
-  // Render calendar content based on display mode
-  const renderCalendarContent = () => {
-    return displayMode === 'list' ? renderListView() : renderHourlyView();
   };
 
   // Render event dialog
