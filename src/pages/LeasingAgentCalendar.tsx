@@ -1,14 +1,24 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { mockLeads, mockApplications, CURRENT_LEASING_AGENT } from '@/data/mockData';
+import { Lead, Application } from '@/types';
 import { 
+  ChevronLeft, 
+  ChevronRight, 
   Clock, 
   MapPin, 
-  ExternalLink, 
+  Wrench, 
+  ImageIcon,
+  List,
+  CalendarClock,
+  Info,
   User,
-  Info
+  ExternalLink,
+  FileText,
+  HardHat
 } from 'lucide-react';
 import { 
   format, 
@@ -20,425 +30,650 @@ import {
   isSameDay, 
   isSameMonth, 
   getDay,
+  setHours,
+  setMinutes,
+  addHours,
+  parseISO,
   isWithinInterval,
-  parseISO
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  addDays
 } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { 
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Lead } from '@/types';
-import { mockLeads, CURRENT_LEASING_AGENT } from '@/data/mockData';
-import CalendarTemplate from '@/components/CalendarTemplate';
+import EventDialog from '@/components/maintenance/EventDialog';
+import LeadEventDialog from '@/components/leasing/LeadEventDialog';
 
-// Define business hours for hourly view
-const BUSINESS_HOURS_START = 8; // 8 AM
-const BUSINESS_HOURS_END = 18; // 6 PM
+const viewOptions = {
+  day: { label: "Day", days: 1 },
+  '3day': { label: "Three Day", days: 3 },
+  '5day': { label: "Working Week", days: 5 },
+  week: { label: "Week", days: 7 },
+  month: { label: "Month", days: 31 }
+};
+
+const BUSINESS_HOURS_START = 6; // 6 AM
+const BUSINESS_HOURS_END = 20; // 8 PM
+
+// Define types
+interface CalendarEvent {
+  id: string;
+  title: string;
+  startTime: Date;
+  endTime: Date;
+  type: 'tour' | 'application';
+  details: Lead | Application;
+}
 
 const LeasingAgentCalendar = () => {
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [calendarView, setCalendarView] = useState<string>('week');
-  const [selectedDate, setSelectedDate] = useState<Date>(startOfToday());
   const [displayMode, setDisplayMode] = useState<string>('list'); // 'list' or 'hourly'
-  const [selectedEvent, setSelectedEvent] = useState<Lead | null>(null);
-  
-  // Filter leads for the current leasing agent with scheduled tours
-  const tourLeads = useMemo(() => {
-    return mockLeads.filter(
-      lead => lead.assignedTo === CURRENT_LEASING_AGENT && 
-              lead.status === 'tour_scheduled' &&
-              lead.tourDateTime
-    );
+
+  // Create calendar events from leads and applications
+  const calendarEvents = useMemo(() => {
+    const events: CalendarEvent[] = [];
+    
+    // Add tours from leads assigned to current agent
+    mockLeads
+      .filter(lead => 
+        (lead.assignedTo === CURRENT_LEASING_AGENT || !lead.assignedTo) && 
+        lead.tourDateTime
+      )
+      .forEach(lead => {
+        const tourTime = new Date(lead.tourDateTime!);
+        events.push({
+          id: `tour-${lead.id}`,
+          title: `Tour with ${lead.name}`,
+          startTime: tourTime,
+          endTime: addHours(tourTime, 1), // Assume tours last 1 hour
+          type: 'tour',
+          details: lead
+        });
+      });
+    
+    // Add application review meetings for current agent
+    mockApplications
+      .filter(app => app.assignedTo === CURRENT_LEASING_AGENT)
+      .forEach(app => {
+        // Create a meeting at 10 AM on the date submitted for application reviews
+        const appDate = new Date(app.dateSubmitted);
+        const meetingTime = setHours(setMinutes(appDate, 0), 10);
+        
+        events.push({
+          id: `app-${app.id}`,
+          title: `Application Review - ${app.name}`,
+          startTime: meetingTime,
+          endTime: addHours(meetingTime, 1), // Assume reviews last 1 hour
+          type: 'application',
+          details: app
+        });
+      });
+    
+    return events;
   }, []);
-  
-  // Calculate date range for the current view
-  const dateRange = useMemo(() => {
-    const today = selectedDate;
-    
-    if (calendarView === 'month') {
-      // For month view, we start on the first day of the month
-      const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-      const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-      return eachDayOfInterval({ start: startDate, end: endDate });
-    } else if (calendarView === '3day') {
-      // For 3-day view, we show the selected date and the next 2 days
-      return eachDayOfInterval({
-        start: today,
-        end: add(today, { days: 2 })
-      });
-    } else {
-      // For other views, we show the selected number of days
-      const viewOptions = {
-        day: { label: "Day", days: 1 },
-        '3day': { label: "Three Day", days: 3 },
-        '5day': { label: "Working Week", days: 5 },
-        week: { label: "Week", days: 7 },
-        month: { label: "Month", days: 31 }
-      };
-      
-      const days = viewOptions[calendarView as keyof typeof viewOptions]?.days || 7;
-      
-      let startDate = today;
-      if (calendarView === '5day') {
-        // Working Week starts on Monday
-        const dayOfWeek = getDay(today);
-        const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-        startDate = sub(today, { days: daysToSubtract });
-      } else if (calendarView === 'week') {
-        // Regular week starts on Sunday
-        const dayOfWeek = getDay(today);
-        startDate = sub(today, { days: dayOfWeek });
-      }
-      
-      return eachDayOfInterval({
-        start: startDate,
-        end: add(startDate, { days: days - 1 })
-      });
-    }
-  }, [selectedDate, calendarView]);
 
-  // Format the date range header
-  const formatDateRangeHeader = () => {
-    if (calendarView === 'day') {
-      return format(selectedDate, 'MMMM d, yyyy');
-    } else if (calendarView === 'month') {
-      return format(selectedDate, 'MMMM yyyy');
-    } else {
-      const firstDay = dateRange[0];
-      const lastDay = dateRange[dateRange.length - 1];
-      
-      if (isSameMonth(firstDay, lastDay)) {
-        return `${format(firstDay, 'MMMM d')} - ${format(lastDay, 'd, yyyy')}`;
-      } else {
-        return `${format(firstDay, 'MMM d')} - ${format(lastDay, 'MMM d, yyyy')}`;
-      }
-    }
-  };
-
-  // Get events for a specific day
-  const getEventsForDay = (day: Date) => {
-    return tourLeads.filter(lead => {
-      const tourDate = new Date(lead.tourDateTime!);
-      return isSameDay(tourDate, day);
-    });
-  };
-
-  // Get events for a specific hour
-  const getEventsForHour = (day: Date, hour: number) => {
-    const hourStart = add(startOfDay(day), { hours: hour });
-    const hourEnd = add(hourStart, { hours: 1 });
-    
-    return tourLeads.filter(lead => {
-      if (!lead.tourDateTime) return false;
-      
-      const tourStartTime = new Date(lead.tourDateTime);
-      // Tours typically last 1 hour
-      const tourEndTime = add(tourStartTime, { hours: 1 });
-      
-      return isWithinInterval(hourStart, { start: tourStartTime, end: tourEndTime }) ||
-             isWithinInterval(hourEnd, { start: tourStartTime, end: tourEndTime }) ||
-             isWithinInterval(tourStartTime, { start: hourStart, end: hourEnd });
-    });
-  };
-
-  // Open event dialog
-  const openEventDialog = (lead: Lead) => {
-    setSelectedEvent(lead);
-  };
-
-  // Close event dialog
-  const closeEventDialog = () => {
-    setSelectedEvent(null);
-  };
-
-  // Render month view
-  const renderMonthView = () => {
-    const firstDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-    const dayOfWeek = getDay(firstDayOfMonth);
-    const daysInPreviousMonth = dayOfWeek;
-    
-    return (
-      <Card>
-        <CardContent className="p-0">
-          <div className="grid grid-cols-7 border-b">
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
-              <div key={day} className="py-2 text-center text-sm font-medium">
-                {day}
-              </div>
-            ))}
-          </div>
-          
-          <div className="grid grid-cols-7">
-            {/* Empty cells for days from previous month */}
-            {Array.from({ length: daysInPreviousMonth }).map((_, index) => (
-              <div key={`prev-${index}`} className="min-h-[100px] p-2 border-b border-r text-muted-foreground"></div>
-            ))}
-            
-            {/* Days in current month */}
-            {dateRange.map((day, index) => {
-              const events = getEventsForDay(day);
-              const isToday = isSameDay(day, new Date());
-              
-              return (
-                <div 
-                  key={day.toString()} 
-                  className={cn(
-                    "min-h-[100px] p-2 border-b border-r relative",
-                    !isSameMonth(day, selectedDate) && "text-muted-foreground",
-                    isToday && "bg-muted/50"
-                  )}
-                  onClick={() => {
-                    setSelectedDate(day);
-                    setCalendarView('day');
-                  }}
-                >
-                  <div className={cn(
-                    "h-7 w-7 rounded-full flex items-center justify-center text-sm",
-                    isToday && "bg-primary text-primary-foreground font-medium"
-                  )}>
-                    {format(day, 'd')}
-                  </div>
-                  
-                  <div className="mt-1 space-y-1 max-h-[80px] overflow-y-auto">
-                    {events.map(event => (
-                      <div 
-                        key={event.id} 
-                        className="text-xs bg-primary/10 text-primary rounded px-1 py-0.5 truncate cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openEventDialog(event);
-                        }}
-                      >
-                        {format(new Date(event.tourDateTime!), 'h:mm a')} - {event.name}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+  // Get events for selected date
+  const eventsForSelectedDate = useMemo(() => {
+    if (!selectedDate) return [];
+    return calendarEvents.filter(event => 
+      isSameDay(event.startTime, selectedDate)
     );
-  };
+  }, [selectedDate, calendarEvents]);
 
-  // Render calendar content based on display mode
-  const renderCalendarContent = () => {
-    return displayMode === 'list' ? renderListView() : renderHourlyView();
-  };
+  // Calendar rendering with day cells having event indicators
+  const renderCalendarCell = (day: Date) => {
+    const eventsOnDay = calendarEvents.filter(event => 
+      isSameDay(event.startTime, day)
+    );
 
-  // Render list view
-  const renderListView = () => {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {dateRange.map(day => {
-          const events = getEventsForDay(day);
-          const isToday = isSameDay(day, new Date());
-          
-          return (
-            <Card key={day.toString()} className={cn(isToday && "border-primary")}>
-              <CardHeader className={cn("pb-2", isToday && "bg-primary/5")}>
-                <CardTitle className="text-base">
-                  {format(day, 'EEEE, MMMM d')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                {events.length > 0 ? (
-                  <div className="divide-y">
-                    {events.map(event => (
-                      <div 
-                        key={event.id} 
-                        className="p-3 hover:bg-muted/50 cursor-pointer"
-                        onClick={() => openEventDialog(event)}
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                          <span className="text-sm font-medium">
-                            {format(new Date(event.tourDateTime!), 'h:mm a')}
-                          </span>
-                        </div>
-                        <div className="font-medium">{event.name}</div>
-                        <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
-                          <MapPin className="h-3.5 w-3.5" />
-                          {event.propertyInterest}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="p-4 text-center text-muted-foreground text-sm">
-                    No tours scheduled
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })}
+      <div className="relative w-full h-full">
+        <time dateTime={format(day, 'yyyy-MM-dd')}>
+          {format(day, 'd')}
+        </time>
+        {eventsOnDay.length > 0 && (
+          <div className="absolute bottom-1 left-0 right-0 flex justify-center">
+            <div className="h-1 w-1 rounded-full bg-primary"></div>
+          </div>
+        )}
       </div>
     );
   };
 
-  // Render hourly view
-  const renderHourlyView = () => {
-    const hours = Array.from({ length: BUSINESS_HOURS_END - BUSINESS_HOURS_START }, (_, i) => i + BUSINESS_HOURS_START);
-    
-    return (
-      <Card>
-        <CardContent className="p-0">
-          <div className="grid grid-cols-[auto,1fr] md:grid-cols-[auto,repeat(auto-fill,minmax(0,1fr))]">
-            {/* Time column */}
-            <div className="border-r">
-              <div className="h-12 border-b"></div> {/* Empty cell for header */}
-              {hours.map(hour => (
-                <div key={hour} className="h-20 border-b px-2 py-1 text-xs text-muted-foreground">
-                  {hour === 12 ? '12 PM' : hour < 12 ? `${hour} AM` : `${hour - 12} PM`}
-                </div>
-              ))}
+  // Get date range based on selected date and view
+  const dateRange = useMemo(() => {
+    if (calendarView === 'month') {
+      const start = startOfWeek(startOfMonth(selectedDate));
+      const end = endOfWeek(endOfMonth(selectedDate));
+      return eachDayOfInterval({ start, end });
+    } else if (calendarView === 'week') {
+      const start = startOfWeek(selectedDate);
+      const end = endOfWeek(selectedDate);
+      return eachDayOfInterval({ start, end });
+    } else if (calendarView === '5day') {
+      const start = startOfDay(selectedDate);
+      const end = addDays(start, 4);
+      return eachDayOfInterval({ start, end });
+    } else if (calendarView === '3day') {
+      const start = startOfDay(selectedDate);
+      const end = addDays(start, 2);
+      return eachDayOfInterval({ start, end });
+    } else {
+      // day view
+      return [startOfDay(selectedDate)];
+    }
+  }, [selectedDate, calendarView]);
+  
+  // Get events for a specific day
+  const getEventsForDay = (day: Date) => {
+    return calendarEvents.filter(event => 
+      isSameDay(event.startTime, day)
+    );
+  };
+  
+  // Handle clicking on a day
+  const handleDayClick = (day: Date) => {
+    setSelectedDate(day);
+    if (calendarView === 'month') {
+      setCalendarView('day');
+    }
+  };
+  
+  // Navigate to previous time period
+  const goToPrevious = () => {
+    if (calendarView === 'month') {
+      setSelectedDate(sub(selectedDate, { months: 1 }));
+    } else if (calendarView === 'week') {
+      setSelectedDate(sub(selectedDate, { weeks: 1 }));
+    } else if (calendarView === '5day') {
+      setSelectedDate(sub(selectedDate, { days: 5 }));
+    } else if (calendarView === '3day') {
+      setSelectedDate(sub(selectedDate, { days: 3 }));
+    } else {
+      setSelectedDate(sub(selectedDate, { days: 1 }));
+    }
+  };
+  
+  // Navigate to next time period
+  const goToNext = () => {
+    if (calendarView === 'month') {
+      setSelectedDate(add(selectedDate, { months: 1 }));
+    } else if (calendarView === 'week') {
+      setSelectedDate(add(selectedDate, { weeks: 1 }));
+    } else if (calendarView === '5day') {
+      setSelectedDate(add(selectedDate, { days: 5 }));
+    } else if (calendarView === '3day') {
+      setSelectedDate(add(selectedDate, { days: 3 }));
+    } else {
+      setSelectedDate(add(selectedDate, { days: 1 }));
+    }
+  };
+  
+  // Go to today
+  const goToToday = () => {
+    setSelectedDate(startOfToday());
+  };
+  
+  // Format date range header
+  const formatDateRangeHeader = () => {
+    if (calendarView === 'month') {
+      return format(selectedDate, 'MMMM yyyy');
+    } else if (calendarView === 'week') {
+      const start = startOfWeek(selectedDate);
+      const end = endOfWeek(selectedDate);
+      if (start.getMonth() === end.getMonth()) {
+        return `${format(start, 'MMMM d')} - ${format(end, 'd, yyyy')}`;
+      } else if (start.getFullYear() === end.getFullYear()) {
+        return `${format(start, 'MMMM d')} - ${format(end, 'MMMM d, yyyy')}`;
+      } else {
+        return `${format(start, 'MMMM d, yyyy')} - ${format(end, 'MMMM d, yyyy')}`;
+      }
+    } else if (calendarView === '5day' || calendarView === '3day') {
+      const start = startOfDay(selectedDate);
+      const end = addDays(start, calendarView === '5day' ? 4 : 2);
+      if (start.getMonth() === end.getMonth()) {
+        return `${format(start, 'MMMM d')} - ${format(end, 'd, yyyy')}`;
+      } else if (start.getFullYear() === end.getFullYear()) {
+        return `${format(start, 'MMMM d')} - ${format(end, 'MMMM d, yyyy')}`;
+      } else {
+        return `${format(start, 'MMMM d, yyyy')} - ${format(end, 'MMMM d, yyyy')}`;
+      }
+    } else {
+      return format(selectedDate, 'MMMM d, yyyy');
+    }
+  };
+  
+  // Render calendar content based on view and display mode
+  const renderCalendarContent = () => {
+    if (calendarView === 'month') {
+      return (
+        <div className="grid grid-cols-7 gap-1">
+          {/* Week day headers */}
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+            <div key={day} className="text-center p-2 font-medium text-muted-foreground">
+              {day}
             </div>
-            
-            {/* Day columns */}
-            {dateRange.map(day => {
-              const isToday = isSameDay(day, new Date());
-              
-              return (
-                <div key={day.toString()} className="min-w-[120px]">
-                  {/* Day header */}
-                  <div className={cn(
-                    "h-12 border-b px-2 py-1 text-center font-medium",
-                    isToday && "bg-primary/5"
-                  )}>
-                    <div>{format(day, 'EEE')}</div>
-                    <div className={cn(
-                      "text-sm",
-                      isToday && "text-primary font-bold"
-                    )}>
-                      {format(day, 'MMM d')}
+          ))}
+          
+          {/* Calendar days */}
+          {dateRange.map((day, i) => {
+            const events = getEventsForDay(day);
+            return (
+              <div 
+                key={i} 
+                className={cn(
+                  "min-h-24 border p-1 relative cursor-pointer",
+                  !isSameMonth(day, selectedDate) && "bg-muted/50 text-muted-foreground", 
+                  isSameDay(day, new Date()) && "border-primary"
+                )}
+                onClick={() => handleDayClick(day)}
+              >
+                <div className="text-right mb-1">{format(day, 'd')}</div>
+                <div className="space-y-1">
+                  {events.slice(0, 3).map((event) => (
+                    <LeadEventDialog
+                      key={event.id}
+                      event={event}
+                      trigger={
+                        <div 
+                          className={cn(
+                            "text-xs p-1 rounded truncate",
+                            event.type === 'tour' ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"
+                          )}
+                        >
+                          {event.title}
+                        </div>
+                      }
+                    />
+                  ))}
+                  {events.length > 3 && (
+                    <div className="text-xs text-center text-muted-foreground">
+                      + {events.length - 3} more
                     </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    } else if (displayMode === 'list') {
+      // List view for day, 3-day, 5-day, and week views
+      if (['3day', '5day', 'week'].includes(calendarView)) {
+        // Side-by-side view for multiple days
+        const maxCols = calendarView === '3day' ? 3 : calendarView === '5day' ? 5 : 7;
+        const gridCols = calendarView === '3day' ? 
+          "grid-cols-1 md:grid-cols-3" : 
+          calendarView === '5day' ? 
+            "grid-cols-1 md:grid-cols-5" : 
+            "grid-cols-1 md:grid-cols-7";
+        
+        return (
+          <div className={`grid ${gridCols} gap-4`}>
+            {dateRange.map((day, dayIndex) => {
+              const events = getEventsForDay(day);
+              return (
+                <div key={dayIndex} className="space-y-2">
+                  <div className={cn(
+                    "text-center p-2 font-medium",
+                    isSameDay(day, new Date()) ? "text-primary" : ""
+                  )}>
+                    {format(day, 'EEE, MMM d')}
                   </div>
                   
-                  {/* Hour cells */}
-                  {hours.map(hour => {
-                    const events = getEventsForHour(day, hour);
-                    
-                    return (
-                      <div key={hour} className="h-20 border-b border-r relative group">
-                        {events.map(event => {
-                          const eventTime = new Date(event.tourDateTime!);
-                          const eventHour = eventTime.getHours();
-                          const eventMinute = eventTime.getMinutes();
-                          const topOffset = eventHour === hour ? (eventMinute / 60) * 100 : 0;
-                          
-                          return (
-                            <div 
-                              key={event.id}
-                              className="absolute left-0 right-0 mx-1 p-1 bg-primary/10 text-primary rounded text-xs cursor-pointer"
-                              style={{ top: `${topOffset}%` }}
-                              onClick={() => openEventDialog(event)}
-                            >
-                              <div className="font-medium truncate">
-                                {format(eventTime, 'h:mm a')} - {event.name}
+                  {events.length === 0 ? (
+                    <div className="text-center text-muted-foreground text-sm py-4">
+                      No events scheduled
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {events.map((event) => (
+                        <LeadEventDialog
+                          key={event.id}
+                          event={event}
+                          trigger={
+                            <div className="bg-muted/40 rounded-lg p-2 text-sm cursor-pointer hover:bg-muted/60">
+                              <div className="flex justify-between items-start">
+                                <div className="font-medium truncate">{event.title}</div>
+                                <Badge 
+                                  variant={event.type === 'tour' ? "default" : "secondary"}
+                                  className="ml-1 shrink-0"
+                                >
+                                  {event.type}
+                                </Badge>
+                              </div>
+                              
+                              <div className="mt-1 space-y-1 text-xs text-muted-foreground">
+                                <div className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  <span>{format(event.startTime, 'h:mm')} - {format(event.endTime, 'h:mm a')}</span>
+                                </div>
+                                {event.type === 'tour' && (
+                                  <>
+                                    <div className="flex items-center gap-1">
+                                      <User className="h-3 w-3" />
+                                      <span>{event.details.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <MapPin className="h-3 w-3" />
+                                      <span className="truncate">{event.details.propertyInterest}</span>
+                                    </div>
+                                  </>
+                                )}
+                                {event.type === 'application' && (
+                                  <>
+                                    <div className="flex items-center gap-1">
+                                      <FileText className="h-3 w-3" />
+                                      <span>{event.details.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <MapPin className="h-3 w-3" />
+                                      <span className="truncate">{event.details.propertyAddress || 'Not specified'}</span>
+                                    </div>
+                                  </>
+                                )}
                               </div>
                             </div>
-                          );
-                        })}
-                      </div>
-                    );
-                  })}
+                          }
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
-        </CardContent>
-      </Card>
-    );
-  };
-
-  // Render event dialog
-  const renderEventDialog = () => {
-    if (!selectedEvent) return null;
-    
-    const tourTime = selectedEvent.tourDateTime ? new Date(selectedEvent.tourDateTime) : null;
-    
-    return (
-      <Dialog open={!!selectedEvent} onOpenChange={closeEventDialog}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle className="flex justify-between items-center">
-              <span>{selectedEvent.name}</span>
-              <Badge variant="outline">
-                {selectedEvent.source}
-              </Badge>
-            </DialogTitle>
-            <DialogDescription className="text-lg">
-              Tour Details
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
-                <p>{tourTime ? format(tourTime, 'MMM d, yyyy h:mm a') : 'Date not set'}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Location</p>
-                <p>{selectedEvent.propertyInterest} ({selectedEvent.community})</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Contact</p>
-                <p>{selectedEvent.phone}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Email</p>
-                <p>{selectedEvent.email}</p>
-              </div>
+        );
+      } else {
+        // Single day list view
+        return (
+          <div className="grid grid-cols-1 divide-y">
+            {dateRange.map((day, i) => {
+              const events = getEventsForDay(day);
+              return (
+                <div key={i} className="space-y-4 py-4">
+                  <div className="text-lg font-semibold">
+                    {format(day, 'EEEE, MMMM d, yyyy')}
+                  </div>
+                  
+                  {events.length === 0 ? (
+                    <div className="text-center text-muted-foreground py-8">
+                      No events scheduled for today
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {events.map((event) => (
+                        <LeadEventDialog
+                          key={event.id}
+                          event={event}
+                          trigger={
+                            <div className="rounded-lg border p-3 cursor-pointer hover:bg-muted/50">
+                              <div className="flex justify-between items-center">
+                                <div className="font-medium">{event.title}</div>
+                                <Badge 
+                                  variant={event.type === 'tour' ? "default" : "secondary"}
+                                >
+                                  {event.type}
+                                </Badge>
+                              </div>
+                              
+                              <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+                                <div className="flex items-center gap-1">
+                                  <Clock className="h-4 w-4 text-muted-foreground" />
+                                  <span>{format(event.startTime, 'h:mm')} - {format(event.endTime, 'h:mm a')}</span>
+                                </div>
+                                
+                                {event.type === 'tour' && (
+                                  <>
+                                    <div className="flex items-center gap-1">
+                                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                                      <span>{event.details.propertyInterest}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <User className="h-4 w-4 text-muted-foreground" />
+                                      <span>{event.details.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <Info className="h-4 w-4 text-muted-foreground" />
+                                      <span>{event.details.status}</span>
+                                    </div>
+                                  </>
+                                )}
+                                
+                                {event.type === 'application' && (
+                                  <>
+                                    <div className="flex items-center gap-1">
+                                      <FileText className="h-4 w-4 text-muted-foreground" />
+                                      <span>{event.details.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                                      <span>{event.details.propertyAddress || 'Not specified'}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <Info className="h-4 w-4 text-muted-foreground" />
+                                      <span className="capitalize">{event.details.status}</span>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          }
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        );
+      }
+    } else {
+      // Hourly planner view
+      if (['3day', '5day', 'week'].includes(calendarView)) {
+        // Side-by-side hourly view for multiple days
+        const maxCols = calendarView === '3day' ? 3 : calendarView === '5day' ? 5 : 7;
+        const visibleDays = dateRange.slice(0, maxCols);
+        const gridCols = calendarView === '3day' ? 
+          "grid-cols-3" : 
+          calendarView === '5day' ? 
+            "grid-cols-5" : 
+            "grid-cols-7";
+        
+        return (
+          <div className="flex w-full h-[700px] overflow-auto">
+            {/* Time labels column */}
+            <div className="w-16 flex-shrink-0 pt-12 pr-2">
+              {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                const hour = BUSINESS_HOURS_START + i;
+                return (
+                  <div key={hour} className="h-14 flex items-start justify-end sticky">
+                    <div className="text-xs text-muted-foreground">
+                      {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
             
-            {selectedEvent.notes && (
-              <div className="border rounded-md p-3 text-sm">
-                <div className="font-medium mb-1">Notes</div>
-                <div>{selectedEvent.notes}</div>
-              </div>
-            )}
-            
-            <div className="flex items-center gap-2">
-              <div className="text-sm font-medium">Lead Source:</div>
-              <Badge variant="outline">{selectedEvent.source}</Badge>
+            {/* Days columns */}
+            <div className={`flex-grow grid ${gridCols} divide-x divide-gray-200`}>
+              {visibleDays.map((day, dayIndex) => (
+                <div key={dayIndex} className="relative">
+                  <div className="h-12 flex justify-center items-center sticky top-0 bg-background z-10 border-b">
+                    <div className={cn(
+                      "text-base font-semibold",
+                      isSameDay(day, new Date()) ? "text-primary" : ""
+                    )}>
+                      {format(day, 'EEE, MMM d')}
+                    </div>
+                  </div>
+                  
+                  <div className="relative">
+                    {/* Hour lines */}
+                    {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                      const hour = BUSINESS_HOURS_START + i;
+                      return <div key={hour} className="h-14 border-b border-gray-100"></div>;
+                    })}
+                    
+                    {/* Events */}
+                    {(() => {
+                      const eventsForDay = getEventsForDay(day);
+                      return eventsForDay.map((event) => {
+                        const eventStartHour = event.startTime.getHours();
+                        const eventStartMinute = event.startTime.getMinutes();
+                        const eventEndHour = event.endTime.getHours();
+                        const eventEndMinute = event.endTime.getMinutes();
+                        
+                        // Calculate position and height
+                        const startPosition = (eventStartHour - BUSINESS_HOURS_START) * 56 + (eventStartMinute / 60) * 56;
+                        const duration = ((eventEndHour - eventStartHour) * 60 + (eventEndMinute - eventStartMinute)) / 60;
+                        const height = duration * 56;
+                        
+                        return (
+                          <LeadEventDialog
+                            key={event.id}
+                            event={event}
+                            trigger={
+                              <div 
+                                className={cn(
+                                  "absolute left-1 right-1 rounded p-1 text-xs overflow-hidden cursor-pointer shadow-sm",
+                                  event.type === 'tour' ? "bg-blue-100 text-blue-800 border border-blue-200" : 
+                                    "bg-green-100 text-green-800 border border-green-200"
+                                )}
+                                style={{ 
+                                  top: `${startPosition}px`,
+                                  height: `${height}px`,
+                                }}
+                              >
+                                <div className="font-medium truncate">{event.title}</div>
+                                <div className="truncate">{format(event.startTime, 'h:mm')} - {format(event.endTime, 'h:mm')}</div>
+                              </div>
+                            }
+                          />
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          
-          <DialogFooter>
-            <Button variant="outline" onClick={closeEventDialog}>Close</Button>
-            <Button 
-              onClick={() => window.open('https://www.yardi.com', '_blank')}
-              className="gap-2"
-            >
-              <ExternalLink className="h-4 w-4" />
-              Open in Yardi
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    );
+        );
+      } else {
+        // Single day hourly view
+        return (
+          <div className="flex w-full h-[700px] overflow-auto">
+            {/* Time labels column */}
+            <div className="w-16 flex-shrink-0 pr-2">
+              {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                const hour = BUSINESS_HOURS_START + i;
+                return (
+                  <div key={hour} className="h-14 flex items-start justify-end">
+                    <div className="text-xs text-muted-foreground">
+                      {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Day column */}
+            <div className="flex-grow relative border-l">
+              {/* Hour lines */}
+              {Array.from({ length: (BUSINESS_HOURS_END - BUSINESS_HOURS_START) }, (_, i) => {
+                const hour = BUSINESS_HOURS_START + i;
+                return <div key={hour} className="h-14 border-b border-gray-100"></div>;
+              })}
+              
+              {/* Events */}
+              {(() => {
+                const day = dateRange[0];
+                const eventsForDay = getEventsForDay(day);
+                
+                return eventsForDay.map((event) => {
+                  const eventStartHour = event.startTime.getHours();
+                  const eventStartMinute = event.startTime.getMinutes();
+                  const eventEndHour = event.endTime.getHours();
+                  const eventEndMinute = event.endTime.getMinutes();
+                  
+                  // Calculate position and height
+                  const startPosition = (eventStartHour - BUSINESS_HOURS_START) * 56 + (eventStartMinute / 60) * 56;
+                  const duration = ((eventEndHour - eventStartHour) * 60 + (eventEndMinute - eventStartMinute)) / 60;
+                  const height = duration * 56;
+                  
+                  return (
+                    <LeadEventDialog
+                      key={event.id}
+                      event={event}
+                      trigger={
+                        <div 
+                          className={cn(
+                            "absolute left-2 right-2 rounded p-2 overflow-hidden cursor-pointer shadow-sm",
+                            event.type === 'tour' ? "bg-blue-100 text-blue-800 border border-blue-200" : 
+                              "bg-green-100 text-green-800 border border-green-200"
+                          )}
+                          style={{ 
+                            top: `${startPosition}px`,
+                            height: `${height}px`,
+                          }}
+                        >
+                          <div className="font-medium">{event.title}</div>
+                          <div className="text-xs mt-1">
+                            {format(event.startTime, 'h:mm')} - {format(event.endTime, 'h:mm a')}
+                          </div>
+                          {event.type === 'tour' && (
+                            <div className="text-xs mt-1 flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              <span className="truncate">{event.details.propertyInterest}</span>
+                            </div>
+                          )}
+                          {event.type === 'application' && (
+                            <div className="text-xs mt-1 flex items-center gap-1">
+                              <FileText className="h-3 w-3" />
+                              <span className="truncate">{event.details.propertyAddress || 'Application Review'}</span>
+                            </div>
+                          )}
+                        </div>
+                      }
+                    />
+                  );
+                });
+              })()}
+            </div>
+          </div>
+        );
+      }
+    }
   };
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center mb-6">
+      <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">Calendar</h1>
           <p className="text-muted-foreground">Welcome back, {CURRENT_LEASING_AGENT}</p>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
           <Select value={calendarView} onValueChange={setCalendarView}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Calendar View" />
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Week" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="day">Day</SelectItem>
@@ -459,20 +694,39 @@ const LeasingAgentCalendar = () => {
         </div>
       </div>
       
-      <CalendarTemplate
-        title="Tour Schedule"
-        renderMonthView={renderMonthView}
-        renderCalendarContent={renderCalendarContent}
-        onViewChange={setCalendarView}
-        onDateChange={setSelectedDate}
-        onDisplayModeChange={setDisplayMode}
-        calendarView={calendarView}
-        selectedDate={selectedDate}
-        displayMode={displayMode}
-        formatDateRangeHeader={formatDateRangeHeader}
-      />
-      
-      {renderEventDialog()}
+      <Card>
+        <CardHeader className="pb-3 flex flex-row items-center justify-between">
+          <CardTitle>Leasing Schedule</CardTitle>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="icon" onClick={goToPrevious}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" onClick={goToToday}>Today</Button>
+            <Button variant="outline" size="icon" onClick={goToNext}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            
+            {/* View toggle for list/hourly view */}
+            {calendarView !== 'month' && (
+              <ToggleGroup type="single" value={displayMode} onValueChange={(value) => value && setDisplayMode(value)}>
+                <ToggleGroupItem value="list" aria-label="List view">
+                  <List className="h-4 w-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="hourly" aria-label="Hourly view">
+                  <CalendarClock className="h-4 w-4" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4 text-center">
+            <h3 className="text-lg font-semibold">{formatDateRangeHeader()}</h3>
+          </div>
+          
+          {renderCalendarContent()}
+        </CardContent>
+      </Card>
     </div>
   );
 };
