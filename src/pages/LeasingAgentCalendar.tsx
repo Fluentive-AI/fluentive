@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -578,12 +577,26 @@ const LeasingAgentCalendar = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">Calendar</h1>
+          <p className="text-muted-foreground">Welcome back, {CURRENT_LEASING_AGENT}</p>
         </div>
         
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
+          <Select value={calendarView} onValueChange={setCalendarView}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Calendar View" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="day">Day</SelectItem>
+              <SelectItem value="3day">Three Day</SelectItem>
+              <SelectItem value="5day">Working Week</SelectItem>
+              <SelectItem value="week">Week</SelectItem>
+              <SelectItem value="month">Month</SelectItem>
+            </SelectContent>
+          </Select>
+          
           <Button 
             size="sm"
             className="flex items-center gap-1"
@@ -621,21 +634,8 @@ const LeasingAgentCalendar = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex justify-between items-center">
+          <div className="mb-4 flex justify-center items-center">
             <h3 className="text-lg font-semibold">{formatDateRangeHeader()}</h3>
-            
-            <Select value={calendarView} onValueChange={setCalendarView}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Calendar View" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="day">Day</SelectItem>
-                <SelectItem value="3day">Three Day</SelectItem>
-                <SelectItem value="5day">Working Week</SelectItem>
-                <SelectItem value="week">Week</SelectItem>
-                <SelectItem value="month">Month</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
           
           {renderCalendarContent()}

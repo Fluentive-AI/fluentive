@@ -33,7 +33,7 @@ const LeasingAgentMyDay = () => {
       <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">My Day</h1>
-          <p className="text-muted-foreground">Your schedule for {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+          <p className="text-muted-foreground">Welcome back, {CURRENT_LEASING_AGENT}</p>
         </div>
         
         <div className="flex gap-3 w-full md:w-auto">

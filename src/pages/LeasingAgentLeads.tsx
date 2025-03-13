@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -53,9 +52,11 @@ const LeasingAgentLeads = () => {
   
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">My Leads & Tours</h1>
-        
+      <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">Leads & Tours</h1>
+          <p className="text-muted-foreground">Welcome back, {CURRENT_LEASING_AGENT}</p>
+        </div>
         <div className="flex gap-3">
           <Button variant="outline" size="sm">
             <FileText className="h-4 w-4 mr-2" />

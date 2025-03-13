@@ -3,7 +3,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import AppLogo from './AppLogo';
 import { 
-  CalendarClock,
+  Calendar,
   Users,
   FileText,
   Settings,
@@ -47,7 +47,7 @@ const LeasingAgentSidebar = () => {
         <NavItem to="/agent" icon={<Sun className="h-5 w-5" />} label="My Day" end={true} />
         <NavItem to="/agent/leads" icon={<Users className="h-5 w-5" />} label="Leads & Tours" />
         <NavItem to="/agent/applications" icon={<FileText className="h-5 w-5" />} label="Applications" />
-        <NavItem to="/agent/calendar" icon={<CalendarClock className="h-5 w-5" />} label="Calendar" />
+        <NavItem to="/agent/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
       </nav>
       
       <div className="p-4 border-t border-sidebar-border">
