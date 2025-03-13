@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import MetricsGrid from '@/components/dashboard/MetricsGrid';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
@@ -15,7 +16,7 @@ import {
 } from '@/data/mockData';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, PlusCircle } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,8 @@ import {
 import { Button } from '@/components/ui/button';
 import DashboardSelector from '@/components/dashboard/DashboardSelector';
 import CreateDashboardDialog from '@/components/dashboard/CreateDashboardDialog';
+import AddMetricCardDialog from '@/components/dashboard/AddMetricCardDialog';
+import AddGraphDialog from '@/components/dashboard/AddGraphDialog';
 import { toast } from 'sonner';
 
 interface DashboardCard {
@@ -43,6 +46,16 @@ interface Dashboard {
   name: string;
   isDefault?: boolean;
   cards?: DashboardCard[];
+  metrics?: DashboardMetric[];
+}
+
+interface DashboardMetric {
+  id: number;
+  title: string;
+  value: number | string;
+  change: number;
+  status: 'neutral' | 'up' | 'down' | 'increase_good' | 'increase_bad' | 'decrease_good' | 'decrease_bad';
+  format?: string;
 }
 
 const initialDashboards: Dashboard[] = [
@@ -93,6 +106,9 @@ const Dashboard = () => {
   const [dashboards, setDashboards] = useState<Dashboard[]>(initialDashboards);
   const [activeDashboard, setActiveDashboard] = useState<Dashboard>(dashboards[0]);
   const [createDashboardOpen, setCreateDashboardOpen] = useState(false);
+  const [addMetricCardOpen, setAddMetricCardOpen] = useState(false);
+  const [addGraphOpen, setAddGraphOpen] = useState(false);
+  const [customMetrics, setCustomMetrics] = useState<DashboardMetric[]>([]);
 
   useEffect(() => {
     const handleCreateDashboardEvent = (event: CustomEvent) => {
@@ -291,6 +307,29 @@ const Dashboard = () => {
     toast.success(`Dashboard "${newDashboard.name}" created successfully`);
   };
 
+  const handleAddMetricCard = (metric: DashboardMetric) => {
+    setCustomMetrics([...customMetrics, metric]);
+    setAddMetricCardOpen(false);
+    toast.success("New metric card added successfully");
+  };
+
+  const handleAddGraph = (graph: DashboardCard) => {
+    const updatedDashboard = { 
+      ...activeDashboard,
+      cards: [...(activeDashboard.cards || []), graph]
+    };
+    
+    const updatedDashboards = dashboards.map(d => 
+      d.id === activeDashboard.id ? updatedDashboard : d
+    );
+    
+    setDashboards(updatedDashboards);
+    setActiveDashboard(updatedDashboard);
+    setAddGraphOpen(false);
+    
+    toast.success("New graph added successfully");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -318,18 +357,74 @@ const Dashboard = () => {
         </div>
       </div>
       
-      <MetricsGrid 
-        metrics={filterMetricsBySelection(mockDashboardMetrics)} 
-        className="grid-cols-3 lg:grid-cols-6"
-        selectedMarket={viewMode}
-      />
+      <div className="flex items-center justify-between">
+        <MetricsGrid 
+          metrics={filterMetricsBySelection([...mockDashboardMetrics, ...customMetrics])} 
+          className="grid-cols-3 lg:grid-cols-6"
+          selectedMarket={viewMode}
+        />
+        <Button 
+          variant="outline" 
+          size="sm"
+          className="flex items-center gap-1 ml-2"
+          onClick={() => setAddMetricCardOpen(true)}
+        >
+          <PlusCircle className="h-4 w-4" />
+          Add Metric
+        </Button>
+      </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {activeDashboard.cards?.map((card, index) => (
           <div key={card.id} className="space-y-6">
-            {index === 0 && <h2 className="text-2xl font-semibold">Leasing</h2>}
-            {index === 1 && <h2 className="text-2xl font-semibold">Property Operations</h2>}
-            {index === 2 && <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>}
+            {index === 0 && (
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Leasing</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  onClick={() => {
+                    setAddGraphOpen(true);
+                  }}
+                >
+                  <PlusCircle className="h-4 w-4" />
+                  Add Graph
+                </Button>
+              </div>
+            )}
+            {index === 1 && (
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Property Operations</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  onClick={() => {
+                    setAddGraphOpen(true);
+                  }}
+                >
+                  <PlusCircle className="h-4 w-4" />
+                  Add Graph
+                </Button>
+              </div>
+            )}
+            {index === 2 && (
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  onClick={() => {
+                    setAddGraphOpen(true);
+                  }}
+                >
+                  <PlusCircle className="h-4 w-4" />
+                  Add Graph
+                </Button>
+              </div>
+            )}
             
             <Card className="p-4">
               {card.type === 'line' ? (
@@ -372,7 +467,20 @@ const Dashboard = () => {
         {(!activeDashboard.cards || activeDashboard.cards.length === 0) && (
           <>
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold">Leasing</h2>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Leasing</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  onClick={() => {
+                    setAddGraphOpen(true);
+                  }}
+                >
+                  <PlusCircle className="h-4 w-4" />
+                  Add Graph
+                </Button>
+              </div>
               <Card className="p-4">
                 <SimpleLineChart 
                   data={filterChartData(mockRenewalsTrendData)} 
@@ -397,7 +505,20 @@ const Dashboard = () => {
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold">Property Operations</h2>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Property Operations</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  onClick={() => {
+                    setAddGraphOpen(true);
+                  }}
+                >
+                  <PlusCircle className="h-4 w-4" />
+                  Add Graph
+                </Button>
+              </div>
               <Card className="p-4">
                 <SimpleLineChart 
                   data={filterChartData(mockOccupancyTrendData)} 
@@ -417,7 +538,20 @@ const Dashboard = () => {
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  onClick={() => {
+                    setAddGraphOpen(true);
+                  }}
+                >
+                  <PlusCircle className="h-4 w-4" />
+                  Add Graph
+                </Button>
+              </div>
               <Card className="p-4">
                 <SimpleLineChart 
                   data={filterChartData(mockBillHoursTrendData, false, true)} 
@@ -443,6 +577,18 @@ const Dashboard = () => {
         open={createDashboardOpen}
         onOpenChange={setCreateDashboardOpen}
         onSave={handleCreateDashboard}
+      />
+
+      <AddMetricCardDialog
+        open={addMetricCardOpen}
+        onOpenChange={setAddMetricCardOpen}
+        onSave={handleAddMetricCard}
+      />
+
+      <AddGraphDialog
+        open={addGraphOpen}
+        onOpenChange={setAddGraphOpen}
+        onSave={handleAddGraph}
       />
     </div>
   );
