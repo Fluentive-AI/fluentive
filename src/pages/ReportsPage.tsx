@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { 
@@ -34,7 +33,8 @@ import {
   Clock,
   Download,
   Edit,
-  Trash
+  Trash,
+  MoreVertical
 } from 'lucide-react';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
 import SimpleBarChart from '@/components/dashboard/SimpleBarChart';
@@ -43,6 +43,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const ReportsPage = () => {
   const [selectedMarket, setSelectedMarket] = useState('Average');
@@ -73,7 +74,6 @@ const ReportsPage = () => {
   const [reportFrequency, setReportFrequency] = useState('monthly');
   const [reportFormat, setReportFormat] = useState('pdf');
   
-  // New state for personalized reports
   const [personalizedReports, setPersonalizedReports] = useState([
     { 
       id: 1, 
@@ -198,7 +198,6 @@ const ReportsPage = () => {
     setPersonalizedReports([...personalizedReports, newReport]);
     toast.success(`Report "${reportName}" created successfully`);
     
-    // Reset form
     setReportName('');
     setReportDescription('');
     setReportRecipients('');
@@ -214,7 +213,6 @@ const ReportsPage = () => {
   
   const handleGenerateReport = (reportName: string) => {
     toast.success(`Generating report: ${reportName}...`);
-    // In a real app, this would trigger the report generation process
   };
 
   const renderCardContent = (card: any) => {
@@ -275,82 +273,93 @@ const ReportsPage = () => {
     }
   };
 
-  const renderCardControls = (card: any) => {
+  const handleCardPropertyChange = (cardId: number, property: string, value: string) => {
+    setDashboardCards(dashboardCards.map(card => 
+      card.id === cardId ? { ...card, [property]: value } : card
+    ));
+  };
+
+  const renderCardOptionsMenu = (card: any) => {
     return (
-      <div className="flex flex-wrap gap-2 mt-2 p-2 bg-gray-50 rounded">
-        <div className="flex flex-col space-y-1">
-          <label className="text-xs text-gray-500">Type</label>
-          <ToggleGroup type="single" value={card.type} onValueChange={(value) => value && handleCardTypeChange(card.id, value)}>
-            <ToggleGroupItem value="line" aria-label="Line Chart">
-              <LineChartIcon className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="bar" aria-label="Bar Chart">
-              <BarChart className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="pie" aria-label="Pie Chart">
-              <PieChart className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="table" aria-label="Table">
-              <TableIcon className="h-4 w-4" />
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
-        
-        <div className="flex flex-col space-y-1">
-          <label className="text-xs text-gray-500">Timeframe</label>
-          <Select value={card.timeframe} onValueChange={(value) => {
-            setDashboardCards(dashboardCards.map(c => 
-              c.id === card.id ? {...c, timeframe: value} : c
-            ));
-          }}>
-            <SelectTrigger className="w-28 h-8">
-              <SelectValue placeholder="Timeframe" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="month">Month</SelectItem>
-              <SelectItem value="quarter">Quarter</SelectItem>
-              <SelectItem value="year">Year</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="flex flex-col space-y-1">
-          <label className="text-xs text-gray-500">Market</label>
-          <Select value={card.market} onValueChange={(value) => {
-            setDashboardCards(dashboardCards.map(c => 
-              c.id === card.id ? {...c, market: value} : c
-            ));
-          }}>
-            <SelectTrigger className="w-32 h-8">
-              <SelectValue placeholder="Market" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Markets</SelectItem>
-              <SelectItem value="atlanta">Atlanta</SelectItem>
-              <SelectItem value="tampa">Tampa</SelectItem>
-              <SelectItem value="orlando">Orlando</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="flex flex-col space-y-1">
-          <label className="text-xs text-gray-500">Category</label>
-          <Select value={card.category} onValueChange={(value) => {
-            setDashboardCards(dashboardCards.map(c => 
-              c.id === card.id ? {...c, category: value} : c
-            ));
-          }}>
-            <SelectTrigger className="w-32 h-8">
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="leasing">Leasing</SelectItem>
-              <SelectItem value="operations">Operations</SelectItem>
-              <SelectItem value="maintenance">Maintenance</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuGroup>
+            <DropdownMenuItem className="p-0 focus:bg-transparent">
+              <div className="flex flex-col w-full px-2 py-1.5">
+                <Label className="text-xs text-muted-foreground mb-1">Chart Type</Label>
+                <ToggleGroup type="single" value={card.type} onValueChange={(value) => value && handleCardPropertyChange(card.id, 'type', value)} className="justify-start">
+                  <ToggleGroupItem value="line" aria-label="Line Chart" className="h-8 w-8 p-0">
+                    <LineChartIcon className="h-4 w-4" />
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="bar" aria-label="Bar Chart" className="h-8 w-8 p-0">
+                    <BarChart className="h-4 w-4" />
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="pie" aria-label="Pie Chart" className="h-8 w-8 p-0">
+                    <PieChart className="h-4 w-4" />
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="table" aria-label="Table" className="h-8 w-8 p-0">
+                    <TableIcon className="h-4 w-4" />
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem className="p-0 focus:bg-transparent">
+              <div className="flex flex-col w-full px-2 py-1.5">
+                <Label className="text-xs text-muted-foreground mb-1">Timeframe</Label>
+                <Select value={card.timeframe} onValueChange={(value) => handleCardPropertyChange(card.id, 'timeframe', value)}>
+                  <SelectTrigger className="w-full h-8">
+                    <SelectValue placeholder="Timeframe" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="month">Month</SelectItem>
+                    <SelectItem value="quarter">Quarter</SelectItem>
+                    <SelectItem value="year">Year</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem className="p-0 focus:bg-transparent">
+              <div className="flex flex-col w-full px-2 py-1.5">
+                <Label className="text-xs text-muted-foreground mb-1">Market</Label>
+                <Select value={card.market} onValueChange={(value) => handleCardPropertyChange(card.id, 'market', value)}>
+                  <SelectTrigger className="w-full h-8">
+                    <SelectValue placeholder="Market" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Markets</SelectItem>
+                    <SelectItem value="atlanta">Atlanta</SelectItem>
+                    <SelectItem value="tampa">Tampa</SelectItem>
+                    <SelectItem value="orlando">Orlando</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem className="p-0 focus:bg-transparent">
+              <div className="flex flex-col w-full px-2 py-1.5">
+                <Label className="text-xs text-muted-foreground mb-1">Category</Label>
+                <Select value={card.category} onValueChange={(value) => handleCardPropertyChange(card.id, 'category', value)}>
+                  <SelectTrigger className="w-full h-8">
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="leasing">Leasing</SelectItem>
+                    <SelectItem value="operations">Operations</SelectItem>
+                    <SelectItem value="maintenance">Maintenance</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   };
 
@@ -492,16 +501,18 @@ const ReportsPage = () => {
                       {getCategoryIcon(card.category)}
                       <CardTitle>{card.title}</CardTitle>
                     </div>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-6 w-6 rounded-full" 
-                      onClick={() => handleDeleteCard(card.id)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center gap-1">
+                      {renderCardOptionsMenu(card)}
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-7 w-7 rounded-full" 
+                        onClick={() => handleDeleteCard(card.id)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                  {renderCardControls(card)}
                 </CardHeader>
                 <CardContent>
                   {renderCardContent(card)}
@@ -612,7 +623,6 @@ const ReportsPage = () => {
         </div>
       )}
       
-      {/* Add new card dialog */}
       <Dialog open={addCardDialogOpen} onOpenChange={setAddCardDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
@@ -735,7 +745,6 @@ const ReportsPage = () => {
         </DialogContent>
       </Dialog>
       
-      {/* Create Personalized Report dialog */}
       <Dialog open={createReportDialogOpen} onOpenChange={setCreateReportDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
@@ -848,3 +857,4 @@ const ReportsPage = () => {
 };
 
 export default ReportsPage;
+
