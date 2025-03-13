@@ -1790,3 +1790,120 @@ export const mockRentCommunications: RentCommunication[] = [
     ]
   }
 ];
+
+// Define the current superintendent constant
+export const CURRENT_SUPER = "Michael Rodriguez";
+
+// Mock Superintendent Communications
+export const mockSuperCommunications = [
+  {
+    id: '1',
+    tenantName: 'Robert Garcia',
+    unit: 'Oakwood 101',
+    community: 'Atlanta/Osborne Farms',
+    superintendent: 'Michael Rodriguez',
+    status: 'urgent',
+    message: 'Water leak reported in bathroom, possible pipe burst. Tenant reports water coming through ceiling. Immediate attention required.',
+    date: '2025-03-15T09:30:00',
+    category: 'plumbing'
+  },
+  {
+    id: '2',
+    tenantName: 'Jennifer Lopez',
+    unit: 'Riverfront 205',
+    community: 'Tampa/Preserve at Pine Grove',
+    superintendent: 'Michael Rodriguez',
+    status: 'scheduled',
+    message: 'HVAC maintenance scheduled for tomorrow between 1-3 PM. Unit is cooling but not efficiently.',
+    date: '2025-03-14T14:15:00',
+    category: 'hvac'
+  },
+  {
+    id: '3',
+    tenantName: 'Thomas White',
+    unit: 'Sunset 304',
+    community: 'Jacksonville/Sawyer\'s Preserve',
+    superintendent: 'Michael Rodriguez',
+    status: 'completed',
+    message: 'Replaced broken garbage disposal as requested. Also noticed and fixed a small leak under the sink.',
+    date: '2025-03-13T11:45:00',
+    category: 'appliance'
+  },
+  {
+    id: '4',
+    tenantName: 'Patricia Martinez',
+    unit: 'Oakwood 205',
+    community: 'Atlanta/Osborne Farms',
+    superintendent: 'Michael Rodriguez',
+    status: 'scheduled',
+    message: 'Smoke detector replacement scheduled for Mar 19. Current detector is beeping intermittently.',
+    date: '2025-03-13T16:30:00',
+    category: 'safety'
+  },
+  {
+    id: '5',
+    tenantName: 'James Taylor',
+    unit: 'Riverfront 110',
+    community: 'Tampa/Preserve at Pine Grove',
+    superintendent: 'Michael Rodriguez',
+    status: 'urgent',
+    message: 'No hot water in apartment. Tenant has reported water heater making unusual noises yesterday.',
+    date: '2025-03-15T08:15:00',
+    category: 'plumbing'
+  },
+  {
+    id: '6',
+    tenantName: 'Mary Johnson',
+    unit: 'Sunset 202',
+    community: 'Orlando/Scattered',
+    superintendent: 'Michael Rodriguez',
+    status: 'completed',
+    message: 'Repaired loose balcony railing as reported. Inspected all other railings and found them secure.',
+    date: '2025-03-10T13:20:00',
+    category: 'structural'
+  },
+  {
+    id: '7',
+    tenantName: 'Daniel Brown',
+    unit: 'Oakwood 303',
+    community: 'Atlanta/Suwanee Square',
+    superintendent: 'Michael Rodriguez',
+    status: 'scheduled',
+    message: 'Window replacement scheduled for Mar 20. Current window has crack that is expanding.',
+    date: '2025-03-12T10:30:00',
+    category: 'windows'
+  },
+  {
+    id: '8',
+    tenantName: 'Sarah Wilson',
+    unit: 'Riverfront 307',
+    community: 'Tampa/Avila Bay',
+    superintendent: 'Michael Rodriguez',
+    status: 'completed',
+    message: 'Fixed kitchen light fixture flickering issue. Replaced ballast and verified operation.',
+    date: '2025-03-11T15:45:00',
+    category: 'electrical'
+  },
+  {
+    id: '9',
+    tenantName: 'Michael Davis',
+    unit: 'Sunset 105',
+    community: 'Jacksonville/Scattered',
+    superintendent: 'Michael Rodriguez',
+    status: 'urgent',
+    message: 'Front door lock jammed, tenant unable to enter apartment. Locksmith dispatched.',
+    date: '2025-03-15T17:00:00',
+    category: 'locks'
+  },
+  {
+    id: '10',
+    tenantName: 'Emily Thompson',
+    unit: 'Oakwood 404',
+    community: 'Atlanta/Scattered',
+    superintendent: 'Michael Rodriguez',
+    status: 'scheduled',
+    message: 'Dishwasher making loud noise during operation. Repair scheduled for Mar 18.',
+    date: '2025-03-14T09:15:00',
+    category: 'appliance'
+  }
+];

@@ -47,7 +47,7 @@ const PropertyManagerSidebar = () => {
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         <NavItem to="/manager" icon={<Sun className="h-5 w-5" />} label="My Day" end={true} />
         <NavItem to="/manager/tenants" icon={<Users className="h-5 w-5" />} label="Tenants" />
-        <NavItem to="/manager/rent" icon={<Bot className="h-5 w-5" />} label="AI Rent Collection" />
+        <NavItem to="/manager/communication" icon={<Bot className="h-5 w-5" />} label="AI Communications" />
       </nav>
       
       <div className="p-4 border-t border-sidebar-border">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import AppLogo from './AppLogo';
@@ -7,7 +6,8 @@ import {
   Calendar,
   Map,
   Settings,
-  Sun
+  Sun,
+  Bot
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -48,6 +48,7 @@ const SuperintendentSidebar = () => {
         <NavItem to="/super/dashboard" icon={<Wrench className="h-5 w-5" />} label="Work Orders" />
         <NavItem to="/super/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
         <NavItem to="/super/map" icon={<Map className="h-5 w-5" />} label="Map View" />
+        <NavItem to="/super/communication" icon={<Bot className="h-5 w-5" />} label="AI Communications" />
       </nav>
       
       <div className="p-4 border-t border-sidebar-border">

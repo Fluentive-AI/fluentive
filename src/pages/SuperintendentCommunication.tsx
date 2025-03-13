@@ -4,31 +4,23 @@ import { Button } from '@/components/ui/button';
 import { ExternalLink, Download, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
-import CommunicationStatusFilter from '@/components/rent/CommunicationStatusFilter';
-import PropertyManagerRentAIConsole from '@/components/rent/PropertyManagerRentAIConsole';
+import SuperintendentCommunicationAIConsole from '@/components/rent/SuperintendentCommunicationAIConsole';
 import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
+import MaintenanceTopicFilter from '@/components/rent/MaintenanceTopicFilter';
+import { CURRENT_SUPER } from '@/data/mockData';
 
-// Define the current property manager
-const CURRENT_MANAGER = "John Davis";
-
-const PropertyManagerRent = () => {
+const SuperintendentCommunication = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [communicationStatusFilters, setCommunicationStatusFilters] = useState<string[]>([]);
   const [marketFilters, setMarketFilters] = useState<string[]>([]);
-  
-  // Add console logs to debug
-  useEffect(() => {
-    console.log("Market filters:", marketFilters);
-    console.log("Status filters:", communicationStatusFilters);
-  }, [marketFilters, communicationStatusFilters]);
+  const [topicFilters, setTopicFilters] = useState<string[]>([]);
   
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">AI Communications</h1>
-          <p className="text-muted-foreground">Welcome back, {CURRENT_MANAGER}</p>
+          <p className="text-muted-foreground">Welcome back, {CURRENT_SUPER}</p>
         </div>
         
         <div className="flex gap-3 w-full md:w-auto">
@@ -66,26 +58,20 @@ const PropertyManagerRent = () => {
             <div className="flex gap-2">
               <MarketCommunityFilter 
                 selectedValues={marketFilters}
-                onChange={(values) => {
-                  console.log("MarketFilter updated:", values);
-                  setMarketFilters(values);
-                }}
+                onChange={setMarketFilters}
               />
-              <CommunicationStatusFilter 
-                selectedValues={communicationStatusFilters}
-                onChange={(values) => {
-                  console.log("StatusFilter updated:", values);
-                  setCommunicationStatusFilters(values);
-                }}
+              <MaintenanceTopicFilter 
+                selectedValues={topicFilters}
+                onChange={setTopicFilters}
               />
             </div>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
-          <PropertyManagerRentAIConsole 
+          <SuperintendentCommunicationAIConsole 
             searchQuery={searchQuery}
-            statusFilters={communicationStatusFilters}
             marketFilters={marketFilters}
+            topicFilters={topicFilters}
           />
         </CardContent>
       </Card>
@@ -93,4 +79,4 @@ const PropertyManagerRent = () => {
   );
 };
 
-export default PropertyManagerRent; 
+export default SuperintendentCommunication; 

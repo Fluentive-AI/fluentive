@@ -8,6 +8,7 @@ import TenantsTable from '@/components/tenants/TenantsTable';
 import TenantStatusFilter from '@/components/tenants/TenantStatusFilter';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
+import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
 
 const CURRENT_MANAGER = "John Davis";
 
@@ -15,8 +16,15 @@ const PropertyManagerMyDay = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [rentStatusFilters, setRentStatusFilters] = useState<string[]>([]);
+  const [marketFilters, setMarketFilters] = useState<string[]>([]);
   const [filteredAttentionTenants, setFilteredAttentionTenants] = useState([]);
   const [myTenants, setMyTenants] = useState([]);
+  
+  // Debug log for filter changes
+  useEffect(() => {
+    console.log("Market filters updated:", marketFilters);
+    console.log("Rent status filters updated:", rentStatusFilters);
+  }, [marketFilters, rentStatusFilters]);
   
   // Get all tenants for the current property manager
   useEffect(() => {
@@ -40,6 +48,8 @@ const PropertyManagerMyDay = () => {
                 tenant.propertyManager === CURRENT_MANAGER
     );
     
+    console.log("Starting with attention tenants:", baseAttentionTenants.length);
+    
     // Apply search filter if there's a query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -49,17 +59,33 @@ const PropertyManagerMyDay = () => {
         tenant.email.toLowerCase().includes(query) ||
         tenant.community.toLowerCase().includes(query)
       );
+      console.log("After search filter:", baseAttentionTenants.length);
+    }
+
+    // Apply market filters if any are selected
+    if (marketFilters.length > 0) {
+      console.log("Applying market filters:", marketFilters);
+      baseAttentionTenants = baseAttentionTenants.filter(tenant => {
+        // Log each tenant's community to verify format
+        console.log(`Tenant ${tenant.name} community: ${tenant.community}`);
+        
+        // Correctly match the community format from MarketCommunityFilter
+        return marketFilters.includes(tenant.community);
+      });
+      console.log("After market filter:", baseAttentionTenants.length);
     }
 
     // Apply rent status filters if any are selected
     if (rentStatusFilters.length > 0) {
+      console.log("Applying rent status filters:", rentStatusFilters);
       baseAttentionTenants = baseAttentionTenants.filter(tenant => 
         rentStatusFilters.includes(tenant.rentStatus)
       );
+      console.log("After rent status filter:", baseAttentionTenants.length);
     }
 
     setFilteredAttentionTenants(baseAttentionTenants);
-  }, [searchQuery, rentStatusFilters]);
+  }, [searchQuery, rentStatusFilters, marketFilters]);
 
   // Calculate summary statistics based on tenant rent status
   const managerTenants = mockTenants.filter(tenant => 
@@ -101,7 +127,7 @@ const PropertyManagerMyDay = () => {
           <Button 
             variant="outline" 
             className="flex-1 md:flex-auto" 
-            onClick={() => navigate('/manager/rent')}
+            onClick={() => navigate('/manager/communication')}
           >
             <CreditCard className="h-4 w-4 mr-2" />
             Rent Collection
@@ -179,9 +205,19 @@ const PropertyManagerMyDay = () => {
               </div>
               
               <div className="flex gap-2">
+                <MarketCommunityFilter
+                  selectedValues={marketFilters}
+                  onChange={(values) => {
+                    console.log("Market filter changed to:", values);
+                    setMarketFilters(values);
+                  }}
+                />
                 <TenantStatusFilter 
                   selectedValues={rentStatusFilters}
-                  onChange={setRentStatusFilters}
+                  onChange={(values) => {
+                    console.log("Rent status filter changed to:", values);
+                    setRentStatusFilters(values);
+                  }}
                   filterType="rentStatus"
                 />
               </div>

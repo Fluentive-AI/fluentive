@@ -27,20 +27,52 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-// Define the current superintendent name
+// Define the current role names
 const CURRENT_SUPER = "Mike Johnson";
+const CURRENT_PROPERTY_MANAGER = "John Davis";
+const CURRENT_LEASING_AGENT = "Emily Wilson";
 
 const getTitleFromPath = (pathname: string): string => {
   // Check if we're in the superintendent section
   const isSuperPath = pathname.startsWith('/super');
+  // Check if we're in the property manager section
+  const isManagerPath = pathname.startsWith('/manager');
+  // Check if we're in the leasing agent section
+  const isAgentPath = pathname.startsWith('/agent');
   
   // Handle superintendent specific pages
   if (isSuperPath) {
-    if (pathname === '/super' || pathname === '/super/dashboard' || pathname === '/super/calendar' || pathname === '/super/map') {
+    if (pathname === '/super' || pathname === '/super/dashboard' || pathname === '/super/calendar' || pathname === '/super/map' || pathname === '/super/communication') {
       return `${CURRENT_SUPER}'s Dashboard`;
     }
     
     // For other superintendent pages, extract the page name
+    const pageName = pathname.split('/').pop();
+    if (pageName) {
+      return pageName.charAt(0).toUpperCase() + pageName.slice(1);
+    }
+  }
+  
+  // Handle property manager specific pages
+  if (isManagerPath) {
+    if (pathname === '/manager' || pathname === '/manager/dashboard' || pathname === '/manager/tenants' || pathname === '/manager/communication') {
+      return `${CURRENT_PROPERTY_MANAGER}'s Dashboard`;
+    }
+    
+    // For other property manager pages, extract the page name
+    const pageName = pathname.split('/').pop();
+    if (pageName) {
+      return pageName.charAt(0).toUpperCase() + pageName.slice(1);
+    }
+  }
+  
+  // Handle leasing agent specific pages
+  if (isAgentPath) {
+    if (pathname === '/agent' || pathname === '/agent/leads' || pathname === '/agent/applications' || pathname === '/agent/calendar') {
+      return `${CURRENT_LEASING_AGENT}'s Dashboard`;
+    }
+    
+    // For other leasing agent pages, extract the page name
     const pageName = pathname.split('/').pop();
     if (pageName) {
       return pageName.charAt(0).toUpperCase() + pageName.slice(1);

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,13 +12,13 @@ import Maintenance from "./pages/Maintenance";
 import Communications from "./pages/Communications";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
-import LandingPage from "./pages/LandingPage";
 import MapView from "./pages/MapView";
 import SuperintendentCalendar from "./pages/SuperintendentCalendar";
 import SuperintendentMap from "./pages/SuperintendentMap";
 import Calendar from "./pages/Calendar";
 import SuperintendentDashboard from "./pages/SuperintendentDashboard";
 import SuperintendentMyDay from "./pages/SuperintendentMyDay";
+import SuperintendentCommunication from "./pages/SuperintendentCommunication";
 import TenantLayout from "./components/layout/TenantLayout";
 import TenantLeasing from "./pages/tenant/TenantLeasing";
 import TenantOperations from "./pages/tenant/TenantOperations";
@@ -48,7 +47,6 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           
           {/* Admin/Property Manager Routes */}
@@ -67,7 +65,7 @@ const App = () => (
           {/* Property Manager Routes */}
           <Route path="/manager" element={<PropertyManagerLayout><PropertyManagerMyDay /></PropertyManagerLayout>} />
           <Route path="/manager/tenants" element={<PropertyManagerLayout><PropertyManagerTenants /></PropertyManagerLayout>} />
-          <Route path="/manager/rent" element={<PropertyManagerLayout><PropertyManagerRent /></PropertyManagerLayout>} />
+          <Route path="/manager/communication" element={<PropertyManagerLayout><PropertyManagerRent /></PropertyManagerLayout>} />
           <Route path="/manager/settings" element={<PropertyManagerLayout><PlaceholderPage /></PropertyManagerLayout>} />
           
           {/* Superintendent Routes */}
@@ -75,6 +73,7 @@ const App = () => (
           <Route path="/super/dashboard" element={<SuperintendentLayout><SuperintendentDashboard /></SuperintendentLayout>} />
           <Route path="/super/calendar" element={<SuperintendentLayout><SuperintendentCalendar /></SuperintendentLayout>} />
           <Route path="/super/map" element={<SuperintendentLayout><SuperintendentMap /></SuperintendentLayout>} />
+          <Route path="/super/communication" element={<SuperintendentLayout><SuperintendentCommunication /></SuperintendentLayout>} />
           <Route path="/super/settings" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
           
           {/* Leasing Agent Routes */}
@@ -102,6 +101,7 @@ const App = () => (
           <Route path="/tenant/maintenance/scheduling" element={<TenantLayout><TenantMaintenance scenario="scheduling" /></TenantLayout>} />
           <Route path="/tenant/maintenance/relationship" element={<TenantLayout><TenantMaintenance scenario="relationship" /></TenantLayout>} />
           
+          <Route path="/" element={<LoginPage />} /> {/* Using LoginPage as landing for now */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -13,6 +13,7 @@ import TenantsTable from '@/components/tenants/TenantsTable';
 import TenantStatusFilter from '@/components/tenants/TenantStatusFilter';
 import { useNavigate } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
+import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
 
 // Current property manager constant
 const CURRENT_MANAGER = "John Davis";
@@ -22,6 +23,7 @@ const PropertyManagerTenants = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilters, setStatusFilters] = useState<string[]>([]);
   const [rentStatusFilters, setRentStatusFilters] = useState<string[]>([]);
+  const [marketFilters, setMarketFilters] = useState<string[]>([]);
   const [filteredTenants, setFilteredTenants] = useState([]);
 
   // Filter tenants based on search query and filters
@@ -40,6 +42,15 @@ const PropertyManagerTenants = () => {
       );
     }
 
+    // Apply market filters
+    if (marketFilters.length > 0) {
+      filtered = filtered.filter(tenant => {
+        // Assuming community follows the format "City/Community"
+        const tenantMarket = tenant.community.split('/')[0];
+        return marketFilters.some(filter => filter.startsWith(tenantMarket));
+      });
+    }
+
     if (statusFilters.length > 0) {
       filtered = filtered.filter(tenant => statusFilters.includes(tenant.status));
     }
@@ -49,7 +60,7 @@ const PropertyManagerTenants = () => {
     }
 
     setFilteredTenants(filtered);
-  }, [searchQuery, statusFilters, rentStatusFilters]);
+  }, [searchQuery, statusFilters, rentStatusFilters, marketFilters]);
 
   // Calculate summary statistics based on tenant rent status
   const managerTenants = mockTenants.filter(tenant => 
@@ -159,6 +170,10 @@ const PropertyManagerTenants = () => {
             </div>
             
             <div className="flex gap-2">
+              <MarketCommunityFilter 
+                selectedValues={marketFilters}
+                onChange={setMarketFilters}
+              />
               <TenantStatusFilter 
                 selectedValues={rentStatusFilters}
                 onChange={setRentStatusFilters}

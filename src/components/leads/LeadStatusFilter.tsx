@@ -8,45 +8,44 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
-interface CommunicationStatusFilterProps {
-  selectedValues: string[];
-  onChange: (values: string[]) => void;
-}
-
 interface CategoryOption {
   name: string;
   options: { value: string; label: string }[];
 }
 
-const STATUS_CATEGORIES: CategoryOption[] = [
+interface LeadStatusFilterProps {
+  selectedValues: string[];
+  onChange: (values: string[]) => void;
+}
+
+const STATUS_OPTIONS: CategoryOption[] = [
   {
     name: 'Rent Collection',
     options: [
-      { value: 'delivered', label: 'Message Delivered' },
-      { value: 'failed', label: 'Failed to Collect Payment' },
-      { value: 'committed', label: 'Committed to Pay' },
-      { value: 'pending', label: 'Pending Payment' }
+      { value: 'new', label: 'New Lead' },
+      { value: 'contacted', label: 'Contacted' },
+      { value: 'tour_scheduled', label: 'Scheduled Tour' },
+      { value: 'application_sent', label: 'Application Sent' }
     ]
   },
   {
     name: 'Other',
     options: [
-      { value: 'maintenance', label: 'Maintenance' },
-      { value: 'lease_renewal', label: 'Lease Renewal' },
-      { value: 'notice', label: 'Notice' },
-      { value: 'general', label: 'General Communication' }
+      { value: 'application_received', label: 'Application Received' },
+      { value: 'closed_won', label: 'Closed Won' },
+      { value: 'closed_lost', label: 'Closed Lost' }
     ]
   }
 ];
 
-const CommunicationStatusFilter: React.FC<CommunicationStatusFilterProps> = ({
+const LeadStatusFilter: React.FC<LeadStatusFilterProps> = ({
   selectedValues,
   onChange,
 }) => {
   const [open, setOpen] = useState(false);
 
   const toggleCategory = (categoryName: string) => {
-    const category = STATUS_CATEGORIES.find(c => c.name === categoryName);
+    const category = STATUS_OPTIONS.find(c => c.name === categoryName);
     if (!category) return;
 
     const categoryValues = category.options.map(opt => opt.value);
@@ -67,14 +66,15 @@ const CommunicationStatusFilter: React.FC<CommunicationStatusFilterProps> = ({
   };
 
   const toggleOption = (value: string) => {
-    const newValues = selectedValues.includes(value)
+    const newSelectedValues = selectedValues.includes(value)
       ? selectedValues.filter(v => v !== value)
       : [...selectedValues, value];
-    onChange(newValues);
+    
+    onChange(newSelectedValues);
   };
 
   const isCategorySelected = (categoryName: string) => {
-    const category = STATUS_CATEGORIES.find(c => c.name === categoryName);
+    const category = STATUS_OPTIONS.find(c => c.name === categoryName);
     if (!category) return false;
     
     const categoryValues = category.options.map(opt => opt.value);
@@ -82,7 +82,7 @@ const CommunicationStatusFilter: React.FC<CommunicationStatusFilterProps> = ({
   };
 
   const isCategoryFullySelected = (categoryName: string) => {
-    const category = STATUS_CATEGORIES.find(c => c.name === categoryName);
+    const category = STATUS_OPTIONS.find(c => c.name === categoryName);
     if (!category) return false;
     
     const categoryValues = category.options.map(opt => opt.value);
@@ -90,27 +90,16 @@ const CommunicationStatusFilter: React.FC<CommunicationStatusFilterProps> = ({
   };
 
   const getSelectedText = () => {
-    const allOptions = STATUS_CATEGORIES.flatMap(cat => cat.options);
-    const allValues = allOptions.map(opt => opt.value);
-    
     if (selectedValues.length === 0) return 'All Topics';
-    if (selectedValues.length === allValues.length) return 'All Topics';
     
-    const selectedLabels = allOptions
-      .filter(option => selectedValues.includes(option.value))
-      .map(option => option.label);
+    const selectedLabels = selectedValues.map(value => {
+      const option = STATUS_OPTIONS
+        .flatMap(category => category.options)
+        .find(opt => opt.value === value);
+      return option?.label || value;
+    });
     
-    if (selectedLabels.length <= 2) {
-      return selectedLabels.join(', ');
-    }
-    
-    return `${selectedValues.length} selected`;
-  };
-
-  const toggleAll = () => {
-    const allValues = STATUS_CATEGORIES.flatMap(cat => cat.options.map(opt => opt.value));
-    const hasAll = allValues.every(value => selectedValues.includes(value));
-    onChange(hasAll ? [] : allValues);
+    return selectedLabels.join(', ');
   };
 
   return (
@@ -120,15 +109,15 @@ const CommunicationStatusFilter: React.FC<CommunicationStatusFilterProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-8 justify-between min-w-[150px] max-w-[200px]"
+          className="h-8 justify-between min-w-[150px] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap"
         >
-          <span className="truncate">{getSelectedText()}</span>
+          {getSelectedText()}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[500px] p-4" align="end">
-        <div className="grid grid-cols-2 gap-4">
-          {STATUS_CATEGORIES.map((category) => (
+      <PopoverContent className="w-[400px] p-4" align="start">
+        <div className="grid grid-cols-2 gap-6">
+          {STATUS_OPTIONS.map((category) => (
             <div key={category.name} className="space-y-2">
               <div 
                 className="flex items-center gap-2 cursor-pointer hover:text-brand-600"
@@ -147,11 +136,11 @@ const CommunicationStatusFilter: React.FC<CommunicationStatusFilterProps> = ({
                 </div>
                 <span className="font-medium">{category.name}</span>
               </div>
-              <div className="space-y-1 pl-4">
+              <div className="space-y-2 pl-4">
                 {category.options.map((option) => (
                   <div 
                     key={option.value} 
-                    className="grid grid-cols-[20px,1fr] gap-2 cursor-pointer text-[13px] hover:text-brand-600 h-[32px] items-center"
+                    className="flex items-center gap-2 cursor-pointer text-[13px] hover:text-brand-600 h-[32px]"
                     onClick={() => toggleOption(option.value)}
                   >
                     <div className={cn(
@@ -161,7 +150,7 @@ const CommunicationStatusFilter: React.FC<CommunicationStatusFilterProps> = ({
                     )}>
                       {selectedValues.includes(option.value) && <Check className="h-4 w-4 text-white" />}
                     </div>
-                    <span className="leading-tight text-gray-600">
+                    <span className="text-gray-600">
                       {option.label}
                     </span>
                   </div>
@@ -175,4 +164,4 @@ const CommunicationStatusFilter: React.FC<CommunicationStatusFilterProps> = ({
   );
 };
 
-export default CommunicationStatusFilter; 
+export default LeadStatusFilter; 

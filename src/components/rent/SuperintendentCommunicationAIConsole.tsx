@@ -1,67 +1,71 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge } from "@/components/ui/badge";
-import { Bot, User, MessageSquare, Mail, Phone, List, MessageCircle } from 'lucide-react';
+import { Bot, User, MessageSquare, Mail, Phone, List, MessageCircle, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { mockRentCommunications } from '@/data/mockData';
-import { useAuth } from "@/hooks/useAuth";
+import { mockSuperCommunications, CURRENT_SUPER } from '@/data/mockData';
+import { format } from 'date-fns';
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ExternalLink } from "lucide-react";
 
-// Define the structure for rent communications
-interface RentCommunication {
+// Define the structure for superintendent communications
+interface SuperCommunication {
   id: string;
-  tenantId: string;
   tenantName: string;
-  channel: 'sms' | 'email' | 'voice';
-  dateTime: string;
-  summary: string;
-  status: 'delivered' | 'failed' | 'committed' | 'pending';
-  transcript: string;
-  unit?: string;
-  amount?: number;
-  dueDate?: string;
-  contactPhone?: string;
-  contactEmail?: string;
-  propertyManager?: string;
-  actionItems?: string[];
-  property: string;
+  unit: string;
+  community: string;
+  superintendent: string;
+  status: 'urgent' | 'scheduled' | 'completed';
   message: string;
+  date: string;
+  category: string;
+  // Add virtual channel property based on ID to simulate different channels
+  channel?: 'sms' | 'email' | 'phone';
 }
 
-interface PropertyManagerRentAIConsoleProps {
-  communications?: RentCommunication[];
-  currentManager?: string;
+interface SuperintendentCommunicationAIConsoleProps {
   searchQuery?: string;
   statusFilters?: string[];
   marketFilters: string[];
+  topicFilters?: string[];
 }
 
-const getStatusColor = (status: string) => {
+const getStatusIcon = (status: string) => {
   switch (status) {
-    case 'delivered':
-      return 'bg-blue-100 text-blue-800';
-    case 'failed':
-      return 'bg-red-100 text-red-800';
-    case 'committed':
-      return 'bg-orange-100 text-orange-800';
-    case 'pending':
-      return 'bg-yellow-100 text-yellow-800';
+    case 'urgent':
+      return <AlertCircle className="h-5 w-5 text-destructive" />;
+    case 'completed':
+      return <CheckCircle2 className="h-5 w-5 text-success" />;
+    case 'scheduled':
+      return <Clock className="h-5 w-5 text-warning" />;
     default:
-      return 'bg-gray-100 text-gray-800';
+      return <MessageSquare className="h-5 w-5 text-muted-foreground" />;
   }
 };
 
-const getStatusDisplayName = (status: string) => {
+const getStatusColor = (status: string) => {
   switch (status) {
-    case 'delivered':
-      return 'Delivered';
-    case 'failed':
-      return 'Failed to Collect Payment';
-    case 'committed':
-      return 'Committed to Pay';
-    case 'pending':
-      return 'Pending Payment';
+    case 'urgent':
+      return 'bg-destructive/10 text-destructive';
+    case 'completed':
+      return 'bg-green-100 text-green-800';
+    case 'scheduled':
+      return 'bg-yellow-100 text-yellow-800';
     default:
-      return status.charAt(0).toUpperCase() + status.slice(1);
+      return 'bg-primary/10 text-primary';
+  }
+};
+
+// Determine channel based on ID for demonstration purposes
+const getChannel = (id: string): 'sms' | 'email' | 'phone' => {
+  // Use the last digit of the ID to determine channel type
+  const lastDigit = parseInt(id.slice(-1));
+  if (lastDigit >= 0 && lastDigit <= 3) {
+    return 'sms';
+  } else if (lastDigit >= 4 && lastDigit <= 7) {
+    return 'email';
+  } else {
+    return 'phone';
   }
 };
 
@@ -71,7 +75,7 @@ const getChannelIcon = (channel: string) => {
       return <MessageSquare className="h-4 w-4" />;
     case 'email':
       return <Mail className="h-4 w-4" />;
-    case 'voice':
+    case 'phone':
       return <Phone className="h-4 w-4" />;
     default:
       return <MessageSquare className="h-4 w-4" />;
@@ -84,77 +88,111 @@ const getChannelDisplayName = (channel: string) => {
       return 'Text Message';
     case 'email':
       return 'Email';
-    case 'voice':
+    case 'phone':
       return 'Phone Call';
     default:
-      return channel;
+      return 'Communication';
   }
 };
 
-const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> = ({
-  communications = mockRentCommunications,
-  currentManager = "John Davis", // Default for demo purposes
+const getStatusDisplayName = (status: string) => {
+  switch (status) {
+    case 'urgent':
+      return 'Urgent';
+    case 'completed':
+      return 'Completed';
+    case 'scheduled':
+      return 'Scheduled';
+    default:
+      return status.charAt(0).toUpperCase() + status.slice(1);
+  }
+};
+
+const SuperintendentCommunicationAIConsole: React.FC<SuperintendentCommunicationAIConsoleProps> = ({
   searchQuery = "",
   statusFilters = [],
-  marketFilters = []
+  marketFilters = [],
+  topicFilters = []
 }) => {
-  const [selectedCommunication, setSelectedCommunication] = useState<RentCommunication | null>(null);
+  const [filteredCommunications, setFilteredCommunications] = useState<SuperCommunication[]>([]);
+  const [selectedCommunication, setSelectedCommunication] = useState<SuperCommunication | null>(null);
   const [activeTab, setActiveTab] = useState('summary');
-  const [filteredCommunications, setFilteredCommunications] = useState<RentCommunication[]>([]);
-  
+
+  // Function to handle selecting a communication
+  const handleSelectCommunication = (communication: SuperCommunication) => {
+    setSelectedCommunication(communication);
+    setActiveTab('summary');
+  };
+
   useEffect(() => {
-    // Start with communications for the current property manager
-    let filtered = communications.filter(
-      comm => comm.propertyManager === currentManager
+    let filtered = mockSuperCommunications.filter(
+      comm => comm.superintendent === CURRENT_SUPER
     );
     
-    // Apply search filter if there's a query
+    // Add channel info to each communication
+    filtered = filtered.map(comm => ({
+      ...comm,
+      channel: getChannel(comm.id)
+    }));
+    
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(comm => 
         comm.tenantName.toLowerCase().includes(query) || 
-        comm.property.toLowerCase().includes(query) || 
+        comm.community.toLowerCase().includes(query) || 
         comm.message.toLowerCase().includes(query)
       );
     }
     
-    // Apply status filters if any are selected
     if (statusFilters.length > 0) {
-      filtered = filtered.filter(comm => 
-        statusFilters.includes(comm.status)
-      );
+      filtered = filtered.filter(comm => statusFilters.includes(comm.status));
     }
     
-    // Apply market filters if any are selected
     if (marketFilters.length > 0) {
       filtered = filtered.filter(comm => {
-        // Assuming property follows format "City/Property"
-        const market = comm.property.split('/')[0];
-        return marketFilters.some(filter => filter.startsWith(market));
+        return marketFilters.some(filter => comm.community.includes(filter));
       });
+    }
+
+    // Add filtering by maintenance topics
+    if (topicFilters.length > 0) {
+      filtered = filtered.filter(comm => topicFilters.includes(comm.category));
     }
     
     setFilteredCommunications(filtered);
     
-    // If the currently selected communication is filtered out, deselect it
-    if (selectedCommunication && !filtered.some(comm => comm.id === selectedCommunication.id)) {
+    // If we have communications and none selected, select the first one
+    if (filtered.length > 0 && !selectedCommunication) {
+      setSelectedCommunication(filtered[0]);
+    } else if (filtered.length === 0) {
       setSelectedCommunication(null);
     }
-  }, [communications, currentManager, searchQuery, statusFilters, marketFilters, selectedCommunication]);
-  
-  const handleSelectCommunication = (communication: RentCommunication) => {
-    setSelectedCommunication(communication);
-    setActiveTab('summary'); // Reset to summary tab when selecting a new communication
+  }, [searchQuery, statusFilters, marketFilters, topicFilters]);
+
+  // Generate a mock transcript for the communication
+  const generateMockTranscript = (comm: SuperCommunication) => {
+    const tenantName = comm.tenantName;
+    let transcript = '';
+    
+    if (comm.status === 'urgent') {
+      transcript = `AI: Hello, this is the property management AI assistant. Is there an issue at your unit?\n${tenantName}: Yes, ${comm.message.toLowerCase()}\nAI: I understand this is urgent. I'll notify the superintendent immediately. When did you first notice this issue?\n${tenantName}: About an hour ago\nAI: I've escalated this to Mike Johnson. He'll be there as soon as possible. Would you like me to arrange temporary accommodations if needed?\n${tenantName}: No, I think we'll be okay until it's fixed\nAI: Understood. Michael should contact you shortly with an estimated arrival time. Please call emergency services if the situation worsens.`;
+    } else if (comm.status === 'scheduled') {
+      transcript = `AI: Hello, this is the property management AI assistant. I'm reaching out about maintenance for your unit.\n${tenantName}: Hi, what's this about?\nAI: We need to schedule ${comm.message.toLowerCase()}\n${tenantName}: That would be great. When can someone come?\nAI: Mike Johnson has availability tomorrow between 1-3 PM. Would that work for you?\n${tenantName}: Yes, that time works for me\nAI: Perfect. I've scheduled maintenance for tomorrow between 1-3 PM. Mike Johnson will be handling this. Is there anything else you need assistance with?\n${tenantName}: No, that's all. Thanks!`;
+    } else {
+      transcript = `AI: Hello, this is the property management AI assistant. I'm following up on the recent maintenance in your unit.\n${tenantName}: Yes, the maintenance has been completed\nAI: Great! ${comm.message} Was everything done to your satisfaction?\n${tenantName}: Yes, the work was done well\nAI: I'm glad to hear that. If you notice any issues or have any other maintenance needs, please don't hesitate to let us know.`;
+    }
+    
+    return transcript;
   };
 
   return (
-    <div className="flex h-[600px] border rounded-md overflow-hidden">
-      {/* Communications List */}
-      <div className="w-1/3 border-r flex flex-col">
+    <div className="flex border rounded-md overflow-hidden h-[600px]">
+      {/* Communications Sidebar */}
+      <div className="w-80 border-r flex flex-col">
         <div className="p-3 border-b">
           <h3 className="font-medium">Recent Communications</h3>
           <p className="text-xs text-gray-500">
-            AI-generated rent payment reminders for {currentManager}'s tenants
+            Maintenance communications for {CURRENT_SUPER}'s properties
           </p>
         </div>
         
@@ -168,15 +206,15 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
               >
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-600">
-                    {getChannelIcon(communication.channel)}
+                    {getChannelIcon(communication.channel || 'sms')}
                   </div>
                   <span className="font-medium">{communication.tenantName}</span>
                 </div>
                 <div className="text-sm text-gray-600 truncate">
-                  {communication.summary}
+                  {communication.message}
                 </div>
                 <div className="text-xs text-gray-500 mt-1">
-                  {new Date(communication.dateTime).toLocaleString(undefined, {
+                  {new Date(communication.date).toLocaleString(undefined, {
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric',
@@ -209,21 +247,21 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
               <div className="flex justify-between items-start">
                 <div className="flex items-start gap-2">
                   <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600">
-                    {getChannelIcon(selectedCommunication.channel)}
+                    {getChannelIcon(selectedCommunication.channel || 'sms')}
                   </div>
                   <div>
                     <div className="font-medium">{selectedCommunication.tenantName}</div>
                     <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <span>{getChannelDisplayName(selectedCommunication.channel)}</span>
+                      <span>{getChannelDisplayName(selectedCommunication.channel || 'sms')}</span>
                       <span>•</span>
                       <span>{selectedCommunication.unit}</span>
                       <span>•</span>
-                      <span>${selectedCommunication.amount?.toLocaleString()}</span>
+                      <span>{selectedCommunication.community}</span>
                     </div>
                   </div>
                 </div>
                 
-                {/* Contact Button with Dialog - Now bigger and on the right */}
+                {/* Contact Button with Dialog */}
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button>
@@ -236,7 +274,7 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                         <Button 
                           variant="outline" 
                           className="flex items-center justify-start gap-2 h-10"
-                          onClick={() => window.open(`tel:${selectedCommunication.contactPhone || '555-123-4567'}`)}
+                          onClick={() => window.open(`tel:555-123-4567`, '_blank')}
                         >
                           <Phone className="h-4 w-4 text-brand-600" />
                           <span>Call {selectedCommunication.tenantName}</span>
@@ -245,7 +283,7 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                         <Button 
                           variant="outline" 
                           className="flex items-center justify-start gap-2 h-10"
-                          onClick={() => window.open(`sms:${selectedCommunication.contactPhone || '555-123-4567'}`)}
+                          onClick={() => window.open(`sms:555-123-4567`, '_blank')}
                         >
                           <MessageSquare className="h-4 w-4 text-brand-600" />
                           <span>Text {selectedCommunication.tenantName}</span>
@@ -254,7 +292,7 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                         <Button 
                           variant="outline" 
                           className="flex items-center justify-start gap-2 h-10"
-                          onClick={() => window.open(`mailto:${selectedCommunication.contactEmail || 'contact@example.com'}`)}
+                          onClick={() => window.open(`mailto:tenant@example.com`, '_blank')}
                         >
                           <Mail className="h-4 w-4 text-brand-600" />
                           <span>Email {selectedCommunication.tenantName}</span>
@@ -265,7 +303,7 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                 </Dialog>
               </div>
               
-              {/* Tab Navigation - Now more user-friendly */}
+              {/* Tab Navigation */}
               <div className="mt-4 border-b">
                 <div className="flex">
                   <button 
@@ -284,7 +322,7 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                     Transcript
                   </button>
                   
-                  {selectedCommunication.channel === 'voice' && (
+                  {selectedCommunication.channel === 'phone' && (
                     <button 
                       onClick={() => setActiveTab('conversation')}
                       className={`flex items-center px-4 py-2 text-sm font-medium ${activeTab === 'conversation' ? 'border-b-2 border-brand-600 text-brand-600' : 'text-gray-500 hover:text-gray-700'}`}
@@ -301,21 +339,21 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
             <div className="flex-1 overflow-y-auto p-4">
               {activeTab === 'summary' && (
                 <div>
-                  {/* Rent Details */}
+                  {/* Maintenance Details */}
                   <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                    <h4 className="font-medium mb-2">Rent Details</h4>
+                    <h4 className="font-medium mb-2">Maintenance Details</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-gray-500">Unit</p>
-                        <p className="font-medium">{selectedCommunication.unit || 'N/A'}</p>
+                        <p className="font-medium">{selectedCommunication.unit}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Amount</p>
-                        <p className="font-medium">${selectedCommunication.amount?.toLocaleString() || 'N/A'}</p>
+                        <p className="text-sm text-gray-500">Community</p>
+                        <p className="font-medium">{selectedCommunication.community}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Due Date</p>
-                        <p className="font-medium">{selectedCommunication.dueDate || 'N/A'}</p>
+                        <p className="text-sm text-gray-500">Category</p>
+                        <p className="font-medium">{selectedCommunication.category.charAt(0).toUpperCase() + selectedCommunication.category.slice(1)}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-500">Status</p>
@@ -324,8 +362,15 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                         </Badge>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">Property Manager</p>
-                        <p className="font-medium">{selectedCommunication.propertyManager || 'N/A'}</p>
+                        <p className="text-sm text-gray-500">Communication Channel</p>
+                        <p className="font-medium flex items-center gap-1">
+                          {getChannelIcon(selectedCommunication.channel || 'sms')}
+                          <span>{getChannelDisplayName(selectedCommunication.channel || 'sms')}</span>
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Date</p>
+                        <p className="font-medium">{new Date(selectedCommunication.date).toLocaleDateString()}</p>
                       </div>
                     </div>
                   </div>
@@ -333,28 +378,44 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                   {/* Communication Summary */}
                   <div className="bg-gray-50 p-4 rounded-lg mb-4">
                     <h4 className="font-medium mb-2">Communication Summary</h4>
-                    <p>{selectedCommunication.summary}</p>
+                    <p>{selectedCommunication.message}</p>
                   </div>
                   
                   {/* Action Items */}
-                  {selectedCommunication.actionItems && (
-                    <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                      <h4 className="font-medium mb-2">Action Items</h4>
-                      <ul className="list-disc list-inside">
-                        {selectedCommunication.actionItems.map((item, index) => (
-                          <li key={index}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                  <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h4 className="font-medium mb-2">Action Items</h4>
+                    <ul className="list-disc list-inside">
+                      {selectedCommunication.status === 'urgent' && (
+                        <>
+                          <li>Visit property immediately to assess damage</li>
+                          <li>Confirm extent of repairs needed</li>
+                          <li>Update tenant on timeline for resolution</li>
+                        </>
+                      )}
+                      {selectedCommunication.status === 'scheduled' && (
+                        <>
+                          <li>Confirm appointment with tenant</li>
+                          <li>Prepare necessary materials and tools</li>
+                          <li>Document completion of maintenance task</li>
+                        </>
+                      )}
+                      {selectedCommunication.status === 'completed' && (
+                        <>
+                          <li>Verify tenant satisfaction</li>
+                          <li>Update maintenance log</li>
+                          <li>Schedule follow-up if necessary</li>
+                        </>
+                      )}
+                    </ul>
+                  </div>
                 </div>
               )}
               
               {activeTab === 'transcript' && (
                 <div>
-                  {selectedCommunication.transcript.split('\n').map((line, index) => {
+                  {generateMockTranscript(selectedCommunication).split('\n').map((line, index) => {
                     const isAI = line.startsWith('AI:');
-                    const content = line.replace(/^(AI:|Michael:|Robert:|Amanda:|Daniel:|William:|Jessica:|Emily:|Sophia:|Olivia:|Alexander:|Isabella:)/, '').trim();
+                    const content = line.replace(/^(AI:|.*?:)/, '').trim();
                     
                     if (!content) return null;
                     
@@ -384,7 +445,7 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                   <div className="text-center">
                     <Phone className="h-12 w-12 mx-auto mb-3 text-brand-300" />
                     <p>Call recording would play here</p>
-                    <p className="text-sm text-gray-500 mt-2">Duration: 3:45</p>
+                    <p className="text-sm text-gray-500 mt-2">Duration: 2:18</p>
                   </div>
                 </div>
               )}
@@ -403,4 +464,4 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
   );
 };
 
-export default PropertyManagerRentAIConsole; 
+export default SuperintendentCommunicationAIConsole; 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Tenant } from '@/types';
 import StatusBadge from '../shared/StatusBadge';
@@ -19,12 +18,11 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
           <tr>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Tenant</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Unit</th>
+            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Community (Market)</th>
+            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Property Manager</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Rent Status</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Delinquent Amount</th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Community</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Lease End</th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Tenant Status</th>
-            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Property Manager</th>
             <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">See in Yardi</th>
           </tr>
         </thead>
@@ -42,6 +40,8 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
                     </div>
                   </td>
                   <td className="px-4 py-3">{tenant.unit}</td>
+                  <td className="px-4 py-3">{tenant.community} ({tenant.market})</td>
+                  <td className="px-4 py-3">{tenant.propertyManager}</td>
                   <td className="px-4 py-3">
                     <StatusBadge status={tenant.rentStatus} />
                   </td>
@@ -50,12 +50,7 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
                       `$${tenant.delinquentAmount || tenant.rentAmount}` : 
                       '$0'}
                   </td>
-                  <td className="px-4 py-3">{tenant.community}</td>
                   <td className="px-4 py-3">{format(new Date(tenant.leaseEnd), 'MM/dd/yyyy')}</td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={tenant.status} />
-                  </td>
-                  <td className="px-4 py-3">{tenant.propertyManager}</td>
                   <td className="px-4 py-3">
                     <Button 
                       variant="ghost" 
@@ -76,7 +71,7 @@ const TenantsTable = ({ tenants }: TenantsTableProps) => {
           ))}
           {tenants.length === 0 && (
             <tr>
-              <td colSpan={9} className="px-4 py-8 text-center text-muted-foreground">
+              <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">
                 No tenants found matching the selected filters.
               </td>
             </tr>
