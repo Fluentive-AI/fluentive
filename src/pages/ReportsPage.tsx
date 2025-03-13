@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { 
@@ -18,7 +19,19 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { MessageCircle, Users, Building, Wrench, BarChart, PieChart, LineChart as LineChartIcon, Table as TableIcon, X, Plus } from 'lucide-react';
+import { 
+  MessageCircle, 
+  Users, 
+  Building, 
+  Wrench, 
+  BarChart, 
+  PieChart, 
+  LineChart as LineChartIcon, 
+  Table as TableIcon, 
+  X, 
+  Plus, 
+  FileText 
+} from 'lucide-react';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
 import SimpleBarChart from '@/components/dashboard/SimpleBarChart';
 import { Button } from '@/components/ui/button';
@@ -30,31 +43,31 @@ import { toast } from 'sonner';
 const ReportsPage = () => {
   const [selectedMarket, setSelectedMarket] = useState('Average');
   const [activeTab, setActiveTab] = useState('occupancy');
-  const [mainTab, setMainTab] = useState('leasing');
+  const [mainTab, setMainTab] = useState('dashboard');
   const [agentPrompt, setAgentPrompt] = useState('');
   const [agentResponses, setAgentResponses] = useState<{question: string, answer: string}[]>([]);
   
-  const [leasingCards, setLeasingCards] = useState([
-    { id: 1, title: 'Occupancy Rate', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all' },
-    { id: 2, title: 'Leasing Velocity', type: 'bar', kpi: 'leasing-velocity', timeframe: 'quarter', market: 'all' }
-  ]);
-  
-  const [operationsCards, setOperationsCards] = useState([
-    { id: 1, title: 'Rent Collection', type: 'line', kpi: 'rent-collection', timeframe: 'year', market: 'all' },
-    { id: 2, title: 'Delinquency Rate', type: 'bar', kpi: 'delinquency', timeframe: 'quarter', market: 'all' }
-  ]);
-  
-  const [maintenanceCards, setMaintenanceCards] = useState([
-    { id: 1, title: 'Work Order Resolution Time', type: 'line', kpi: 'resolution-time', timeframe: 'year', market: 'all' },
-    { id: 2, title: 'Work Orders by Type', type: 'pie', kpi: 'work-order-types', timeframe: 'quarter', market: 'all' }
+  const [dashboardCards, setDashboardCards] = useState([
+    { id: 1, title: 'Occupancy Rate', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all', category: 'leasing' },
+    { id: 2, title: 'Leasing Velocity', type: 'bar', kpi: 'leasing-velocity', timeframe: 'quarter', market: 'all', category: 'leasing' },
+    { id: 3, title: 'Rent Collection', type: 'line', kpi: 'rent-collection', timeframe: 'year', market: 'all', category: 'operations' },
+    { id: 4, title: 'Work Order Resolution Time', type: 'line', kpi: 'resolution-time', timeframe: 'year', market: 'all', category: 'maintenance' },
   ]);
   
   const [addCardDialogOpen, setAddCardDialogOpen] = useState(false);
+  const [createReportDialogOpen, setCreateReportDialogOpen] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState('');
   const [newCardKpi, setNewCardKpi] = useState('occupancy');
   const [newCardType, setNewCardType] = useState('line');
   const [newCardTimeframe, setNewCardTimeframe] = useState('month');
   const [newCardMarket, setNewCardMarket] = useState('all');
+  const [newCardCategory, setNewCardCategory] = useState('leasing');
+  
+  const [reportName, setReportName] = useState('');
+  const [reportDescription, setReportDescription] = useState('');
+  const [reportRecipients, setReportRecipients] = useState('');
+  const [reportFrequency, setReportFrequency] = useState('monthly');
+  const [reportFormat, setReportFormat] = useState('pdf');
   
   const formatYAxis = (value: number) => `${value}%`;
   
@@ -87,30 +100,14 @@ const ReportsPage = () => {
     setAgentPrompt('');
   };
 
-  const handleCardTypeChange = (cardId: number, tabName: string, newType: string) => {
-    if (tabName === 'leasing') {
-      setLeasingCards(leasingCards.map(card => 
-        card.id === cardId ? { ...card, type: newType } : card
-      ));
-    } else if (tabName === 'operations') {
-      setOperationsCards(operationsCards.map(card => 
-        card.id === cardId ? { ...card, type: newType } : card
-      ));
-    } else if (tabName === 'maintenance') {
-      setMaintenanceCards(maintenanceCards.map(card => 
-        card.id === cardId ? { ...card, type: newType } : card
-      ));
-    }
+  const handleCardTypeChange = (cardId: number, newType: string) => {
+    setDashboardCards(dashboardCards.map(card => 
+      card.id === cardId ? { ...card, type: newType } : card
+    ));
   };
 
-  const handleDeleteCard = (cardId: number, tabName: string) => {
-    if (tabName === 'leasing') {
-      setLeasingCards(leasingCards.filter(card => card.id !== cardId));
-    } else if (tabName === 'operations') {
-      setOperationsCards(operationsCards.filter(card => card.id !== cardId));
-    } else if (tabName === 'maintenance') {
-      setMaintenanceCards(maintenanceCards.filter(card => card.id !== cardId));
-    }
+  const handleDeleteCard = (cardId: number) => {
+    setDashboardCards(dashboardCards.filter(card => card.id !== cardId));
     toast.success("Card removed successfully");
   };
 
@@ -126,25 +123,39 @@ const ReportsPage = () => {
       type: newCardType,
       kpi: newCardKpi,
       timeframe: newCardTimeframe,
-      market: newCardMarket
+      market: newCardMarket,
+      category: newCardCategory
     };
     
-    if (mainTab === 'leasing') {
-      setLeasingCards([...leasingCards, newCard]);
-    } else if (mainTab === 'operations') {
-      setOperationsCards([...operationsCards, newCard]);
-    } else if (mainTab === 'maintenance') {
-      setMaintenanceCards([...maintenanceCards, newCard]);
-    }
+    setDashboardCards([...dashboardCards, newCard]);
     
     setNewCardTitle('');
     setNewCardKpi('occupancy');
     setNewCardType('line');
     setNewCardTimeframe('month');
     setNewCardMarket('all');
+    setNewCardCategory('leasing');
     setAddCardDialogOpen(false);
     
     toast.success("New card added successfully");
+  };
+
+  const handleCreateReport = () => {
+    if (!reportName.trim()) {
+      toast.error("Please enter a name for your report");
+      return;
+    }
+    
+    // Here you would normally save the report configuration
+    toast.success(`Report "${reportName}" created successfully`);
+    
+    // Reset form
+    setReportName('');
+    setReportDescription('');
+    setReportRecipients('');
+    setReportFrequency('monthly');
+    setReportFormat('pdf');
+    setCreateReportDialogOpen(false);
   };
 
   const renderCardContent = (card: any) => {
@@ -205,12 +216,12 @@ const ReportsPage = () => {
     }
   };
 
-  const renderCardControls = (card: any, tabName: string) => {
+  const renderCardControls = (card: any) => {
     return (
       <div className="flex flex-wrap gap-2 mt-2 p-2 bg-gray-50 rounded">
         <div className="flex flex-col space-y-1">
           <label className="text-xs text-gray-500">Type</label>
-          <ToggleGroup type="single" value={card.type} onValueChange={(value) => value && handleCardTypeChange(card.id, tabName, value)}>
+          <ToggleGroup type="single" value={card.type} onValueChange={(value) => value && handleCardTypeChange(card.id, value)}>
             <ToggleGroupItem value="line" aria-label="Line Chart">
               <LineChartIcon className="h-4 w-4" />
             </ToggleGroupItem>
@@ -229,12 +240,9 @@ const ReportsPage = () => {
         <div className="flex flex-col space-y-1">
           <label className="text-xs text-gray-500">Timeframe</label>
           <Select value={card.timeframe} onValueChange={(value) => {
-            const updateCard = (cards: typeof leasingCards) => 
-              cards.map(c => c.id === card.id ? {...c, timeframe: value} : c);
-            
-            if (tabName === 'leasing') setLeasingCards(updateCard(leasingCards));
-            else if (tabName === 'operations') setOperationsCards(updateCard(operationsCards));
-            else if (tabName === 'maintenance') setMaintenanceCards(updateCard(maintenanceCards));
+            setDashboardCards(dashboardCards.map(c => 
+              c.id === card.id ? {...c, timeframe: value} : c
+            ));
           }}>
             <SelectTrigger className="w-28 h-8">
               <SelectValue placeholder="Timeframe" />
@@ -250,12 +258,9 @@ const ReportsPage = () => {
         <div className="flex flex-col space-y-1">
           <label className="text-xs text-gray-500">Market</label>
           <Select value={card.market} onValueChange={(value) => {
-            const updateCard = (cards: typeof leasingCards) => 
-              cards.map(c => c.id === card.id ? {...c, market: value} : c);
-            
-            if (tabName === 'leasing') setLeasingCards(updateCard(leasingCards));
-            else if (tabName === 'operations') setOperationsCards(updateCard(operationsCards));
-            else if (tabName === 'maintenance') setMaintenanceCards(updateCard(maintenanceCards));
+            setDashboardCards(dashboardCards.map(c => 
+              c.id === card.id ? {...c, market: value} : c
+            ));
           }}>
             <SelectTrigger className="w-32 h-8">
               <SelectValue placeholder="Market" />
@@ -268,8 +273,39 @@ const ReportsPage = () => {
             </SelectContent>
           </Select>
         </div>
+        
+        <div className="flex flex-col space-y-1">
+          <label className="text-xs text-gray-500">Category</label>
+          <Select value={card.category} onValueChange={(value) => {
+            setDashboardCards(dashboardCards.map(c => 
+              c.id === card.id ? {...c, category: value} : c
+            ));
+          }}>
+            <SelectTrigger className="w-32 h-8">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="leasing">Leasing</SelectItem>
+              <SelectItem value="operations">Operations</SelectItem>
+              <SelectItem value="maintenance">Maintenance</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     );
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'leasing':
+        return <Users className="h-4 w-4 mr-1 text-blue-500" />;
+      case 'operations':
+        return <Building className="h-4 w-4 mr-1 text-green-500" />;
+      case 'maintenance':
+        return <Wrench className="h-4 w-4 mr-1 text-amber-500" />;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -277,20 +313,31 @@ const ReportsPage = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Reports</h1>
         
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-muted-foreground">Market:</span>
-          <Select value={selectedMarket} onValueChange={setSelectedMarket}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select Market" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Average">All Markets (Average)</SelectItem>
-              <SelectItem value="Atlanta">Atlanta</SelectItem>
-              <SelectItem value="Tampa">Tampa</SelectItem>
-              <SelectItem value="Jacksonville">Jacksonville</SelectItem>
-              <SelectItem value="Orlando">Orlando</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex items-center gap-3">
+          <Button 
+            onClick={() => setCreateReportDialogOpen(true)}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <FileText className="h-4 w-4" />
+            Create Personalized Report
+          </Button>
+          
+          <div className="flex items-center">
+            <span className="text-sm text-muted-foreground mr-2">Market:</span>
+            <Select value={selectedMarket} onValueChange={setSelectedMarket}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select Market" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Average">All Markets (Average)</SelectItem>
+                <SelectItem value="Atlanta">Atlanta</SelectItem>
+                <SelectItem value="Tampa">Tampa</SelectItem>
+                <SelectItem value="Jacksonville">Jacksonville</SelectItem>
+                <SelectItem value="Orlando">Orlando</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
       
@@ -304,17 +351,9 @@ const ReportsPage = () => {
           <MessageCircle className="h-4 w-4" />
           <span>Ask our Agent</span>
         </ToggleGroupItem>
-        <ToggleGroupItem value="leasing" aria-label="Leasing" className="gap-2">
-          <Users className="h-4 w-4" />
-          <span>Leasing</span>
-        </ToggleGroupItem>
-        <ToggleGroupItem value="operations" aria-label="Property Operations" className="gap-2">
-          <Building className="h-4 w-4" />
-          <span>Property Operations</span>
-        </ToggleGroupItem>
-        <ToggleGroupItem value="maintenance" aria-label="Maintenance" className="gap-2">
-          <Wrench className="h-4 w-4" />
-          <span>Maintenance</span>
+        <ToggleGroupItem value="dashboard" aria-label="Dashboard" className="gap-2">
+          <BarChart className="h-4 w-4" />
+          <span>Dashboard</span>
         </ToggleGroupItem>
       </ToggleGroup>
       
@@ -362,232 +401,48 @@ const ReportsPage = () => {
         </Card>
       )}
       
-      {mainTab === 'leasing' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {leasingCards.map((card) => (
-            <Card key={card.id}>
-              <CardHeader className="pb-2 relative">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="absolute right-4 top-4 h-6 w-6 rounded-full" 
-                  onClick={() => handleDeleteCard(card.id, 'leasing')}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-                <CardTitle>{card.title}</CardTitle>
-                {renderCardControls(card, 'leasing')}
-              </CardHeader>
-              <CardContent>
-                {renderCardContent(card)}
-              </CardContent>
+      {mainTab === 'dashboard' && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {dashboardCards.map((card) => (
+              <Card key={card.id}>
+                <CardHeader className="pb-2 relative">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      {getCategoryIcon(card.category)}
+                      <CardTitle>{card.title}</CardTitle>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-6 w-6 rounded-full" 
+                      onClick={() => handleDeleteCard(card.id)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  {renderCardControls(card)}
+                </CardHeader>
+                <CardContent>
+                  {renderCardContent(card)}
+                </CardContent>
+              </Card>
+            ))}
+            <Card className="border-dashed flex items-center justify-center h-48">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+                onClick={() => setAddCardDialogOpen(true)}
+              >
+                <Plus className="h-4 w-4" />
+                Add new card
+              </Button>
             </Card>
-          ))}
-          <Card className="border-dashed flex items-center justify-center h-48">
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2"
-              onClick={() => setAddCardDialogOpen(true)}
-            >
-              <Plus className="h-4 w-4" />
-              Add new card
-            </Button>
-          </Card>
+          </div>
         </div>
       )}
       
-      {mainTab === 'operations' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {operationsCards.map((card) => (
-            <Card key={card.id}>
-              <CardHeader className="pb-2 relative">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="absolute right-4 top-4 h-6 w-6 rounded-full" 
-                  onClick={() => handleDeleteCard(card.id, 'operations')}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-                <CardTitle>{card.title}</CardTitle>
-                {renderCardControls(card, 'operations')}
-              </CardHeader>
-              <CardContent>
-                {renderCardContent(card)}
-              </CardContent>
-            </Card>
-          ))}
-          <Card className="border-dashed flex items-center justify-center h-48">
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2"
-              onClick={() => setAddCardDialogOpen(true)}
-            >
-              <Plus className="h-4 w-4" />
-              Add new card
-            </Button>
-          </Card>
-        </div>
-      )}
-      
-      {mainTab === 'maintenance' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {maintenanceCards.map((card) => (
-            <Card key={card.id}>
-              <CardHeader className="pb-2 relative">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="absolute right-4 top-4 h-6 w-6 rounded-full" 
-                  onClick={() => handleDeleteCard(card.id, 'maintenance')}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-                <CardTitle>{card.title}</CardTitle>
-                {renderCardControls(card, 'maintenance')}
-              </CardHeader>
-              <CardContent>
-                {renderCardContent(card)}
-              </CardContent>
-            </Card>
-          ))}
-          <Card className="border-dashed flex items-center justify-center h-48">
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2"
-              onClick={() => setAddCardDialogOpen(true)}
-            >
-              <Plus className="h-4 w-4" />
-              Add new card
-            </Button>
-          </Card>
-        </div>
-      )}
-      
-      {mainTab === 'legacy' && (
-        <Tabs defaultValue="occupancy" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="occupancy">Occupancy Rate</TabsTrigger>
-            <TabsTrigger value="renewals">Renewals</TabsTrigger>
-            <TabsTrigger value="delinquency">Delinquency</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="occupancy">
-            <Card>
-              <CardHeader>
-                <CardTitle>Occupancy Rate Trend</CardTitle>
-                <CardDescription>Monthly occupancy rates over the past year</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={mockOccupancyTrendData}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis domain={[90, 95]} tickFormatter={formatYAxis} />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey={selectedMarket}
-                        stroke="#2563eb"
-                        strokeWidth={2}
-                        dot={{ r: 3 }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="renewals">
-            <Card>
-              <CardHeader>
-                <CardTitle>Renewals Trend</CardTitle>
-                <CardDescription>Monthly renewal rates over the past year</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={mockRenewalsTrendData}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis domain={[65, 75]} tickFormatter={formatYAxis} />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey={selectedMarket}
-                        stroke="#16a34a"
-                        strokeWidth={2}
-                        dot={{ r: 3 }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="delinquency">
-            <Card>
-              <CardHeader>
-                <CardTitle>Delinquency Trend</CardTitle>
-                <CardDescription>Monthly delinquency rates over the past year</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={mockDelinquencyTrendData}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis domain={[2, 4]} tickFormatter={formatYAxis} />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey={selectedMarket}
-                        stroke="#dc2626"
-                        strokeWidth={2}
-                        dot={{ r: 3 }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      )}
-      
+      {/* Add new card dialog */}
       <Dialog open={addCardDialogOpen} onOpenChange={setAddCardDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
@@ -609,6 +464,22 @@ const ReportsPage = () => {
                 placeholder="Card title"
                 className="col-span-3"
               />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="card-category" className="text-right">
+                Category
+              </Label>
+              <Select value={newCardCategory} onValueChange={setNewCardCategory}>
+                <SelectTrigger id="card-category" className="col-span-3">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="leasing">Leasing</SelectItem>
+                  <SelectItem value="operations">Operations</SelectItem>
+                  <SelectItem value="maintenance">Maintenance</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             
             <div className="grid grid-cols-4 items-center gap-4">
@@ -689,6 +560,115 @@ const ReportsPage = () => {
             </Button>
             <Button onClick={handleAddNewCard}>
               Add Card
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Create Personalized Report dialog */}
+      <Dialog open={createReportDialogOpen} onOpenChange={setCreateReportDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Create Personalized Report</DialogTitle>
+            <DialogDescription>
+              Configure a custom report to be generated and shared with your team.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-name" className="text-right">
+                Report Name
+              </Label>
+              <Input
+                id="report-name"
+                value={reportName}
+                onChange={(e) => setReportName(e.target.value)}
+                placeholder="Monthly Leasing Performance"
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-description" className="text-right">
+                Description
+              </Label>
+              <Input
+                id="report-description"
+                value={reportDescription}
+                onChange={(e) => setReportDescription(e.target.value)}
+                placeholder="Overview of leasing performance across all markets"
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-recipients" className="text-right">
+                Recipients
+              </Label>
+              <Input
+                id="report-recipients"
+                value={reportRecipients}
+                onChange={(e) => setReportRecipients(e.target.value)}
+                placeholder="email@example.com, email2@example.com"
+                className="col-span-3"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-frequency" className="text-right">
+                Frequency
+              </Label>
+              <Select value={reportFrequency} onValueChange={setReportFrequency}>
+                <SelectTrigger id="report-frequency" className="col-span-3">
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="quarterly">Quarterly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="report-format" className="text-right">
+                Format
+              </Label>
+              <Select value={reportFormat} onValueChange={setReportFormat}>
+                <SelectTrigger id="report-format" className="col-span-3">
+                  <SelectValue placeholder="Select format" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                  <SelectItem value="excel">Excel</SelectItem>
+                  <SelectItem value="csv">CSV</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-start gap-4">
+              <Label className="text-right pt-2">
+                Include Metrics
+              </Label>
+              <div className="col-span-3 space-y-2">
+                {['Occupancy Rate', 'Leasing Velocity', 'Rent Collection', 'Delinquency Rate', 'Work Order Resolution Time'].map((metric) => (
+                  <div key={metric} className="flex items-center space-x-2">
+                    <input type="checkbox" id={`metric-${metric}`} defaultChecked />
+                    <Label htmlFor={`metric-${metric}`}>{metric}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateReportDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleCreateReport}>
+              Create Report
             </Button>
           </DialogFooter>
         </DialogContent>
