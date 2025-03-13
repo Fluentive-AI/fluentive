@@ -1907,3 +1907,181 @@ export const mockSuperCommunications = [
     category: 'appliance'
   }
 ];
+
+// Add after the mockSuperCommunications array
+
+// Define the current leasing agent constant
+
+// Mock Leasing Agent Communications
+export const mockLeasingCommunications = [
+  {
+    id: '1',
+    prospectName: 'Sarah Johnson',
+    propertyInterest: '245 Oakridge Drive',
+    community: 'Osborne Farms',
+    market: 'Atlanta',
+    leasingAgent: 'Emily Wilson',
+    status: 'inquiry',
+    message: 'Initial inquiry about 3-bedroom homes, pricing, and availability for April move-in. Interested in pet policies and yard size.',
+    date: '2025-03-12T10:30:00',
+    category: 'inquiry',
+    transcript: `AI: Hello! Thank you for your interest in our Atlanta properties. How can I help you today?
+Sarah Johnson: Hi, I'm looking for information about homes in the Osborne Farms area.
+AI: Great! We have several properties available in Osborne Farms. Are you interested in a specific size or number of bedrooms?
+Sarah Johnson: I'm looking for a 3-bedroom home with a fenced yard. What's your pet policy?
+AI: Many of our homes in Osborne Farms have 3 bedrooms and fenced yards. We are pet-friendly with a $500 pet deposit and $35 monthly pet rent. We have a lovely property at 245 Oakridge Drive that might be perfect for you. Would you like to schedule a tour?`
+  },
+  {
+    id: '2',
+    prospectName: 'Michael Chen',
+    propertyInterest: '187 Riverside Lane',
+    community: 'Preserve at Pine Grove',
+    market: 'Tampa',
+    leasingAgent: 'Emily Wilson',
+    status: 'tour_scheduled',
+    message: 'Tour scheduled for tomorrow at 2 PM. Looking for 4-bedroom with fenced yard. Mentioned parking needs for 2 vehicles.',
+    date: '2025-03-14T14:15:00',
+    category: 'tour',
+    transcript: `AI: Hello! I'd like to confirm your tour scheduled for 3/14/2025, 2:15:00 PM at 187 Riverside Lane. Is this time still convenient for you?
+Michael Chen: Yes, that works for me. I'm especially interested in seeing the yard and garage space.
+AI: Perfect! Your tour is confirmed with Emily Wilson, our leasing specialist. She'll show you the entire property including the yard and garage. Is there anything specific you'd like to know about the neighborhood?
+Michael Chen: I'd like to know about nearby schools and shopping areas.
+AI: Absolutely! Emily Wilson will provide information about the local schools and amenities. The property is near several well-rated schools and just 10 minutes from a shopping center. We look forward to meeting you!`
+  },
+  {
+    id: '3',
+    prospectName: 'Jessica Rodriguez',
+    propertyInterest: '722 Parkview Avenue',
+    community: 'Scattered',
+    market: 'Orlando',
+    leasingAgent: 'Emily Wilson',
+    status: 'application_sent',
+    message: 'Application sent for review. Follow-up call about income verification documents and pet deposit information.',
+    date: '2025-03-11T11:45:00',
+    category: 'application',
+    transcript: `AI: Hello Jessica Rodriguez, I'm following up regarding your application for 722 Parkview Avenue. Our team is currently reviewing your information.
+Jessica Rodriguez: Thanks for the update. How long does the review process usually take?
+AI: Our standard review process takes 2-3 business days. We're checking credit history, income verification, and rental references. Do you have any questions about the process?
+Jessica Rodriguez: What's the minimum credit score requirement?
+AI: We typically look for a credit score of 650 or higher, but we consider the complete application. If needed, we can discuss options like a higher security deposit or having a guarantor. The 722 Parkview Avenue property is very popular, so we're trying to process applications quickly.`
+  },
+  {
+    id: '4',
+    prospectName: 'David Taylor',
+    propertyInterest: '528 Suwanee Circle',
+    community: 'Suwanee Square',
+    market: 'Atlanta',
+    leasingAgent: 'Emily Wilson',
+    status: 'application_received',
+    message: 'Application received. Discussion about credit score requirements and guarantor options. Will provide additional references.',
+    date: '2025-03-10T16:30:00',
+    category: 'screening',
+    transcript: `AI: Hello David Taylor, I wanted to let you know we've received your application for 528 Suwanee Circle and have begun the screening process.
+David Taylor: Great, thank you. Are there any documents I need to provide?
+AI: We'll need your last two pay stubs or proof of income, and we'll be contacting your previous landlords for references. Your credit check is already in progress.
+David Taylor: I just started a new job. Will that be an issue?
+AI: As long as you can provide an offer letter and verification of employment, that should be fine. Our goal is to complete your screening by 3/13/2025.`
+  },
+  {
+    id: '5',
+    prospectName: 'Jennifer Lee',
+    propertyInterest: '953 Avila Drive',
+    community: 'Avila Bay',
+    market: 'Tampa',
+    leasingAgent: 'Emily Wilson',
+    status: 'approved',
+    message: 'Application approved. Discussion about lease signing date and move-in details. Requested information about utility setup.',
+    date: '2025-03-12T09:15:00',
+    category: 'approval',
+    transcript: `AI: Congratulations Jennifer Lee! I'm pleased to inform you that your application for 953 Avila Drive has been approved.
+Jennifer Lee: That's wonderful news! What are the next steps?
+AI: We'll need you to sign the lease agreement within 48 hours to secure the property. Would you prefer to do this electronically or in person?
+Jennifer Lee: Electronic would be easiest for me. When can I move in?
+AI: We can send the lease documents today via email. Based on your requested move-in date, you can move in on April 1st. We'll also need your security deposit and first month's rent before providing keys. Do you have any questions about utilities or the move-in process?`
+  },
+  {
+    id: '6',
+    prospectName: 'Robert Wilson',
+    propertyInterest: '341 Magnolia Court',
+    community: 'Scattered',
+    market: 'Orlando',
+    leasingAgent: 'Emily Wilson',
+    status: 'inquiry',
+    message: 'Inquiry about pricing for 4-bedroom homes and any current specials. Asked about school districts and neighborhood amenities.',
+    date: '2025-03-09T13:20:00',
+    category: 'pricing',
+    transcript: `AI: Hello! Thank you for your interest in our properties in Scattered. How can I assist you today?
+Robert Wilson: I'm wondering about pricing for homes in the area, particularly 4-bedroom properties.
+AI: In Scattered, our 4-bedroom homes typically rent for between $2,200 and $2,600 per month, depending on features like updated kitchens, finished basements, or larger yards. Are you looking for any specific features?
+Robert Wilson: Do you offer any move-in specials or discounts?
+AI: Yes! We currently have a spring special offering half off the first month's rent for leases signed before April 15th. We also waive the application fee for qualified military personnel and first responders.`
+  },
+  {
+    id: '7',
+    prospectName: 'Emma Garcia',
+    propertyInterest: '675 Belmont Road',
+    community: 'Belmont',
+    market: 'Tampa',
+    leasingAgent: 'Emily Wilson',
+    status: 'tour_scheduled',
+    message: 'Virtual tour scheduled for March 15. Relocating from out of state. Requested information about nearby schools and public transportation.',
+    date: '2025-03-08T10:30:00',
+    category: 'location',
+    transcript: `AI: Hello Emma Garcia! I understand you're relocating to our area. How can I help make your move easier?
+Emma Garcia: I'd like to know more about Belmont and what's around it. Particularly schools and transportation.
+AI: Belmont is located in a family-friendly area with excellent schools. The elementary school is rated 8/10 on GreatSchools, and there's a middle and high school within 3 miles. Public transportation includes bus routes that connect to downtown, and there's a commuter train station about 4 miles away. The neighborhood has several parks within walking distance and a community center with a pool.
+Emma Garcia: That sounds promising. What about grocery stores and restaurants?
+AI: You'll find a Publix supermarket just 5 minutes away, along with several local restaurants and cafes. There's a larger shopping center about 10 minutes by car with more retail options, restaurants, and a movie theater.`
+  },
+  {
+    id: '8',
+    prospectName: 'Thomas Brown',
+    propertyInterest: '442 Sawyer Lane',
+    community: 'Sawyer\'s Preserve',
+    market: 'Jacksonville',
+    leasingAgent: 'Emily Wilson',
+    status: 'declined',
+    message: 'Application declined due to insufficient income. Discussion about alternative properties with lower rent requirements.',
+    date: '2025-03-07T15:45:00',
+    category: 'application',
+    transcript: `AI: Hello Thomas Brown, I'm reaching out regarding your application for 442 Sawyer Lane. I regret to inform you that we were unable to approve your application at this time.
+Thomas Brown: Can you tell me why it was declined?
+AI: The primary reason was the income verification. Our policy requires that monthly income be at least three times the monthly rent. We do have other properties with lower rental rates that might be more suitable. Would you be interested in hearing about those options?
+Thomas Brown: Yes, please. What other properties do you have available?
+AI: We have a nice home in Jacksonville with a monthly rent that's about $400 less. It's still a 3-bedroom but slightly smaller. Would you like to schedule a tour of this property instead?`
+  },
+  {
+    id: '9',
+    prospectName: 'Sophia Martinez',
+    propertyInterest: '829 Scattered Way',
+    community: 'Scattered',
+    market: 'Jacksonville',
+    leasingAgent: 'Emily Wilson',
+    status: 'inquiry',
+    message: 'Detailed questions about property maintenance, lawn care responsibilities, and whether a home office space can be built in the garage.',
+    date: '2025-03-13T17:00:00',
+    category: 'amenities',
+    transcript: `AI: Hello Sophia Martinez, thank you for your interest in 829 Scattered Way. How can I assist you today?
+Sophia Martinez: I have some questions about the property maintenance and whether I can build a home office in the garage.
+AI: For maintenance, our company handles all structural, plumbing, electrical, and HVAC issues. Tenants are responsible for lawn care and basic upkeep, though we do offer a lawn service add-on for $120 per month. Regarding modifications to the garage, any permanent changes would need approval, but we're generally open to reasonable improvements. Could you tell me more about what you're planning?
+Sophia Martinez: I'd just need to add electrical outlets and possibly insulation to make it comfortable as a workspace.
+AI: Adding outlets would likely be approved as long as it's done by a licensed electrician. Insulation might also be permitted if it doesn't alter the structure. Would you like to discuss this further during a property tour?`
+  },
+  {
+    id: '10',
+    prospectName: 'Daniel Kim',
+    propertyInterest: '156 Osborne Street',
+    community: 'Osborne Farms',
+    market: 'Atlanta',
+    leasingAgent: 'Emily Wilson',
+    status: 'tour_scheduled',
+    message: 'Tour scheduled for next week. Specific interest in home layout and storage space. Asked about noise levels from neighboring properties.',
+    date: '2025-03-15T09:15:00',
+    category: 'tour',
+    transcript: `AI: Hello Daniel Kim! I'd like to confirm your tour scheduled for March 15th at 156 Osborne Street. Is this time still convenient for you?
+Daniel Kim: Yes, that works for me. I'm particularly interested in the home layout and storage options.
+AI: Perfect! Your tour is confirmed with Emily Wilson. She'll be sure to highlight the layout and all storage areas throughout the home. Is there anything specific about the layout you're looking for?
+Daniel Kim: I work from home, so I need a good space for a home office. Also, what's the noise level like from neighboring properties?
+AI: Emily will show you several spaces that would work well as a home office. Regarding noise, Osborne Farms is known for being a quiet community with good spacing between homes. Most neighbors are families or professionals, and the HOA has noise regulations to ensure everyone's comfort. We look forward to meeting you on the 15th!`
+  }
+];

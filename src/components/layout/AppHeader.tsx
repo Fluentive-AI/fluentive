@@ -68,7 +68,7 @@ const getTitleFromPath = (pathname: string): string => {
   
   // Handle leasing agent specific pages
   if (isAgentPath) {
-    if (pathname === '/agent' || pathname === '/agent/leads' || pathname === '/agent/applications' || pathname === '/agent/calendar') {
+    if (pathname === '/agent' || pathname === '/agent/leads' || pathname === '/agent/applications' || pathname === '/agent/calendar' || pathname === '/agent/communication') {
       return `${CURRENT_LEASING_AGENT}'s Dashboard`;
     }
     

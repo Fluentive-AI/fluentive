@@ -37,6 +37,7 @@ import LeasingAgentLeads from "./pages/LeasingAgentLeads";
 import LeasingAgentApplications from "./pages/LeasingAgentApplications";
 import LeasingAgentCalendar from "./pages/LeasingAgentCalendar";
 import LoginPage from "./pages/LoginPage";
+import LeasingAgentCommunication from "./pages/LeasingAgentCommunication";
 
 const queryClient = new QueryClient();
 
@@ -81,6 +82,7 @@ const App = () => (
           <Route path="/agent/leads" element={<LeasingAgentLayout><LeasingAgentLeads /></LeasingAgentLayout>} />
           <Route path="/agent/applications" element={<LeasingAgentLayout><LeasingAgentApplications /></LeasingAgentLayout>} />
           <Route path="/agent/calendar" element={<LeasingAgentLayout><LeasingAgentCalendar /></LeasingAgentLayout>} />
+          <Route path="/agent/communication" element={<LeasingAgentLayout><LeasingAgentCommunication /></LeasingAgentLayout>} />
           <Route path="/agent/settings" element={<LeasingAgentLayout><PlaceholderPage /></LeasingAgentLayout>} />
           
           {/* Tenant Interface Routes */}
