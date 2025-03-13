@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import AppLogo from './AppLogo';
@@ -12,7 +11,6 @@ import {
   MessageCircle,
   Building,
   Calendar,
-  CreditCard,
   Map,
   Bot
 } from 'lucide-react';
@@ -64,7 +62,6 @@ const AppSidebar = () => {
             Property Operations
           </div>
           <NavItem to="/tenants" icon={<Building className="h-5 w-5" />} label="Tenants" />
-          <NavItem to="/rent" icon={<CreditCard className="h-5 w-5" />} label="Rent Collection" />
         </div>
         
         <div className="pt-4 pb-2">

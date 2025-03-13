@@ -6,10 +6,14 @@ type StatusType =
   // Tenant statuses
   | 'active' | 'pending' | 'past' | 'notice-given'
   // Rent statuses
-  | 'paid' | 'partial' | 'delinquent' | 'grace-period';
+  | 'paid' | 'partial' | 'delinquent' | 'grace-period'
+  // Maintenance priority levels
+  | 'urgent' | 'normal' | 'low'
+  // Maintenance status types
+  | 'completed' | 'scheduled' | 'in progress' | 'assigned' | 'unassigned';
 
 interface StatusBadgeProps {
-  status: StatusType;
+  status: StatusType | string; // Added string to accommodate any other status values
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
@@ -50,6 +54,26 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
         return 'bg-red-100 text-red-800';
       case 'grace-period':
         return 'bg-blue-100 text-blue-800';
+      
+      // Maintenance priority levels
+      case 'urgent':
+        return 'bg-red-100 text-red-800';
+      case 'normal':
+        return 'bg-amber-100 text-amber-800';
+      case 'low':
+        return 'bg-blue-100 text-blue-800';
+      
+      // Maintenance status types
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'scheduled':
+        return 'bg-blue-100 text-blue-800';
+      case 'in progress':
+        return 'bg-amber-100 text-amber-800';
+      case 'assigned':
+        return 'bg-purple-100 text-purple-800';
+      case 'unassigned':
+        return 'bg-gray-500 text-white';
       
       default:
         return 'bg-gray-100 text-gray-800';

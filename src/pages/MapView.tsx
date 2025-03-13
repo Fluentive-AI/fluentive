@@ -58,6 +58,15 @@ const MapView = () => {
               ))}
             </SelectContent>
           </Select>
+          
+          <Button 
+            size="sm"
+            className="flex items-center gap-1"
+            onClick={() => window.open('https://www.yardi.com', '_blank')}
+          >
+            <ExternalLink className="h-4 w-4 mr-2" />
+            Open in Yardi
+          </Button>
         </div>
       </div>
       

@@ -153,9 +153,6 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
       <div className="w-1/3 border-r flex flex-col">
         <div className="p-3 border-b">
           <h3 className="font-medium">Recent Communications</h3>
-          <p className="text-xs text-gray-500">
-            AI-generated rent payment reminders for {currentManager}'s tenants
-          </p>
         </div>
         
         <div className="overflow-y-auto">

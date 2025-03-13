@@ -38,6 +38,7 @@ import LeasingAgentApplications from "./pages/LeasingAgentApplications";
 import LeasingAgentCalendar from "./pages/LeasingAgentCalendar";
 import LoginPage from "./pages/LoginPage";
 import LeasingAgentCommunication from "./pages/LeasingAgentCommunication";
+import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -103,7 +104,7 @@ const App = () => (
           <Route path="/tenant/maintenance/scheduling" element={<TenantLayout><TenantMaintenance scenario="scheduling" /></TenantLayout>} />
           <Route path="/tenant/maintenance/relationship" element={<TenantLayout><TenantMaintenance scenario="relationship" /></TenantLayout>} />
           
-          <Route path="/" element={<LoginPage />} /> {/* Using LoginPage as landing for now */}
+          <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

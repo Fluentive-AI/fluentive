@@ -14,7 +14,8 @@ import {
   CalendarClock,
   Info,
   User,
-  HardHat
+  HardHat,
+  ExternalLink
 } from 'lucide-react';
 import { 
   format, 
@@ -705,6 +706,15 @@ const SuperintendentCalendar = () => {
               <SelectItem value="month">Month</SelectItem>
             </SelectContent>
           </Select>
+          
+          <Button 
+            size="sm"
+            className="flex items-center gap-1"
+            onClick={() => window.open('https://www.yardi.com', '_blank')}
+          >
+            <ExternalLink className="h-4 w-4 mr-2" />
+            Open in Yardi
+          </Button>
         </div>
       </div>
       
@@ -731,6 +741,9 @@ const SuperintendentCalendar = () => {
                 </ToggleGroupItem>
               </ToggleGroup>
             )}
+            
+            {/* Add Open in Yardi button */}
+
           </div>
         </CardHeader>
         <CardContent>

@@ -190,9 +190,6 @@ const LeasingAgentCommunicationAIConsole: React.FC<LeasingAgentCommunicationAICo
       <div className="w-80 border-r flex flex-col">
         <div className="p-3 border-b">
           <h3 className="font-medium">Recent Communications</h3>
-          <p className="text-xs text-gray-500">
-            Prospect communications for {CURRENT_LEASING_AGENT}'s properties
-          </p>
         </div>
         
         <div className="overflow-y-auto">

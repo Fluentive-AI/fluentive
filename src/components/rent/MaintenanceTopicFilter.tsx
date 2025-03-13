@@ -63,8 +63,8 @@ const MaintenanceTopicFilter: React.FC<MaintenanceTopicFilterProps> = ({
   };
 
   const getSelectedText = () => {
-    if (selectedValues.length === 0) return 'All Categories';
-    if (selectedValues.length === ALL_TOPICS.length) return 'All Categories';
+    if (selectedValues.length === 0) return 'All Topics';
+    if (selectedValues.length === ALL_TOPICS.length) return 'All Topics';
     
     const selectedLabels = ALL_TOPICS
       .filter(topic => selectedValues.includes(topic.value))

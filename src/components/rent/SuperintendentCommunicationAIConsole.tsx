@@ -191,9 +191,6 @@ const SuperintendentCommunicationAIConsole: React.FC<SuperintendentCommunication
       <div className="w-80 border-r flex flex-col">
         <div className="p-3 border-b">
           <h3 className="font-medium">Recent Communications</h3>
-          <p className="text-xs text-gray-500">
-            Maintenance communications for {CURRENT_SUPER}'s properties
-          </p>
         </div>
         
         <div className="overflow-y-auto">
