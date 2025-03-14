@@ -41,7 +41,9 @@ import LeasingAgentCommunication from "./pages/LeasingAgentCommunication";
 import LandingPage from "./pages/LandingPage";
 import AskPage from "@/pages/AskPage";
 import MyReportsPage from "@/pages/MyReportsPage";
-
+import LeasingAgentAskPage from "@/pages/LeasingAgentAskPage";
+import PropertyManagerAskPage from "@/pages/PropertyManagerAskPage";
+import SuperintendentAskPage from "@/pages/SuperintendentAskPage";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -73,7 +75,8 @@ const App = () => (
           <Route path="/manager/tenants" element={<PropertyManagerLayout><PropertyManagerTenants /></PropertyManagerLayout>} />
           <Route path="/manager/communication" element={<PropertyManagerLayout><PropertyManagerRent /></PropertyManagerLayout>} />
           <Route path="/manager/settings" element={<PropertyManagerLayout><PlaceholderPage /></PropertyManagerLayout>} />
-          
+          <Route path="/manager/ask" element={<PropertyManagerLayout><PropertyManagerAskPage /></PropertyManagerLayout>} />
+
           {/* Superintendent Routes */}
           <Route path="/super" element={<SuperintendentLayout><SuperintendentMyDay /></SuperintendentLayout>} />
           <Route path="/super/dashboard" element={<SuperintendentLayout><SuperintendentDashboard /></SuperintendentLayout>} />
@@ -81,7 +84,8 @@ const App = () => (
           <Route path="/super/map" element={<SuperintendentLayout><SuperintendentMap /></SuperintendentLayout>} />
           <Route path="/super/communication" element={<SuperintendentLayout><SuperintendentCommunication /></SuperintendentLayout>} />
           <Route path="/super/settings" element={<SuperintendentLayout><PlaceholderPage /></SuperintendentLayout>} />
-          
+          <Route path="/super/ask" element={<SuperintendentLayout><SuperintendentAskPage /></SuperintendentLayout>} />
+
           {/* Leasing Agent Routes */}
           <Route path="/agent" element={<LeasingAgentLayout><LeasingAgentMyDay /></LeasingAgentLayout>} />
           <Route path="/agent/leads" element={<LeasingAgentLayout><LeasingAgentLeads /></LeasingAgentLayout>} />
@@ -89,7 +93,8 @@ const App = () => (
           <Route path="/agent/calendar" element={<LeasingAgentLayout><LeasingAgentCalendar /></LeasingAgentLayout>} />
           <Route path="/agent/communication" element={<LeasingAgentLayout><LeasingAgentCommunication /></LeasingAgentLayout>} />
           <Route path="/agent/settings" element={<LeasingAgentLayout><PlaceholderPage /></LeasingAgentLayout>} />
-          
+          <Route path="/agent/ask" element={<LeasingAgentLayout><LeasingAgentAskPage /></LeasingAgentLayout>} />
+
           {/* Tenant Interface Routes */}
           <Route path="/tenant" element={<TenantLayout><TenantLeasing scenario="lead" /></TenantLayout>} />
           <Route path="/tenant/leasing/:scenario" element={<TenantLayout><TenantLeasing /></TenantLayout>} />

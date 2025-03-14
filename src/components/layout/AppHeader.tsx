@@ -42,7 +42,7 @@ const getTitleFromPath = (pathname: string): string => {
   
   // Handle superintendent specific pages
   if (isSuperPath) {
-    if (pathname === '/super' || pathname === '/super/dashboard' || pathname === '/super/calendar' || pathname === '/super/map' || pathname === '/super/communication') {
+    if (pathname === '/super' || pathname === '/super/dashboard' || pathname === '/super/calendar' || pathname === '/super/map' || pathname === '/super/communication' || pathname === '/super/ask') {
       return `${CURRENT_SUPER}'s Dashboard`;
     }
     
@@ -55,7 +55,7 @@ const getTitleFromPath = (pathname: string): string => {
   
   // Handle property manager specific pages
   if (isManagerPath) {
-    if (pathname === '/manager' || pathname === '/manager/dashboard' || pathname === '/manager/tenants' || pathname === '/manager/communication') {
+    if (pathname === '/manager' || pathname === '/manager/dashboard' || pathname === '/manager/tenants' || pathname === '/manager/communication' || pathname === '/manager/ask') {
       return `${CURRENT_PROPERTY_MANAGER}'s Dashboard`;
     }
     
@@ -68,7 +68,7 @@ const getTitleFromPath = (pathname: string): string => {
   
   // Handle leasing agent specific pages
   if (isAgentPath) {
-    if (pathname === '/agent' || pathname === '/agent/leads' || pathname === '/agent/applications' || pathname === '/agent/calendar' || pathname === '/agent/communication') {
+    if (pathname === '/agent' || pathname === '/agent/leads' || pathname === '/agent/applications' || pathname === '/agent/calendar' || pathname === '/agent/communication' || pathname === '/agent/ask') {
       return `${CURRENT_LEASING_AGENT}'s Dashboard`;
     }
     

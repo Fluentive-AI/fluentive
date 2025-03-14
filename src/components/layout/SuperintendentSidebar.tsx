@@ -7,7 +7,8 @@ import {
   Map,
   Settings,
   Sun,
-  Bot
+  Bot,
+  MessageSquare,
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -49,6 +50,8 @@ const SuperintendentSidebar = () => {
         <NavItem to="/super/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
         <NavItem to="/super/map" icon={<Map className="h-5 w-5" />} label="Map View" />
         <NavItem to="/super/communication" icon={<Bot className="h-5 w-5" />} label="AI Communications" />
+        <NavItem to="/super/ask" icon={<MessageSquare className="h-5 w-5" />} label="Chat with your AI Assistant" 
+        />
       </nav>
       
       <div className="p-4 border-t border-sidebar-border">

@@ -129,7 +129,7 @@ const AppSidebar = () => {
           <NavItem 
             to="/ask" 
             icon={<MessageSquare className="h-5 w-5" />} 
-            label="Ask our Agent" 
+            label="Chat with our AI" 
           />
           <NavItem 
             to="/myreports" 

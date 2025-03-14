@@ -9,6 +9,7 @@ import {
   Settings, 
   CreditCard,
   Bot,
+  MessageSquare,
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -48,6 +49,8 @@ const PropertyManagerSidebar = () => {
         <NavItem to="/manager" icon={<Sun className="h-5 w-5" />} label="My Day" end={true} />
         <NavItem to="/manager/tenants" icon={<Users className="h-5 w-5" />} label="Tenants" />
         <NavItem to="/manager/communication" icon={<Bot className="h-5 w-5" />} label="AI Communications" />
+        <NavItem to="/manager/ask" icon={<MessageSquare className="h-5 w-5" />} label="Chat with your AI Assistant" 
+        />
       </nav>
       
       <div className="p-4 border-t border-sidebar-border">
