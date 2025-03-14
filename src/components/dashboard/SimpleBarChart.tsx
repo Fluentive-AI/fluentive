@@ -219,59 +219,64 @@ const SimpleBarChart = ({
 
   return (
     <>
-      <div className={`${fullsize ? 'h-full' : 'h-[250px]'}`}>
-        {!fullsize && (
-          <div className="mb-3">
-            <h3 className="text-base font-medium">{title}</h3>
-          </div>
-        )}
+      <div className="flex flex-col h-[calc(100%)]">
+        {/* Reduce title margin to gain space */}
+        <div className="mb-1">
+          <h3 className="text-sm font-medium">{title}</h3>
+          {selectedValues.length > 0 && (
+            <p className="text-xs text-muted-foreground">{getSubtitle()}</p>
+          )}
+        </div>
         
-        <div className="h-full cursor-pointer" onClick={handleChartClick}>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={chartData}
-              margin={{ top: 10, right: 30, left: 20, bottom: 40 }}
-              onMouseLeave={() => setHoveredBar(null)}
-            >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis 
-                dataKey={xAxisKey} 
-                tick={{ fontSize: 12 }}
-                height={60}
-                angle={-45}
-                textAnchor="end"
-                interval={0}
-              />
-              <YAxis 
-                domain={yDomain}
-                tick={{ fontSize: 12 }}
-                label={{ 
-                  value: yAxisLabel,
-                  angle: -90,
-                  position: 'insideLeft',
-                  style: { textAnchor: 'middle', fontSize: 12 }
-                }}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              
-              <Bar 
-                dataKey="Lead to Sign" 
-                fill="#3391b1" 
-                name="Lead to Sign"
-                stackId={stacked ? "a" : undefined}
-                radius={stacked ? [2, 2, 0, 0] : 2} // Reduced radius for stacked bars
-                onMouseOver={() => setHoveredBar("Lead to Sign")}
-              />
-              <Bar 
-                dataKey="Sign to Move" 
-                fill="#7bccee" 
-                name="Sign to Move"
-                stackId={stacked ? "a" : undefined}
-                radius={stacked ? [0, 0, 2, 2] : 2} // Reduced radius for stacked bars
-                onMouseOver={() => setHoveredBar("Sign to Move")}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+        {/* Allow flex-1 to take more space */}
+        <div className="flex-1">
+          <div className="h-full cursor-pointer" onClick={handleChartClick}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={chartData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 15 }}
+                onMouseLeave={() => setHoveredBar(null)}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis 
+                  dataKey={xAxisKey} 
+                  tick={{ fontSize: 12 }}
+                  height={30}
+                  angle={-45}
+                  textAnchor="end"
+                  interval={1}
+                />
+                <YAxis 
+                  domain={yDomain}
+                  tick={{ fontSize: 12 }}
+                  label={{ 
+                    value: yAxisLabel,
+                    angle: -90,
+                    position: 'insideLeft',
+                    style: { textAnchor: 'middle', fontSize: 12 }
+                  }}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                
+                <Bar 
+                  dataKey="Lead to Sign" 
+                  fill="#3391b1" 
+                  name="Lead to Sign"
+                  stackId={stacked ? "a" : undefined}
+                  radius={stacked ? [2, 2, 0, 0] : 2}
+                  onMouseOver={() => setHoveredBar("Lead to Sign")}
+                />
+                <Bar 
+                  dataKey="Sign to Move" 
+                  fill="#7bccee" 
+                  name="Sign to Move"
+                  stackId={stacked ? "a" : undefined}
+                  radius={stacked ? [0, 0, 2, 2] : 2}
+                  onMouseOver={() => setHoveredBar("Sign to Move")}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
