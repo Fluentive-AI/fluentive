@@ -1,8 +1,9 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
-import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone } from 'lucide-react';
+import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const LandingPage = () => {
@@ -44,6 +45,24 @@ const LandingPage = () => {
         videoRef.current.play();
       }
     }, 2000);
+  };
+  
+  const endCallSimulation = () => {
+    // Stop the timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    
+    // Reset the call state
+    setPhoneState('contact');
+    setCallTime(0);
+    setShowClock(false);
+    
+    // Pause and reset the video
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
   };
   
   const formatCallTime = (seconds) => {
@@ -339,7 +358,7 @@ const LandingPage = () => {
           </div>
           
           <div className="space-y-8">
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center gap-4">
               <button 
                 onClick={startCallSimulation}
                 disabled={phoneState !== 'contact'}
@@ -350,6 +369,18 @@ const LandingPage = () => {
                 </div>
                 <span className="text-xl font-medium text-gray-800 group-disabled:opacity-50">Call Property AI</span>
               </button>
+              
+              {phoneState !== 'contact' && (
+                <button 
+                  onClick={endCallSimulation}
+                  className="flex items-center gap-3 group"
+                >
+                  <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
+                    <PhoneOff className="h-8 w-8 text-white" stroke="white" />
+                  </div>
+                  <span className="text-xl font-medium text-gray-800">Hang Up</span>
+                </button>
+              )}
             </div>
             
             <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
