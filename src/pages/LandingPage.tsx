@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -340,10 +339,18 @@ const LandingPage = () => {
           </div>
           
           <div className="space-y-8">
-            <h3 className="text-xl font-medium flex items-center justify-center">
-              <Phone className="h-5 w-5 mr-2" />
-              Property AI Call Assistant
-            </h3>
+            <div className="flex justify-center items-center">
+              <button 
+                onClick={startCallSimulation}
+                disabled={phoneState !== 'contact'}
+                className="flex items-center gap-3 group"
+              >
+                <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center shadow-lg transition-all hover:bg-green-600 group-disabled:opacity-50">
+                  <Phone className="h-8 w-8 text-white" stroke="white" />
+                </div>
+                <span className="text-xl font-medium text-gray-800 group-disabled:opacity-50">Call Property AI</span>
+              </button>
+            </div>
             
             <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
               <CardContent className="p-6 md:p-10">
@@ -366,18 +373,6 @@ const LandingPage = () => {
                 </div>
               </CardContent>
             </Card>
-            
-            <div className="flex justify-center mt-8">
-              <Button 
-                size="lg" 
-                className="px-8 py-2"
-                onClick={startCallSimulation}
-                disabled={phoneState !== 'contact'}
-              >
-                <Phone className="mr-2 h-5 w-5" />
-                Simulate Property Call
-              </Button>
-            </div>
           </div>
         </div>
       </section>
