@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
 import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff } from 'lucide-react';
+import { FaPhone } from "react-icons/fa6";
 import { Card, CardContent } from '@/components/ui/card';
 
 const LandingPage = () => {
@@ -103,6 +104,7 @@ const LandingPage = () => {
         <nav className="hidden md:flex items-center space-x-10">
           <a href="#features" className="text-gray-700 hover:text-primary transition-colors font-medium">Features</a>
           <a href="#benefits" className="text-gray-700 hover:text-primary transition-colors font-medium">Benefits</a>
+          <a href="#demo" className="text-gray-700 hover:text-primary transition-colors font-medium">Demo</a>
           <a href="#testimonials" className="text-gray-700 hover:text-primary transition-colors font-medium">Case Studies</a>
         </nav>
         
@@ -112,7 +114,7 @@ const LandingPage = () => {
             onClick={() => navigate('/login')}
             className="hidden md:flex items-center gap-1"
           >
-            Try Demo
+            Try Demo Dashboard
             <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
         </div>
@@ -344,7 +346,7 @@ const LandingPage = () => {
       </section>
       
       {/* Tool Preview Section */}
-      <section className="py-20 px-8 bg-white">
+      <section id="demo" className="py-20 px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-3">
@@ -407,7 +409,7 @@ const LandingPage = () => {
       </section>
       
       {/* Testimonials Section (Placeholder) */}
-      <section id="testimonials" className="py-20 px-8 bg-white">
+      <section id="testimonials" className="py-20 px-8 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <div className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-3">
@@ -419,7 +421,7 @@ const LandingPage = () => {
             </p>
           </div>
           
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-16 text-center bg-gray-50 hover:bg-gray-100 transition-colors">
+          <div className="border-2 border-dashed border-gray-300 rounded-xl p-16 text-center bg-white hover:bg-gray-100 transition-colors">
             <p className="text-gray-500 text-xl font-medium">Case studies coming soon</p>
           </div>
         </div>
