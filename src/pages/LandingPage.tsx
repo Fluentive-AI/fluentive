@@ -346,17 +346,18 @@ const LandingPage = () => {
                 Property AI Call Assistant
               </h3>
               
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="md:w-1/2">
-                  {renderPhoneScreen()}
+              <div className="flex flex-col md:flex-row gap-6 items-center">
+                <div className="md:w-1/3">
+                  <div className="max-w-[220px] mx-auto">
+                    {renderPhoneScreen()}
+                  </div>
                 </div>
                 
-                <div className="md:w-1/2">
+                <div className="md:w-2/3">
                   <video 
                     ref={videoRef}
                     src="/phone_calls/leasing/lead.mp4" 
                     className="w-full rounded-lg shadow-lg" 
-                    controls
                     preload="auto"
                   />
                 </div>
