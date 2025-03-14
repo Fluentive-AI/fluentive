@@ -142,6 +142,14 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
     }
   }, [communications, currentManager, searchQuery, statusFilters, marketFilters, selectedCommunication]);
   
+  useEffect(() => {
+    // Auto-select the first conversation when the component mounts
+    // or when the filtered conversations change
+    if (filteredCommunications.length > 0 && !selectedCommunication) {
+      setSelectedCommunication(filteredCommunications[0]);
+    }
+  }, [filteredCommunications, selectedCommunication]);
+  
   const handleSelectCommunication = (communication: RentCommunication) => {
     setSelectedCommunication(communication);
     setActiveTab('summary'); // Reset to summary tab when selecting a new communication

@@ -19,7 +19,7 @@ const SuperintendentCommunication = () => {
     <div>
       <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">AI Communications</h1>
+          <h1 className="text-2xl font-bold">AI Chats with Tenants</h1>
           <p className="text-muted-foreground">Welcome back, {CURRENT_SUPER}</p>
         </div>
         

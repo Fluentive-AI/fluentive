@@ -89,7 +89,7 @@ const getTitleFromPath = (pathname: string): string => {
     '/maintenance': 'Renovation, Maintenance, and Turns',
     '/calendar': 'Renovation, Maintenance, and Turns',
     '/map': 'Renovation, Maintenance, and Turns',
-    '/communications': 'AI Communications',
+    '/communications': 'AI Chats with Tenants',
     '/reports': 'Analytics',
     '/settings': 'Settings',
   };

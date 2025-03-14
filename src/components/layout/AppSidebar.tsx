@@ -116,9 +116,9 @@ const AppSidebar = () => {
         
         <div className="pt-4 pb-2">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
-            AI Chats with Tenants
+            AI Communications
           </div>
-          <NavItem to="/communications" icon={<Bot className="h-5 w-5" />} label="AI Communications" />
+          <NavItem to="/communications" icon={<Bot className="h-5 w-5" />} label="AI Chats with Tenants" />
         </div>
         
         <div className="pt-4 pb-2">
@@ -129,7 +129,7 @@ const AppSidebar = () => {
           <NavItem 
             to="/ask" 
             icon={<MessageSquare className="h-5 w-5" />} 
-            label="Chat with our AI" 
+            label="Chat with your AI Assistant" 
           />
           <NavItem 
             to="/myreports" 

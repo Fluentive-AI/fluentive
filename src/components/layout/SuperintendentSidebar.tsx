@@ -49,7 +49,7 @@ const SuperintendentSidebar = () => {
         <NavItem to="/super/dashboard" icon={<Wrench className="h-5 w-5" />} label="Work Orders" />
         <NavItem to="/super/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
         <NavItem to="/super/map" icon={<Map className="h-5 w-5" />} label="Map View" />
-        <NavItem to="/super/communication" icon={<Bot className="h-5 w-5" />} label="AI Communications" />
+        <NavItem to="/super/communication" icon={<Bot className="h-5 w-5" />} label="AI Chats with Tenants" />
         <NavItem to="/super/ask" icon={<MessageSquare className="h-5 w-5" />} label="Chat with your AI Assistant" 
         />
       </nav>

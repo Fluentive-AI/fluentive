@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AIAgentConsole from '@/components/communications/AIAgentConsole';
 import CommunicationsAnalytics from '@/components/communications/CommunicationsAnalytics';
 import { mockAIConversations } from '@/data/mockData';
@@ -109,11 +109,31 @@ const Communications = () => {
     // In a real implementation, you would generate a CSV/Excel file and trigger download
   };
   
+  // State for selected conversation
+  const [selectedConversation, setSelectedConversation] = useState(null);
+
+  useEffect(() => {
+    // Auto-select the first conversation when department changes
+    if (filteredConversations.length > 0) {
+      // Find the first conversation matching the active department
+      const firstDeptConversation = filteredConversations.find(
+        conv => conv.department === activeDepartment
+      );
+      
+      if (firstDeptConversation) {
+        setSelectedConversation(firstDeptConversation);
+      } else {
+        // If no conversation matches the department, just select the first one
+        setSelectedConversation(filteredConversations[0]);
+      }
+    }
+  }, [activeDepartment, filteredConversations]);
+
   return (
     <div>
       {/* Header with title and action buttons */}
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">AI Agent Communication</h1>
+        <h1 className="text-2xl font-bold">AI Communications with Tenants</h1>
         
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={handleExport} className="flex items-center gap-1">

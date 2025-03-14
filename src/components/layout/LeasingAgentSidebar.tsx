@@ -49,7 +49,7 @@ const LeasingAgentSidebar = () => {
         <NavItem to="/agent/leads" icon={<Users className="h-5 w-5" />} label="Leads & Tours" />
         <NavItem to="/agent/applications" icon={<FileText className="h-5 w-5" />} label="Applications" />
         <NavItem to="/agent/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
-        <NavItem to="/agent/communication" icon={<Bot className="h-5 w-5" />} label="AI Communications" />
+        <NavItem to="/agent/communication" icon={<Bot className="h-5 w-5" />} label="AI Chats with Leads" />
         <NavItem to="/agent/ask" icon={<MessageSquare className="h-5 w-5" />} label="Chat with your AI Assistant" 
           />
       </nav>
