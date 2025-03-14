@@ -338,26 +338,27 @@ const LandingPage = () => {
             </p>
           </div>
           
-          <Card className="bg-white border-0">
+          <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
             <CardContent className="p-6 md:p-10">
               <h3 className="text-xl font-medium flex items-center mb-6">
                 <Phone className="h-5 w-5 mr-2" />
                 Property AI Call Assistant
               </h3>
               
-              <div className="flex flex-col md:flex-row gap-6 items-center">
-                <div className="md:w-2/5">
-                  <div className="max-w-[250px] mx-auto">
+              <div className="flex flex-col md:flex-row gap-8 items-center">
+                <div className="md:w-[45%] flex justify-center items-center">
+                  <div className="max-w-[280px] mx-auto">
                     {renderPhoneScreen()}
                   </div>
                 </div>
                 
-                <div className="md:w-3/5">
+                <div className="md:w-[55%] flex items-center">
                   <video 
                     ref={videoRef}
                     src="/phone_calls/leasing/lead.mp4" 
                     className="w-full rounded-lg" 
                     preload="auto"
+                    controls={false}
                   />
                 </div>
               </div>
