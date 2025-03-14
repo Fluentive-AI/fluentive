@@ -1,11 +1,79 @@
-import React from 'react';
+
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
-import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2 } from 'lucide-react';
+import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [phoneState, setPhoneState] = useState('contact');
+  const [callTime, setCallTime] = useState(0);
+  const [showClock, setShowClock] = useState(false);
+  const videoRef = useRef(null);
+  const timerRef = useRef(null);
+  
+  useEffect(() => {
+    // Cleanup timer on component unmount
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+  
+  const startCallSimulation = () => {
+    // First transition to calling screen
+    setPhoneState('calling');
+    
+    // After 2 seconds, transition to in-call and start the clock
+    setTimeout(() => {
+      setPhoneState('in-call');
+      setShowClock(true);
+      
+      // Start the call timer
+      timerRef.current = setInterval(() => {
+        setCallTime(prev => prev + 1);
+      }, 1000);
+      
+    }, 2000);
+    
+    // Start the video after 2 seconds
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.play();
+      }
+    }, 2000);
+  };
+  
+  const formatCallTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' + secs : secs}`;
+  };
+  
+  const renderPhoneScreen = () => {
+    switch (phoneState) {
+      case 'contact':
+        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className="w-full rounded-lg shadow-lg" />;
+      case 'calling':
+        return <img src="/phone_screens/calling_screen.png" alt="Calling screen" className="w-full rounded-lg shadow-lg" />;
+      case 'in-call':
+        return (
+          <div className="relative">
+            <img src="/phone_screens/in_call_screen.png" alt="In-call screen" className="w-full rounded-lg shadow-lg" />
+            {showClock && (
+              <div className="absolute top-20 left-1/2 transform -translate-x-1/2 text-white text-xl font-semibold">
+                {formatCallTime(callTime)}
+              </div>
+            )}
+          </div>
+        );
+      default:
+        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className="w-full rounded-lg shadow-lg" />;
+    }
+  };
   
   return (
     <div className="min-h-screen bg-white">
@@ -255,6 +323,58 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      
+      {/* Tool Preview Section */}
+      <section className="py-20 px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-3">
+              Interactive Demo
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">See Our AI Call Assistant in Action</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Experience how our AI handles property inquiries, providing instant, professional responses to potential tenants.
+            </p>
+          </div>
+          
+          <Card className="shadow-xl bg-gradient-to-b from-white to-gray-50 border-0">
+            <CardContent className="p-6 md:p-10">
+              <h3 className="text-xl font-medium flex items-center mb-6">
+                <Phone className="h-5 w-5 mr-2" />
+                Property AI Call Assistant
+              </h3>
+              
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="md:w-1/2">
+                  {renderPhoneScreen()}
+                </div>
+                
+                <div className="md:w-1/2">
+                  <video 
+                    ref={videoRef}
+                    src="/phone_calls/leasing/lead.mp4" 
+                    className="w-full rounded-lg shadow-lg" 
+                    controls
+                    preload="auto"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-center mt-8">
+                <Button 
+                  size="lg" 
+                  className="px-8 py-2"
+                  onClick={startCallSimulation}
+                  disabled={phoneState !== 'contact'}
+                >
+                  <Phone className="mr-2 h-5 w-5" />
+                  Simulate Property Call
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
       
