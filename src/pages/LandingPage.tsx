@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -56,13 +55,13 @@ const LandingPage = () => {
   const renderPhoneScreen = () => {
     switch (phoneState) {
       case 'contact':
-        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className="w-full rounded-lg shadow-lg" />;
+        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className="w-full rounded-lg" />;
       case 'calling':
-        return <img src="/phone_screens/calling_screen.png" alt="Calling screen" className="w-full rounded-lg shadow-lg" />;
+        return <img src="/phone_screens/calling_screen.png" alt="Calling screen" className="w-full rounded-lg" />;
       case 'in-call':
         return (
           <div className="relative">
-            <img src="/phone_screens/in_call_screen.png" alt="In-call screen" className="w-full rounded-lg shadow-lg" />
+            <img src="/phone_screens/in_call_screen.png" alt="In-call screen" className="w-full rounded-lg" />
             {showClock && (
               <div className="absolute top-20 left-1/2 transform -translate-x-1/2 text-white text-xl font-semibold">
                 {formatCallTime(callTime)}
@@ -71,7 +70,7 @@ const LandingPage = () => {
           </div>
         );
       default:
-        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className="w-full rounded-lg shadow-lg" />;
+        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className="w-full rounded-lg" />;
     }
   };
   
@@ -339,7 +338,7 @@ const LandingPage = () => {
             </p>
           </div>
           
-          <Card className="shadow-xl bg-gradient-to-b from-white to-gray-50 border-0">
+          <Card className="bg-white border-0">
             <CardContent className="p-6 md:p-10">
               <h3 className="text-xl font-medium flex items-center mb-6">
                 <Phone className="h-5 w-5 mr-2" />
@@ -347,17 +346,17 @@ const LandingPage = () => {
               </h3>
               
               <div className="flex flex-col md:flex-row gap-6 items-center">
-                <div className="md:w-1/3">
-                  <div className="max-w-[220px] mx-auto">
+                <div className="md:w-2/5">
+                  <div className="max-w-[250px] mx-auto">
                     {renderPhoneScreen()}
                   </div>
                 </div>
                 
-                <div className="md:w-2/3">
+                <div className="md:w-3/5">
                   <video 
                     ref={videoRef}
                     src="/phone_calls/leasing/lead.mp4" 
-                    className="w-full rounded-lg shadow-lg" 
+                    className="w-full rounded-lg" 
                     preload="auto"
                   />
                 </div>
