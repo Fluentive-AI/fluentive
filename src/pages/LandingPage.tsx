@@ -52,7 +52,7 @@ const LandingPage = () => {
                 We transform SFR property management with AI agents that automate operations, enhance tenant experiences, and drive better business outcomes.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+              <div className="flex flex-col gap-4 pt-6 items-center">
                 <Button 
                   size="lg" 
                   className="text-lg px-6 py-6 h-auto font-medium shadow-md hover:shadow-lg transition-all"
@@ -62,7 +62,7 @@ const LandingPage = () => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 
-                <Button 
+                {/* <Button 
                   size="lg" 
                   variant="outline"
                   className="text-lg px-6 py-6 h-auto font-medium border-2"
@@ -70,11 +70,11 @@ const LandingPage = () => {
                 >
                   Tenant Interface Preview
                   <ArrowUpRight className="ml-2 h-5 w-5" />
-                </Button>
+                </Button> */}
               </div>
             </div>
             
-            <div className="md:w-1/2 md:pl-8">
+            <div className="md:w-1/2 md:pl-2">
               <div className="bg-white rounded-xl border shadow-2xl overflow-hidden transition-all duration-300">
                 <img 
                   src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" 
@@ -323,14 +323,14 @@ const LandingPage = () => {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             
-            <Button 
+            {/* <Button 
               size="lg"
               className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-7 h-auto font-medium shadow-xl hover:shadow-2xl transition-all"
               onClick={() => navigate('/login')}
             >
               Experience Tenant Interface
               <ArrowUpRight className="ml-2 h-5 w-5" />
-            </Button>
+            </Button> */}
           </div>
         </div>
       </section>
