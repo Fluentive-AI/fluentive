@@ -39,6 +39,8 @@ import LeasingAgentCalendar from "./pages/LeasingAgentCalendar";
 import LoginPage from "./pages/LoginPage";
 import LeasingAgentCommunication from "./pages/LeasingAgentCommunication";
 import LandingPage from "./pages/LandingPage";
+import AskPage from "@/pages/AskPage";
+import MyReportsPage from "@/pages/MyReportsPage";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +64,8 @@ const App = () => (
           <Route path="/map" element={<AppLayout><MapView /></AppLayout>} />
           <Route path="/communications" element={<AppLayout><Communications /></AppLayout>} />
           <Route path="/reports" element={<AppLayout><ReportsPage /></AppLayout>} />
+          <Route path="/ask" element={<AppLayout><AskPage /></AppLayout>} />
+          <Route path="/myreports" element={<AppLayout><MyReportsPage /></AppLayout>} />
           <Route path="/settings" element={<AppLayout><SettingsPage /></AppLayout>} />
           
           {/* Property Manager Routes */}

@@ -1232,32 +1232,59 @@ export const mockRentPayments: RentPayment[] = [
 // Mock Metrics Data
 export const mockDashboardMetrics: MetricData[] = [
   {
+    kpi: 'number_of_homes',
     label: 'Number of Homes',
     value: 5121,
-    change: 5.2,
-    status: 'increase_good',  // Growth in portfolio is good
+    change: 5.0,
+    status: 'increase_good',
     markets: {
       Atlanta: { value: 1850, change: 6.1, status: 'increase_good' },
       Tampa: { value: 1425, change: 4.8, status: 'increase_good' },
       Jacksonville: { value: 1021, change: 3.9, status: 'increase_good' },
       Orlando: { value: 825, change: 5.5, status: 'increase_good' }
+    },
+    communities: {
+      'Atlanta/Osborne Farms': { value: 750, change: 7.2, status: 'increase_good' },
+      'Atlanta/Suwanee Square': { value: 680, change: 5.8, status: 'increase_good' },
+      'Atlanta/Scattered': { value: 420, change: 4.5, status: 'increase_good' },
+      'Tampa/Preserve at Pine Grove': { value: 450, change: 5.1, status: 'increase_good' },
+      'Tampa/Avila Bay': { value: 380, change: 4.9, status: 'increase_good' },
+      'Tampa/Belmont': { value: 325, change: 4.2, status: 'increase_good' },
+      'Tampa/Scattered': { value: 270, change: 4.8, status: 'increase_good' },
+      'Jacksonville/Sawyer\'s Preserve': { value: 680, change: 4.1, status: 'increase_good' },
+      'Jacksonville/Scattered': { value: 341, change: 3.5, status: 'increase_good' },
+      'Orlando/Scattered': { value: 825, change: 5.5, status: 'increase_good' }
     }
   },
   {
+    kpi: 'average_rent',
     label: 'Average Rent (USD)',
-    value: 1868,
-    change: 3.8,
-    status: 'increase_good',  // Increasing rent is good for revenue
+    value: 1865,
+    change: 3.9,
+    status: 'increase_good',
     markets: {
       Atlanta: { value: 1950, change: 4.2, status: 'increase_good' },
       Tampa: { value: 1875, change: 3.9, status: 'increase_good' },
       Jacksonville: { value: 1725, change: 3.5, status: 'increase_good' },
       Orlando: { value: 1850, change: 3.6, status: 'increase_good' }
+    },
+    communities: {
+      'Atlanta/Osborne Farms': { value: 2100, change: 4.5, status: 'increase_good' },
+      'Atlanta/Suwanee Square': { value: 1950, change: 4.2, status: 'increase_good' },
+      'Atlanta/Scattered': { value: 1800, change: 3.8, status: 'increase_good' },
+      'Tampa/Preserve at Pine Grove': { value: 1950, change: 4.1, status: 'increase_good' },
+      'Tampa/Avila Bay': { value: 1890, change: 3.9, status: 'increase_good' },
+      'Tampa/Belmont': { value: 1850, change: 3.7, status: 'increase_good' },
+      'Tampa/Scattered': { value: 1810, change: 3.8, status: 'increase_good' },
+      'Jacksonville/Sawyer\'s Preserve': { value: 1775, change: 3.6, status: 'increase_good' },
+      'Jacksonville/Scattered': { value: 1675, change: 3.4, status: 'increase_good' },
+      'Orlando/Scattered': { value: 1850, change: 3.6, status: 'increase_good' }
     }
   },
   {
+    kpi: 'occupancy',
     label: 'Monthly Occupancy',
-    value: 93.0,
+    value: 92.6,
     change: 0.1,
     status: 'increase_good',  // Higher occupancy is good
     markets: {
@@ -1265,33 +1292,72 @@ export const mockDashboardMetrics: MetricData[] = [
       Tampa: { value: 92.1, change: -0.8, status: 'decrease_bad' },
       Jacksonville: { value: 92.8, change: -0.9, status: 'decrease_bad' },
       Orlando: { value: 93.4, change: 0.9, status: 'increase_good' }
+    },
+    communities: {
+      'Atlanta/Osborne Farms': { value: 94.0, change: 1.5, status: 'increase_good' },
+      'Atlanta/Suwanee Square': { value: 93.2, change: 1.0, status: 'increase_good' },
+      'Atlanta/Scattered': { value: 93.5, change: 1.3, status: 'increase_good' },
+      'Tampa/Preserve at Pine Grove': { value: 91.0, change: -1.0, status: 'decrease_bad' },
+      'Tampa/Avila Bay': { value: 92.0, change: -0.5, status: 'decrease_bad' },
+      'Tampa/Belmont': { value: 91.5, change: -0.8, status: 'decrease_bad' },
+      'Tampa/Scattered': { value: 91.8, change: -0.6, status: 'decrease_bad' },
+      'Jacksonville/Sawyer\'s Preserve': { value: 92.5, change: -0.7, status: 'decrease_bad' },
+      'Jacksonville/Scattered': { value: 92.9, change: -0.5, status: 'decrease_bad' },
+      'Orlando/Scattered': { value: 93.4, change: 0.9, status: 'increase_good' }
     }
   },
   {
+    kpi: 'delinquency',
     label: 'Delinqu. (% billed rent)',
-    value: 3.2,
-    change: 0.0,
-    status: null,  // Decreasing delinquency is good
+    value: 3.3,
+    change: 0.2,
+    status: 'increase_bad',
     markets: {
       Atlanta: { value: 2.8, change: -0.2, status: 'decrease_good' },
       Tampa: { value: 3.3, change: 0.5, status: 'increase_bad' },
       Jacksonville: { value: 3.6, change: 0.2, status: 'increase_bad' },
       Orlando: { value: 3.2, change: -0.5, status: 'decrease_good' }
+    },
+    communities: {
+      'Atlanta/Osborne Farms': { value: 2.7, change: -0.3, status: 'decrease_good' },
+      'Atlanta/Suwanee Square': { value: 2.9, change: -0.1, status: 'decrease_good' },
+      'Atlanta/Scattered': { value: 2.8, change: -0.2, status: 'decrease_good' },
+      'Tampa/Preserve at Pine Grove': { value: 3.4, change: 0.4, status: 'increase_bad' },
+      'Tampa/Avila Bay': { value: 3.5, change: 0.6, status: 'increase_bad' },
+      'Tampa/Belmont': { value: 3.3, change: 0.5, status: 'increase_bad' },
+      'Tampa/Scattered': { value: 3.6, change: 0.7, status: 'increase_bad' },
+      'Jacksonville/Sawyer\'s Preserve': { value: 3.5, change: 0.3, status: 'increase_bad' },
+      'Jacksonville/Scattered': { value: 3.7, change: 0.4, status: 'increase_bad' },
+      'Orlando/Scattered': { value: 3.1, change: -0.4, status: 'decrease_good' }
     }
   },
   {
+    kpi: 'renewals',
     label: 'Renewals (%)',
-    value: 70.2,
-    change: 0.6,
+    value: 70.0,
+    change: -0.2,
     status: 'increase_good',  // Decreasing renewals is bad
     markets: {
       Atlanta: { value: 71.9, change: 1.4, status: 'increase_good' },
       Tampa: { value: 70.2, change: -1.6, status: 'decrease_bad' },
       Jacksonville: { value: 67.5, change: -1.4, status: 'decrease_bad' },
       Orlando: { value: 69.8, change: 2.6, status: 'increase_good' }
+    },
+    communities: {
+      'Atlanta/Osborne Farms': { value: 72.0, change: 1.5, status: 'increase_good' },
+      'Atlanta/Suwanee Square': { value: 71.5, change: 1.2, status: 'increase_good' },
+      'Atlanta/Scattered': { value: 71.8, change: 1.3, status: 'increase_good' },
+      'Tampa/Preserve at Pine Grove': { value: 69.0, change: -1.8, status: 'decrease_bad' },
+      'Tampa/Avila Bay': { value: 70.0, change: -1.5, status: 'decrease_bad' },
+      'Tampa/Belmont': { value: 70.5, change: -1.4, status: 'decrease_bad' },
+      'Tampa/Scattered': { value: 70.8, change: -1.3, status: 'decrease_bad' },
+      'Jacksonville/Sawyer\'s Preserve': { value: 67.0, change: -1.5, status: 'decrease_bad' },
+      'Jacksonville/Scattered': { value: 67.8, change: -1.3, status: 'decrease_bad' },
+      'Orlando/Scattered': { value: 69.5, change: 2.5, status: 'increase_good' }
     }
   },
   {
+    kpi: 'rent-increase',
     label: 'Rent Increase (%)',
     value: 5.8,
     change: 0.7,
@@ -1301,12 +1367,25 @@ export const mockDashboardMetrics: MetricData[] = [
       Tampa: { value: 5.9, change: 0.8, status: 'increase_good' },
       Jacksonville: { value: 5.4, change: 0.5, status: 'increase_good' },
       Orlando: { value: 5.7, change: 0.6, status: 'increase_good' }
+    },
+    communities: {
+      'Atlanta/Osborne Farms': { value: 6.5, change: 1.0, status: 'increase_good' },
+      'Atlanta/Suwanee Square': { value: 6.0, change: 0.8, status: 'increase_good' },
+      'Atlanta/Scattered': { value: 6.3, change: 0.9, status: 'increase_good' },
+      'Tampa/Preserve at Pine Grove': { value: 5.8, change: 0.7, status: 'increase_good' },
+      'Tampa/Avila Bay': { value: 5.7, change: 0.6, status: 'increase_good' },
+      'Tampa/Belmont': { value: 5.6, change: 0.5, status: 'increase_good' },
+      'Tampa/Scattered': { value: 5.9, change: 0.8, status: 'increase_good' },
+      'Jacksonville/Sawyer\'s Preserve': { value: 5.5, change: 0.6, status: 'increase_good' },
+      'Jacksonville/Scattered': { value: 5.3, change: 0.4, status: 'increase_good' },
+      'Orlando/Scattered': { value: 5.6, change: 0.5, status: 'increase_good' }
     }
   }
 ];
 
 export const mockLeadMetrics: MetricData[] = [
   {
+    kpi:'renewals',
     label: '% Renewals trend',
     value: 68.5,
     change: 4.2,
@@ -1316,211 +1395,159 @@ export const mockLeadMetrics: MetricData[] = [
       Tampa: { value: 68.5, change: 4.2, status: 'increase_good' },
       Jacksonville: { value: 68.5, change: 4.2, status: 'increase_good' },
       Orlando: { value: 68.5, change: 4.2, status: 'increase_good' }
+    },
+    communities: {
+      'Atlanta/Osborne Farms': { value: 68.0, change: 4.0, status: 'increase_good' },
+      'Atlanta/Suwanee Square': { value: 68.2, change: 4.1, status: 'increase_good' },
+      'Atlanta/Scattered': { value: 68.3, change: 4.2, status: 'increase_good' },
+      'Tampa/Preserve at Pine Grove': { value: 68.4, change: 4.3, status: 'increase_good' },
+      'Tampa/Avila Bay': { value: 68.1, change: 4.0, status: 'increase_good' },
+      'Tampa/Belmont': { value: 68.2, change: 4.1, status: 'increase_good' },
+      'Tampa/Scattered': { value: 68.3, change: 4.2, status: 'increase_good' },
+      'Jacksonville/Sawyer\'s Preserve': { value: 68.4, change: 4.3, status: 'increase_good' },
+      'Jacksonville/Scattered': { value: 68.0, change: 4.0, status: 'increase_good' },
+      'Orlando/Scattered': { value: 68.5, change: 4.2, status: 'increase_good' }
     }
   }
 ];
 
 export const mockOperationMetrics: MetricData[] = [];
 
-// Monthly data for renewals trend (last 12 months)
+// Mock Renewals Trend Data
 export const mockRenewalsTrendData = [
-  { month: 'Mar 24', Atlanta: 68.4, Tampa: 71.2, Jacksonville: 69.1, Orlando: 72.3, Average: 70.2 },
-  { month: 'Apr 24', Atlanta: 69.8, Tampa: 70.5, Jacksonville: 67.2, Orlando: 71.9, Average: 69.9 },
-  { month: 'May 24', Atlanta: 71.5, Tampa: 68.9, Jacksonville: 66.8, Orlando: 70.4, Average: 69.4 },
-  { month: 'Jun 24', Atlanta: 70.2, Tampa: 67.3, Jacksonville: 69.5, Orlando: 68.8, Average: 69.0 },
-  { month: 'Jul 24', Atlanta: 67.8, Tampa: 69.1, Jacksonville: 71.2, Orlando: 66.5, Average: 68.7 },
-  { month: 'Aug 24', Atlanta: 69.3, Tampa: 71.4, Jacksonville: 70.8, Orlando: 67.9, Average: 69.9 },
-  { month: 'Sep 24', Atlanta: 72.1, Tampa: 70.8, Jacksonville: 68.4, Orlando: 69.5, Average: 70.2 },
-  { month: 'Oct 24', Atlanta: 71.6, Tampa: 68.5, Jacksonville: 69.7, Orlando: 71.2, Average: 70.3 },
-  { month: 'Nov 24', Atlanta: 69.4, Tampa: 67.2, Jacksonville: 71.5, Orlando: 70.8, Average: 69.7 },
-  { month: 'Dec 24', Atlanta: 67.8, Tampa: 69.4, Jacksonville: 70.2, Orlando: 68.5, Average: 69.0 },
-  { month: 'Jan 25', Atlanta: 70.5, Tampa: 71.8, Jacksonville: 68.9, Orlando: 67.2, Average: 69.6 },
-  { month: 'Feb 25', Atlanta: 71.9, Tampa: 70.2, Jacksonville: 67.5, Orlando: 69.8, Average: 70.2 }
+  { month: 'Mar 24', Atlanta: 68.4, Tampa: 71.2, Jacksonville: 69.1, Orlando: 72.3, Average: 70.2, 'Atlanta/Osborne Farms': 70.0, 'Atlanta/Suwanee Square': 67.5, 'Atlanta/Scattered': 68.0, 'Tampa/Preserve at Pine Grove': 72.0, 'Tampa/Avila Bay': 70.5, 'Tampa/Belmont': 71.0, 'Tampa/Scattered': 71.5, 'Jacksonville/Sawyer\'s Preserve': 69.0, 'Jacksonville/Scattered': 69.2, 'Orlando/Scattered': 72.3 },
+  { month: 'Apr 24', Atlanta: 69.8, Tampa: 70.5, Jacksonville: 67.2, Orlando: 71.9, Average: 69.9, 'Atlanta/Osborne Farms': 71.0, 'Atlanta/Suwanee Square': 68.5, 'Atlanta/Scattered': 69.0, 'Tampa/Preserve at Pine Grove': 71.5, 'Tampa/Avila Bay': 70.0, 'Tampa/Belmont': 70.8, 'Tampa/Scattered': 70.9, 'Jacksonville/Sawyer\'s Preserve': 68.5, 'Jacksonville/Scattered': 68.8, 'Orlando/Scattered': 71.9 },
+  { month: 'May 24', Atlanta: 70.5, Tampa: 69.8, Jacksonville: 68.0, Orlando: 72.0, Average: 70.1, 'Atlanta/Osborne Farms': 71.5, 'Atlanta/Suwanee Square': 69.0, 'Atlanta/Scattered': 69.5, 'Tampa/Preserve at Pine Grove': 71.0, 'Tampa/Avila Bay': 69.5, 'Tampa/Belmont': 70.5, 'Tampa/Scattered': 70.4, 'Jacksonville/Sawyer\'s Preserve': 68.0, 'Jacksonville/Scattered': 68.3, 'Orlando/Scattered': 72.0 },
+  { month: 'Jun 24', Atlanta: 71.0, Tampa: 70.0, Jacksonville: 67.5, Orlando: 71.5, Average: 70.0, 'Atlanta/Osborne Farms': 72.0, 'Atlanta/Suwanee Square': 69.5, 'Atlanta/Scattered': 70.0, 'Tampa/Preserve at Pine Grove': 70.5, 'Tampa/Avila Bay': 69.0, 'Tampa/Belmont': 70.0, 'Tampa/Scattered': 70.2, 'Jacksonville/Sawyer\'s Preserve': 67.5, 'Jacksonville/Scattered': 67.8, 'Orlando/Scattered': 71.5 },
+  { month: 'Jul 24', Atlanta: 70.8, Tampa: 70.2, Jacksonville: 67.8, Orlando: 71.2, Average: 70.0, 'Atlanta/Osborne Farms': 71.8, 'Atlanta/Suwanee Square': 69.2, 'Atlanta/Scattered': 69.8, 'Tampa/Preserve at Pine Grove': 70.2, 'Tampa/Avila Bay': 69.2, 'Tampa/Belmont': 70.2, 'Tampa/Scattered': 70.1, 'Jacksonville/Sawyer\'s Preserve': 67.8, 'Jacksonville/Scattered': 68.0, 'Orlando/Scattered': 71.2 },
+  { month: 'Aug 24', Atlanta: 71.2, Tampa: 70.5, Jacksonville: 68.2, Orlando: 71.8, Average: 70.4, 'Atlanta/Osborne Farms': 72.2, 'Atlanta/Suwanee Square': 69.8, 'Atlanta/Scattered': 70.2, 'Tampa/Preserve at Pine Grove': 70.8, 'Tampa/Avila Bay': 69.8, 'Tampa/Belmont': 70.8, 'Tampa/Scattered': 70.5, 'Jacksonville/Sawyer\'s Preserve': 68.2, 'Jacksonville/Scattered': 68.5, 'Orlando/Scattered': 71.8 },
+  { month: 'Sep 24', Atlanta: 71.5, Tampa: 70.8, Jacksonville: 68.5, Orlando: 72.0, Average: 70.7, 'Atlanta/Osborne Farms': 72.5, 'Atlanta/Suwanee Square': 70.0, 'Atlanta/Scattered': 70.5, 'Tampa/Preserve at Pine Grove': 71.0, 'Tampa/Avila Bay': 70.0, 'Tampa/Belmont': 71.0, 'Tampa/Scattered': 70.7, 'Jacksonville/Sawyer\'s Preserve': 68.5, 'Jacksonville/Scattered': 68.7, 'Orlando/Scattered': 72.0 },
+  { month: 'Oct 24', Atlanta: 71.8, Tampa: 71.0, Jacksonville: 68.8, Orlando: 72.2, Average: 70.9, 'Atlanta/Osborne Farms': 72.8, 'Atlanta/Suwanee Square': 70.2, 'Atlanta/Scattered': 70.8, 'Tampa/Preserve at Pine Grove': 71.2, 'Tampa/Avila Bay': 70.2, 'Tampa/Belmont': 71.2, 'Tampa/Scattered': 70.9, 'Jacksonville/Sawyer\'s Preserve': 68.8, 'Jacksonville/Scattered': 68.9, 'Orlando/Scattered': 72.2 },
+  { month: 'Nov 24', Atlanta: 72.0, Tampa: 71.2, Jacksonville: 69.0, Orlando: 72.5, Average: 71.1, 'Atlanta/Osborne Farms': 73.0, 'Atlanta/Suwanee Square': 70.5, 'Atlanta/Scattered': 71.0, 'Tampa/Preserve at Pine Grove': 71.5, 'Tampa/Avila Bay': 70.5, 'Tampa/Belmont': 71.5, 'Tampa/Scattered': 71.1, 'Jacksonville/Sawyer\'s Preserve': 69.0, 'Jacksonville/Scattered': 69.2, 'Orlando/Scattered': 72.5 },
+  { month: 'Dec 24', Atlanta: 72.2, Tampa: 71.5, Jacksonville: 69.2, Orlando: 72.8, Average: 71.3, 'Atlanta/Osborne Farms': 73.2, 'Atlanta/Suwanee Square': 70.8, 'Atlanta/Scattered': 71.2, 'Tampa/Preserve at Pine Grove': 71.8, 'Tampa/Avila Bay': 70.8, 'Tampa/Belmont': 71.8, 'Tampa/Scattered': 71.3, 'Jacksonville/Sawyer\'s Preserve': 69.2, 'Jacksonville/Scattered': 69.4, 'Orlando/Scattered': 72.8 },
+  { month: 'Jan 25', Atlanta: 72.5, Tampa: 71.8, Jacksonville: 69.5, Orlando: 73.0, Average: 71.5, 'Atlanta/Osborne Farms': 73.5, 'Atlanta/Suwanee Square': 71.0, 'Atlanta/Scattered': 71.5, 'Tampa/Preserve at Pine Grove': 72.0, 'Tampa/Avila Bay': 71.0, 'Tampa/Belmont': 72.0, 'Tampa/Scattered': 71.5, 'Jacksonville/Sawyer\'s Preserve': 69.5, 'Jacksonville/Scattered': 69.6, 'Orlando/Scattered': 73.0 },
+  { month: 'Feb 25', Atlanta: 72.8, Tampa: 72.0, Jacksonville: 69.8, Orlando: 73.2, Average: 71.7, 'Atlanta/Osborne Farms': 73.8, 'Atlanta/Suwanee Square': 71.2, 'Atlanta/Scattered': 71.8, 'Tampa/Preserve at Pine Grove': 72.2, 'Tampa/Avila Bay': 71.2, 'Tampa/Belmont': 72.2, 'Tampa/Scattered': 71.7, 'Jacksonville/Sawyer\'s Preserve': 69.8, 'Jacksonville/Scattered': 69.9, 'Orlando/Scattered': 73.2 }
 ];
 
-// Monthly data for occupancy rate trend (last 12 months)
+// Mock Occupancy Trend Data
 export const mockOccupancyTrendData = [
-  { month: 'Mar 24', Atlanta: 94.2, Tampa: 91.5, Jacksonville: 93.1, Orlando: 92.4, Average: 92.8 },
-  { month: 'Apr 24', Atlanta: 93.8, Tampa: 92.1, Jacksonville: 92.5, Orlando: 93.2, Average: 92.9 },
-  { month: 'May 24', Atlanta: 92.9, Tampa: 93.4, Jacksonville: 91.8, Orlando: 93.8, Average: 93.0 },
-  { month: 'Jun 24', Atlanta: 91.7, Tampa: 93.8, Jacksonville: 92.4, Orlando: 92.9, Average: 92.7 },
-  { month: 'Jul 24', Atlanta: 90.9, Tampa: 92.7, Jacksonville: 93.5, Orlando: 91.8, Average: 92.2 },
-  { month: 'Aug 24', Atlanta: 91.5, Tampa: 91.9, Jacksonville: 93.8, Orlando: 92.4, Average: 92.4 },
-  { month: 'Sep 24', Atlanta: 92.8, Tampa: 91.2, Jacksonville: 92.9, Orlando: 93.5, Average: 92.6 },
-  { month: 'Oct 24', Atlanta: 93.5, Tampa: 92.4, Jacksonville: 91.7, Orlando: 93.9, Average: 92.9 },
-  { month: 'Nov 24', Atlanta: 94.1, Tampa: 93.2, Jacksonville: 92.3, Orlando: 92.8, Average: 93.1 },
-  { month: 'Dec 24', Atlanta: 93.2, Tampa: 93.8, Jacksonville: 93.1, Orlando: 91.9, Average: 93.0 },
-  { month: 'Jan 25', Atlanta: 92.4, Tampa: 92.9, Jacksonville: 93.7, Orlando: 92.5, Average: 92.9 },
-  { month: 'Feb 25', Atlanta: 93.6, Tampa: 92.1, Jacksonville: 92.8, Orlando: 93.4, Average: 93.0 }
+  { month: 'Mar 24', Atlanta: 94.2, Tampa: 91.5, Jacksonville: 93.1, Orlando: 92.4, Average: 92.8, 'Atlanta/Osborne Farms': 95.0, 'Atlanta/Suwanee Square': 93.5, 'Atlanta/Scattered': 94.0, 'Tampa/Preserve at Pine Grove': 91.0, 'Tampa/Avila Bay': 92.0, 'Tampa/Belmont': 91.5, 'Tampa/Scattered': 91.8, 'Jacksonville/Sawyer\'s Preserve': 93.0, 'Jacksonville/Scattered': 93.2, 'Orlando/Scattered': 92.4 },
+  { month: 'Apr 24', Atlanta: 93.8, Tampa: 92.1, Jacksonville: 92.5, Orlando: 93.2, Average: 92.9, 'Atlanta/Osborne Farms': 94.5, 'Atlanta/Suwanee Square': 92.5, 'Atlanta/Scattered': 93.0, 'Tampa/Preserve at Pine Grove': 92.0, 'Tampa/Avila Bay': 91.5, 'Tampa/Belmont': 92.2, 'Tampa/Scattered': 92.1, 'Jacksonville/Sawyer\'s Preserve': 92.5, 'Jacksonville/Scattered': 92.8, 'Orlando/Scattered': 93.2 },
+  { month: 'May 24', Atlanta: 93.5, Tampa: 92.0, Jacksonville: 92.8, Orlando: 93.0, Average: 92.8, 'Atlanta/Osborne Farms': 94.0, 'Atlanta/Suwanee Square': 92.0, 'Atlanta/Scattered': 92.5, 'Tampa/Preserve at Pine Grove': 91.8, 'Tampa/Avila Bay': 91.2, 'Tampa/Belmont': 91.9, 'Tampa/Scattered': 91.7, 'Jacksonville/Sawyer\'s Preserve': 92.8, 'Jacksonville/Scattered': 92.9, 'Orlando/Scattered': 93.0 },
+  { month: 'Jun 24', Atlanta: 93.2, Tampa: 91.8, Jacksonville: 92.6, Orlando: 92.8, Average: 92.6, 'Atlanta/Osborne Farms': 93.8, 'Atlanta/Suwanee Square': 91.8, 'Atlanta/Scattered': 92.3, 'Tampa/Preserve at Pine Grove': 91.6, 'Tampa/Avila Bay': 91.0, 'Tampa/Belmont': 91.7, 'Tampa/Scattered': 91.5, 'Jacksonville/Sawyer\'s Preserve': 92.6, 'Jacksonville/Scattered': 92.7, 'Orlando/Scattered': 92.8 },
+  { month: 'Jul 24', Atlanta: 93.0, Tampa: 91.6, Jacksonville: 92.4, Orlando: 92.6, Average: 92.4, 'Atlanta/Osborne Farms': 93.6, 'Atlanta/Suwanee Square': 91.6, 'Atlanta/Scattered': 92.1, 'Tampa/Preserve at Pine Grove': 91.4, 'Tampa/Avila Bay': 90.8, 'Tampa/Belmont': 91.5, 'Tampa/Scattered': 91.3, 'Jacksonville/Sawyer\'s Preserve': 92.4, 'Jacksonville/Scattered': 92.5, 'Orlando/Scattered': 92.6 },
+  { month: 'Aug 24', Atlanta: 92.8, Tampa: 91.4, Jacksonville: 92.2, Orlando: 92.4, Average: 92.2, 'Atlanta/Osborne Farms': 93.4, 'Atlanta/Suwanee Square': 91.4, 'Atlanta/Scattered': 91.9, 'Tampa/Preserve at Pine Grove': 91.2, 'Tampa/Avila Bay': 90.6, 'Tampa/Belmont': 91.3, 'Tampa/Scattered': 91.1, 'Jacksonville/Sawyer\'s Preserve': 92.2, 'Jacksonville/Scattered': 92.3, 'Orlando/Scattered': 92.4 },
+  { month: 'Sep 24', Atlanta: 92.6, Tampa: 91.2, Jacksonville: 92.0, Orlando: 92.2, Average: 92.0, 'Atlanta/Osborne Farms': 93.2, 'Atlanta/Suwanee Square': 91.2, 'Atlanta/Scattered': 91.7, 'Tampa/Preserve at Pine Grove': 91.0, 'Tampa/Avila Bay': 90.4, 'Tampa/Belmont': 91.1, 'Tampa/Scattered': 90.9, 'Jacksonville/Sawyer\'s Preserve': 92.0, 'Jacksonville/Scattered': 92.1, 'Orlando/Scattered': 92.2 },
+  { month: 'Oct 24', Atlanta: 92.4, Tampa: 91.0, Jacksonville: 91.8, Orlando: 92.0, Average: 91.8, 'Atlanta/Osborne Farms': 93.0, 'Atlanta/Suwanee Square': 91.0, 'Atlanta/Scattered': 91.5, 'Tampa/Preserve at Pine Grove': 90.8, 'Tampa/Avila Bay': 90.2, 'Tampa/Belmont': 90.9, 'Tampa/Scattered': 90.7, 'Jacksonville/Sawyer\'s Preserve': 91.8, 'Jacksonville/Scattered': 91.9, 'Orlando/Scattered': 92.0 },
+  { month: 'Nov 24', Atlanta: 92.2, Tampa: 90.8, Jacksonville: 91.6, Orlando: 91.8, Average: 91.6, 'Atlanta/Osborne Farms': 92.8, 'Atlanta/Suwanee Square': 90.8, 'Atlanta/Scattered': 91.3, 'Tampa/Preserve at Pine Grove': 90.6, 'Tampa/Avila Bay': 90.0, 'Tampa/Belmont': 90.7, 'Tampa/Scattered': 90.5, 'Jacksonville/Sawyer\'s Preserve': 91.6, 'Jacksonville/Scattered': 91.7, 'Orlando/Scattered': 91.8 },
+  { month: 'Dec 24', Atlanta: 92.0, Tampa: 90.6, Jacksonville: 91.4, Orlando: 91.6, Average: 91.4, 'Atlanta/Osborne Farms': 92.6, 'Atlanta/Suwanee Square': 90.6, 'Atlanta/Scattered': 91.1, 'Tampa/Preserve at Pine Grove': 90.4, 'Tampa/Avila Bay': 89.8, 'Tampa/Belmont': 90.5, 'Tampa/Scattered': 90.3, 'Jacksonville/Sawyer\'s Preserve': 91.4, 'Jacksonville/Scattered': 91.5, 'Orlando/Scattered': 91.6 },
+  { month: 'Jan 25', Atlanta: 91.8, Tampa: 90.4, Jacksonville: 91.2, Orlando: 91.4, Average: 91.2, 'Atlanta/Osborne Farms': 92.4, 'Atlanta/Suwanee Square': 90.4, 'Atlanta/Scattered': 90.9, 'Tampa/Preserve at Pine Grove': 90.2, 'Tampa/Avila Bay': 89.6, 'Tampa/Belmont': 90.3, 'Tampa/Scattered': 90.1, 'Jacksonville/Sawyer\'s Preserve': 91.2, 'Jacksonville/Scattered': 91.3, 'Orlando/Scattered': 91.4 },
+  { month: 'Feb 25', Atlanta: 91.6, Tampa: 90.2, Jacksonville: 91.0, Orlando: 91.2, Average: 91.0, 'Atlanta/Osborne Farms': 92.2, 'Atlanta/Suwanee Square': 90.2, 'Atlanta/Scattered': 90.7, 'Tampa/Preserve at Pine Grove': 90.0, 'Tampa/Avila Bay': 89.4, 'Tampa/Belmont': 90.1, 'Tampa/Scattered': 89.9, 'Jacksonville/Sawyer\'s Preserve': 91.0, 'Jacksonville/Scattered': 91.1, 'Orlando/Scattered': 91.2 }
 ];
 
-// Monthly data for delinquency rate trend (last 12 months)
+// Mock Delinquency Trend Data
 export const mockDelinquencyTrendData = [
-  { month: 'Mar 24', Atlanta: 2.8, Tampa: 3.9, Jacksonville: 3.2, Orlando: 2.7, Average: 3.2 },
-  { month: 'Apr 24', Atlanta: 3.1, Tampa: 3.7, Jacksonville: 2.9, Orlando: 3.4, Average: 3.3 },
-  { month: 'May 24', Atlanta: 2.9, Tampa: 3.5, Jacksonville: 3.8, Orlando: 3.1, Average: 3.3 },
-  { month: 'Jun 24', Atlanta: 3.4, Tampa: 3.2, Jacksonville: 3.5, Orlando: 2.8, Average: 3.2 },
-  { month: 'Jul 24', Atlanta: 3.7, Tampa: 2.9, Jacksonville: 3.1, Orlando: 3.3, Average: 3.3 },
-  { month: 'Aug 24', Atlanta: 3.2, Tampa: 3.1, Jacksonville: 2.8, Orlando: 3.5, Average: 3.2 },
-  { month: 'Sep 24', Atlanta: 2.7, Tampa: 3.4, Jacksonville: 3.3, Orlando: 3.8, Average: 3.3 },
-  { month: 'Oct 24', Atlanta: 2.9, Tampa: 3.8, Jacksonville: 3.5, Orlando: 3.2, Average: 3.4 },
-  { month: 'Nov 24', Atlanta: 3.3, Tampa: 3.5, Jacksonville: 3.0, Orlando: 2.9, Average: 3.2 },
-  { month: 'Dec 24', Atlanta: 3.5, Tampa: 3.1, Jacksonville: 2.8, Orlando: 3.4, Average: 3.2 },
-  { month: 'Jan 25', Atlanta: 3.0, Tampa: 2.8, Jacksonville: 3.4, Orlando: 3.7, Average: 3.2 },
-  { month: 'Feb 25', Atlanta: 2.8, Tampa: 3.3, Jacksonville: 3.6, Orlando: 3.2, Average: 3.2 }
+  { month: 'Mar 24', Atlanta: 3.2, Tampa: 3.5, Jacksonville: 3.1, Orlando: 3.4, Average: 3.3, 'Atlanta/Osborne Farms': 3.0, 'Atlanta/Suwanee Square': 3.3, 'Atlanta/Scattered': 3.1, 'Tampa/Preserve at Pine Grove': 3.5, 'Tampa/Avila Bay': 3.6, 'Tampa/Belmont': 3.4, 'Tampa/Scattered': 3.5, 'Jacksonville/Sawyer\'s Preserve': 3.1, 'Jacksonville/Scattered': 3.2, 'Orlando/Scattered': 3.4 },
+  { month: 'Apr 24', Atlanta: 3.1, Tampa: 3.6, Jacksonville: 3.0, Orlando: 3.5, Average: 3.3, 'Atlanta/Osborne Farms': 2.9, 'Atlanta/Suwanee Square': 3.4, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.6, 'Tampa/Avila Bay': 3.7, 'Tampa/Belmont': 3.5, 'Tampa/Scattered': 3.6, 'Jacksonville/Sawyer\'s Preserve': 3.0, 'Jacksonville/Scattered': 3.1, 'Orlando/Scattered': 3.5 },
+  { month: 'May 24', Atlanta: 3.0, Tampa: 3.7, Jacksonville: 2.9, Orlando: 3.6, Average: 3.3, 'Atlanta/Osborne Farms': 2.8, 'Atlanta/Suwanee Square': 3.5, 'Atlanta/Scattered': 3.3, 'Tampa/Preserve at Pine Grove': 3.7, 'Tampa/Avila Bay': 3.8, 'Tampa/Belmont': 3.6, 'Tampa/Scattered': 3.7, 'Jacksonville/Sawyer\'s Preserve': 2.9, 'Jacksonville/Scattered': 3.0, 'Orlando/Scattered': 3.6 },
+  { month: 'Jun 24', Atlanta: 2.9, Tampa: 3.8, Jacksonville: 2.8, Orlando: 3.7, Average: 3.3, 'Atlanta/Osborne Farms': 2.7, 'Atlanta/Suwanee Square': 3.6, 'Atlanta/Scattered': 3.4, 'Tampa/Preserve at Pine Grove': 3.8, 'Tampa/Avila Bay': 3.9, 'Tampa/Belmont': 3.7, 'Tampa/Scattered': 3.8, 'Jacksonville/Sawyer\'s Preserve': 2.8, 'Jacksonville/Scattered': 2.9, 'Orlando/Scattered': 3.7 },
+  { month: 'Jul 24', Atlanta: 2.8, Tampa: 3.9, Jacksonville: 2.7, Orlando: 3.8, Average: 3.3, 'Atlanta/Osborne Farms': 2.6, 'Atlanta/Suwanee Square': 3.7, 'Atlanta/Scattered': 3.5, 'Tampa/Preserve at Pine Grove': 3.9, 'Tampa/Avila Bay': 4.0, 'Tampa/Belmont': 3.8, 'Tampa/Scattered': 3.9, 'Jacksonville/Sawyer\'s Preserve': 2.7, 'Jacksonville/Scattered': 2.8, 'Orlando/Scattered': 3.8 },
+  { month: 'Aug 24', Atlanta: 2.7, Tampa: 4.0, Jacksonville: 2.6, Orlando: 3.9, Average: 3.3, 'Atlanta/Osborne Farms': 2.5, 'Atlanta/Suwanee Square': 3.8, 'Atlanta/Scattered': 3.6, 'Tampa/Preserve at Pine Grove': 4.0, 'Tampa/Avila Bay': 4.1, 'Tampa/Belmont': 3.9, 'Tampa/Scattered': 4.0, 'Jacksonville/Sawyer\'s Preserve': 2.6, 'Jacksonville/Scattered': 2.7, 'Orlando/Scattered': 3.9 },
+  { month: 'Sep 24', Atlanta: 2.6, Tampa: 4.1, Jacksonville: 2.5, Orlando: 4.0, Average: 3.3, 'Atlanta/Osborne Farms': 2.4, 'Atlanta/Suwanee Square': 3.9, 'Atlanta/Scattered': 3.7, 'Tampa/Preserve at Pine Grove': 4.1, 'Tampa/Avila Bay': 4.2, 'Tampa/Belmont': 4.0, 'Tampa/Scattered': 4.1, 'Jacksonville/Sawyer\'s Preserve': 2.5, 'Jacksonville/Scattered': 2.6, 'Orlando/Scattered': 4.0 },
+  { month: 'Oct 24', Atlanta: 2.5, Tampa: 4.2, Jacksonville: 2.4, Orlando: 4.1, Average: 3.3, 'Atlanta/Osborne Farms': 2.3, 'Atlanta/Suwanee Square': 4.0, 'Atlanta/Scattered': 3.8, 'Tampa/Preserve at Pine Grove': 4.2, 'Tampa/Avila Bay': 4.3, 'Tampa/Belmont': 4.1, 'Tampa/Scattered': 4.2, 'Jacksonville/Sawyer\'s Preserve': 2.4, 'Jacksonville/Scattered': 2.5, 'Orlando/Scattered': 4.1 },
+  { month: 'Nov 24', Atlanta: 2.4, Tampa: 4.3, Jacksonville: 2.3, Orlando: 4.2, Average: 3.3, 'Atlanta/Osborne Farms': 2.2, 'Atlanta/Suwanee Square': 4.1, 'Atlanta/Scattered': 3.9, 'Tampa/Preserve at Pine Grove': 4.3, 'Tampa/Avila Bay': 4.4, 'Tampa/Belmont': 4.2, 'Tampa/Scattered': 4.3, 'Jacksonville/Sawyer\'s Preserve': 2.3, 'Jacksonville/Scattered': 2.4, 'Orlando/Scattered': 4.2 },
+  { month: 'Dec 24', Atlanta: 2.3, Tampa: 4.4, Jacksonville: 2.2, Orlando: 4.3, Average: 3.3, 'Atlanta/Osborne Farms': 2.1, 'Atlanta/Suwanee Square': 4.2, 'Atlanta/Scattered': 4.0, 'Tampa/Preserve at Pine Grove': 4.4, 'Tampa/Avila Bay': 4.5, 'Tampa/Belmont': 4.3, 'Tampa/Scattered': 4.4, 'Jacksonville/Sawyer\'s Preserve': 2.2, 'Jacksonville/Scattered': 2.3, 'Orlando/Scattered': 4.3 },
+  { month: 'Jan 25', Atlanta: 2.2, Tampa: 4.5, Jacksonville: 2.1, Orlando: 4.4, Average: 3.3, 'Atlanta/Osborne Farms': 2.0, 'Atlanta/Suwanee Square': 4.3, 'Atlanta/Scattered': 4.1, 'Tampa/Preserve at Pine Grove': 4.5, 'Tampa/Avila Bay': 4.6, 'Tampa/Belmont': 4.4, 'Tampa/Scattered': 4.5, 'Jacksonville/Sawyer\'s Preserve': 2.1, 'Jacksonville/Scattered': 2.2, 'Orlando/Scattered': 4.4 },
+  { month: 'Feb 25', Atlanta: 2.1, Tampa: 4.6, Jacksonville: 2.0, Orlando: 4.5, Average: 3.3, 'Atlanta/Osborne Farms': 1.9, 'Atlanta/Suwanee Square': 4.4, 'Atlanta/Scattered': 4.2, 'Tampa/Preserve at Pine Grove': 4.6, 'Tampa/Avila Bay': 4.7, 'Tampa/Belmont': 4.5, 'Tampa/Scattered': 4.6, 'Jacksonville/Sawyer\'s Preserve': 2.0, 'Jacksonville/Scattered': 2.1, 'Orlando/Scattered': 4.5 }
 ];
 
 // Define technician locations
 export const technicianLocations = {
-  'John D.': 'Atlanta',
-  'Maria L.': 'Atlanta',
-  'Roberto S.': 'Atlanta',
-  'Sarah K.': 'Tampa'
+  'John D.': ['Atlanta/Osborne Farms', 'Atlanta/Suwanee Square'],
+  'Maria L.': ['Atlanta/Scattered'],
+  'Peter F.': ['Tampa/Preserve at Pine Grove', 'Tampa/Avila Bay', 'Tampa/Belmont', 'Tampa/Scattered'],
+  'Lisa M.': ['Jacksonville/Sawyer\'s Preserve', 'Jacksonville/Scattered'],
+  'Emily T.': ['Orlando/Scattered']
 };
 
-// Keep the original flat structure but we'll filter based on technicianLocations
+// Mock Bill Hours Trend Data
 export const mockBillHoursTrendData = [
-  { month: 'Mar 24', 'John D.': 5.8, 'Maria L.': 6.5, 'Roberto S.': 5.2, 'Sarah K.': 6.1, Average: 5.9 },
-  { month: 'Apr 24', 'John D.': 5.7, 'Maria L.': 6.6, 'Roberto S.': 5.4, 'Sarah K.': 6.2, Average: 6.0 },
-  { month: 'May 24', 'John D.': 6.0, 'Maria L.': 6.4, 'Roberto S.': 5.6, 'Sarah K.': 6.0, Average: 6.0 },
-  { month: 'Jun 24', 'John D.': 6.2, 'Maria L.': 6.3, 'Roberto S.': 5.8, 'Sarah K.': 6.3, Average: 6.2 },
-  { month: 'Jul 24', 'John D.': 6.1, 'Maria L.': 6.7, 'Roberto S.': 5.7, 'Sarah K.': 6.5, Average: 6.3 },
-  { month: 'Aug 24', 'John D.': 6.3, 'Maria L.': 6.8, 'Roberto S.': 5.9, 'Sarah K.': 6.4, Average: 6.4 },
-  { month: 'Sep 24', 'John D.': 6.5, 'Maria L.': 6.6, 'Roberto S.': 6.2, 'Sarah K.': 6.6, Average: 6.5 },
-  { month: 'Oct 24', 'John D.': 6.4, 'Maria L.': 6.9, 'Roberto S.': 6.1, 'Sarah K.': 6.8, Average: 6.6 },
-  { month: 'Nov 24', 'John D.': 6.6, 'Maria L.': 7.0, 'Roberto S.': 6.3, 'Sarah K.': 6.7, Average: 6.7 },
-  { month: 'Dec 24', 'John D.': 6.8, 'Maria L.': 6.9, 'Roberto S.': 6.5, 'Sarah K.': 6.9, Average: 6.8 },
-  { month: 'Jan 25', 'John D.': 6.7, 'Maria L.': 7.1, 'Roberto S.': 6.6, 'Sarah K.': 7.0, Average: 6.9 },
-  { month: 'Feb 25', 'John D.': 6.9, 'Maria L.': 7.2, 'Roberto S.': 6.7, 'Sarah K.': 7.1, Average: 7.0 }
+  { month: 'Mar 24', Atlanta: 8.2, Tampa: 7.5, Jacksonville: 8.1, Orlando: 7.4, Average: 7.8, 'Atlanta/Osborne Farms': 8.5, 'Atlanta/Suwanee Square': 7.8, 'Atlanta/Scattered': 8.0, 'Tampa/Preserve at Pine Grove': 7.2, 'Tampa/Avila Bay': 7.4, 'Tampa/Belmont': 7.3, 'Tampa/Scattered': 7.5, 'Jacksonville/Sawyer\'s Preserve': 8.1, 'Jacksonville/Scattered': 8.0, 'Orlando/Scattered': 7.4 },
+  { month: 'Apr 24', Atlanta: 8.0, Tampa: 7.6, Jacksonville: 8.0, Orlando: 7.5, Average: 7.8, 'Atlanta/Osborne Farms': 8.3, 'Atlanta/Suwanee Square': 7.9, 'Atlanta/Scattered': 8.1, 'Tampa/Preserve at Pine Grove': 7.3, 'Tampa/Avila Bay': 7.5, 'Tampa/Belmont': 7.4, 'Tampa/Scattered': 7.6, 'Jacksonville/Sawyer\'s Preserve': 8.0, 'Jacksonville/Scattered': 7.9, 'Orlando/Scattered': 7.5 },
+  { month: 'May 24', Atlanta: 7.9, Tampa: 7.7, Jacksonville: 7.9, Orlando: 7.6, Average: 7.8, 'Atlanta/Osborne Farms': 8.2, 'Atlanta/Suwanee Square': 8.0, 'Atlanta/Scattered': 8.2, 'Tampa/Preserve at Pine Grove': 7.4, 'Tampa/Avila Bay': 7.6, 'Tampa/Belmont': 7.5, 'Tampa/Scattered': 7.7, 'Jacksonville/Sawyer\'s Preserve': 7.9, 'Jacksonville/Scattered': 7.8, 'Orlando/Scattered': 7.6 },
+  { month: 'Jun 24', Atlanta: 7.8, Tampa: 7.8, Jacksonville: 7.8, Orlando: 7.7, Average: 7.8, 'Atlanta/Osborne Farms': 8.1, 'Atlanta/Suwanee Square': 8.1, 'Atlanta/Scattered': 8.3, 'Tampa/Preserve at Pine Grove': 7.5, 'Tampa/Avila Bay': 7.7, 'Tampa/Belmont': 7.6, 'Tampa/Scattered': 7.8, 'Jacksonville/Sawyer\'s Preserve': 7.8, 'Jacksonville/Scattered': 7.7, 'Orlando/Scattered': 7.7 },
+  { month: 'Jul 24', Atlanta: 7.7, Tampa: 7.9, Jacksonville: 7.7, Orlando: 7.8, Average: 7.8, 'Atlanta/Osborne Farms': 8.0, 'Atlanta/Suwanee Square': 8.2, 'Atlanta/Scattered': 8.4, 'Tampa/Preserve at Pine Grove': 7.6, 'Tampa/Avila Bay': 7.8, 'Tampa/Belmont': 7.7, 'Tampa/Scattered': 7.9, 'Jacksonville/Sawyer\'s Preserve': 7.7, 'Jacksonville/Scattered': 7.6, 'Orlando/Scattered': 7.8 },
+  { month: 'Aug 24', Atlanta: 7.6, Tampa: 8.0, Jacksonville: 7.6, Orlando: 7.9, Average: 7.8, 'Atlanta/Osborne Farms': 7.9, 'Atlanta/Suwanee Square': 8.3, 'Atlanta/Scattered': 8.5, 'Tampa/Preserve at Pine Grove': 7.7, 'Tampa/Avila Bay': 7.9, 'Tampa/Belmont': 7.8, 'Tampa/Scattered': 8.0, 'Jacksonville/Sawyer\'s Preserve': 7.6, 'Jacksonville/Scattered': 7.5, 'Orlando/Scattered': 7.9 },
+  { month: 'Sep 24', Atlanta: 7.5, Tampa: 8.1, Jacksonville: 7.5, Orlando: 8.0, Average: 7.8, 'Atlanta/Osborne Farms': 7.8, 'Atlanta/Suwanee Square': 8.4, 'Atlanta/Scattered': 8.6, 'Tampa/Preserve at Pine Grove': 7.8, 'Tampa/Avila Bay': 8.0, 'Tampa/Belmont': 7.9, 'Tampa/Scattered': 8.1, 'Jacksonville/Sawyer\'s Preserve': 7.5, 'Jacksonville/Scattered': 7.4, 'Orlando/Scattered': 8.0 },
+  { month: 'Oct 24', Atlanta: 7.4, Tampa: 8.2, Jacksonville: 7.4, Orlando: 8.1, Average: 7.8, 'Atlanta/Osborne Farms': 7.7, 'Atlanta/Suwanee Square': 8.5, 'Atlanta/Scattered': 8.7, 'Tampa/Preserve at Pine Grove': 7.9, 'Tampa/Avila Bay': 8.1, 'Tampa/Belmont': 8.0, 'Tampa/Scattered': 8.2, 'Jacksonville/Sawyer\'s Preserve': 7.4, 'Jacksonville/Scattered': 7.3, 'Orlando/Scattered': 8.1 },
+  { month: 'Nov 24', Atlanta: 7.3, Tampa: 8.3, Jacksonville: 7.3, Orlando: 8.2, Average: 7.8, 'Atlanta/Osborne Farms': 7.6, 'Atlanta/Suwanee Square': 8.6, 'Atlanta/Scattered': 8.8, 'Tampa/Preserve at Pine Grove': 8.0, 'Tampa/Avila Bay': 8.2, 'Tampa/Belmont': 8.1, 'Tampa/Scattered': 8.3, 'Jacksonville/Sawyer\'s Preserve': 7.3, 'Jacksonville/Scattered': 7.2, 'Orlando/Scattered': 8.2 },
+  { month: 'Dec 24', Atlanta: 7.2, Tampa: 8.4, Jacksonville: 7.2, Orlando: 8.3, Average: 7.8, 'Atlanta/Osborne Farms': 7.5, 'Atlanta/Suwanee Square': 8.7, 'Atlanta/Scattered': 8.9, 'Tampa/Preserve at Pine Grove': 8.1, 'Tampa/Avila Bay': 8.3, 'Tampa/Belmont': 8.2, 'Tampa/Scattered': 8.4, 'Jacksonville/Sawyer\'s Preserve': 7.2, 'Jacksonville/Scattered': 7.1, 'Orlando/Scattered': 8.3 },
+  { month: 'Jan 25', Atlanta: 7.1, Tampa: 8.5, Jacksonville: 7.1, Orlando: 8.4, Average: 7.8, 'Atlanta/Osborne Farms': 7.4, 'Atlanta/Suwanee Square': 8.8, 'Atlanta/Scattered': 9.0, 'Tampa/Preserve at Pine Grove': 8.2, 'Tampa/Avila Bay': 8.4, 'Tampa/Belmont': 8.3, 'Tampa/Scattered': 8.5, 'Jacksonville/Sawyer\'s Preserve': 7.1, 'Jacksonville/Scattered': 7.0, 'Orlando/Scattered': 8.4 },
+  { month: 'Feb 25', Atlanta: 7.0, Tampa: 8.6, Jacksonville: 7.0, Orlando: 8.5, Average: 7.8, 'Atlanta/Osborne Farms': 7.3, 'Atlanta/Suwanee Square': 8.9, 'Atlanta/Scattered': 9.1, 'Tampa/Preserve at Pine Grove': 8.3, 'Tampa/Avila Bay': 8.5, 'Tampa/Belmont': 8.4, 'Tampa/Scattered': 8.6, 'Jacksonville/Sawyer\'s Preserve': 7.0, 'Jacksonville/Scattered': 6.9, 'Orlando/Scattered': 8.5 }
 ];
 
+// Mock Work Orders Trend Data
 export const mockWorkOrdersTrendData = [
-  { month: 'Mar 24', 'John D.': 7.8, 'Maria L.': 6.5, 'Roberto S.': 7.4, 'Sarah K.': 6.3, Average: 7.0 },
-  { month: 'Apr 24', 'John D.': 7.6, 'Maria L.': 6.8, 'Roberto S.': 7.2, 'Sarah K.': 6.7, Average: 7.1 },
-  { month: 'May 24', 'John D.': 7.9, 'Maria L.': 6.7, 'Roberto S.': 7.5, 'Sarah K.': 6.6, Average: 7.2 },
-  { month: 'Jun 24', 'John D.': 7.7, 'Maria L.': 7.0, 'Roberto S.': 7.3, 'Sarah K.': 6.9, Average: 7.2 },
-  { month: 'Jul 24', 'John D.': 8.0, 'Maria L.': 6.9, 'Roberto S.': 7.6, 'Sarah K.': 7.0, Average: 7.4 },
-  { month: 'Aug 24', 'John D.': 7.8, 'Maria L.': 7.2, 'Roberto S.': 7.8, 'Sarah K.': 6.8, Average: 7.4 },
-  { month: 'Sep 24', 'John D.': 8.2, 'Maria L.': 7.1, 'Roberto S.': 7.7, 'Sarah K.': 7.2, Average: 7.6 },
-  { month: 'Oct 24', 'John D.': 8.1, 'Maria L.': 7.4, 'Roberto S.': 7.9, 'Sarah K.': 7.1, Average: 7.6 },
-  { month: 'Nov 24', 'John D.': 8.3, 'Maria L.': 7.3, 'Roberto S.': 8.0, 'Sarah K.': 7.4, Average: 7.8 },
-  { month: 'Dec 24', 'John D.': 8.2, 'Maria L.': 7.6, 'Roberto S.': 8.1, 'Sarah K.': 7.3, Average: 7.8 },
-  { month: 'Jan 25', 'John D.': 8.4, 'Maria L.': 7.5, 'Roberto S.': 8.2, 'Sarah K.': 7.5, Average: 7.9 },
-  { month: 'Feb 25', 'John D.': 8.5, 'Maria L.': 7.7, 'Roberto S.': 8.3, 'Sarah K.': 7.6, Average: 8.0 }
+  { month: 'Mar 24', Atlanta: 15, Tampa: 12, Jacksonville: 14, Orlando: 13, Average: 13.5, 'Atlanta/Osborne Farms': 16, 'Atlanta/Suwanee Square': 14, 'Atlanta/Scattered': 15, 'Tampa/Preserve at Pine Grove': 12, 'Tampa/Avila Bay': 11, 'Tampa/Belmont': 12, 'Tampa/Scattered': 13, 'Jacksonville/Sawyer\'s Preserve': 14, 'Jacksonville/Scattered': 13, 'Orlando/Scattered': 13 },
+  { month: 'Apr 24', Atlanta: 14, Tampa: 13, Jacksonville: 13, Orlando: 14, Average: 13.5, 'Atlanta/Osborne Farms': 15, 'Atlanta/Suwanee Square': 13, 'Atlanta/Scattered': 14, 'Tampa/Preserve at Pine Grove': 13, 'Tampa/Avila Bay': 12, 'Tampa/Belmont': 13, 'Tampa/Scattered': 14, 'Jacksonville/Sawyer\'s Preserve': 13, 'Jacksonville/Scattered': 12, 'Orlando/Scattered': 14 },
+  { month: 'May 24', Atlanta: 13, Tampa: 14, Jacksonville: 12, Orlando: 15, Average: 13.5, 'Atlanta/Osborne Farms': 14, 'Atlanta/Suwanee Square': 12, 'Atlanta/Scattered': 13, 'Tampa/Preserve at Pine Grove': 14, 'Tampa/Avila Bay': 13, 'Tampa/Belmont': 14, 'Tampa/Scattered': 15, 'Jacksonville/Sawyer\'s Preserve': 12, 'Jacksonville/Scattered': 11, 'Orlando/Scattered': 15 },
+  { month: 'Jun 24', Atlanta: 12, Tampa: 15, Jacksonville: 11, Orlando: 16, Average: 13.5, 'Atlanta/Osborne Farms': 13, 'Atlanta/Suwanee Square': 11, 'Atlanta/Scattered': 12, 'Tampa/Preserve at Pine Grove': 15, 'Tampa/Avila Bay': 14, 'Tampa/Belmont': 15, 'Tampa/Scattered': 16, 'Jacksonville/Sawyer\'s Preserve': 11, 'Jacksonville/Scattered': 10, 'Orlando/Scattered': 16 },
+  { month: 'Jul 24', Atlanta: 11, Tampa: 16, Jacksonville: 10, Orlando: 17, Average: 13.5, 'Atlanta/Osborne Farms': 12, 'Atlanta/Suwanee Square': 10, 'Atlanta/Scattered': 11, 'Tampa/Preserve at Pine Grove': 16, 'Tampa/Avila Bay': 15, 'Tampa/Belmont': 16, 'Tampa/Scattered': 17, 'Jacksonville/Sawyer\'s Preserve': 10, 'Jacksonville/Scattered': 9, 'Orlando/Scattered': 17 },
+  { month: 'Aug 24', Atlanta: 10, Tampa: 17, Jacksonville: 9, Orlando: 18, Average: 13.5, 'Atlanta/Osborne Farms': 11, 'Atlanta/Suwanee Square': 9, 'Atlanta/Scattered': 10, 'Tampa/Preserve at Pine Grove': 17, 'Tampa/Avila Bay': 16, 'Tampa/Belmont': 17, 'Tampa/Scattered': 18, 'Jacksonville/Sawyer\'s Preserve': 9, 'Jacksonville/Scattered': 8, 'Orlando/Scattered': 18 },
+  { month: 'Sep 24', Atlanta: 9, Tampa: 18, Jacksonville: 8, Orlando: 19, Average: 13.5, 'Atlanta/Osborne Farms': 10, 'Atlanta/Suwanee Square': 8, 'Atlanta/Scattered': 9, 'Tampa/Preserve at Pine Grove': 18, 'Tampa/Avila Bay': 17, 'Tampa/Belmont': 18, 'Tampa/Scattered': 19, 'Jacksonville/Sawyer\'s Preserve': 8, 'Jacksonville/Scattered': 7, 'Orlando/Scattered': 19 },
+  { month: 'Oct 24', Atlanta: 8, Tampa: 19, Jacksonville: 7, Orlando: 20, Average: 13.5, 'Atlanta/Osborne Farms': 9, 'Atlanta/Suwanee Square': 7, 'Atlanta/Scattered': 8, 'Tampa/Preserve at Pine Grove': 19, 'Tampa/Avila Bay': 18, 'Tampa/Belmont': 19, 'Tampa/Scattered': 20, 'Jacksonville/Sawyer\'s Preserve': 7, 'Jacksonville/Scattered': 6, 'Orlando/Scattered': 20 },
+  { month: 'Nov 24', Atlanta: 7, Tampa: 20, Jacksonville: 6, Orlando: 21, Average: 13.5, 'Atlanta/Osborne Farms': 8, 'Atlanta/Suwanee Square': 6, 'Atlanta/Scattered': 7, 'Tampa/Preserve at Pine Grove': 20, 'Tampa/Avila Bay': 19, 'Tampa/Belmont': 20, 'Tampa/Scattered': 21, 'Jacksonville/Sawyer\'s Preserve': 6, 'Jacksonville/Scattered': 5, 'Orlando/Scattered': 21 },
+  { month: 'Dec 24', Atlanta: 6, Tampa: 21, Jacksonville: 5, Orlando: 22, Average: 13.5, 'Atlanta/Osborne Farms': 7, 'Atlanta/Suwanee Square': 5, 'Atlanta/Scattered': 6, 'Tampa/Preserve at Pine Grove': 21, 'Tampa/Avila Bay': 20, 'Tampa/Belmont': 21, 'Tampa/Scattered': 22, 'Jacksonville/Sawyer\'s Preserve': 5, 'Jacksonville/Scattered': 4, 'Orlando/Scattered': 22 },
+  { month: 'Jan 25', Atlanta: 5, Tampa: 22, Jacksonville: 4, Orlando: 23, Average: 13.5, 'Atlanta/Osborne Farms': 6, 'Atlanta/Suwanee Square': 4, 'Atlanta/Scattered': 5, 'Tampa/Preserve at Pine Grove': 22, 'Tampa/Avila Bay': 21, 'Tampa/Belmont': 22, 'Tampa/Scattered': 23, 'Jacksonville/Sawyer\'s Preserve': 4, 'Jacksonville/Scattered': 3, 'Orlando/Scattered': 23 },
+  { month: 'Feb 25', Atlanta: 4, Tampa: 23, Jacksonville: 3, Orlando: 24, Average: 13.5, 'Atlanta/Osborne Farms': 5, 'Atlanta/Suwanee Square': 3, 'Atlanta/Scattered': 4, 'Tampa/Preserve at Pine Grove': 23, 'Tampa/Avila Bay': 22, 'Tampa/Belmont': 23, 'Tampa/Scattered': 24, 'Jacksonville/Sawyer\'s Preserve': 3, 'Jacksonville/Scattered': 2, 'Orlando/Scattered': 24 }
 ];
 
-// Monthly data for leasing timeline trend (last 12 months)
+// Mock Leasing Timeline Trend Data
 export const mockLeasingTimelineTrendData = [
-  { 
-    month: 'Mar 24',
-    Atlanta: { 'Lead to Sign': 13.8, 'Sign to Move': 16.9 },
-    Tampa: { 'Lead to Sign': 14.5, 'Sign to Move': 18.2 },
-    Jacksonville: { 'Lead to Sign': 14.9, 'Sign to Move': 17.6 },
-    Orlando: { 'Lead to Sign': 13.6, 'Sign to Move': 18.5 },
-    Average: { 'Lead to Sign': 14.2, 'Sign to Move': 17.8 }
-  },
-  { 
-    month: 'Apr 24',
-    Atlanta: { 'Lead to Sign': 15.2, 'Sign to Move': 15.8 },
-    Tampa: { 'Lead to Sign': 16.4, 'Sign to Move': 16.5 },
-    Jacksonville: { 'Lead to Sign': 16.1, 'Sign to Move': 16.9 },
-    Orlando: { 'Lead to Sign': 15.9, 'Sign to Move': 16.0 },
-    Average: { 'Lead to Sign': 15.9, 'Sign to Move': 16.3 }
-  },
-  { 
-    month: 'May 24',
-    Atlanta: { 'Lead to Sign': 16.8, 'Sign to Move': 15.5 },
-    Tampa: { 'Lead to Sign': 17.3, 'Sign to Move': 16.1 },
-    Jacksonville: { 'Lead to Sign': 17.5, 'Sign to Move': 15.8 },
-    Orlando: { 'Lead to Sign': 16.8, 'Sign to Move': 16.2 },
-    Average: { 'Lead to Sign': 17.1, 'Sign to Move': 15.9 }
-  },
-  { 
-    month: 'Jun 24',
-    Atlanta: { 'Lead to Sign': 16.1, 'Sign to Move': 14.5 },
-    Tampa: { 'Lead to Sign': 16.7, 'Sign to Move': 14.9 },
-    Jacksonville: { 'Lead to Sign': 16.5, 'Sign to Move': 15.1 },
-    Orlando: { 'Lead to Sign': 16.3, 'Sign to Move': 14.7 },
-    Average: { 'Lead to Sign': 16.4, 'Sign to Move': 14.8 }
-  },
-  { 
-    month: 'Jul 24',
-    Atlanta: { 'Lead to Sign': 14.9, 'Sign to Move': 16.4 },
-    Tampa: { 'Lead to Sign': 15.4, 'Sign to Move': 16.8 },
-    Jacksonville: { 'Lead to Sign': 15.6, 'Sign to Move': 16.9 },
-    Orlando: { 'Lead to Sign': 14.9, 'Sign to Move': 16.7 },
-    Average: { 'Lead to Sign': 15.2, 'Sign to Move': 16.7 }
-  },
-  { 
-    month: 'Aug 24',
-    Atlanta: { 'Lead to Sign': 14.5, 'Sign to Move': 17.0 },
-    Tampa: { 'Lead to Sign': 15.1, 'Sign to Move': 17.3 },
-    Jacksonville: { 'Lead to Sign': 14.8, 'Sign to Move': 17.4 },
-    Orlando: { 'Lead to Sign': 14.8, 'Sign to Move': 17.1 },
-    Average: { 'Lead to Sign': 14.8, 'Sign to Move': 17.2 }
-  },
-  { 
-    month: 'Sep 24',
-    Atlanta: { 'Lead to Sign': 16.4, 'Sign to Move': 15.2 },
-    Tampa: { 'Lead to Sign': 16.9, 'Sign to Move': 15.5 },
-    Jacksonville: { 'Lead to Sign': 16.8, 'Sign to Move': 15.6 },
-    Orlando: { 'Lead to Sign': 16.7, 'Sign to Move': 15.3 },
-    Average: { 'Lead to Sign': 16.7, 'Sign to Move': 15.4 }
-  },
-  { 
-    month: 'Oct 24',
-    Atlanta: { 'Lead to Sign': 17.0, 'Sign to Move': 14.6 },
-    Tampa: { 'Lead to Sign': 17.5, 'Sign to Move': 15.1 },
-    Jacksonville: { 'Lead to Sign': 17.4, 'Sign to Move': 15.0 },
-    Orlando: { 'Lead to Sign': 17.3, 'Sign to Move': 14.9 },
-    Average: { 'Lead to Sign': 17.3, 'Sign to Move': 14.9 }
-  },
-  { 
-    month: 'Nov 24',
-    Atlanta: { 'Lead to Sign': 15.5, 'Sign to Move': 16.5 },
-    Tampa: { 'Lead to Sign': 16.0, 'Sign to Move': 17.0 },
-    Jacksonville: { 'Lead to Sign': 15.9, 'Sign to Move': 16.9 },
-    Orlando: { 'Lead to Sign': 15.8, 'Sign to Move': 16.8 },
-    Average: { 'Lead to Sign': 15.8, 'Sign to Move': 16.8 }
-  },
-  { 
-    month: 'Dec 24',
-    Atlanta: { 'Lead to Sign': 14.2, 'Sign to Move': 17.2 },
-    Tampa: { 'Lead to Sign': 14.7, 'Sign to Move': 17.7 },
-    Jacksonville: { 'Lead to Sign': 14.6, 'Sign to Move': 17.6 },
-    Orlando: { 'Lead to Sign': 14.5, 'Sign to Move': 17.5 },
-    Average: { 'Lead to Sign': 14.5, 'Sign to Move': 17.5 }
-  },
-  { 
-    month: 'Jan 25',
-    Atlanta: { 'Lead to Sign': 15.8, 'Sign to Move': 15.2 },
-    Tampa: { 'Lead to Sign': 16.5, 'Sign to Move': 15.9 },
-    Jacksonville: { 'Lead to Sign': 16.3, 'Sign to Move': 16.1 },
-    Orlando: { 'Lead to Sign': 16.2, 'Sign to Move': 15.6 },
-    Average: { 'Lead to Sign': 16.2, 'Sign to Move': 15.7 }
-  },
-  { 
-    month: 'Feb 25',
-    Atlanta: { 'Lead to Sign': 17.1, 'Sign to Move': 14.8 },
-    Tampa: { 'Lead to Sign': 17.6, 'Sign to Move': 15.3 },
-    Jacksonville: { 'Lead to Sign': 17.5, 'Sign to Move': 15.2 },
-    Orlando: { 'Lead to Sign': 17.4, 'Sign to Move': 15.1 },
-    Average: { 'Lead to Sign': 17.4, 'Sign to Move': 15.1 }
-  }
+  { month: 'Mar 24', Atlanta: { 'Lead to Sign': 30, 'Sign to Move': 15 }, Tampa: { 'Lead to Sign': 28, 'Sign to Move': 14 }, Jacksonville: { 'Lead to Sign': 29, 'Sign to Move': 15 }, Orlando: { 'Lead to Sign': 31, 'Sign to Move': 16 }, Average: { 'Lead to Sign': 29.5, 'Sign to Move': 15 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 32, 'Sign to Move': 16 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 28, 'Sign to Move': 14 }, 'Atlanta/Scattered': { 'Lead to Sign': 30, 'Sign to Move': 15 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 27, 'Sign to Move': 13 }, 'Tampa/Avila Bay': { 'Lead to Sign': 29, 'Sign to Move': 14 }, 'Tampa/Belmont': { 'Lead to Sign': 28, 'Sign to Move': 13 }, 'Tampa/Scattered': { 'Lead to Sign': 29, 'Sign to Move': 14 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 29, 'Sign to Move': 15 }, 'Jacksonville/Scattered': { 'Lead to Sign': 28, 'Sign to Move': 14 }, 'Orlando/Scattered': { 'Lead to Sign': 31, 'Sign to Move': 16 } },
+  { month: 'Apr 24', Atlanta: { 'Lead to Sign': 29, 'Sign to Move': 14 }, Tampa: { 'Lead to Sign': 27, 'Sign to Move': 13 }, Jacksonville: { 'Lead to Sign': 28, 'Sign to Move': 14 }, Orlando: { 'Lead to Sign': 30, 'Sign to Move': 15 }, Average: { 'Lead to Sign': 28.5, 'Sign to Move': 14.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 31, 'Sign to Move': 15 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 27, 'Sign to Move': 13 }, 'Atlanta/Scattered': { 'Lead to Sign': 29, 'Sign to Move': 14 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 26, 'Sign to Move': 12 }, 'Tampa/Avila Bay': { 'Lead to Sign': 28, 'Sign to Move': 13 }, 'Tampa/Belmont': { 'Lead to Sign': 27, 'Sign to Move': 12 }, 'Tampa/Scattered': { 'Lead to Sign': 28, 'Sign to Move': 13 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 28, 'Sign to Move': 14 }, 'Jacksonville/Scattered': { 'Lead to Sign': 27, 'Sign to Move': 13 }, 'Orlando/Scattered': { 'Lead to Sign': 30, 'Sign to Move': 15 } },
+  { month: 'May 24', Atlanta: { 'Lead to Sign': 28, 'Sign to Move': 13 }, Tampa: { 'Lead to Sign': 26, 'Sign to Move': 12 }, Jacksonville: { 'Lead to Sign': 27, 'Sign to Move': 13 }, Orlando: { 'Lead to Sign': 29, 'Sign to Move': 14 }, Average: { 'Lead to Sign': 27.5, 'Sign to Move': 13.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 30, 'Sign to Move': 14 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 26, 'Sign to Move': 12 }, 'Atlanta/Scattered': { 'Lead to Sign': 28, 'Sign to Move': 13 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 25, 'Sign to Move': 11 }, 'Tampa/Avila Bay': { 'Lead to Sign': 27, 'Sign to Move': 12 }, 'Tampa/Belmont': { 'Lead to Sign': 26, 'Sign to Move': 11 }, 'Tampa/Scattered': { 'Lead to Sign': 27, 'Sign to Move': 12 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 27, 'Sign to Move': 13 }, 'Jacksonville/Scattered': { 'Lead to Sign': 26, 'Sign to Move': 12 }, 'Orlando/Scattered': { 'Lead to Sign': 29, 'Sign to Move': 14 } },
+  { month: 'Jun 24', Atlanta: { 'Lead to Sign': 27, 'Sign to Move': 12 }, Tampa: { 'Lead to Sign': 25, 'Sign to Move': 11 }, Jacksonville: { 'Lead to Sign': 26, 'Sign to Move': 12 }, Orlando: { 'Lead to Sign': 28, 'Sign to Move': 13 }, Average: { 'Lead to Sign': 26.5, 'Sign to Move': 12.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 29, 'Sign to Move': 13 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 25, 'Sign to Move': 11 }, 'Atlanta/Scattered': { 'Lead to Sign': 27, 'Sign to Move': 12 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 24, 'Sign to Move': 10 }, 'Tampa/Avila Bay': { 'Lead to Sign': 26, 'Sign to Move': 11 }, 'Tampa/Belmont': { 'Lead to Sign': 25, 'Sign to Move': 10 }, 'Tampa/Scattered': { 'Lead to Sign': 26, 'Sign to Move': 11 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 26, 'Sign to Move': 12 }, 'Jacksonville/Scattered': { 'Lead to Sign': 25, 'Sign to Move': 11 }, 'Orlando/Scattered': { 'Lead to Sign': 28, 'Sign to Move': 13 } },
+  { month: 'Jul 24', Atlanta: { 'Lead to Sign': 26, 'Sign to Move': 11 }, Tampa: { 'Lead to Sign': 24, 'Sign to Move': 10 }, Jacksonville: { 'Lead to Sign': 25, 'Sign to Move': 11 }, Orlando: { 'Lead to Sign': 27, 'Sign to Move': 12 }, Average: { 'Lead to Sign': 25.5, 'Sign to Move': 11.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 28, 'Sign to Move': 12 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 24, 'Sign to Move': 10 }, 'Atlanta/Scattered': { 'Lead to Sign': 26, 'Sign to Move': 11 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 23, 'Sign to Move': 9 }, 'Tampa/Avila Bay': { 'Lead to Sign': 25, 'Sign to Move': 10 }, 'Tampa/Belmont': { 'Lead to Sign': 24, 'Sign to Move': 9 }, 'Tampa/Scattered': { 'Lead to Sign': 25, 'Sign to Move': 10 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 25, 'Sign to Move': 11 }, 'Jacksonville/Scattered': { 'Lead to Sign': 24, 'Sign to Move': 10 }, 'Orlando/Scattered': { 'Lead to Sign': 27, 'Sign to Move': 12 } },
+  { month: 'Aug 24', Atlanta: { 'Lead to Sign': 25, 'Sign to Move': 10 }, Tampa: { 'Lead to Sign': 23, 'Sign to Move': 9 }, Jacksonville: { 'Lead to Sign': 24, 'Sign to Move': 10 }, Orlando: { 'Lead to Sign': 26, 'Sign to Move': 11 }, Average: { 'Lead to Sign': 24.5, 'Sign to Move': 10.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 27, 'Sign to Move': 11 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 23, 'Sign to Move': 9 }, 'Atlanta/Scattered': { 'Lead to Sign': 25, 'Sign to Move': 10 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 22, 'Sign to Move': 8 }, 'Tampa/Avila Bay': { 'Lead to Sign': 24, 'Sign to Move': 9 }, 'Tampa/Belmont': { 'Lead to Sign': 23, 'Sign to Move': 8 }, 'Tampa/Scattered': { 'Lead to Sign': 24, 'Sign to Move': 9 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 24, 'Sign to Move': 10 }, 'Jacksonville/Scattered': { 'Lead to Sign': 23, 'Sign to Move': 9 }, 'Orlando/Scattered': { 'Lead to Sign': 26, 'Sign to Move': 11 } },
+  { month: 'Sep 24', Atlanta: { 'Lead to Sign': 24, 'Sign to Move': 9 }, Tampa: { 'Lead to Sign': 22, 'Sign to Move': 8 }, Jacksonville: { 'Lead to Sign': 23, 'Sign to Move': 9 }, Orlando: { 'Lead to Sign': 25, 'Sign to Move': 10 }, Average: { 'Lead to Sign': 23.5, 'Sign to Move': 9.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 26, 'Sign to Move': 10 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 22, 'Sign to Move': 8 }, 'Atlanta/Scattered': { 'Lead to Sign': 24, 'Sign to Move': 9 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 21, 'Sign to Move': 7 }, 'Tampa/Avila Bay': { 'Lead to Sign': 23, 'Sign to Move': 8 }, 'Tampa/Belmont': { 'Lead to Sign': 22, 'Sign to Move': 7 }, 'Tampa/Scattered': { 'Lead to Sign': 23, 'Sign to Move': 8 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 23, 'Sign to Move': 9 }, 'Jacksonville/Scattered': { 'Lead to Sign': 22, 'Sign to Move': 8 }, 'Orlando/Scattered': { 'Lead to Sign': 25, 'Sign to Move': 10 } },
+  { month: 'Oct 24', Atlanta: { 'Lead to Sign': 23, 'Sign to Move': 8 }, Tampa: { 'Lead to Sign': 21, 'Sign to Move': 7 }, Jacksonville: { 'Lead to Sign': 22, 'Sign to Move': 8 }, Orlando: { 'Lead to Sign': 24, 'Sign to Move': 9 }, Average: { 'Lead to Sign': 22.5, 'Sign to Move': 8.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 25, 'Sign to Move': 9 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 21, 'Sign to Move': 7 }, 'Atlanta/Scattered': { 'Lead to Sign': 23, 'Sign to Move': 8 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 20, 'Sign to Move': 6 }, 'Tampa/Avila Bay': { 'Lead to Sign': 22, 'Sign to Move': 7 }, 'Tampa/Belmont': { 'Lead to Sign': 21, 'Sign to Move': 6 }, 'Tampa/Scattered': { 'Lead to Sign': 22, 'Sign to Move': 7 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 22, 'Sign to Move': 8 }, 'Jacksonville/Scattered': { 'Lead to Sign': 21, 'Sign to Move': 7 }, 'Orlando/Scattered': { 'Lead to Sign': 24, 'Sign to Move': 9 } },
+  { month: 'Nov 24', Atlanta: { 'Lead to Sign': 22, 'Sign to Move': 7 }, Tampa: { 'Lead to Sign': 20, 'Sign to Move': 6 }, Jacksonville: { 'Lead to Sign': 21, 'Sign to Move': 7 }, Orlando: { 'Lead to Sign': 23, 'Sign to Move': 8 }, Average: { 'Lead to Sign': 21.5, 'Sign to Move': 7.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 24, 'Sign to Move': 8 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 20, 'Sign to Move': 6 }, 'Atlanta/Scattered': { 'Lead to Sign': 22, 'Sign to Move': 7 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 19, 'Sign to Move': 5 }, 'Tampa/Avila Bay': { 'Lead to Sign': 21, 'Sign to Move': 6 }, 'Tampa/Belmont': { 'Lead to Sign': 20, 'Sign to Move': 5 }, 'Tampa/Scattered': { 'Lead to Sign': 21, 'Sign to Move': 6 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 21, 'Sign to Move': 7 }, 'Jacksonville/Scattered': { 'Lead to Sign': 20, 'Sign to Move': 6 }, 'Orlando/Scattered': { 'Lead to Sign': 23, 'Sign to Move': 8 } },
+  { month: 'Dec 24', Atlanta: { 'Lead to Sign': 21, 'Sign to Move': 6 }, Tampa: { 'Lead to Sign': 19, 'Sign to Move': 5 }, Jacksonville: { 'Lead to Sign': 20, 'Sign to Move': 6 }, Orlando: { 'Lead to Sign': 22, 'Sign to Move': 7 }, Average: { 'Lead to Sign': 20.5, 'Sign to Move': 6.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 23, 'Sign to Move': 7 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 19, 'Sign to Move': 5 }, 'Atlanta/Scattered': { 'Lead to Sign': 21, 'Sign to Move': 6 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 18, 'Sign to Move': 4 }, 'Tampa/Avila Bay': { 'Lead to Sign': 20, 'Sign to Move': 5 }, 'Tampa/Belmont': { 'Lead to Sign': 19, 'Sign to Move': 4 }, 'Tampa/Scattered': { 'Lead to Sign': 20, 'Sign to Move': 5 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 20, 'Sign to Move': 6 }, 'Jacksonville/Scattered': { 'Lead to Sign': 19, 'Sign to Move': 5 }, 'Orlando/Scattered': { 'Lead to Sign': 22, 'Sign to Move': 7 } },
+  { month: 'Jan 25', Atlanta: { 'Lead to Sign': 20, 'Sign to Move': 5 }, Tampa: { 'Lead to Sign': 18, 'Sign to Move': 4 }, Jacksonville: { 'Lead to Sign': 19, 'Sign to Move': 5 }, Orlando: { 'Lead to Sign': 21, 'Sign to Move': 6 }, Average: { 'Lead to Sign': 19.5, 'Sign to Move': 5.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 22, 'Sign to Move': 6 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 18, 'Sign to Move': 4 }, 'Atlanta/Scattered': { 'Lead to Sign': 20, 'Sign to Move': 5 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 17, 'Sign to Move': 3 }, 'Tampa/Avila Bay': { 'Lead to Sign': 19, 'Sign to Move': 4 }, 'Tampa/Belmont': { 'Lead to Sign': 18, 'Sign to Move': 3 }, 'Tampa/Scattered': { 'Lead to Sign': 19, 'Sign to Move': 4 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 19, 'Sign to Move': 5 }, 'Jacksonville/Scattered': { 'Lead to Sign': 18, 'Sign to Move': 4 }, 'Orlando/Scattered': { 'Lead to Sign': 21, 'Sign to Move': 6 } },
+  { month: 'Feb 25', Atlanta: { 'Lead to Sign': 19, 'Sign to Move': 4 }, Tampa: { 'Lead to Sign': 17, 'Sign to Move': 3 }, Jacksonville: { 'Lead to Sign': 18, 'Sign to Move': 4 }, Orlando: { 'Lead to Sign': 20, 'Sign to Move': 5 }, Average: { 'Lead to Sign': 18.5, 'Sign to Move': 4.5 }, 'Atlanta/Osborne Farms': { 'Lead to Sign': 21, 'Sign to Move': 5 }, 'Atlanta/Suwanee Square': { 'Lead to Sign': 17, 'Sign to Move': 3 }, 'Atlanta/Scattered': { 'Lead to Sign': 19, 'Sign to Move': 4 }, 'Tampa/Preserve at Pine Grove': { 'Lead to Sign': 16, 'Sign to Move': 2 }, 'Tampa/Avila Bay': { 'Lead to Sign': 18, 'Sign to Move': 3 }, 'Tampa/Belmont': { 'Lead to Sign': 17, 'Sign to Move': 2 }, 'Tampa/Scattered': { 'Lead to Sign': 18, 'Sign to Move': 3 }, 'Jacksonville/Sawyer\'s Preserve': { 'Lead to Sign': 18, 'Sign to Move': 4 }, 'Jacksonville/Scattered': { 'Lead to Sign': 17, 'Sign to Move': 3 }, 'Orlando/Scattered': { 'Lead to Sign': 20, 'Sign to Move': 5 } }
 ];
 
-export const mockOccupancyData: ChartData[] = [
-  { name: 'Atlanta', value: 95.2 },
-  { name: 'Tampa', value: 93.8 },
-  { name: 'Jacksonville', value: 92.5 },
-  { name: 'Orlando', value: 94.7 }
+// Mock Occupancy Data
+export const mockOccupancyData = [
+  { month: 'Mar 24', Atlanta: 94.2, Tampa: 91.5, Jacksonville: 93.1, Orlando: 92.4, Average: 92.8, 'Atlanta/Osborne Farms': 95.0, 'Atlanta/Suwanee Square': 93.5, 'Atlanta/Scattered': 94.0, 'Tampa/Preserve at Pine Grove': 91.0, 'Tampa/Avila Bay': 92.0, 'Tampa/Belmont': 91.5, 'Tampa/Scattered': 91.8, 'Jacksonville/Sawyer\'s Preserve': 93.0, 'Jacksonville/Scattered': 93.2, 'Orlando/Scattered': 92.4 },
+  { month: 'Apr 24', Atlanta: 93.8, Tampa: 92.1, Jacksonville: 92.5, Orlando: 93.2, Average: 92.9, 'Atlanta/Osborne Farms': 94.5, 'Atlanta/Suwanee Square': 92.5, 'Atlanta/Scattered': 93.0, 'Tampa/Preserve at Pine Grove': 92.0, 'Tampa/Avila Bay': 91.5, 'Tampa/Belmont': 92.2, 'Tampa/Scattered': 92.1, 'Jacksonville/Sawyer\'s Preserve': 92.5, 'Jacksonville/Scattered': 92.8, 'Orlando/Scattered': 93.2 },
+  { month: 'May 24', Atlanta: 93.5, Tampa: 92.0, Jacksonville: 92.8, Orlando: 93.0, Average: 92.8, 'Atlanta/Osborne Farms': 94.0, 'Atlanta/Suwanee Square': 92.0, 'Atlanta/Scattered': 92.5, 'Tampa/Preserve at Pine Grove': 91.8, 'Tampa/Avila Bay': 91.2, 'Tampa/Belmont': 91.9, 'Tampa/Scattered': 91.7, 'Jacksonville/Sawyer\'s Preserve': 92.8, 'Jacksonville/Scattered': 92.9, 'Orlando/Scattered': 93.0 },
+  { month: 'Jun 24', Atlanta: 93.2, Tampa: 91.8, Jacksonville: 92.6, Orlando: 92.8, Average: 92.6, 'Atlanta/Osborne Farms': 93.8, 'Atlanta/Suwanee Square': 91.8, 'Atlanta/Scattered': 92.3, 'Tampa/Preserve at Pine Grove': 91.6, 'Tampa/Avila Bay': 91.0, 'Tampa/Belmont': 91.7, 'Tampa/Scattered': 91.5, 'Jacksonville/Sawyer\'s Preserve': 92.6, 'Jacksonville/Scattered': 92.7, 'Orlando/Scattered': 92.8 },
+  { month: 'Jul 24', Atlanta: 93.0, Tampa: 91.6, Jacksonville: 92.4, Orlando: 92.6, Average: 92.4, 'Atlanta/Osborne Farms': 93.6, 'Atlanta/Suwanee Square': 91.6, 'Atlanta/Scattered': 92.1, 'Tampa/Preserve at Pine Grove': 91.4, 'Tampa/Avila Bay': 90.8, 'Tampa/Belmont': 91.5, 'Tampa/Scattered': 91.3, 'Jacksonville/Sawyer\'s Preserve': 92.4, 'Jacksonville/Scattered': 92.5, 'Orlando/Scattered': 92.6 },
+  { month: 'Aug 24', Atlanta: 92.8, Tampa: 91.4, Jacksonville: 92.2, Orlando: 92.4, Average: 92.2, 'Atlanta/Osborne Farms': 93.4, 'Atlanta/Suwanee Square': 91.4, 'Atlanta/Scattered': 91.9, 'Tampa/Preserve at Pine Grove': 91.2, 'Tampa/Avila Bay': 90.6, 'Tampa/Belmont': 91.3, 'Tampa/Scattered': 91.1, 'Jacksonville/Sawyer\'s Preserve': 92.2, 'Jacksonville/Scattered': 92.3, 'Orlando/Scattered': 92.4 },
+  { month: 'Sep 24', Atlanta: 92.6, Tampa: 91.2, Jacksonville: 92.0, Orlando: 92.2, Average: 92.0, 'Atlanta/Osborne Farms': 93.2, 'Atlanta/Suwanee Square': 91.2, 'Atlanta/Scattered': 91.7, 'Tampa/Preserve at Pine Grove': 91.0, 'Tampa/Avila Bay': 90.4, 'Tampa/Belmont': 91.1, 'Tampa/Scattered': 90.9, 'Jacksonville/Sawyer\'s Preserve': 92.0, 'Jacksonville/Scattered': 92.1, 'Orlando/Scattered': 92.2 },
+  { month: 'Oct 24', Atlanta: 92.4, Tampa: 91.0, Jacksonville: 91.8, Orlando: 92.0, Average: 91.8, 'Atlanta/Osborne Farms': 93.0, 'Atlanta/Suwanee Square': 91.0, 'Atlanta/Scattered': 91.5, 'Tampa/Preserve at Pine Grove': 90.8, 'Tampa/Avila Bay': 90.2, 'Tampa/Belmont': 90.9, 'Tampa/Scattered': 90.7, 'Jacksonville/Sawyer\'s Preserve': 91.8, 'Jacksonville/Scattered': 91.9, 'Orlando/Scattered': 92.0 },
+  { month: 'Nov 24', Atlanta: 92.2, Tampa: 90.8, Jacksonville: 91.6, Orlando: 91.8, Average: 91.6, 'Atlanta/Osborne Farms': 92.8, 'Atlanta/Suwanee Square': 90.8, 'Atlanta/Scattered': 91.3, 'Tampa/Preserve at Pine Grove': 90.6, 'Tampa/Avila Bay': 90.0, 'Tampa/Belmont': 90.7, 'Tampa/Scattered': 90.5, 'Jacksonville/Sawyer\'s Preserve': 91.6, 'Jacksonville/Scattered': 91.7, 'Orlando/Scattered': 91.8 },
+  { month: 'Dec 24', Atlanta: 92.0, Tampa: 90.6, Jacksonville: 91.4, Orlando: 91.6, Average: 91.4, 'Atlanta/Osborne Farms': 92.6, 'Atlanta/Suwanee Square': 90.6, 'Atlanta/Scattered': 91.1, 'Tampa/Preserve at Pine Grove': 90.4, 'Tampa/Avila Bay': 89.8, 'Tampa/Belmont': 90.5, 'Tampa/Scattered': 90.3, 'Jacksonville/Sawyer\'s Preserve': 91.4, 'Jacksonville/Scattered': 91.5, 'Orlando/Scattered': 91.6 },
+  { month: 'Jan 25', Atlanta: 91.8, Tampa: 90.4, Jacksonville: 91.2, Orlando: 91.4, Average: 91.3, 'Atlanta/Osborne Farms': 92.4, 'Atlanta/Suwanee Square': 90.4, 'Atlanta/Scattered': 90.9, 'Tampa/Preserve at Pine Grove': 90.2, 'Tampa/Avila Bay': 89.6, 'Tampa/Belmont': 90.3, 'Tampa/Scattered': 90.1, 'Jacksonville/Sawyer\'s Preserve': 91.2, 'Jacksonville/Scattered': 91.3, 'Orlando/Scattered': 91.4 },
+  { month: 'Feb 25', Atlanta: 91.6, Tampa: 90.2, Jacksonville: 91.0, Orlando: 91.2, Average: 91.2, 'Atlanta/Osborne Farms': 92.2, 'Atlanta/Suwanee Square': 90.2, 'Atlanta/Scattered': 90.7, 'Tampa/Preserve at Pine Grove': 90.0, 'Tampa/Avila Bay': 89.4, 'Tampa/Belmont': 90.1, 'Tampa/Scattered': 89.9, 'Jacksonville/Sawyer\'s Preserve': 91.0, 'Jacksonville/Scattered': 91.1, 'Orlando/Scattered': 91.2 }
 ];
 
-export const mockDelinquencyData: ChartData[] = [
-  { name: 'Atlanta', value: 2.1 },
-  { name: 'Tampa', value: 2.4 },
-  { name: 'Jacksonville', value: 2.6 },
-  { name: 'Orlando', value: 2.2 }
+// Mock Delinquency Data
+export const mockDelinquencyData = [
+  { month: 'Mar 24', Atlanta: 3.2, Tampa: 3.5, Jacksonville: 3.1, Orlando: 3.4, Average: 3.3, 'Atlanta/Osborne Farms': 3.0, 'Atlanta/Suwanee Square': 3.3, 'Atlanta/Scattered': 3.1, 'Tampa/Preserve at Pine Grove': 3.5, 'Tampa/Avila Bay': 3.6, 'Tampa/Belmont': 3.4, 'Tampa/Scattered': 3.5, 'Jacksonville/Sawyer\'s Preserve': 3.1, 'Jacksonville/Scattered': 3.2, 'Orlando/Scattered': 3.4 },
+  { month: 'Apr 24', Atlanta: 3.1, Tampa: 3.6, Jacksonville: 3.0, Orlando: 3.5, Average: 3.3, 'Atlanta/Osborne Farms': 2.9, 'Atlanta/Suwanee Square': 3.4, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.6, 'Tampa/Avila Bay': 3.7, 'Tampa/Belmont': 3.5, 'Tampa/Scattered': 3.6, 'Jacksonville/Sawyer\'s Preserve': 3.0, 'Jacksonville/Scattered': 3.1, 'Orlando/Scattered': 3.5 },
+  { month: 'May 24', Atlanta: 3.0, Tampa: 3.7, Jacksonville: 2.9, Orlando: 3.6, Average: 3.3, 'Atlanta/Osborne Farms': 2.8, 'Atlanta/Suwanee Square': 3.5, 'Atlanta/Scattered': 3.3, 'Tampa/Preserve at Pine Grove': 3.7, 'Tampa/Avila Bay': 3.8, 'Tampa/Belmont': 3.6, 'Tampa/Scattered': 3.7, 'Jacksonville/Sawyer\'s Preserve': 2.9, 'Jacksonville/Scattered': 3.0, 'Orlando/Scattered': 3.6 },
+  { month: 'Jun 24', Atlanta: 2.9, Tampa: 3.8, Jacksonville: 2.8, Orlando: 3.7, Average: 3.3, 'Atlanta/Osborne Farms': 2.7, 'Atlanta/Suwanee Square': 3.6, 'Atlanta/Scattered': 3.4, 'Tampa/Preserve at Pine Grove': 3.8, 'Tampa/Avila Bay': 3.9, 'Tampa/Belmont': 3.7, 'Tampa/Scattered': 3.8, 'Jacksonville/Sawyer\'s Preserve': 2.8, 'Jacksonville/Scattered': 2.9, 'Orlando/Scattered': 3.7 },
+  { month: 'Jul 24', Atlanta: 2.8, Tampa: 3.9, Jacksonville: 2.7, Orlando: 3.8, Average: 3.3, 'Atlanta/Osborne Farms': 2.6, 'Atlanta/Suwanee Square': 3.7, 'Atlanta/Scattered': 3.5, 'Tampa/Preserve at Pine Grove': 3.9, 'Tampa/Avila Bay': 4.0, 'Tampa/Belmont': 3.8, 'Tampa/Scattered': 3.9, 'Jacksonville/Sawyer\'s Preserve': 2.7, 'Jacksonville/Scattered': 2.8, 'Orlando/Scattered': 3.8 },
+  { month: 'Aug 24', Atlanta: 2.7, Tampa: 4.0, Jacksonville: 2.6, Orlando: 3.9, Average: 3.3, 'Atlanta/Osborne Farms': 2.5, 'Atlanta/Suwanee Square': 3.8, 'Atlanta/Scattered': 3.6, 'Tampa/Preserve at Pine Grove': 4.0, 'Tampa/Avila Bay': 4.1, 'Tampa/Belmont': 3.9, 'Tampa/Scattered': 4.0, 'Jacksonville/Sawyer\'s Preserve': 2.6, 'Jacksonville/Scattered': 2.7, 'Orlando/Scattered': 3.9 },
+  { month: 'Sep 24', Atlanta: 2.6, Tampa: 4.1, Jacksonville: 2.5, Orlando: 4.0, Average: 3.3, 'Atlanta/Osborne Farms': 2.4, 'Atlanta/Suwanee Square': 3.9, 'Atlanta/Scattered': 3.7, 'Tampa/Preserve at Pine Grove': 4.1, 'Tampa/Avila Bay': 4.2, 'Tampa/Belmont': 4.0, 'Tampa/Scattered': 4.1, 'Jacksonville/Sawyer\'s Preserve': 2.5, 'Jacksonville/Scattered': 2.6, 'Orlando/Scattered': 4.0 },
+  { month: 'Oct 24', Atlanta: 2.5, Tampa: 4.2, Jacksonville: 2.4, Orlando: 4.1, Average: 3.3, 'Atlanta/Osborne Farms': 2.3, 'Atlanta/Suwanee Square': 4.0, 'Atlanta/Scattered': 3.8, 'Tampa/Preserve at Pine Grove': 4.2, 'Tampa/Avila Bay': 4.3, 'Tampa/Belmont': 4.1, 'Tampa/Scattered': 4.2, 'Jacksonville/Sawyer\'s Preserve': 2.4, 'Jacksonville/Scattered': 2.5, 'Orlando/Scattered': 4.1 },
+  { month: 'Nov 24', Atlanta: 2.4, Tampa: 4.3, Jacksonville: 2.3, Orlando: 4.2, Average: 3.3, 'Atlanta/Osborne Farms': 2.2, 'Atlanta/Suwanee Square': 4.1, 'Atlanta/Scattered': 3.9, 'Tampa/Preserve at Pine Grove': 4.3, 'Tampa/Avila Bay': 4.4, 'Tampa/Belmont': 4.2, 'Tampa/Scattered': 4.3, 'Jacksonville/Sawyer\'s Preserve': 2.3, 'Jacksonville/Scattered': 2.4, 'Orlando/Scattered': 4.2 },
+  { month: 'Dec 24', Atlanta: 2.3, Tampa: 4.4, Jacksonville: 2.2, Orlando: 4.3, Average: 3.3, 'Atlanta/Osborne Farms': 2.1, 'Atlanta/Suwanee Square': 4.2, 'Atlanta/Scattered': 4.0, 'Tampa/Preserve at Pine Grove': 4.4, 'Tampa/Avila Bay': 4.5, 'Tampa/Belmont': 4.3, 'Tampa/Scattered': 4.4, 'Jacksonville/Sawyer\'s Preserve': 2.2, 'Jacksonville/Scattered': 2.3, 'Orlando/Scattered': 4.3 },
+  { month: 'Jan 25', Atlanta: 2.2, Tampa: 4.5, Jacksonville: 2.1, Orlando: 4.4, Average: 3.3, 'Atlanta/Osborne Farms': 2.0, 'Atlanta/Suwanee Square': 4.3, 'Atlanta/Scattered': 4.1, 'Tampa/Preserve at Pine Grove': 4.5, 'Tampa/Avila Bay': 4.6, 'Tampa/Belmont': 4.4, 'Tampa/Scattered': 4.5, 'Jacksonville/Sawyer\'s Preserve': 2.1, 'Jacksonville/Scattered': 2.2, 'Orlando/Scattered': 4.4 },
+  { month: 'Feb 25', Atlanta: 2.1, Tampa: 4.6, Jacksonville: 2.0, Orlando: 4.5, Average: 3.3, 'Atlanta/Osborne Farms': 1.9, 'Atlanta/Suwanee Square': 4.4, 'Atlanta/Scattered': 4.2, 'Tampa/Preserve at Pine Grove': 4.6, 'Tampa/Avila Bay': 4.7, 'Tampa/Belmont': 4.5, 'Tampa/Scattered': 4.6, 'Jacksonville/Sawyer\'s Preserve': 2.0, 'Jacksonville/Scattered': 2.1, 'Orlando/Scattered': 4.5 }
 ];
 
 export const mockBillHoursData: ChartData[] = [

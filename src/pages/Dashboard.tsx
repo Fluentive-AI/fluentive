@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import MetricsGrid from '@/components/dashboard/MetricsGrid';
 import MetricCard from '@/components/dashboard/MetricCard';
 import SimpleLineChart from '@/components/dashboard/SimpleLineChart';
@@ -31,6 +31,7 @@ import AddMetricCardDialog from '@/components/dashboard/AddMetricCardDialog';
 import AddGraphDialog from '@/components/dashboard/AddGraphDialog';
 import { toast } from 'sonner';
 import { MetricData } from '@/types';
+import ChangeMetricDialog from '@/components/dashboard/ChangeMetricDialog';
 
 interface DashboardCard {
   id: number;
@@ -62,17 +63,20 @@ interface DashboardMetric {
 const initialDashboards: Dashboard[] = [
   { 
     id: '1', 
-    name: 'Default Overview', 
+    name: 'Default Dashboard', 
     isDefault: true,
     cards: [
-      { id: 1, title: 'Occupancy Rate', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all', category: 'leasing' },
-      { id: 2, title: 'Renewals', type: 'line', kpi: 'renewals', timeframe: 'year', market: 'all', category: 'leasing' },
-      { id: 3, title: 'Maintenance Metrics', type: 'line', kpi: 'resolution-time', timeframe: 'month', market: 'all', category: 'maintenance' }
+      { id: 1, title: 'Renewals', type: 'line', kpi: 'renewals', timeframe: 'year', market: 'all', category: 'leasing' },
+      { id: 2, title: 'Occupancy Rate', type: 'line', kpi: 'occupancy', timeframe: 'year', market: 'all', category: 'operations' },
+      // { id: 3, title: 'Billable Hours/ Day/ Tech', type: 'line', kpi: 'billable-hours', timeframe: 'quarter', market: 'all', category: 'maintenance' },
+      { id: 3, title: 'Delinquency', type: 'line', kpi: 'delinquency', timeframe: 'year', market: 'all', category: 'operations' },
+      { id: 4, title: 'Leasing Timeline', type: 'bar', kpi: 'leasing-velocity', timeframe: 'quarter', market: 'all', category: 'leasing' },
+      // { id: 6, title: 'Work Orders/ Day/ Tech', type: 'line', kpi: 'work-orders', timeframe: 'month', market: 'all', category: 'maintenance' }
     ]
   },
   { 
     id: '2', 
-    name: 'Leasing Focus', 
+    name: 'Leasing Dashboard', 
     isDefault: false,
     cards: [
       { id: 1, title: 'Leasing Velocity', type: 'bar', kpi: 'leasing-velocity', timeframe: 'quarter', market: 'all', category: 'leasing' },
@@ -80,16 +84,16 @@ const initialDashboards: Dashboard[] = [
       { id: 3, title: 'Renewal Trends', type: 'line', kpi: 'renewals', timeframe: 'year', market: 'all', category: 'leasing' }
     ]
   },
-  { 
-    id: '3', 
-    name: 'Maintenance KPIs', 
-    isDefault: false,
-    cards: [
-      { id: 1, title: 'Work Order Resolution', type: 'line', kpi: 'resolution-time', timeframe: 'month', market: 'all', category: 'maintenance' },
-      { id: 2, title: 'Billable Hours', type: 'line', kpi: 'billable-hours', timeframe: 'month', market: 'all', category: 'maintenance' },
-      { id: 3, title: 'Work Orders per Tech', type: 'bar', kpi: 'work-orders', timeframe: 'month', market: 'all', category: 'maintenance' }
-    ]
-  },
+  // { 
+  //   id: '3', 
+  //   name: 'Maintenance KPIs', 
+  //   isDefault: false,
+  //   cards: [
+  //     { id: 1, title: 'Work Order Resolution', type: 'line', kpi: 'resolution-time', timeframe: 'month', market: 'all', category: 'maintenance' },
+  //     { id: 2, title: 'Billable Hours', type: 'line', kpi: 'billable-hours', timeframe: 'month', market: 'all', category: 'maintenance' },
+  //     { id: 3, title: 'Work Orders per Tech', type: 'bar', kpi: 'work-orders', timeframe: 'month', market: 'all', category: 'maintenance' }
+  //   ]
+  // },
   { 
     id: '4', 
     name: 'Occupancy Tracker', 
@@ -103,13 +107,16 @@ const initialDashboards: Dashboard[] = [
 
 const Dashboard = () => {
   const [selectedMarketCommunities, setSelectedMarketCommunities] = useState<string[]>([]);
-  const [viewMode, setViewMode] = useState<'market' | 'community'>('market');
   const [dashboards, setDashboards] = useState<Dashboard[]>(initialDashboards);
   const [activeDashboard, setActiveDashboard] = useState<Dashboard>(dashboards[0]);
   const [createDashboardOpen, setCreateDashboardOpen] = useState(false);
   const [addMetricCardOpen, setAddMetricCardOpen] = useState(false);
   const [addGraphOpen, setAddGraphOpen] = useState(false);
   const [customMetrics, setCustomMetrics] = useState<DashboardMetric[]>([]);
+  const [hiddenMetrics, setHiddenMetrics] = useState<string[]>([]);
+  const [changeMetricOpen, setChangeMetricOpen] = useState(false);
+  const [dialogMode, setDialogMode] = useState<'add' | 'change'>('change');
+  const [metricToChange, setMetricToChange] = useState<{id: string | number, index: number} | null>(null);
 
   useEffect(() => {
     const handleCreateDashboardEvent = (event: CustomEvent) => {
@@ -125,6 +132,25 @@ const Dashboard = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Check if there's a saved default dashboard ID
+    const savedDefaultId = localStorage.getItem('defaultDashboardId');
+    
+    if (savedDefaultId) {
+      // Find the dashboard with this ID
+      const defaultDashboard = dashboards.find(d => d.id === savedDefaultId);
+      if (defaultDashboard) {
+        setActiveDashboard(defaultDashboard);
+      }
+    } else {
+      // Otherwise use the one marked as default in the initial data
+      const defaultDashboard = dashboards.find(d => d.isDefault);
+      if (defaultDashboard) {
+        setActiveDashboard(defaultDashboard);
+      }
+    }
+  }, [dashboards]);
+
   const getMarketFromCommunity = (community: string): string => {
     return community.split('/')[0];
   };
@@ -136,157 +162,163 @@ const Dashboard = () => {
     return [...new Set(markets)];
   };
 
-  const filterMetricsBySelection = (metrics: typeof mockDashboardMetrics) => {
-    const selectedMarkets = getSelectedMarkets();
-    
-    if (selectedMarkets.includes('all') || selectedMarketCommunities.length === 0) {
+  const determineTrendStatus = (kpi: string, change: number): string => {
+    const increaseGoodKPIs = ['occupancy', 'renewals', 'rent-increase', 'number_of_homes', 'average_rent'];
+    const decreaseGoodKPIs = ['delinquency'];
+
+    if (increaseGoodKPIs.includes(kpi)) {
+      return change > 0 ? 'increase_good' : change < 0 ? 'decrease_bad' : 'neutral';
+    } else if (decreaseGoodKPIs.includes(kpi)) {
+      return change > 0 ? 'increase_bad' : change < 0 ? 'decrease_good' : 'neutral';
+    }
+    return 'neutral';
+  };
+
+  const filterMetricsBySelection = (metrics: MetricData[]) => {
+    console.log('Selected Market Communities:', selectedMarketCommunities);
+
+    if (selectedMarketCommunities.length === 0) {
       return metrics;
     }
 
-    if (viewMode === 'market') {
-      return metrics.map(metric => ({
-        ...metric,
-        value: metric.markets?.[selectedMarkets[0]]?.value ?? metric.value,
-        change: metric.markets?.[selectedMarkets[0]]?.change ?? metric.change,
-        status: metric.markets?.[selectedMarkets[0]]?.status ?? metric.status,
-      }));
-    }
+    return metrics.map(metric => {
+      if (selectedMarketCommunities.length === 1) {
+        const community = selectedMarketCommunities[0];
+        console.log('Filtering for community:', community);
+        return {
+          ...metric,
+          value: metric.communities?.[community]?.value ?? metric.value,
+          change: metric.communities?.[community]?.change ?? metric.change,
+          status: metric.communities?.[community]?.status ?? metric.status,
+        };
+      }
 
-    return metrics.map(metric => ({
-      ...metric,
-      value: metric.markets?.[getMarketFromCommunity(selectedMarketCommunities[0])]?.value ?? metric.value,
-      change: metric.markets?.[getMarketFromCommunity(selectedMarketCommunities[0])]?.change ?? metric.change,
-      status: metric.markets?.[getMarketFromCommunity(selectedMarketCommunities[0])]?.status ?? metric.status,
-    }));
+      if (metric.kpi === 'number_of_homes') {
+        // Sum for number_of_homes
+        const totalHomes = selectedMarketCommunities.reduce((acc, community) => {
+          const communityValue = metric.communities?.[community]?.value ?? 0;
+          console.log(`Community: ${community}, Value: ${communityValue}`);
+          return acc + communityValue;
+        }, 0);
+
+        const totalChange = selectedMarketCommunities.reduce((acc, community) => {
+          return acc + (metric.communities?.[community]?.change ?? 0);
+        }, 0);
+
+        const averageChange = totalChange / selectedMarketCommunities.length;
+        const status = determineTrendStatus(metric.kpi, averageChange);
+
+        return {
+          ...metric,
+          value: totalHomes,
+          change: averageChange,
+          status,
+        };
+      } else {
+        // Average for other KPIs
+        const totalValue = selectedMarketCommunities.reduce((acc, community) => {
+          const communityValue = metric.communities?.[community]?.value ?? 0;
+          console.log(`Community: ${community}, Value: ${communityValue}`);
+          return acc + communityValue;
+        }, 0);
+
+        let averageValue;
+        if (metric.kpi === 'average_rent') {
+          averageValue = (totalValue / selectedMarketCommunities.length).toFixed(0);
+        } else {
+          averageValue = (totalValue / selectedMarketCommunities.length).toFixed(1);
+        }
+
+        const totalChange = selectedMarketCommunities.reduce((acc, community) => {
+          return acc + (metric.communities?.[community]?.change ?? 0);
+        }, 0);
+
+        const averageChange = totalChange / selectedMarketCommunities.length;
+        const status = determineTrendStatus(metric.kpi, averageChange);
+
+        return {
+          ...metric,
+          value: parseFloat(averageValue), // Convert back to number
+          change: averageChange,
+          status,
+        };
+      }
+    });
   };
 
-  const filterChartData = (data: any[], isLeasingTimeline: boolean = false, isTechnicianData: boolean = false) => {
-    const selectedMarkets = getSelectedMarkets();
+  const filterChartData = (data: any[], isStacked = false, isTechnician = false) => {
+    // If no communities selected, show only totals and markets
+    if (selectedMarketCommunities.length === 0) {
+      return data.map(item => {
+        const result = { month: item.month };
+        
+        // Include Total/Average
+        if (item.Total || item.Average) {
+          result.Total = item.Total || item.Average;
+        }
+        
+        // Include only market-level data
+        ['Atlanta', 'Tampa', 'Jacksonville', 'Orlando'].forEach(market => {
+          if (item[market]) {
+            result[market] = item[market];
+          }
+        });
+        
+        // Handle special case for stacked charts
+        if (isStacked) {
+          if (item['Lead to Sign']) result['Lead to Sign'] = item['Lead to Sign'];
+          if (item['Sign to Move']) result['Sign to Move'] = item['Sign to Move'];
+        }
+        
+        // Handle special case for technician data
+        if (isTechnician) {
+          if (item['Average per tech']) result['Average per tech'] = item['Average per tech'];
+        }
+        
+        return result;
+      });
+    }
     
-    if (isTechnicianData) {
-      if (selectedMarketCommunities.length === 0 || selectedMarkets.includes('all')) {
-        if (viewMode === 'market') {
-          return data;
-        } else {
-          return data.map(item => ({
-            month: item.month,
-            Average: Number(item.Average.toFixed(1))
-          }));
-        }
+    // When communities are selected, show selected communities, their market, and total
+    return data.map(item => {
+      const result = { month: item.month };
+      
+      // Include Total/Average
+      if (item.Total || item.Average) {
+        result.Total = item.Total || item.Average;
       }
       
-      const marketNames = selectedMarkets.map(market => 
-        market.charAt(0).toUpperCase() + market.slice(1)
-      );
+      // Get unique markets from selected communities
+      const selectedMarkets = [...new Set(selectedMarketCommunities.map(c => c.split('/')[0]))];
       
-      const techniciansInMarkets = Object.entries(technicianLocations)
-        .filter(([_, location]) => marketNames.includes(location))
-        .map(([tech]) => tech);
-
-      if (techniciansInMarkets.length === 0) {
-        return data.map(item => ({
-          month: item.month,
-          Average: Number(item.Average.toFixed(1))
-        }));
-      }
-
-      return data.map(item => {
-        const result = { month: item.month };
-        
-        if (viewMode === 'community') {
-          techniciansInMarkets.forEach(tech => {
-            result[tech] = Number(item[tech].toFixed(1));
-          });
-        } else {
-          marketNames.forEach(market => {
-            const techsInMarket = Object.entries(technicianLocations)
-              .filter(([_, loc]) => loc === market)
-              .map(([tech]) => tech);
-              
-            if (techsInMarket.length > 0) {
-              const marketAverage = techsInMarket.reduce((sum, tech) => sum + item[tech], 0) / techsInMarket.length;
-              result[`${market}`] = Number(marketAverage.toFixed(1));
-            }
-          });
+      // Include the market totals for selected markets
+      selectedMarkets.forEach(market => {
+        if (item[market]) {
+          result[market] = item[market];
         }
-
-        if (Object.keys(result).length > 2) {
-          result['Average'] = Number(item.Average.toFixed(1));
-        }
-
-        return result;
       });
-    }
-
-    if (isLeasingTimeline) {
-      if (selectedMarketCommunities.length === 0 || selectedMarkets.includes('all')) {
-        return data.map(item => ({
-          month: item.month,
-          'Lead to Sign': item.Average['Lead to Sign'],
-          'Sign to Move': item.Average['Sign to Move']
-        }));
-      }
       
-      if (viewMode === 'market' && selectedMarkets.length === 1) {
-        const market = selectedMarkets[0].charAt(0).toUpperCase() + selectedMarkets[0].slice(1);
-        return data.map(item => ({
-          month: item.month,
-          'Lead to Sign': item[market]['Lead to Sign'],
-          'Sign to Move': item[market]['Sign to Move']
-        }));
-      }
-      
-      return data.map(item => ({
-        month: item.month,
-        'Lead to Sign': item.Average['Lead to Sign'],
-        'Sign to Move': item.Average['Sign to Move']
-      }));
-    }
-
-    if (selectedMarketCommunities.length === 0 || selectedMarkets.includes('all')) {
-      if (viewMode === 'market') {
-        return data;
-      } else {
-        return data.map(item => ({
-          month: item.month,
-          Average: Number(item.Average.toFixed(1))
-        }));
-      }
-    }
-
-    if (viewMode === 'market') {
-      return data.map(item => {
-        const result = { month: item.month };
-        
-        selectedMarkets.forEach(market => {
-          const formattedMarket = market.charAt(0).toUpperCase() + market.slice(1);
-          result[formattedMarket] = item[formattedMarket];
-        });
-        
-        if (selectedMarkets.length > 1) {
-          result['Average'] = Number(item.Average.toFixed(1));
+      // Include selected communities (KEEP full market/community format for color matching)
+      selectedMarketCommunities.forEach(community => {
+        if (item[community]) {
+          // Keep the full market/community format for proper color matching
+          result[community] = item[community];
         }
-        
-        return result;
       });
-    } else {
-      const markets = [...new Set(selectedMarketCommunities.map(getMarketFromCommunity))];
       
-      return data.map(item => {
-        const result = { month: item.month };
-        
-        markets.forEach(market => {
-          const formattedMarket = market.charAt(0).toUpperCase() + market.slice(1);
-          result[formattedMarket] = item[formattedMarket];
-        });
-        
-        if (markets.length > 1) {
-          result['Average'] = Number(item.Average.toFixed(1));
-        }
-        
-        return result;
-      });
-    }
+      // Handle special case for stacked charts
+      if (isStacked) {
+        if (item['Lead to Sign']) result['Lead to Sign'] = item['Lead to Sign'];
+        if (item['Sign to Move']) result['Sign to Move'] = item['Sign to Move'];
+      }
+      
+      // Handle special case for technician data
+      if (isTechnician) {
+        if (item['Average per tech']) result['Average per tech'] = item['Average per tech'];
+      }
+      
+      return result;
+    });
   };
 
   const handleDashboardSelect = (dashboard: Dashboard) => {
@@ -331,9 +363,13 @@ const Dashboard = () => {
     toast.success("New graph added successfully");
   };
 
-  const handleDeleteMetric = (metricId: number) => {
-    setCustomMetrics(customMetrics.filter(metric => metric.id !== metricId));
-    toast.success("Metric card removed successfully");
+  const handleDeleteMetric = (metricId: number | string) => {
+    if (typeof metricId === 'number') {
+      setCustomMetrics(customMetrics.filter(m => m.id !== metricId));
+    } else if (typeof metricId === 'string') {
+      setHiddenMetrics([...hiddenMetrics, metricId]);
+    }
+    toast.success('Metric removed from dashboard');
   };
 
   const handleDeleteCard = (cardId: number) => {
@@ -388,6 +424,92 @@ const Dashboard = () => {
     );
   };
 
+  const filteredMetrics = useMemo(() => {
+    // Get default metrics that aren't hidden
+    const defaultMetrics = mockDashboardMetrics
+      .filter(m => !hiddenMetrics.includes(m.label))
+      .map(m => ({ ...m, id: m.label })); // Use label as ID for default metrics
+    
+    // Combine with custom metrics and sort based on position info
+    const combinedMetrics = [...defaultMetrics, ...customMetrics];
+    
+    // Maintain the original ordering by using the index positions
+    const sortedMetrics = [...combinedMetrics].sort((a, b) => {
+      // Custom metrics with originalPosition go where they belong
+      if ('originalPosition' in a && 'originalPosition' in b) {
+        return (a.originalPosition as number) - (b.originalPosition as number);
+      }
+      if ('originalPosition' in a) {
+        return (a.originalPosition as number) - defaultMetrics.findIndex(m => m.id === b.id);
+      }
+      if ('originalPosition' in b) {
+        return defaultMetrics.findIndex(m => m.id === a.id) - (b.originalPosition as number);
+      }
+      // Default ordering for metrics without position info
+      return 0;
+    });
+    
+    return filterMetricsBySelection(sortedMetrics);
+  }, [mockDashboardMetrics, customMetrics, hiddenMetrics, selectedMarketCommunities]);
+
+  const handleChangeMetric = (newMetricKey: string) => {
+    const selectedMetric = mockDashboardMetrics.find(mock => mock.kpi === newMetricKey);
+    if (!selectedMetric) return;
+    
+    if (dialogMode === 'add') {
+      // Add new metric card
+      const newMetric = {
+        ...selectedMetric,
+        id: Date.now(), // Generate a unique ID for the new card
+      };
+      
+      setCustomMetrics([...customMetrics, newMetric]);
+      toast.success("New metric card added successfully");
+    } else if (metricToChange) {
+      // Change existing metric (existing logic)
+      if (typeof metricToChange.id === 'number') {
+        // For custom metrics, update in place
+        setCustomMetrics(customMetrics.map(m => 
+          m.id === metricToChange.id 
+            ? {...selectedMetric, id: m.id}
+            : m
+        ));
+      } else {
+        // For default metrics, maintain position by replacing in the hiddenMetrics list
+        const newHiddenMetrics = hiddenMetrics.filter(id => id !== metricToChange.id);
+        newHiddenMetrics.push(metricToChange.id as string);
+        
+        const newCustomMetric = {
+          ...selectedMetric,
+          id: `custom_${Date.now()}`,
+          originalPosition: metricToChange.index
+        };
+        
+        setHiddenMetrics(newHiddenMetrics);
+        setCustomMetrics([...customMetrics, newCustomMetric]);
+      }
+      
+      toast.success("Metric changed successfully");
+    }
+    
+    setChangeMetricOpen(false);
+  };
+
+  const setDashboardAsDefault = () => {
+    // Update the dashboards array to mark current dashboard as default
+    const updatedDashboards = dashboards.map(dash => ({
+      ...dash,
+      isDefault: dash.id === activeDashboard.id
+    }));
+    
+    setDashboards(updatedDashboards);
+    
+    // Save to local storage for persistence
+    localStorage.setItem('defaultDashboardId', activeDashboard.id);
+    
+    toast.success("This dashboard has been set as your default view");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -402,12 +524,14 @@ const Dashboard = () => {
           />
         </div>
         <div className="flex items-center gap-4">
-          <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as 'market' | 'community')} className="w-[250px]">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="market">By Market</TabsTrigger>
-              <TabsTrigger value="community">By Community</TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <Button 
+            variant="outline"
+            size="sm"
+            onClick={setDashboardAsDefault}
+            className="text-xs"
+          >
+            Set as Default
+          </Button>
           <MarketCommunityFilter 
             selectedValues={selectedMarketCommunities} 
             onChange={setSelectedMarketCommunities} 
@@ -416,9 +540,9 @@ const Dashboard = () => {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-        {filterMetricsBySelection([...mockDashboardMetrics, ...customMetrics]).map((metric, index) => (
+        {filteredMetrics.map((metric, index) => (
           <div key={index} className="relative">
-            <div className="absolute top-2 right-2 flex items-center gap-1 z-10">
+            <div className="absolute top-1.5 right-2 flex items-center gap-1 z-10">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full">
@@ -427,182 +551,142 @@ const Dashboard = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      View details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Edit metric
+                    <DropdownMenuItem onClick={() => {
+                      setDialogMode('change');
+                      setMetricToChange({id: metric.id, index: index});
+                      setChangeMetricOpen(true);
+                    }}>
+                      Change metric
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
               
-              {customMetrics.some(m => m.id === metric.id) && (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-7 w-7 rounded-full" 
-                  onClick={() => handleDeleteMetric(metric.id)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-7 w-7 rounded-full" 
+                onClick={() => handleDeleteMetric(metric.id)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
             </div>
             <MetricCard 
               key={index} 
               metric={metric as MetricData} 
-              selectedMarket={viewMode}
+              selectedValues={selectedMarketCommunities}
+              id={metric.id}
             />
           </div>
         ))}
-        <Card className="add-card-button h-full flex flex-col items-center justify-center" onClick={() => setAddMetricCardOpen(true)}>
-          <Plus className="h-5 w-5 mb-1" />
-          <span>Add new card</span>
+        <Card 
+          className="add-card-button h-full flex items-center justify-center p-4 cursor-pointer" 
+          onClick={() => {
+            setDialogMode('add');
+            setMetricToChange(null);
+            setChangeMetricOpen(true);
+          }}
+        >
+          <div className="w-full min-h-[105px] bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center justify-center">
+            <Plus className="h-5 w-5 mb-2" />
+            <span className="text-sm text-gray-500">Add new card</span>
+          </div>
         </Card>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {activeDashboard.cards?.map((card, index) => (
-          <div key={card.id} className="space-y-6">
-            {index === 0 && (
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Leasing</h2>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {activeDashboard.cards?.map((card) => (
+          <Card key={card.id} className="p-4 relative h-[310px]">
+            {renderCardOptions(card.id)}
+            {card.type === 'line' ? (
+              <SimpleLineChart 
+                data={filterChartData(
+                  card.kpi === 'occupancy' ? mockOccupancyTrendData :
+                  card.kpi === 'renewals' ? mockRenewalsTrendData :
+                  card.kpi === 'delinquency' ? mockDelinquencyTrendData :
+                  mockRenewalsTrendData
+                )} 
+                title={card.title}
+                yAxisLabel={card.kpi.includes('time') ? 'Days' : '%'}
+              />
+            ) : (
+              <SimpleBarChart 
+                data={mockLeasingTimelineTrendData} 
+                title="Leasing Timeline Trend"
+                yAxisLabel="Days"
+                stacked={true}
+                selectedValues={selectedMarketCommunities}
+              />
             )}
-            {index === 1 && (
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Property Operations</h2>
-              </div>
-            )}
-            {index === 2 && (
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
-              </div>
-            )}
-            
-            <Card className="p-4 relative">
-              {renderCardOptions(card.id)}
-              {card.type === 'line' ? (
-                <SimpleLineChart 
-                  data={filterChartData(
-                    card.kpi === 'occupancy' ? mockOccupancyTrendData :
-                    card.kpi === 'renewals' ? mockRenewalsTrendData :
-                    card.kpi === 'delinquency' ? mockDelinquencyTrendData :
-                    card.kpi === 'billable-hours' ? mockBillHoursTrendData :
-                    card.kpi === 'work-orders' ? mockWorkOrdersTrendData :
-                    mockRenewalsTrendData
-                  )} 
-                  title={card.title}
-                  yAxisLabel={card.kpi.includes('time') ? 'Days' : '%'}
-                  key={`${card.id}-${viewMode}-${selectedMarketCommunities.join('-')}`}
-                />
-              ) : (
-                <SimpleBarChart 
-                  data={filterChartData(
-                    card.kpi === 'leasing-velocity' ? mockLeasingTimelineTrendData :
-                    card.kpi === 'occupancy' ? mockOccupancyTrendData :
-                    card.kpi === 'work-orders' ? mockWorkOrdersTrendData :
-                    mockRenewalsTrendData,
-                    card.kpi === 'leasing-velocity'
-                  )} 
-                  title={card.title}
-                  yAxisLabel={card.kpi.includes('time') ? 'Days' : '%'}
-                  stacked={card.kpi === 'leasing-velocity'}
-                  bars={card.kpi === 'leasing-velocity' ? [
-                    { dataKey: 'Lead to Sign', color: '#3391b1', stackId: 'a' },
-                    { dataKey: 'Sign to Move', color: '#7bccee', stackId: 'a' }
-                  ] : undefined}
-                  key={`${card.id}-${viewMode}-${selectedMarketCommunities.join('-')}`}
-                />
-              )}
-            </Card>
-          </div>
+          </Card>
         ))}
 
         {(!activeDashboard.cards || activeDashboard.cards.length === 0) && (
           <>
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Leasing</h2>
-              </div>
-              <Card className="p-4 relative">
-                {renderCardOptions(-1)}
-                <SimpleLineChart 
-                  data={filterChartData(mockRenewalsTrendData)} 
-                  title="Renewals (%) trend by market"
-                  yAxisLabel="%"
-                  key={`renewals-${viewMode}-${selectedMarketCommunities.join('-')}`}
-                />
-              </Card>
-              <Card className="p-4 relative">
-                {renderCardOptions(-2)}
-                <SimpleBarChart 
-                  data={filterChartData(mockLeasingTimelineTrendData, true)} 
-                  title="Leasing Timeline Trend"
-                  yAxisLabel="Days"
-                  stacked={true}
-                  bars={[
-                    { dataKey: 'Lead to Sign', color: '#3391b1', stackId: 'a' },
-                    { dataKey: 'Sign to Move', color: '#7bccee', stackId: 'a' }
-                  ]}
-                  key={`timeline-${viewMode}-${selectedMarketCommunities.join('-')}`}
-                />
-              </Card>
-            </div>
-
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Property Operations</h2>
-              </div>
-              <Card className="p-4 relative">
-                {renderCardOptions(-3)}
-                <SimpleLineChart 
-                  data={filterChartData(mockOccupancyTrendData)} 
-                  title="Occupancy Rate (%) trend by market"
-                  yAxisLabel="%"
-                  key={`occupancy-${viewMode}-${selectedMarketCommunities.join('-')}`}
-                />
-              </Card>
-              <Card className="p-4 relative">
-                {renderCardOptions(-4)}
-                <SimpleLineChart 
-                  data={filterChartData(mockDelinquencyTrendData)} 
-                  title="Delinquency Rate (%) trend by market"
-                  yAxisLabel="%"
-                  key={`delinquency-${viewMode}-${selectedMarketCommunities.join('-')}`}
-                />
-              </Card>
-            </div>
-
-            <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Renovation, Maintenance, Turns</h2>
-              </div>
-              <Card className="p-4 relative">
-                {renderCardOptions(-5)}
-                <SimpleLineChart 
-                  data={filterChartData(mockBillHoursTrendData, false, true)} 
-                  title="Billable Hours/ Day/ Technician"
-                  yAxisLabel="Hours"
-                  key={`billhours-${viewMode}-${selectedMarketCommunities.join('-')}`}
-                />
-              </Card>
-              <Card className="p-4 relative">
-                {renderCardOptions(-6)}
-                <SimpleLineChart 
-                  data={filterChartData(mockWorkOrdersTrendData, false, true)} 
-                  title="Work Orders/ Day/ Technician"
-                  yAxisLabel="Orders"
-                  key={`workorders-${viewMode}-${selectedMarketCommunities.join('-')}`}
-                />
-              </Card>
-            </div>
+            <Card className="p-4 relative h-[310px]">
+              {renderCardOptions(-1)}
+              <SimpleLineChart 
+                data={filterChartData(mockRenewalsTrendData)} 
+                title="Renewals (%) trend by market"
+                yAxisLabel="%"
+              />
+            </Card>
+            <Card className="p-4 relative h-[310px]">
+              {renderCardOptions(-2)}
+              <SimpleBarChart 
+                data={mockLeasingTimelineTrendData} 
+                title="Leasing Timeline Trend"
+                yAxisLabel="Days"
+                stacked={true}
+              />
+            </Card>
+            <Card className="p-4 relative h-[310px]">
+              {renderCardOptions(-3)}
+              <SimpleLineChart 
+                data={filterChartData(mockOccupancyTrendData)} 
+                title="Occupancy Rate (%) trend by market"
+                yAxisLabel="%"
+              />
+            </Card>
+            <Card className="p-4 relative h-[310px]">
+              {renderCardOptions(-4)}
+              <SimpleLineChart 
+                data={filterChartData(mockDelinquencyTrendData)} 
+                title="Delinquency Rate (%) trend by market"
+                yAxisLabel="%"
+              />
+            </Card>
+            <Card className="p-4 relative h-[310px]">
+              {renderCardOptions(-5)}
+              <SimpleLineChart 
+                data={filterChartData(
+                  mockBillHoursTrendData, 
+                  false, 
+                  true
+                )} 
+                title="Billable Hours/ Day/ Technician"
+                yAxisLabel="Hours"
+              />
+            </Card>
+            <Card className="p-4 relative h-[310px]">
+              {renderCardOptions(-6)}
+              <SimpleLineChart 
+                data={filterChartData(mockWorkOrdersTrendData, false, true)} 
+                title="Work Orders/ Day/ Technician"
+                yAxisLabel="Orders"
+              />
+            </Card>
           </>
         )}
 
-        <Card className="add-card-button h-64 flex flex-col items-center justify-center" onClick={() => setAddGraphOpen(true)}>
-          <Plus className="h-6 w-6 mb-2" />
-          <span>Add new card</span>
+        <Card 
+          className="add-card-button h-[310px] flex items-center justify-center p-4 cursor-pointer" 
+          onClick={() => setAddGraphOpen(true)}
+        >
+          <div className="w-[65%] h-[55%] bg-gray-50 rounded-lg border border-gray-100 flex flex-col items-center justify-center">
+            <Plus className="h-6 w-6 mb-2" />
+            <span className="text-sm text-gray-500">Add new card</span>
+          </div>
         </Card>
       </div>
 
@@ -622,6 +706,15 @@ const Dashboard = () => {
         open={addGraphOpen}
         onOpenChange={setAddGraphOpen}
         onSave={handleAddGraph}
+      />
+
+      <ChangeMetricDialog
+        open={changeMetricOpen}
+        onOpenChange={setChangeMetricOpen}
+        onSelect={handleChangeMetric}
+        currentMetricId={metricToChange?.id}
+        availableMetrics={mockDashboardMetrics}
+        mode={dialogMode}
       />
     </div>
   );

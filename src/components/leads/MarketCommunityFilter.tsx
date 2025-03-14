@@ -132,9 +132,11 @@ const MarketCommunityFilter: React.FC<MarketCommunityFilterProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-8 justify-between min-w-[150px] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap"
+          className="h-8 justify-between min-w-[150px] max-w-[400px] overflow-hidden text-ellipsis whitespace-nowrap"
         >
-          {getSelectedText()}
+          <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+            {getSelectedText()}
+          </span>
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

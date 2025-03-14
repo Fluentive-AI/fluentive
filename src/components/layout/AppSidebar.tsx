@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import AppLogo from './AppLogo';
@@ -117,36 +116,26 @@ const AppSidebar = () => {
         
         <div className="pt-4 pb-2">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
-            Communication
+            AI Chats with Tenants
           </div>
-          <NavItem to="/communications" icon={<Bot className="h-5 w-5" />} label="AI Agent" />
+          <NavItem to="/communications" icon={<Bot className="h-5 w-5" />} label="AI Communications" />
         </div>
         
         <div className="pt-4 pb-2">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
             Analytics
           </div>
+
           <NavItem 
-            to="/reports" 
-            icon={<BarChart className="h-5 w-5" />} 
-            label="Reports" 
-            isActive={isReportsActive}
-            className={isAnalyticsExpanded ? "mb-1" : ""}
+            to="/ask" 
+            icon={<MessageSquare className="h-5 w-5" />} 
+            label="Ask our Agent" 
           />
-          {isAnalyticsExpanded && (
-            <>
-              <SubNavItem 
-                to="/reports?tab=ask" 
-                label="Ask our Agent" 
-                isActive={isAskAgentActive} 
-              />
-              <SubNavItem 
-                to="/reports?tab=myreports" 
-                label="My Reports" 
-                isActive={isMyReportsActive} 
-              />
-            </>
-          )}
+          <NavItem 
+            to="/myreports" 
+            icon={<LineChart className="h-5 w-5" />} 
+            label="My Reports" 
+          />
         </div>
       </nav>
       
