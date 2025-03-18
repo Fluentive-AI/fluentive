@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
-import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff } from 'lucide-react';
+import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight } from 'lucide-react';
 import { FaPhone } from "react-icons/fa6";
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -11,6 +11,7 @@ const LandingPage = () => {
   const [phoneState, setPhoneState] = useState('contact');
   const [callTime, setCallTime] = useState(0);
   const [showClock, setShowClock] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const videoRef = useRef(null);
   const timerRef = useRef(null);
   
@@ -82,7 +83,7 @@ const LandingPage = () => {
           <div className="relative">
             <img src="/phone_screens/in_call_screen.png" alt="In-call screen" className="w-full rounded-lg" />
             {showClock && (
-              <div className="absolute top-20 left-1/2 transform -translate-x-1/2 text-white text-xl font-semibold">
+              <div className="absolute top-16 sm:top-16 md:top-20 left-1/2 transform -translate-x-1/2 text-white text-sm sm:text-base md:text-xl font-semibold">
                 {formatCallTime(callTime)}
               </div>
             )}
@@ -96,7 +97,7 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation Bar */}
-      <header className="w-full py-4 px-8 border-b flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-sm z-10 shadow-sm">
+      <header className="w-full py-4 px-4 sm:px-8 border-b flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm">
         <div>
           <AppLogo />
         </div>
@@ -108,60 +109,102 @@ const LandingPage = () => {
           <a href="#testimonials" className="text-gray-700 hover:text-primary transition-colors font-medium">Case Studies</a>
         </nav>
         
-        <div>
+        <div className="flex items-center gap-2">
           <Button 
             size="sm"
             onClick={() => navigate('/login')}
-            className="hidden md:flex items-center gap-1"
+            className="flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
+            variant="default"
           >
-            Try Demo Dashboard
-            <ArrowRight className="ml-1 h-4 w-4" />
+            <span className="hidden sm:inline">Try Demo</span>
+            <span className="sm:hidden">Try Demo</span>
+            <ArrowRight className="ml-1 h-3 w-3 hidden sm:block" />
+            <SquareArrowOutUpRight className="ml-1 h-3 w-3 sm:hidden" />
           </Button>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+              className="h-8 w-8 p-1"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
       </header>
+
+      {/* Mobile menu overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 bg-white z-10 md:hidden pt-16 px-4">
+          <nav className="flex flex-col items-center space-y-6 mt-10">
+            <a 
+              href="#features" 
+              className="text-xl font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Features
+            </a>
+            <a 
+              href="#benefits" 
+              className="text-xl font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Benefits
+            </a>
+            <a 
+              href="#demo" 
+              className="text-xl font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Demo
+            </a>
+            <a 
+              href="#testimonials" 
+              className="text-xl font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Case Studies
+            </a>
+          </nav>
+        </div>
+      )}
       
       {/* Hero Section */}
-      <section className="py-20 px-8 bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      <section className="py-12 sm:py-20 px-4 sm:px-8 bg-gradient-to-br from-blue-50 via-white to-indigo-50">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="md:w-1/2 space-y-6">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div className="md:w-1/2 space-y-4 sm:space-y-6 text-center md:text-left">
               <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-2">
                 AI-Powered Property Management
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 leading-tight">
                 AI Agents for SFR Property Managers
               </h1>
-              <p className="mt-2 text-xl md:text-2xl text-gray-600 font-bold whitespace-nowrap">
+              <p className="mt-2 text-lg sm:text-xl md:text-2xl text-gray-600 font-bold">
                 Demo For Brandywine Homes USA and Lafayette RE
               </p>
               
-              <p className="text-xl text-gray-600">
+              <p className="text-lg sm:text-xl text-gray-600">
                 We transform SFR property management with AI agents that automate operations, enhance tenant experiences, and drive better business outcomes.
               </p>
               
-              <div className="flex flex-col gap-4 pt-6 items-center">
+              <div className="flex flex-col gap-4 pt-6 items-center md:items-start">
                 <Button 
                   size="lg" 
-                  className="text-lg px-6 py-6 h-auto font-medium shadow-md hover:shadow-lg transition-all"
+                  className="text-lg px-6 py-6 h-auto w-full sm:w-auto font-medium shadow-md hover:shadow-lg transition-all"
                   onClick={() => navigate('/login')}
                 >
                   Property Manager Dashboard
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                
-                {/* <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="text-lg px-6 py-6 h-auto font-medium border-2"
-                  onClick={() => navigate('/login')}
-                >
-                  Tenant Interface Preview
-                  <ArrowUpRight className="ml-2 h-5 w-5" />
-                </Button> */}
               </div>
             </div>
             
-            <div className="md:w-1/2 md:pl-2">
+            <div className="md:w-1/2 mt-10 md:mt-0 md:pl-2">
               <div className="bg-white rounded-xl border shadow-2xl overflow-hidden transition-all duration-300">
                 <img 
                   src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" 
@@ -346,14 +389,14 @@ const LandingPage = () => {
       </section>
       
       {/* Tool Preview Section */}
-      <section id="demo" className="py-20 px-8 bg-white">
+      <section id="demo" className="py-12 sm:py-20 px-4 sm:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-10 sm:mb-14">
             <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-3">
               Interactive Demo
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">See Our AI Call Assistant in Action</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">See Our AI Call Assistant in Action</h2>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Experience how our AI handles property inquiries, providing instant, professional responses to potential tenants.
             </p>
           </div>
@@ -365,34 +408,34 @@ const LandingPage = () => {
                   onClick={startCallSimulation}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center shadow-lg transition-all hover:bg-green-600">
-                    <Phone className="h-8 w-8 text-white" stroke="white" />
+                  <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-full bg-green-500 flex items-center justify-center shadow-lg transition-all hover:bg-green-600">
+                    <Phone className="h-7 sm:h-8 w-7 sm:w-8 text-white" stroke="white" />
                   </div>
-                  <span className="text-xl font-medium text-gray-800">Call Property AI</span>
+                  <span className="text-lg sm:text-xl font-medium text-gray-800">Call Property AI</span>
                 </button>
               ) : (
                 <button 
                   onClick={endCallSimulation}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
-                    <PhoneOff className="h-8 w-8 text-white" stroke="white" />
+                  <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
+                    <PhoneOff className="h-7 sm:h-8 w-7 sm:w-8 text-white" stroke="white" />
                   </div>
-                  <span className="text-xl font-medium text-gray-800">End Call</span>
+                  <span className="text-lg sm:text-xl font-medium text-gray-800">End Call</span>
                 </button>
               )}
             </div>
             
             <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
-              <CardContent className="p-6 md:p-10">
+              <CardContent className="p-4 sm:p-6 md:p-10">
                 <div className="flex flex-col md:flex-row gap-8 items-center">
-                  <div className="md:w-[45%] flex justify-center items-center">
-                    <div className="max-w-[280px] mx-auto">
+                  <div className="w-full md:w-[45%] flex justify-center items-center">
+                    <div className="max-w-[220px] sm:max-w-[280px] mx-auto">
                       {renderPhoneScreen()}
                     </div>
                   </div>
                   
-                  <div className="md:w-[55%] flex items-center">
+                  <div className="w-full md:w-[55%] flex items-center">
                     <video 
                       ref={videoRef}
                       src="/phone_calls/leasing/lead.mp4" 
@@ -437,56 +480,47 @@ const LandingPage = () => {
       </section>
       
       {/* Final CTA Section */}
-      <section className="py-20 px-8 bg-gradient-to-br from-primary to-accent text-white">
+      <section className="py-12 sm:py-20 px-4 sm:px-8 bg-gradient-to-br from-primary to-accent text-white">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-8 leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
             Transform Your Property Management Today
           </h2>
           
-          <p className="text-xl mb-10 max-w-3xl mx-auto opacity-90">
+          <p className="text-lg sm:text-xl mb-8 sm:mb-10 max-w-3xl mx-auto opacity-90">
             Join forward-thinking property managers who use AI to streamline operations, reduce costs, and enhance tenant satisfaction.
           </p>
           
-          <ul className="flex flex-col md:flex-row gap-6 justify-center mb-12">
-            <li className="flex items-center justify-center bg-white/10 px-6 py-3 rounded-full backdrop-blur-sm">
-              <Check className="h-5 w-5 mr-2 text-green-300" />
+          <ul className="flex flex-col md:flex-row gap-4 sm:gap-6 justify-center mb-8 sm:mb-12">
+            <li className="flex items-center justify-center bg-white/10 px-4 sm:px-6 py-3 rounded-full backdrop-blur-sm text-sm sm:text-base">
+              <Check className="h-4 sm:h-5 w-4 sm:w-5 mr-2 text-green-300 flex-shrink-0" />
               <span>Save tens of hours per week</span>
             </li>
-            <li className="flex items-center justify-center bg-white/10 px-6 py-3 rounded-full backdrop-blur-sm">
-              <Check className="h-5 w-5 mr-2 text-green-300" />
+            <li className="flex items-center justify-center bg-white/10 px-4 sm:px-6 py-3 rounded-full backdrop-blur-sm text-sm sm:text-base">
+              <Check className="h-4 sm:h-5 w-4 sm:w-5 mr-2 text-green-300 flex-shrink-0" />
               <span>Reduce operational costs</span>
             </li>
-            <li className="flex items-center justify-center bg-white/10 px-6 py-3 rounded-full backdrop-blur-sm">
-              <Check className="h-5 w-5 mr-2 text-green-300" />
+            <li className="flex items-center justify-center bg-white/10 px-4 sm:px-6 py-3 rounded-full backdrop-blur-sm text-sm sm:text-base">
+              <Check className="h-4 sm:h-5 w-4 sm:w-5 mr-2 text-green-300 flex-shrink-0" />
               <span>Improve tenant satisfaction</span>
             </li>
           </ul>
           
-          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center">
             <Button 
               size="lg" 
               variant="secondary"
-              className="text-primary text-lg px-10 py-7 h-auto font-medium shadow-xl hover:shadow-2xl transition-all"
+              className="text-primary text-lg px-6 sm:px-10 py-6 sm:py-7 h-auto font-medium shadow-xl hover:shadow-2xl transition-all w-full sm:w-auto"
               onClick={() => navigate('/login')}
             >
               Try Demo Dashboard
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            
-            {/* <Button 
-              size="lg"
-              className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-7 h-auto font-medium shadow-xl hover:shadow-2xl transition-all"
-              onClick={() => navigate('/login')}
-            >
-              Experience Tenant Interface
-              <ArrowUpRight className="ml-2 h-5 w-5" />
-            </Button> */}
           </div>
         </div>
       </section>
       
       {/* Footer */}
-      <footer className="py-16 px-8 bg-gray-900 text-gray-300">
+      <footer className="py-12 sm:py-16 px-4 sm:px-8 bg-gray-900 text-gray-300">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
             <div>

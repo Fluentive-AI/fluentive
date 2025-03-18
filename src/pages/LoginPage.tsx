@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -29,17 +28,16 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
+        <div className="mb-6 sm:mb-8 text-center">
           <AppLogo />
-          <h2 className="mt-4 text-2xl font-bold text-gray-900">Welcome to PropertyAI</h2>
-          <p className="text-gray-600 mt-2">Sign in to continue to your dashboard</p>
+          <h2 className="mt-4 text-xl sm:text-2xl font-bold text-gray-900">Welcome to PropertyAI</h2>
+          <p className="text-gray-600 mt-2 text-sm sm:text-base">Sign in to continue to your dashboard</p>
         </div>
 
         <Card className="w-full shadow-lg border-0">
-
-          <CardContent>
+          <CardContent className="pt-6">
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -50,12 +48,13 @@ const LoginPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  className="h-10 sm:h-12"
                 />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
-                  <a href="#" className="text-sm text-blue-600 hover:text-blue-800">Forgot password?</a>
+                  <a href="#" className="text-xs sm:text-sm text-blue-600 hover:text-blue-800">Forgot password?</a>
                 </div>
                 <Input 
                   id="password" 
@@ -63,10 +62,11 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  className="h-10 sm:h-12"
                 />
               </div>
               
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 py-1">
                 <Checkbox 
                   id="remember" 
                   checked={rememberMe}
@@ -80,13 +80,13 @@ const LoginPage = () => {
                 </label>
               </div>
               
-              <Button type="submit" className="w-full bg-brand-500 hover:bg-brand-600">
+              <Button type="submit" className="w-full bg-brand-500 hover:bg-brand-600 h-10 sm:h-12 mt-2">
                 Sign in
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-center text-gray-600">
+          <CardFooter className="flex flex-col space-y-4 px-6 pb-6">
+            <div className="text-xs sm:text-sm text-center text-gray-600">
               Don't have an account?{" "}
               <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
                 Start free trial
@@ -100,6 +100,16 @@ const LoginPage = () => {
             </div>
           </CardFooter>
         </Card>
+      </div>
+      
+      {/* Back to homepage link */}
+      <div className="mt-8 text-center">
+        <a 
+          href="/" 
+          className="text-sm text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1"
+        >
+          ← Back to homepage
+        </a>
       </div>
     </div>
   );
