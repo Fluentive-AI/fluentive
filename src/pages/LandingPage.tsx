@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ const LandingPage = () => {
   const [callTime, setCallTime] = useState(0);
   const [showClock, setShowClock] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const videoRef = useRef(null);
+  const audioRef = useRef(null);
   const timerRef = useRef(null);
   
   useEffect(() => {
@@ -20,6 +21,10 @@ const LandingPage = () => {
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
+      }
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }
     };
   }, []);
@@ -38,12 +43,11 @@ const LandingPage = () => {
         setCallTime(prev => prev + 1);
       }, 1000);
       
-    }, 2000);
-    
-    // Start the video after 2 seconds
-    setTimeout(() => {
-      if (videoRef.current) {
-        videoRef.current.play();
+      // Play the audio when in call
+      if (audioRef.current) {
+        audioRef.current.play().catch(error => {
+          console.error("Error playing audio:", error);
+        });
       }
     }, 2000);
   };
@@ -59,10 +63,10 @@ const LandingPage = () => {
     setCallTime(0);
     setShowClock(false);
     
-    // Pause and reset the video
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
+    // Pause and reset the audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
   };
   
@@ -428,24 +432,22 @@ const LandingPage = () => {
             
             <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
               <CardContent className="p-4 sm:p-6 md:p-10">
-                <div className="flex flex-col md:flex-row gap-8 items-center">
-                  <div className="w-full md:w-[45%] flex justify-center items-center">
-                    <div className="max-w-[220px] sm:max-w-[280px] mx-auto">
-                      {renderPhoneScreen()}
-                    </div>
-                  </div>
-                  
-                  <div className="w-full md:w-[55%] flex justify-center items-center mt-6 md:mt-0">
-                    <video 
-                      ref={videoRef}
+                <div className="flex flex-col items-center">
+                  <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] mx-auto relative">
+                    {renderPhoneScreen()}
+                    
+                    {/* Transparent button overlay */}
+                    <button 
+                      onClick={phoneState === 'contact' ? startCallSimulation : endCallSimulation}
+                      className="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
+                      aria-label={phoneState === 'contact' ? "Call Property AI" : "End Call"}
+                    />
+                    
+                    {/* Hidden audio element */}
+                    <audio 
+                      ref={audioRef}
                       src="/phone_calls/leasing/lead.mp4" 
-                      className="w-full rounded-lg shadow-md" 
                       preload="auto"
-                      playsInline
-                      muted={true}
-                      controls={false}
-                      poster="/phone_calls/leasing/poster.jpg"
-                      style={{ maxHeight: '400px', objectFit: 'contain' }}
                     />
                   </div>
                 </div>
