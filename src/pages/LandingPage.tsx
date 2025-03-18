@@ -5,6 +5,8 @@ import AppLogo from '@/components/layout/AppLogo';
 import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight } from 'lucide-react';
 import { FaPhone } from "react-icons/fa6";
 import { Card, CardContent } from '@/components/ui/card';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { toast } from 'sonner';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -12,8 +14,11 @@ const LandingPage = () => {
   const [callTime, setCallTime] = useState(0);
   const [showClock, setShowClock] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [audioLoaded, setAudioLoaded] = useState(false);
+  const [audioError, setAudioError] = useState(false);
   const audioRef = useRef(null);
   const timerRef = useRef(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     // Cleanup timer on component unmount
@@ -26,6 +31,32 @@ const LandingPage = () => {
         audioRef.current.currentTime = 0;
       }
     };
+  }, []);
+
+  // Add an event listener to handle audio loading
+  useEffect(() => {
+    if (audioRef.current) {
+      const audioElement = audioRef.current;
+      
+      const handleCanPlayThrough = () => {
+        setAudioLoaded(true);
+        console.log("Audio loaded successfully");
+      };
+      
+      const handleError = (e) => {
+        console.error("Audio loading error:", e);
+        setAudioError(true);
+        toast.error("Audio could not be loaded. Check your connection.");
+      };
+      
+      audioElement.addEventListener('canplaythrough', handleCanPlayThrough);
+      audioElement.addEventListener('error', handleError);
+      
+      return () => {
+        audioElement.removeEventListener('canplaythrough', handleCanPlayThrough);
+        audioElement.removeEventListener('error', handleError);
+      };
+    }
   }, []);
   
   const startCallSimulation = () => {
@@ -50,14 +81,20 @@ const LandingPage = () => {
         // Handle potential play() promise rejection (common on mobile)
         if (playPromise !== undefined) {
           playPromise.catch(error => {
-            console.error("Audio playback error (likely autoplay restriction):", error);
+            console.error("Audio playback error:", error);
+            toast.error("Audio could not play automatically. This may be due to browser restrictions.");
+            
             // Try playing again with muted setting which is more permissive on mobile
             audioRef.current.muted = true;
             audioRef.current.play().catch(err => {
               console.error("Even muted audio failed to play:", err);
+              setAudioError(true);
             });
           });
         }
+      } else {
+        console.error("Audio element not available");
+        setAudioError(true);
       }
     }, 2000);
   };
@@ -97,7 +134,7 @@ const LandingPage = () => {
           <div className="relative">
             <img src="/phone_screens/in_call_screen.png" alt="In-call screen" className="w-full rounded-lg" />
             {showClock && (
-              <div className="absolute top-20 sm:top-20 md:top-24 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-2xl font-semibold">
+              <div className="absolute top-20 sm:top-24 md:top-28 left-1/2 transform -translate-x-1/2 text-white text-xl sm:text-2xl md:text-3xl font-semibold">
                 {formatCallTime(callTime)}
               </div>
             )}
@@ -443,7 +480,7 @@ const LandingPage = () => {
             <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
               <CardContent className="p-4 sm:p-6 md:p-10">
                 <div className="flex flex-col items-center">
-                  <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] mx-auto relative">
+                  <div className={`w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] mx-auto relative ${isMobile ? 'scale-110' : ''}`}>
                     {renderPhoneScreen()}
                     
                     {/* Transparent button overlay */}
@@ -453,15 +490,19 @@ const LandingPage = () => {
                       aria-label={phoneState === 'contact' ? "Call Property AI" : "End Call"}
                     />
                     
-                    {/* Hidden audio element - improved for mobile */}
+                    {/* Audio element - using audio file that we know exists */}
                     <audio 
                       ref={audioRef}
                       src="/phone_calls/leasing/lead.mp3" 
                       preload="auto"
                       playsInline
-                      muted={false}
-                      loop
                     />
+                    
+                    {audioError && (
+                      <div className="absolute bottom-4 left-0 right-0 bg-red-100 text-red-700 text-sm p-2 rounded mx-4 text-center">
+                        Audio playback issue. Please try on desktop.
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
