@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -43,11 +42,22 @@ const LandingPage = () => {
         setCallTime(prev => prev + 1);
       }, 1000);
       
-      // Play the audio when in call
+      // Play the audio when in call - with better mobile support
       if (audioRef.current) {
-        audioRef.current.play().catch(error => {
-          console.error("Error playing audio:", error);
-        });
+        // Create a user interaction context for mobile browsers
+        const playPromise = audioRef.current.play();
+        
+        // Handle potential play() promise rejection (common on mobile)
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.error("Audio playback error (likely autoplay restriction):", error);
+            // Try playing again with muted setting which is more permissive on mobile
+            audioRef.current.muted = true;
+            audioRef.current.play().catch(err => {
+              console.error("Even muted audio failed to play:", err);
+            });
+          });
+        }
       }
     }, 2000);
   };
@@ -443,11 +453,14 @@ const LandingPage = () => {
                       aria-label={phoneState === 'contact' ? "Call Property AI" : "End Call"}
                     />
                     
-                    {/* Hidden audio element */}
+                    {/* Hidden audio element - improved for mobile */}
                     <audio 
                       ref={audioRef}
-                      src="/phone_calls/leasing/lead.mp4" 
+                      src="/phone_calls/leasing/lead.mp3" 
                       preload="auto"
+                      playsInline
+                      muted={false}
+                      loop
                     />
                   </div>
                 </div>
