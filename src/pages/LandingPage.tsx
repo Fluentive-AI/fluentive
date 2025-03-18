@@ -12,10 +12,43 @@ const LandingPage = () => {
   const [callTime, setCallTime] = useState(0);
   const [showClock, setShowClock] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const audioRef = useRef(null);
   const timerRef = useRef(null);
   
+  // Preload all phone screen images on component mount
   useEffect(() => {
+    const imageUrls = [
+      '/phone_screens/contact_screen.png',
+      '/phone_screens/calling_screen.png',
+      '/phone_screens/in_call_screen.png'
+    ];
+    
+    let loadedCount = 0;
+    const totalImages = imageUrls.length;
+    
+    const preloadImages = () => {
+      imageUrls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            setImagesLoaded(true);
+          }
+        };
+        img.onerror = () => {
+          console.error(`Failed to load image: ${url}`);
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            setImagesLoaded(true);
+          }
+        };
+      });
+    };
+    
+    preloadImages();
+    
     // Cleanup timer on component unmount
     return () => {
       if (timerRef.current) {
@@ -35,12 +68,16 @@ const LandingPage = () => {
     // After 2 seconds, transition to in-call and start the clock
     setTimeout(() => {
       setPhoneState('in-call');
-      setShowClock(true);
       
-      // Start the call timer
-      timerRef.current = setInterval(() => {
-        setCallTime(prev => prev + 1);
-      }, 1000);
+      // Small delay to ensure the in-call screen is rendered before showing the clock
+      setTimeout(() => {
+        setShowClock(true);
+        
+        // Start the call timer
+        timerRef.current = setInterval(() => {
+          setCallTime(prev => prev + 1);
+        }, 1000);
+      }, 100);
       
       // Play the audio when in call - with better mobile support
       if (audioRef.current) {
@@ -87,24 +124,33 @@ const LandingPage = () => {
   };
   
   const renderPhoneScreen = () => {
+    // Common transition class for smooth fade between images
+    const transitionClass = "w-full rounded-lg transition-opacity duration-300";
+    
     switch (phoneState) {
       case 'contact':
-        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className="w-full rounded-lg" />;
+        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className={transitionClass} />;
       case 'calling':
-        return <img src="/phone_screens/calling_screen.png" alt="Calling screen" className="w-full rounded-lg" />;
+        return <img src="/phone_screens/calling_screen.png" alt="Calling screen" className={transitionClass} />;
       case 'in-call':
         return (
           <div className="relative">
-            <img src="/phone_screens/in_call_screen.png" alt="In-call screen" className="w-full rounded-lg" />
+            <img 
+              src="/phone_screens/in_call_screen.png" 
+              alt="In-call screen" 
+              className={transitionClass} 
+            />
             {showClock && (
-              <div className="absolute top-20 sm:top-20 md:top-24 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-2xl font-semibold">
+              <div 
+                className="absolute top-20 sm:top-20 md:top-24 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-2xl font-semibold transition-opacity duration-300"
+              >
                 {formatCallTime(callTime)}
               </div>
             )}
           </div>
         );
       default:
-        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className="w-full rounded-lg" />;
+        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className={transitionClass} />;
     }
   };
   
@@ -421,11 +467,14 @@ const LandingPage = () => {
                 <button 
                   onClick={startCallSimulation}
                   className="flex items-center gap-3 group"
+                  disabled={!imagesLoaded}
                 >
-                  <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-full bg-green-500 flex items-center justify-center shadow-lg transition-all hover:bg-green-600">
+                  <div className={`w-14 sm:w-16 h-14 sm:h-16 rounded-full flex items-center justify-center shadow-lg transition-all ${imagesLoaded ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400'}`}>
                     <Phone className="h-7 sm:h-8 w-7 sm:w-8 text-white" stroke="white" />
                   </div>
-                  <span className="text-lg sm:text-xl font-medium text-gray-800">Call Property AI</span>
+                  <span className="text-lg sm:text-xl font-medium text-gray-800">
+                    {imagesLoaded ? 'Call Property AI' : 'Loading...'}
+                  </span>
                 </button>
               ) : (
                 <button 
@@ -451,7 +500,15 @@ const LandingPage = () => {
                       onClick={phoneState === 'contact' ? startCallSimulation : endCallSimulation}
                       className="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
                       aria-label={phoneState === 'contact' ? "Call Property AI" : "End Call"}
+                      disabled={!imagesLoaded && phoneState === 'contact'}
                     />
+                    
+                    {/* Hidden images for preloading */}
+                    <div className="hidden">
+                      <img src="/phone_screens/contact_screen.png" alt="Preload" />
+                      <img src="/phone_screens/calling_screen.png" alt="Preload" />
+                      <img src="/phone_screens/in_call_screen.png" alt="Preload" />
+                    </div>
                     
                     {/* Hidden audio element - improved for mobile */}
                     <audio 
