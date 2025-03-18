@@ -456,7 +456,7 @@ const LandingPage = () => {
                     {/* Hidden audio element - improved for mobile */}
                     <audio 
                       ref={audioRef}
-                      src="/phone_calls/leasing/lead.mp3" 
+                      src="/phone_calls/leasing/lead.mp4" 
                       preload="auto"
                       playsInline
                       muted={false}
