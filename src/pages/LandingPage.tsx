@@ -435,13 +435,17 @@ const LandingPage = () => {
                     </div>
                   </div>
                   
-                  <div className="w-full md:w-[55%] flex items-center">
+                  <div className="w-full md:w-[55%] flex justify-center items-center mt-6 md:mt-0">
                     <video 
                       ref={videoRef}
                       src="/phone_calls/leasing/lead.mp4" 
-                      className="w-full rounded-lg" 
+                      className="w-full rounded-lg shadow-md" 
                       preload="auto"
+                      playsInline
+                      muted={true}
                       controls={false}
+                      poster="/phone_calls/leasing/poster.jpg"
+                      style={{ maxHeight: '400px', objectFit: 'contain' }}
                     />
                   </div>
                 </div>
