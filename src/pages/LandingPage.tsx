@@ -13,6 +13,7 @@ const LandingPage = () => {
   const [showClock, setShowClock] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const videoRef = useRef(null);
   const audioRef = useRef(null);
   const timerRef = useRef(null);
   
@@ -54,6 +55,10 @@ const LandingPage = () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
@@ -79,8 +84,15 @@ const LandingPage = () => {
         }, 1000);
       }, 100);
       
-      // Play the audio when in call - with better mobile support
-      if (audioRef.current) {
+      // Handle desktop video playback
+      if (videoRef.current && window.innerWidth >= 768) {
+        videoRef.current.play().catch(error => {
+          console.error("Video play error:", error);
+        });
+      }
+      
+      // Handle mobile audio playback
+      if (audioRef.current && window.innerWidth < 768) {
         // Create a user interaction context for mobile browsers
         const playPromise = audioRef.current.play();
         
@@ -109,6 +121,12 @@ const LandingPage = () => {
     setPhoneState('contact');
     setCallTime(0);
     setShowClock(false);
+    
+    // Pause and reset the video
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
     
     // Pause and reset the audio
     if (audioRef.current) {
@@ -142,7 +160,7 @@ const LandingPage = () => {
             />
             {showClock && (
               <div 
-                className="absolute top-20 sm:top-20 md:top-24 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-2xl font-semibold transition-opacity duration-300"
+                className="absolute top-20 sm:top-20 md:top-20 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-lg font-semibold transition-opacity duration-300"
               >
                 {formatCallTime(callTime)}
               </div>
@@ -469,10 +487,10 @@ const LandingPage = () => {
                   className="flex items-center gap-3 group"
                   disabled={!imagesLoaded}
                 >
-                  <div className={`w-14 sm:w-16 h-14 sm:h-16 rounded-full flex items-center justify-center shadow-lg transition-all ${imagesLoaded ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400'}`}>
-                    <Phone className="h-7 sm:h-8 w-7 sm:w-8 text-white" stroke="white" />
+                  <div className={`${imagesLoaded ? 'w-16 h-16 rounded-full bg-green-500 hover:bg-green-600' : 'w-16 h-16 rounded-full bg-gray-400'} flex items-center justify-center shadow-lg transition-all`}>
+                    <Phone className="h-8 w-8 text-white" stroke="white" />
                   </div>
-                  <span className="text-lg sm:text-xl font-medium text-gray-800">
+                  <span className="text-xl font-medium text-gray-800">
                     {imagesLoaded ? 'Call Property AI' : 'Loading...'}
                   </span>
                 </button>
@@ -481,18 +499,19 @@ const LandingPage = () => {
                   onClick={endCallSimulation}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
-                    <PhoneOff className="h-7 sm:h-8 w-7 sm:w-8 text-white" stroke="white" />
+                  <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
+                    <PhoneOff className="h-8 w-8 text-white" stroke="white" />
                   </div>
-                  <span className="text-lg sm:text-xl font-medium text-gray-800">End Call</span>
+                  <span className="text-xl font-medium text-gray-800">End Call</span>
                 </button>
               )}
             </div>
             
             <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
-              <CardContent className="p-4 sm:p-6 md:p-10">
-                <div className="flex flex-col items-center">
-                  <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px] mx-auto relative">
+              <CardContent className="p-6 md:p-10">
+                {/* Mobile layout (hidden on md and up) */}
+                <div className="flex flex-col items-center md:hidden">
+                  <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative">
                     {renderPhoneScreen()}
                     
                     {/* Transparent button overlay */}
@@ -503,23 +522,42 @@ const LandingPage = () => {
                       disabled={!imagesLoaded && phoneState === 'contact'}
                     />
                     
-                    {/* Hidden images for preloading */}
-                    <div className="hidden">
-                      <img src="/phone_screens/contact_screen.png" alt="Preload" />
-                      <img src="/phone_screens/calling_screen.png" alt="Preload" />
-                      <img src="/phone_screens/in_call_screen.png" alt="Preload" />
-                    </div>
-                    
-                    {/* Hidden audio element - improved for mobile */}
+                    {/* Hidden audio element for mobile - improved for mobile */}
                     <audio 
                       ref={audioRef}
-                      src="/phone_calls/leasing/lead.m4a" 
+                      src="/phone_calls/leasing/lead.mp4" 
                       preload="auto"
                       playsInline
                       muted={false}
                       loop
                     />
                   </div>
+                </div>
+                
+                {/* Desktop layout (hidden on small screens, visible on md and up) */}
+                <div className="hidden md:flex flex-row gap-8 items-center">
+                  <div className="md:w-[45%] flex justify-center items-center">
+                    <div className="max-w-[280px] mx-auto">
+                      {renderPhoneScreen()}
+                    </div>
+                  </div>
+                  
+                  <div className="md:w-[55%] flex items-center">
+                    <video 
+                      ref={videoRef}
+                      src="/phone_calls/leasing/lead.mp4" 
+                      className="w-full rounded-lg" 
+                      preload="auto"
+                      controls={false}
+                    />
+                  </div>
+                </div>
+                
+                {/* Hidden images for preloading */}
+                <div className="hidden">
+                  <img src="/phone_screens/contact_screen.png" alt="Preload" />
+                  <img src="/phone_screens/calling_screen.png" alt="Preload" />
+                  <img src="/phone_screens/in_call_screen.png" alt="Preload" />
                 </div>
               </CardContent>
             </Card>
