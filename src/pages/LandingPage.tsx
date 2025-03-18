@@ -87,7 +87,7 @@ const LandingPage = () => {
           <div className="relative">
             <img src="/phone_screens/in_call_screen.png" alt="In-call screen" className="w-full rounded-lg" />
             {showClock && (
-              <div className="absolute top-16 sm:top-16 md:top-20 left-1/2 transform -translate-x-1/2 text-white text-sm sm:text-base md:text-xl font-semibold">
+              <div className="absolute top-20 sm:top-20 md:top-24 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-2xl font-semibold">
                 {formatCallTime(callTime)}
               </div>
             )}
