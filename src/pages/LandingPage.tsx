@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -86,7 +87,7 @@ const LandingPage = () => {
           <div className="relative">
             <img src="/phone_screens/in_call_screen.png" alt="In-call screen" className="w-full rounded-lg" />
             {showClock && (
-              <div className="absolute top-[22%] left-1/2 transform -translate-x-1/2 text-white text-lg sm:text-xl md:text-2xl font-bold bg-black/20 px-4 py-1 rounded-full backdrop-blur-sm">
+              <div className="absolute top-16 sm:top-16 md:top-20 left-1/2 transform -translate-x-1/2 text-white text-sm sm:text-base md:text-xl font-semibold">
                 {formatCallTime(callTime)}
               </div>
             )}
