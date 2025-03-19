@@ -255,11 +255,11 @@ const AssistantScenario = ({ assistant, onCallEnd, registerEndCall }: AssistantS
                 loop
               />
               
-              {!videoLoaded && !videoError && (
+              {/* {!videoLoaded && !videoError && (
                 <div className="w-full rounded-lg bg-gray-100 flex items-center justify-center" style={{aspectRatio: '16/9'}}>
                   <div className="animate-pulse text-gray-400">Loading video...</div>
                 </div>
-              )}
+              )} */}
               
               {videoError && (
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
