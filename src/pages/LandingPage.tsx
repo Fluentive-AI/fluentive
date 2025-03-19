@@ -25,46 +25,39 @@ const LandingPage = () => {
         </nav>
         
         <div className="flex items-center gap-2">
-          <a 
-            href="https://calendly.com/homm-ai/30min" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hidden sm:flex"
-          >
-            <Button 
-              size="sm"
-              className="flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
-              variant="outline"
-            >
-              Contact Us
-              <MessageSquare className="ml-1 h-3 w-3" />
-            </Button>
-          </a>
-          
           <Button 
             size="sm"
             onClick={() => navigate('/login')}
             className="hidden sm:flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
-            variant="default"
+            variant="outline"
           >
-            <span>Try Demo</span>
-            <ArrowRight className="ml-1 h-3 w-3" />
+            Login
           </Button>
-
+          
           <a 
             href="https://calendly.com/homm-ai/30min" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="sm:hidden"
+            className="hidden sm:block"
           >
             <Button 
               size="sm"
-              className="flex items-center text-xs px-2 py-1 h-8"
-              variant="outline"
+              className="flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
+              variant="default"
             >
-              Contact Us
+              <span>Book a Demo</span>
+              <ArrowRight className="ml-1 h-3 w-3" />
             </Button>
           </a>
+
+          <Button 
+            size="sm"
+            onClick={() => navigate('/login')}
+            className="sm:hidden"
+            variant="outline"
+          >
+            Login
+          </Button>
 
           <div className="md:hidden">
             <Button 
@@ -111,16 +104,20 @@ const LandingPage = () => {
             >
               Pricing
             </a>
-            <Button 
-              onClick={() => {
-                navigate('/login');
-                setMobileMenuOpen(false);
-              }}
-              className="flex items-center gap-2 text-lg"
-              variant="default"
+            <a 
+              href="https://calendly.com/homm-ai/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileMenuOpen(false)}
             >
-              Try Demo
-            </Button>
+              <Button 
+                className="flex items-center gap-2 text-lg"
+                variant="default"
+              >
+                Book a Demo
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </a>
           </nav>
         </div>
       )}
