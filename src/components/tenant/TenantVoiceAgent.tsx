@@ -30,7 +30,7 @@ const scenarioNames: Record<string, string> = {
 };
 
 const TenantVoiceAgent = forwardRef<TenantVoiceAgentRef, TenantVoiceAgentProps>(
-  ({ currentScreen, scenario, onScreenChange }, ref) => {
+  ({ currentScreen = 'contact', scenario = 'lead', onScreenChange }, ref) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
 
