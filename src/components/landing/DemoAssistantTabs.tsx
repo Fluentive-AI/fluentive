@@ -85,6 +85,56 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     endCallSimulation();
   }, [activeTab]);
 
+  // Helper function to play media
+  const playMedia = () => {
+    // Play video on desktop
+    if (videoRef.current && window.innerWidth >= 768) {
+      console.log("Starting video playback:", currentAssistant.videoPath);
+      videoRef.current.src = currentAssistant.videoPath;
+      videoRef.current.load();
+      
+      // Play with better error handling
+      videoRef.current.play()
+        .then(() => console.log("Video playback started successfully"))
+        .catch(error => {
+          console.error("Video play error:", error);
+          // Try again after a short delay
+          setTimeout(() => {
+            if (videoRef.current) {
+              videoRef.current.play()
+                .catch(err => console.error("Second video play attempt failed:", err));
+            }
+          }, 500);
+        });
+    }
+    
+    // Play audio on mobile
+    if (audioRef.current && window.innerWidth < 768) {
+      console.log("Starting audio playback:", currentAssistant.audioPath);
+      audioRef.current.src = currentAssistant.audioPath;
+      audioRef.current.load();
+      
+      const playPromise = audioRef.current.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => console.log("Audio playback started successfully"))
+          .catch(error => {
+            console.error("Audio playback error (likely autoplay restriction):", error);
+            // Try to play muted as a fallback
+            if (audioRef.current) {
+              audioRef.current.muted = true;
+              audioRef.current.play()
+                .then(() => console.log("Muted audio playback started"))
+                .catch(err => {
+                  console.error("Even muted audio failed to play:", err);
+                });
+            }
+          });
+      }
+    }
+  };
+
   const startCallSimulation = () => {
     // For operations tab, skip the calling state and go directly to in-call
     if (activeTab === 'operations') {
@@ -95,32 +145,8 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         setCallTime(prev => prev + 1);
       }, 1000);
       
-      if (videoRef.current && window.innerWidth >= 768) {
-        videoRef.current.src = currentAssistant.videoPath;
-        videoRef.current.load();
-        videoRef.current.play().catch(error => {
-          console.error("Video play error:", error);
-        });
-      }
-      
-      if (audioRef.current && window.innerWidth < 768) {
-        audioRef.current.src = currentAssistant.audioPath;
-        audioRef.current.load();
-        const playPromise = audioRef.current.play();
-        
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.error("Audio playback error (likely autoplay restriction):", error);
-            // Try to play muted as a fallback
-            if (audioRef.current) {
-              audioRef.current.muted = true;
-              audioRef.current.play().catch(err => {
-                console.error("Even muted audio failed to play:", err);
-              });
-            }
-          });
-        }
-      }
+      // Play media with slight delay to ensure state is updated
+      setTimeout(() => playMedia(), 100);
     } else {
       // Original behavior for other tabs
       setPhoneState('calling');
@@ -134,34 +160,10 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
           timerRef.current = setInterval(() => {
             setCallTime(prev => prev + 1);
           }, 1000);
-        }, 100);
-        
-        if (videoRef.current && window.innerWidth >= 768) {
-          videoRef.current.src = currentAssistant.videoPath;
-          videoRef.current.load();
-          videoRef.current.play().catch(error => {
-            console.error("Video play error:", error);
-          });
-        }
-        
-        if (audioRef.current && window.innerWidth < 768) {
-          audioRef.current.src = currentAssistant.audioPath;
-          audioRef.current.load();
-          const playPromise = audioRef.current.play();
           
-          if (playPromise !== undefined) {
-            playPromise.catch(error => {
-              console.error("Audio playback error (likely autoplay restriction):", error);
-              // Try to play muted as a fallback
-              if (audioRef.current) {
-                audioRef.current.muted = true;
-                audioRef.current.play().catch(err => {
-                  console.error("Even muted audio failed to play:", err);
-                });
-              }
-            });
-          }
-        }
+          // Play media
+          playMedia();
+        }, 100);
       }, 2000);
     }
   };
@@ -339,6 +341,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                       className="w-full rounded-lg shadow-md" 
                       preload="auto"
                       controls={false}
+                      muted
                     />
                   </div>
                 </div>
@@ -359,4 +362,3 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
 };
 
 export default DemoAssistantTabs;
-
