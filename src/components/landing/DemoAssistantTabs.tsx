@@ -54,7 +54,8 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       '/phone_screens/calling_screen.png',
       '/phone_screens/in_call_screen.png',
       '/phone_screens/accept_call.png',
-      '/phone_screens/decline_call.png'  // Updated to correct path
+      '/phone_screens/decline_call.png',
+      '/phone_screens/incoming_call.png'  // Added incoming call image
     ];
     
     let loadedCount = 0;
@@ -85,18 +86,14 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
   }, [activeTab]);
 
   const startCallSimulation = () => {
-    setPhoneState('calling');
-    
-    setTimeout(() => {
+    // For operations tab, skip the calling state and go directly to in-call
+    if (activeTab === 'operations') {
       setPhoneState('in-call');
+      setShowClock(true);
       
-      setTimeout(() => {
-        setShowClock(true);
-        
-        timerRef.current = setInterval(() => {
-          setCallTime(prev => prev + 1);
-        }, 1000);
-      }, 100);
+      timerRef.current = setInterval(() => {
+        setCallTime(prev => prev + 1);
+      }, 1000);
       
       if (videoRef.current && window.innerWidth >= 768) {
         videoRef.current.src = currentAssistant.videoPath;
@@ -124,7 +121,49 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
           });
         }
       }
-    }, 2000);
+    } else {
+      // Original behavior for other tabs
+      setPhoneState('calling');
+      
+      setTimeout(() => {
+        setPhoneState('in-call');
+        
+        setTimeout(() => {
+          setShowClock(true);
+          
+          timerRef.current = setInterval(() => {
+            setCallTime(prev => prev + 1);
+          }, 1000);
+        }, 100);
+        
+        if (videoRef.current && window.innerWidth >= 768) {
+          videoRef.current.src = currentAssistant.videoPath;
+          videoRef.current.load();
+          videoRef.current.play().catch(error => {
+            console.error("Video play error:", error);
+          });
+        }
+        
+        if (audioRef.current && window.innerWidth < 768) {
+          audioRef.current.src = currentAssistant.audioPath;
+          audioRef.current.load();
+          const playPromise = audioRef.current.play();
+          
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.error("Audio playback error (likely autoplay restriction):", error);
+              // Try to play muted as a fallback
+              if (audioRef.current) {
+                audioRef.current.muted = true;
+                audioRef.current.play().catch(err => {
+                  console.error("Even muted audio failed to play:", err);
+                });
+              }
+            });
+          }
+        }
+      }, 2000);
+    }
   };
   
   const endCallSimulation = () => {
@@ -171,6 +210,11 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
   
   const renderPhoneScreen = () => {
     const transitionClass = "w-full rounded-lg transition-opacity duration-300 shadow-lg";
+    
+    // Special case for operations tab in contact state
+    if (activeTab === 'operations' && phoneState === 'contact') {
+      return <img src="/phone_screens/incoming_call.png" alt="Incoming call screen" className={transitionClass} />;
+    }
     
     switch (phoneState) {
       case 'contact':
@@ -233,7 +277,6 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   className="flex items-center gap-3 group"
                   disabled={!imagesLoaded}
                 >
-                  {/* Changed from a round icon to just the image */}
                   <img 
                     src="/phone_screens/accept_call.png" 
                     alt="Call" 
@@ -304,6 +347,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   <img src="/phone_screens/contact_screen.png" alt="Preload" />
                   <img src="/phone_screens/calling_screen.png" alt="Preload" />
                   <img src="/phone_screens/in_call_screen.png" alt="Preload" />
+                  <img src="/phone_screens/incoming_call.png" alt="Preload" />
                 </div>
               </CardContent>
             </Card>
@@ -315,3 +359,4 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
 };
 
 export default DemoAssistantTabs;
+
