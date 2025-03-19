@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -47,7 +46,6 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
 
   const currentAssistant = assistantTabs.find(tab => tab.id === activeTab) || assistantTabs[0];
 
-  // Preload images
   useEffect(() => {
     const imageUrls = [
       '/phone_screens/contact_screen.png',
@@ -80,13 +78,11 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     });
   }, []);
 
-  // Reset call when tab changes
   useEffect(() => {
     endCallSimulation();
   }, [activeTab]);
 
   const startCallSimulation = () => {
-    // For operations tab, skip the calling state and go directly to in-call
     if (activeTab === 'operations') {
       setPhoneState('in-call');
       setShowClock(true);
@@ -111,7 +107,6 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         if (playPromise !== undefined) {
           playPromise.catch(error => {
             console.error("Audio playback error (likely autoplay restriction):", error);
-            // Try to play muted as a fallback
             if (audioRef.current) {
               audioRef.current.muted = true;
               audioRef.current.play().catch(err => {
@@ -122,7 +117,6 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         }
       }
     } else {
-      // Original behavior for other tabs
       setPhoneState('calling');
       
       setTimeout(() => {
@@ -152,7 +146,6 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
           if (playPromise !== undefined) {
             playPromise.catch(error => {
               console.error("Audio playback error (likely autoplay restriction):", error);
-              // Try to play muted as a fallback
               if (audioRef.current) {
                 audioRef.current.muted = true;
                 audioRef.current.play().catch(err => {
@@ -211,7 +204,6 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
   const renderPhoneScreen = () => {
     const transitionClass = "w-full rounded-lg transition-opacity duration-300";
     
-    // Special case for operations tab in contact state
     if (activeTab === 'operations' && phoneState === 'contact') {
       return <img src="/phone_screens/incoming_call.png" alt="Incoming call screen" className={transitionClass} />;
     }
@@ -301,7 +293,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
               )}
             </div>
 
-            <Card className="bg-white border-0 rounded-2xl overflow-hidden max-w-5xl mx-auto">
+            <Card className="bg-white border-0 rounded-2xl overflow-hidden max-w-5xl mx-auto shadow-md">
               <CardContent className="p-6 md:p-8">
                 <div className="flex flex-col items-center md:hidden">
                   <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative">

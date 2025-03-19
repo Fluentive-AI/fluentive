@@ -258,3 +258,16 @@
 .demo-card-container {
   @apply bg-white border-0 shadow-none;
 }
+
+/* Shadow options */
+.shadow-subtle {
+  @apply shadow-sm;
+}
+
+.shadow-elevated {
+  @apply shadow-md;
+}
+
+.shadow-floating {
+  @apply shadow-lg;
+}
