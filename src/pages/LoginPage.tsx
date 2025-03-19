@@ -72,7 +72,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col items-center justify-center p-4 sm:p-6">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-xl">
         <div className="mb-6 sm:mb-8 text-center">
           <div className="h-16 flex items-center justify-center">
             <AppLogo />
