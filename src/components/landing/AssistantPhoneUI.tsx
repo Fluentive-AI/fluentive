@@ -76,7 +76,7 @@ const AssistantPhoneUI = ({
               className={transitionClass} 
             />
             <div 
-              className="absolute top-20 sm:top-20 md:top-16 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-lg font-semibold transition-opacity duration-300"
+              className="absolute top-20 sm:top-20 md:top-20 lg:top-20 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-lg font-semibold transition-opacity duration-300"
             >
               {formatCallTime(callTime)}
             </div>
