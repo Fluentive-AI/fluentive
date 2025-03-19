@@ -155,8 +155,21 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     return `${mins}:${secs < 10 ? '0' + secs : secs}`;
   };
   
+  const getTabColor = (id: string) => {
+    switch (id) {
+      case 'leasing':
+        return 'bg-brand-500 text-white';
+      case 'operations':
+        return 'bg-blue-500 text-white';
+      case 'maintenance':
+        return 'bg-amber-500 text-white';
+      default:
+        return 'bg-gray-200 text-gray-700';
+    }
+  };
+  
   const renderPhoneScreen = () => {
-    const transitionClass = "w-full rounded-lg transition-opacity duration-300";
+    const transitionClass = "w-full rounded-lg transition-opacity duration-300 shadow-lg";
     
     switch (phoneState) {
       case 'contact':
@@ -199,7 +212,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Tabs 
         defaultValue="leasing" 
         value={activeTab} 
@@ -208,12 +221,13 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         }}
         className="w-full"
       >
-        <TabsList className="grid grid-cols-3 w-full mb-6">
+        <TabsList className="grid grid-cols-3 w-full max-w-2xl mx-auto mb-8 p-1 bg-muted rounded-xl">
           {assistantTabs.map(tab => (
             <TabsTrigger 
               key={tab.id} 
               value={tab.id}
-              className="flex items-center justify-center"
+              className={`flex items-center justify-center rounded-lg text-sm font-medium transition-all py-3 px-2
+                ${activeTab === tab.id ? 'shadow-md' : 'hover:bg-gray-100/80'}`}
             >
               {getTabIcon(tab.id)}
               <span className="hidden sm:inline">{tab.name}</span>
@@ -224,19 +238,22 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
 
         {assistantTabs.map(tab => (
           <TabsContent key={tab.id} value={tab.id} className="mt-0">
-            <div className="text-center mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold mb-2">{tab.name} - {tab.title}</h3>
-              <p className="text-gray-600">{tab.description}</p>
+            <div className="text-center mb-8">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">{tab.name} - {tab.title}</h3>
+              <p className="text-gray-600 max-w-2xl mx-auto">{tab.description}</p>
             </div>
             
-            <div className="flex justify-center items-center mb-8">
+            <div className="flex justify-center items-center mb-10">
               {phoneState === 'contact' ? (
                 <button 
                   onClick={startCallSimulation}
                   className="flex items-center gap-3 group"
                   disabled={!imagesLoaded}
                 >
-                  <div className={`${imagesLoaded ? 'w-16 h-16 rounded-full bg-green-500 hover:bg-green-600' : 'w-16 h-16 rounded-full bg-gray-400'} flex items-center justify-center shadow-lg transition-all`}>
+                  <div className={`${imagesLoaded ? 
+                    `w-16 h-16 rounded-full ${getTabColor(tab.id)} hover:opacity-90` : 
+                    'w-16 h-16 rounded-full bg-gray-400'} 
+                    flex items-center justify-center shadow-lg transition-all`}>
                     <Phone className="h-8 w-8 text-white" stroke="white" />
                   </div>
                   <span className="text-xl font-medium text-gray-800">
@@ -256,7 +273,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
               )}
             </div>
 
-            <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
+            <Card className="bg-white shadow-xl border rounded-2xl overflow-hidden max-w-5xl mx-auto">
               <CardContent className="p-6 md:p-10">
                 <div className="flex flex-col items-center md:hidden">
                   <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative">
@@ -280,7 +297,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   </div>
                 </div>
                 
-                <div className="hidden md:flex flex-row gap-8 items-center">
+                <div className="hidden md:flex flex-row gap-10 items-center">
                   <div className="md:w-[45%] flex justify-center items-center">
                     <div className="max-w-[280px] mx-auto">
                       {renderPhoneScreen()}
@@ -291,7 +308,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                     <video 
                       ref={videoRef}
                       src={tab.videoPath}
-                      className="w-full rounded-lg" 
+                      className="w-full rounded-lg shadow-md" 
                       preload="auto"
                       controls={false}
                     />
