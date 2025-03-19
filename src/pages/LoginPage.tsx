@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -11,10 +10,16 @@ import AppLogo from '@/components/layout/AppLogo';
 
 // This is not secure for production, but serves as a simple authentication mechanism
 // In a real application, this would be handled by a backend service
-const ALLOWED_USER = {
-  email: 'er526@cornell.edu',
-  password: '123' 
-};
+const ALLOWED_USERS = [
+  {
+    email: 'eytan@homm.com',
+    password: 'safe_password' 
+  },
+  {
+    email: 'antoine@homm.com',
+    password: 'safe_password'
+  }
+];
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -31,8 +36,12 @@ const LoginPage = () => {
     
     // Simulate a network request
     setTimeout(() => {
-      // Check if the credentials match the allowed user
-      if (email === ALLOWED_USER.email && password === ALLOWED_USER.password) {
+      // Check if the credentials match any allowed user
+      const isValidUser = ALLOWED_USERS.some(
+        user => user.email === email && user.password === password
+      );
+      
+      if (isValidUser) {
         // Store authentication state in session storage
         sessionStorage.setItem('isAuthenticated', 'true');
         
@@ -124,10 +133,6 @@ const LoginPage = () => {
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>
 
-              {/* Development hint - remove for production */}
-              <p className="text-xs text-muted-foreground text-center">
-                Hint: Use er526@cornell.edu / 123
-              </p>
             </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 px-6 pb-6">
