@@ -209,7 +209,6 @@ const LandingPage = () => {
               variant="outline"
             >
               Contact Us
-              <MessageSquare className="ml-1 h-3 w-3" />
             </Button>
           </a>
 
@@ -267,7 +266,6 @@ const LandingPage = () => {
               variant="default"
             >
               Try Demo
-              <SquareArrowOutUpRight className="h-4 w-4" />
             </Button>
           </nav>
         </div>
@@ -744,4 +742,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-

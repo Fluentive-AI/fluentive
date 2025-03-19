@@ -14,6 +14,7 @@ export interface ScenarioFilterProps {
   options: any[];
   selectedValues: string[];
   onChange: (selectedValues: string[]) => void;
+  className?: string;
 }
 
 export interface AIConversation {
@@ -37,6 +38,7 @@ export interface AIConversation {
   scenario?: string;
   sentiment?: string;
   summary?: string;
+  transcript?: string;
 }
 
 export interface AIAgentConsoleProps {
