@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import AssistantPhoneUI from './AssistantPhoneUI';
@@ -7,9 +6,10 @@ import { AssistantTab } from '@/types';
 interface AssistantScenarioProps {
   assistant: AssistantTab;
   onCallEnd: () => void;
+  registerEndCall?: (endCall: () => void) => () => void;
 }
 
-const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => {
+const AssistantScenario = ({ assistant, onCallEnd, registerEndCall }: AssistantScenarioProps) => {
   const [phoneState, setPhoneState] = useState<'contact' | 'calling' | 'in-call'>('contact');
   const [callTime, setCallTime] = useState(0);
   const [videoError, setVideoError] = useState(false);
@@ -17,12 +17,21 @@ const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const unregisterRef = useRef<(() => void) | null>(null);
 
-  // Load video as soon as component mounts
+  // Reset everything when component unmounts or assistant changes
   useEffect(() => {
+    // Reset state when assistant changes
+    setPhoneState('contact');
+    setCallTime(0);
+    setVideoError(false);
+    setVideoLoaded(false);
+    
     if (videoRef.current) {
       videoRef.current.src = assistant.videoPath;
       videoRef.current.load();
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
       
       // Set event listeners for video loading
       videoRef.current.onloadeddata = () => {
@@ -40,9 +49,23 @@ const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => 
         setVideoError(true);
       };
     }
+    
+    // Register the endCall function with the parent component
+    if (registerEndCall) {
+      unregisterRef.current = registerEndCall(endCallSimulation);
+    }
 
-    return () => endCallSimulation();
-  }, [assistant.id, assistant.videoPath]);
+    return () => {
+      // Cleanup when component unmounts
+      endCallSimulation();
+      
+      // Unregister from parent if needed
+      if (unregisterRef.current) {
+        unregisterRef.current();
+        unregisterRef.current = null;
+      }
+    };
+  }, [assistant.id, assistant.videoPath, registerEndCall]);
 
   const startCallSimulation = () => {
     if (assistant.id === 'operations') {

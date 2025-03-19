@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 interface AssistantPhoneUIProps {
@@ -77,7 +76,7 @@ const AssistantPhoneUI = ({
               className={transitionClass} 
             />
             <div 
-              className="absolute top-20 sm:top-20 md:top-20 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-lg font-semibold transition-opacity duration-300"
+              className="absolute top-20 sm:top-20 md:top-16 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-lg font-semibold transition-opacity duration-300"
             >
               {formatCallTime(callTime)}
             </div>
@@ -125,7 +124,7 @@ const AssistantPhoneUI = ({
   };
 
   return (
-    <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative">
+    <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[260px] lg:max-w-[280px] mx-auto relative transform md:scale-95 lg:scale-90 transition-transform">
       {renderPhoneScreen()}
       
       <button 

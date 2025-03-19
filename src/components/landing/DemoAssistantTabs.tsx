@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { AssistantTab } from '@/types';
 import AssistantScenario from './AssistantScenario';
@@ -10,6 +9,23 @@ interface DemoAssistantTabsProps {
 
 const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
   const [activeTab, setActiveTab] = useState('leasing');
+  const activeCallRef = useRef<{endCall: () => void} | null>(null);
+
+  const handleTabChange = (tabId: string) => {
+    if (activeCallRef.current) {
+      activeCallRef.current.endCall();
+      activeCallRef.current = null;
+    }
+    
+    setActiveTab(tabId);
+  };
+
+  const registerEndCall = (endCall: () => void) => {
+    activeCallRef.current = { endCall };
+    return () => {
+      activeCallRef.current = null;
+    };
+  };
 
   const assistantTabs: AssistantTab[] = [
     {
@@ -62,7 +78,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         {assistantTabs.map(tab => (
           <Button 
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => handleTabChange(tab.id)}
             className={`px-5 py-6 rounded-lg transition-all flex-grow sm:flex-grow-0 w-full sm:w-auto md:min-w-[220px] ${
               activeTab === tab.id 
                 ? 'bg-blue-500 text-white hover:opacity-90'
@@ -80,7 +96,8 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
           <div key={tab.id} className={`${activeTab === tab.id ? 'block' : 'hidden'}`}>
             <AssistantScenario 
               assistant={tab} 
-              onCallEnd={onCallEnd} 
+              onCallEnd={onCallEnd}
+              registerEndCall={registerEndCall}
             />
           </div>
         ))}

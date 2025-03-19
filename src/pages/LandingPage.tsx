@@ -348,7 +348,13 @@ const LandingPage = () => {
             </p>
           </div>
           
-          <DemoAssistantTabs onCallEnd={() => console.log('Call ended')} />
+          <DemoAssistantTabs 
+            onCallEnd={() => {
+              console.log('Call ended');
+              // This function will be called when a call ends, either manually or when switching tabs
+              // You can add any additional cleanup or analytics tracking here
+            }} 
+          />
         </div>
       </section>
       
