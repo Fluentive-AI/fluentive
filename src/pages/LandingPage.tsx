@@ -171,6 +171,22 @@ const LandingPage = () => {
         </nav>
         
         <div className="flex items-center gap-2">
+          <a 
+            href="https://calendly.com/homm-ai/30min" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hidden sm:flex"
+          >
+            <Button 
+              size="sm"
+              className="flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
+              variant="outline"
+            >
+              Contact Us
+              <MessageSquare className="ml-1 h-3 w-3" />
+            </Button>
+          </a>
+          
           <Button 
             size="sm"
             onClick={() => navigate('/login')}
@@ -228,6 +244,15 @@ const LandingPage = () => {
             >
               Pricing
             </a>
+            <a 
+              href="https://calendly.com/homm-ai/30min"
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-xl font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Contact Us
+            </a>
           </nav>
         </div>
       )}
@@ -242,9 +267,6 @@ const LandingPage = () => {
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 leading-tight">
                 AI Agents for SFR Property Managers
               </h1>
-              {/* <p className="mt-2 text-lg sm:text-xl md:text-2xl text-gray-600 font-bold">
-                Demo For Brandywine Homes USA and Lafayette RE
-              </p> */}
               
               <p className="text-lg sm:text-xl text-gray-600">
                 We transform SFR property management with AI agents that automate operations, enhance tenant experiences, and drive better business outcomes.
@@ -597,13 +619,19 @@ const LandingPage = () => {
                 </ul>
               </CardContent>
               <CardFooter className="px-8 pb-8">
-                <Button 
-                  className="w-full py-6 text-lg shadow-md hover:shadow-xl transition-all bg-gradient-to-r from-blue-500 to-indigo-600"
-                  onClick={() => navigate('/login')}
+                <a 
+                  href="https://calendly.com/homm-ai/30min" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full"
                 >
-                  Talk to Sales
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                  <Button 
+                    className="w-full py-6 text-lg shadow-md hover:shadow-xl transition-all bg-gradient-to-r from-blue-500 to-indigo-600"
+                  >
+                    Contact Us
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </a>
               </CardFooter>
             </Card>
           </div>
@@ -613,15 +641,20 @@ const LandingPage = () => {
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
               Let our team of AI experts design a tailored solution for your property management needs.
             </p>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="font-medium border-2 border-primary hover:bg-primary/10"
-              onClick={() => navigate('/login')}
+            <a 
+              href="https://calendly.com/homm-ai/30min" 
+              target="_blank" 
+              rel="noopener noreferrer"
             >
-              Schedule a Consultation
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="font-medium border-2 border-primary hover:bg-primary/10"
+              >
+                Schedule a Consultation
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
           </div>
         </div>
       </section>
@@ -677,9 +710,6 @@ const LandingPage = () => {
                 />
               </div>
               <p className="mb-4 text-gray-400">AI-powered property management solution.</p>
-              {/* <p className="text-sm mb-2 text-gray-500">
-                Demo For Brandywine Homes USA and Lafayette RE
-              </p> */}
               <p className="text-sm text-gray-500">© 2025 Homm. All rights reserved.</p>
             </div>
             
