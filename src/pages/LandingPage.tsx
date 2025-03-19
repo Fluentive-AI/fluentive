@@ -1,8 +1,9 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
-import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight, Sparkles, User } from 'lucide-react';
+import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight, Sparkles, User, LayoutDashboard } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import DemoAssistantTabs from '@/components/landing/DemoAssistantTabs';
 
@@ -139,15 +140,21 @@ const LandingPage = () => {
                 We transform SFR property management with AI agents that automate operations, enhance tenant experiences, and drive better business outcomes.
               </p>
               
-              <div className="flex flex-col gap-4 pt-6 items-center md:items-start">
-                <Button 
-                  size="lg" 
-                  className="text-lg px-6 py-6 h-auto w-full sm:w-auto font-medium shadow-md hover:shadow-lg transition-all"
-                  onClick={() => navigate('/login')}
+              <div className="flex flex-col gap-4 pt-6 items-center md:items-center">
+                <a 
+                  href="https://calendly.com/homm-ai/30min" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto"
                 >
-                  Property Manager Dashboard
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                  <Button 
+                    size="lg" 
+                    className="text-lg px-6 py-6 h-auto w-full sm:w-auto font-medium shadow-md hover:shadow-lg transition-all"
+                  >
+                    Try our Property Management Dashboard
+                    <LayoutDashboard className="ml-2 h-5 w-5" />
+                  </Button>
+                </a>
               </div>
             </div>
             
