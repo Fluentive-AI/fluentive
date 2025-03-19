@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
-import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight, Sparkles, User } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import DemoAssistantTabs from '@/components/landing/DemoAssistantTabs';
 
@@ -31,6 +31,7 @@ const LandingPage = () => {
             className="hidden sm:flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
             variant="outline"
           >
+            <User className="mr-1 h-3 w-3" />
             Login
           </Button>
           
@@ -56,6 +57,7 @@ const LandingPage = () => {
             className="sm:hidden"
             variant="outline"
           >
+            <User className="mr-1 h-3 w-3" />
             Login
           </Button>
 
