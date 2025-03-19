@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -175,38 +176,6 @@
   @apply bg-gray-100 text-gray-800;
 }
 
-/* Shadow options */
-.shadow-subtle {
-  @apply shadow-sm;
-}
-
-.shadow-elevated {
-  @apply shadow-md;
-}
-
-.shadow-floating {
-  @apply shadow-lg;
-}
-
-/* Assistant avatar styles */
-.assistant-avatar {
-  @apply relative;
-}
-
-.assistant-avatar img {
-  @apply relative z-10;
-}
-
-.assistant-avatar::before {
-  content: '';
-  @apply absolute inset-0 bg-gradient-to-r from-transparent via-gray-400/20 to-transparent rounded-full filter blur-md;
-}
-
-.assistant-avatar::after {
-  content: '';
-  @apply absolute inset-0 bg-gradient-to-b from-transparent via-gray-400/20 to-transparent rounded-full filter blur-md;
-}
-
 /* Sound wave animation */
 @keyframes soundwave {
   0% {
@@ -288,4 +257,17 @@
 
 .demo-card-container {
   @apply bg-white border-0 shadow-none;
+}
+
+/* Shadow options */
+.shadow-subtle {
+  @apply shadow-sm;
+}
+
+.shadow-elevated {
+  @apply shadow-md;
+}
+
+.shadow-floating {
+  @apply shadow-lg;
 }

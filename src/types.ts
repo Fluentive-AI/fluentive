@@ -226,5 +226,4 @@ export interface AssistantTab {
   description: string;
   videoPath: string;
   audioPath: string;
-  avatarPath: string; // Updated to be required
 }

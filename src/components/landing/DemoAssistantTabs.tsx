@@ -1,8 +1,6 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { AssistantTab } from '@/types';
 
 interface DemoAssistantTabsProps {
@@ -26,8 +24,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       title: 'Leasing Assistant',
       description: 'Handles rental inquiries and application questions',
       videoPath: '/phone_calls/leasing/lead.mp4',
-      audioPath: '/phone_calls/leasing/lead.m4a',
-      avatarPath: '/avatars/jessica.png'
+      audioPath: '/phone_calls/leasing/lead.m4a'
     },
     {
       id: 'operations',
@@ -35,8 +32,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       title: 'Property Operations',
       description: 'Assists with rent payments and property management',
       videoPath: '/phone_calls/property_operations/property_operations.mp4',
-      audioPath: '/phone_calls/property_operations/property_operations.m4a',
-      avatarPath: '/avatars/susan.png'
+      audioPath: '/phone_calls/property_operations/property_operations.m4a'
     },
     {
       id: 'maintenance',
@@ -44,8 +40,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       title: 'Maintenance Assistant',
       description: 'Processes maintenance requests and scheduling',
       videoPath: '/phone_calls/maintenance/maintenance.mp4',
-      audioPath: '/phone_calls/maintenance/maintenance.m4a',
-      avatarPath: '/avatars/james.png'
+      audioPath: '/phone_calls/maintenance/maintenance.m4a'
     }
   ];
 
@@ -58,10 +53,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       '/phone_screens/in_call_screen.png',
       '/phone_screens/accept_call.png',
       '/phone_screens/decline_call.png',
-      '/phone_screens/incoming_call.png',
-      '/avatars/jessica.png',
-      '/avatars/susan.png',
-      '/avatars/james.png'
+      '/phone_screens/incoming_call.png'
     ];
     
     let loadedCount = 0;
@@ -265,58 +257,40 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       <div className="transition-all">
         {assistantTabs.map(tab => (
           <div key={tab.id} className={`${activeTab === tab.id ? 'block' : 'hidden'}`}>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-6">
-              <div className="flex flex-col md:w-1/2 space-y-4">
-                <div className="text-left">
-                  <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">{tab.name} - {tab.title}</h3>
-                  <p className="text-gray-600 max-w-2xl">{tab.description}</p>
-                </div>
-                
-                <div className="flex items-center">
-                  {phoneState === 'contact' ? (
-                    <button 
-                      onClick={startCallSimulation}
-                      className="flex items-center gap-3 group"
-                      disabled={!imagesLoaded}
-                    >
-                      <img 
-                        src="/phone_screens/accept_call.png" 
-                        alt="Call" 
-                        className="w-16 h-16 hover:opacity-90 transition-all"
-                      />
-                      <span className="text-xl font-medium text-gray-800">
-                        {imagesLoaded ? `Call ${tab.name}` : 'Loading...'}
-                      </span>
-                    </button>
-                  ) : (
-                    <button 
-                      onClick={endCallSimulation}
-                      className="flex items-center gap-3 group"
-                    >
-                      <img 
-                        src="/phone_screens/decline_call.png" 
-                        alt="End Call" 
-                        className="w-16 h-16 hover:opacity-90 transition-all"
-                      />
-                      <span className="text-xl font-medium text-gray-800">End Call</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-              
-              <div className="flex justify-center md:justify-end md:w-1/2">
-                <div className="relative">
-                  <div className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent rounded-full filter blur-md"></div>
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-transparent rounded-full filter blur-md"></div>
-                    <img 
-                      src={tab.avatarPath} 
-                      alt={tab.name} 
-                      className="w-full h-full object-contain relative z-10"
-                    />
-                  </div>
-                </div>
-              </div>
+            <div className="text-center mb-8">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">{tab.name} - {tab.title}</h3>
+              <p className="text-gray-600 max-w-2xl mx-auto">{tab.description}</p>
+            </div>
+            
+            <div className="flex justify-center items-center mb-10">
+              {phoneState === 'contact' ? (
+                <button 
+                  onClick={startCallSimulation}
+                  className="flex items-center gap-3 group"
+                  disabled={!imagesLoaded}
+                >
+                  <img 
+                    src="/phone_screens/accept_call.png" 
+                    alt="Call" 
+                    className="w-16 h-16 hover:opacity-90 transition-all"
+                  />
+                  <span className="text-xl font-medium text-gray-800">
+                    {imagesLoaded ? `Call ${tab.name}` : 'Loading...'}
+                  </span>
+                </button>
+              ) : (
+                <button 
+                  onClick={endCallSimulation}
+                  className="flex items-center gap-3 group"
+                >
+                  <img 
+                    src="/phone_screens/decline_call.png" 
+                    alt="End Call" 
+                    className="w-16 h-16 hover:opacity-90 transition-all"
+                  />
+                  <span className="text-xl font-medium text-gray-800">End Call</span>
+                </button>
+              )}
             </div>
 
             <Card className="bg-white border-0 rounded-2xl overflow-hidden max-w-5xl mx-auto shadow-md">
