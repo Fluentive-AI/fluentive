@@ -198,6 +198,19 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     }
   };
 
+  const getTabColor = (id: string) => {
+    switch (id) {
+      case 'leasing':
+        return 'bg-blue-500 hover:bg-blue-600';
+      case 'operations': 
+        return 'bg-purple-500 hover:bg-purple-600';
+      case 'maintenance':
+        return 'bg-green-500 hover:bg-green-600';
+      default:
+        return 'bg-blue-500 hover:bg-blue-600';
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Tabs 
@@ -208,35 +221,47 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         }}
         className="w-full"
       >
-        <TabsList className="grid grid-cols-3 w-full mb-6">
+        <TabsList className="grid grid-cols-3 w-full mb-8 p-1 bg-gray-100 rounded-xl">
           {assistantTabs.map(tab => (
             <TabsTrigger 
               key={tab.id} 
               value={tab.id}
-              className="flex items-center justify-center"
+              className="flex items-center justify-center py-3 rounded-lg data-[state=active]:shadow-md transition-all"
             >
-              {getTabIcon(tab.id)}
-              <span className="hidden sm:inline">{tab.name}</span>
-              <span className="sm:hidden">{tab.name.charAt(0)}</span>
+              <div className="flex items-center">
+                <div className={`h-8 w-8 rounded-full flex items-center justify-center ${tab.id === activeTab ? getTabColor(tab.id) : 'bg-gray-200'} mr-2`}>
+                  {getTabIcon(tab.id)}
+                </div>
+                <div className="text-left">
+                  <span className="hidden sm:block font-medium">{tab.name}</span>
+                  <span className="sm:hidden font-medium">{tab.name.charAt(0)}</span>
+                </div>
+              </div>
             </TabsTrigger>
           ))}
         </TabsList>
 
         {assistantTabs.map(tab => (
-          <TabsContent key={tab.id} value={tab.id} className="mt-0">
-            <div className="text-center mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold mb-2">{tab.name} - {tab.title}</h3>
-              <p className="text-gray-600">{tab.description}</p>
+          <TabsContent key={tab.id} value={tab.id} className="mt-0 animate-fade-in">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">
+                {tab.name} - {tab.title}
+              </h3>
+              <p className="text-gray-600 max-w-2xl mx-auto">{tab.description}</p>
             </div>
             
-            <div className="flex justify-center items-center mb-8">
+            <div className="flex justify-center items-center mb-10">
               {phoneState === 'contact' ? (
                 <button 
                   onClick={startCallSimulation}
                   className="flex items-center gap-3 group"
                   disabled={!imagesLoaded}
                 >
-                  <div className={`${imagesLoaded ? 'w-16 h-16 rounded-full bg-green-500 hover:bg-green-600' : 'w-16 h-16 rounded-full bg-gray-400'} flex items-center justify-center shadow-lg transition-all`}>
+                  <div className={`${imagesLoaded 
+                    ? `w-16 h-16 rounded-full ${getTabColor(tab.id)} shadow-lg` 
+                    : 'w-16 h-16 rounded-full bg-gray-400'} 
+                    flex items-center justify-center transition-all transform group-hover:scale-105`}
+                  >
                     <Phone className="h-8 w-8 text-white" stroke="white" />
                   </div>
                   <span className="text-xl font-medium text-gray-800">
@@ -248,7 +273,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   onClick={endCallSimulation}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
+                  <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600 transform group-hover:scale-105">
                     <PhoneOff className="h-8 w-8 text-white" stroke="white" />
                   </div>
                   <span className="text-xl font-medium text-gray-800">End Call</span>
@@ -256,10 +281,10 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
               )}
             </div>
 
-            <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
-              <CardContent className="p-6 md:p-10">
+            <Card className="bg-white shadow-xl border border-gray-100 rounded-2xl overflow-hidden transition-all">
+              <CardContent className="p-6 md:p-8">
                 <div className="flex flex-col items-center md:hidden">
-                  <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative">
+                  <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative shadow-lg rounded-xl overflow-hidden">
                     {renderPhoneScreen()}
                     
                     <button 
@@ -280,9 +305,9 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   </div>
                 </div>
                 
-                <div className="hidden md:flex flex-row gap-8 items-center">
+                <div className="hidden md:flex flex-row gap-10 items-center">
                   <div className="md:w-[45%] flex justify-center items-center">
-                    <div className="max-w-[280px] mx-auto">
+                    <div className="max-w-[280px] mx-auto shadow-lg rounded-xl overflow-hidden">
                       {renderPhoneScreen()}
                     </div>
                   </div>
@@ -291,7 +316,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                     <video 
                       ref={videoRef}
                       src={tab.videoPath}
-                      className="w-full rounded-lg" 
+                      className="w-full rounded-lg shadow-md" 
                       preload="auto"
                       controls={false}
                     />
