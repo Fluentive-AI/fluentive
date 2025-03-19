@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
-import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight } from 'lucide-react';
+import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight, Mail } from 'lucide-react';
 import { FaPhone } from "react-icons/fa6";
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -184,7 +184,7 @@ const LandingPage = () => {
           <a href="#features" className="text-gray-700 hover:text-primary transition-colors font-medium">Features</a>
           <a href="#benefits" className="text-gray-700 hover:text-primary transition-colors font-medium">Benefits</a>
           <a href="#demo" className="text-gray-700 hover:text-primary transition-colors font-medium">Demo</a>
-          <a href="#testimonials" className="text-gray-700 hover:text-primary transition-colors font-medium">Case Studies</a>
+          <a href="#pricing" className="text-gray-700 hover:text-primary transition-colors font-medium">Pricing</a>
         </nav>
         
         <div className="flex items-center gap-2">
@@ -241,11 +241,11 @@ const LandingPage = () => {
               Demo
             </a>
             <a 
-              href="#testimonials" 
+              href="#pricing" 
               className="text-xl font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Case Studies
+              Pricing
             </a>
           </nav>
         </div>
@@ -565,123 +565,138 @@ const LandingPage = () => {
         </div>
       </section>
       
-      {/* Testimonials Section (Placeholder) */}
-      <section id="testimonials" className="py-20 px-8 bg-gradient-to-br from-gray-50 to-blue-50">
+      {/* Pricing Section (NEW) */}
+      <section id="pricing" className="py-16 sm:py-24 px-4 sm:px-8 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <div className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-3">
-              Success Stories
+          <div className="text-center mb-16">
+            <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-3">
+              Flexible Pricing
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Case Studies</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Solutions Tailored to Your Portfolio</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              See how property management companies have transformed their operations with Homm.
+              Our pricing is customized to fit the unique needs and scale of your property management business.
             </p>
           </div>
           
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-16 text-center bg-white hover:bg-gray-100 transition-colors">
-            <p className="text-gray-500 text-xl font-medium">Case studies coming soon</p>
-          </div>
-        </div>
-      </section>
-      
-      {/* Social Proof Section (Placeholder) */}
-      <section className="py-14 px-8 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center bg-white hover:bg-gray-50 transition-colors">
-            <p className="text-gray-500 text-lg font-medium">Trusted by leading property management companies</p>
-          </div>
-        </div>
-      </section>
-      
-      {/* Final CTA Section */}
-      <section className="py-12 sm:py-20 px-4 sm:px-8 bg-gradient-to-br from-primary to-accent text-white">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
-            Transform Your Property Management Today
-          </h2>
-          
-          <p className="text-lg sm:text-xl mb-8 sm:mb-10 max-w-3xl mx-auto opacity-90">
-            Join forward-thinking property managers who use AI to streamline operations, reduce costs, and enhance tenant satisfaction.
-          </p>
-          
-          <ul className="flex flex-col md:flex-row gap-4 sm:gap-6 justify-center mb-8 sm:mb-12">
-            <li className="flex items-center justify-center bg-white/10 px-4 sm:px-6 py-3 rounded-full backdrop-blur-sm text-sm sm:text-base">
-              <Check className="h-4 sm:h-5 w-4 sm:w-5 mr-2 text-green-300 flex-shrink-0" />
-              <span>Save tens of hours per week</span>
-            </li>
-            <li className="flex items-center justify-center bg-white/10 px-4 sm:px-6 py-3 rounded-full backdrop-blur-sm text-sm sm:text-base">
-              <Check className="h-4 sm:h-5 w-4 sm:w-5 mr-2 text-green-300 flex-shrink-0" />
-              <span>Reduce operational costs</span>
-            </li>
-            <li className="flex items-center justify-center bg-white/10 px-4 sm:px-6 py-3 rounded-full backdrop-blur-sm text-sm sm:text-base">
-              <Check className="h-4 sm:h-5 w-4 sm:w-5 mr-2 text-green-300 flex-shrink-0" />
-              <span>Improve tenant satisfaction</span>
-            </li>
-          </ul>
-          
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center">
-            <Button 
-              size="lg" 
-              variant="secondary"
-              className="text-primary text-lg px-6 sm:px-10 py-6 sm:py-7 h-auto font-medium shadow-xl hover:shadow-2xl transition-all w-full sm:w-auto"
-              onClick={() => navigate('/login')}
-            >
-              Try Demo Dashboard
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </section>
-      
-      {/* Footer */}
-      <footer className="py-12 sm:py-16 px-4 sm:px-8 bg-gray-900 text-gray-300">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Building2 className="h-6 w-6 text-white" />
-                <span className="font-bold text-xl text-white">Homm</span>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Basic Plan */}
+            <Card className="rounded-xl shadow-lg overflow-hidden border-0 transform transition-transform duration-300 hover:scale-105 bg-white">
+              <div className="bg-gradient-to-r from-blue-100 to-indigo-100 px-6 py-4">
+                <h3 className="text-xl font-bold text-blue-800">Starter</h3>
+                <p className="text-blue-700 mt-1">For small portfolios</p>
               </div>
-              <p className="mb-4 text-gray-400">AI-powered property management solution.</p>
-              <p className="text-sm mb-2 text-gray-500">
-                Demo For Brandywine Homes USA and Lafayette RE
-              </p>
-              <p className="text-sm text-gray-500">© 2025 Homm. All rights reserved.</p>
-            </div>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Up to 50 properties</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>AI tenant communication</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Basic analytics dashboard</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Maintenance request handling</span>
+                    </li>
+                  </ul>
+                  
+                  <div className="pt-4">
+                    <Button 
+                      className="w-full py-6 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md flex items-center justify-center"
+                      variant="default"
+                      onClick={() => window.location.href = 'mailto:rozenblum.eytan@gmail.com?subject=Homm%20Pricing%20-%20Starter%20Plan%20Inquiry'}
+                    >
+                      <Mail className="mr-2 h-5 w-5" />
+                      Talk to Sales
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             
-            <div>
-              <h3 className="font-bold text-white text-lg mb-4">Product</h3>
-              <ul className="space-y-2">
-                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#benefits" className="hover:text-white transition-colors">Benefits</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
-              </ul>
-            </div>
+            {/* Growth Plan */}
+            <Card className="rounded-xl shadow-xl overflow-hidden border-0 transform transition-transform duration-300 hover:scale-105 relative bg-white">
+              <div className="absolute top-0 right-0 bg-primary text-white px-4 py-1 rounded-bl-lg font-medium text-sm">
+                Popular
+              </div>
+              <div className="bg-gradient-to-r from-primary/80 to-accent/80 px-6 py-4">
+                <h3 className="text-xl font-bold text-white">Growth</h3>
+                <p className="text-white/90 mt-1">For growing businesses</p>
+              </div>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Up to 200 properties</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Advanced AI communication suite</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Full analytics & reporting</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Predictive maintenance</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Tenant portal integration</span>
+                    </li>
+                  </ul>
+                  
+                  <div className="pt-4">
+                    <Button 
+                      className="w-full py-6 bg-primary hover:bg-primary/90 text-white font-medium shadow-md flex items-center justify-center"
+                      variant="default"
+                      onClick={() => window.location.href = 'mailto:rozenblum.eytan@gmail.com?subject=Homm%20Pricing%20-%20Growth%20Plan%20Inquiry'}
+                    >
+                      <Mail className="mr-2 h-5 w-5" />
+                      Talk to Sales
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             
-            <div>
-              <h3 className="font-bold text-white text-lg mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">GDPR</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-bold text-white text-lg mb-4">Contact</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="mailto:rozenblum.eytan@gmail.com" className="hover:text-white transition-colors flex items-center"><ArrowUpRight className="h-3 w-3 mr-1" />rozenblum.eytan@gmail.com</a></li>
-                <li><a href="tel:+1234567890" className="hover:text-white transition-colors flex items-center"><ArrowUpRight className="h-3 w-3 mr-1" />+1 (646) 250-3816</a></li>
-                <li><address className="not-italic">1E Loop Road, New York, NY 10044</address></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-export default LandingPage;
+            {/* Enterprise Plan */}
+            <Card className="rounded-xl shadow-lg overflow-hidden border-0 transform transition-transform duration-300 hover:scale-105 bg-white">
+              <div className="bg-gradient-to-r from-indigo-100 to-purple-100 px-6 py-4">
+                <h3 className="text-xl font-bold text-indigo-800">Enterprise</h3>
+                <p className="text-indigo-700 mt-1">For large portfolios</p>
+              </div>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Unlimited properties</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Custom AI models & training</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Advanced business intelligence</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Full API integration</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      <span>Dedicated support team</span>
+                    </li>
+                  </ul>
+                  
+                  <
