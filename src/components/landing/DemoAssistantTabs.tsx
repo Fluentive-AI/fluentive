@@ -211,6 +211,19 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     }
   };
 
+  const getTabLabel = (id: string) => {
+    switch (id) {
+      case 'leasing':
+        return 'Leasing';
+      case 'operations':
+        return 'Property Operations';
+      case 'maintenance':
+        return 'Maintenance';
+      default:
+        return id;
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex justify-center gap-4 mb-8">
@@ -218,7 +231,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
           <Button 
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-5 py-6 rounded-lg transition-all ${
+            className={`px-5 py-6 rounded-lg transition-all md:min-w-[180px] ${
               activeTab === tab.id 
                 ? `bg-${tab.id === 'leasing' ? 'brand' : tab.id === 'operations' ? 'blue' : 'amber'}-500 text-white hover:opacity-90` 
                 : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
@@ -233,7 +246,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
               }`}>
                 {getTabIcon(tab.id)}
               </div>
-              <span className="font-medium">{tab.name}</span>
+              <span className="font-medium">{getTabLabel(tab.id)}</span>
             </div>
           </Button>
         ))}
