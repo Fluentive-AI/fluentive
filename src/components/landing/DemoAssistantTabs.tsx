@@ -233,11 +233,12 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   className="flex items-center gap-3 group"
                   disabled={!imagesLoaded}
                 >
-                  <div className={`${imagesLoaded ? 
-                    'w-16 h-16 rounded-full bg-blue-500 hover:opacity-90 flex items-center justify-center shadow-lg transition-all' : 
-                    'w-16 h-16 rounded-full bg-gray-400 flex items-center justify-center shadow-lg transition-all'}`}>
-                    <img src="/phone_screens/accept_call.png" alt="Call" className="w-8 h-8" />
-                  </div>
+                  {/* Changed from a round icon to just the image */}
+                  <img 
+                    src="/phone_screens/accept_call.png" 
+                    alt="Call" 
+                    className="w-16 h-16 hover:opacity-90 transition-all"
+                  />
                   <span className="text-xl font-medium text-gray-800">
                     {imagesLoaded ? `Call ${tab.name}` : 'Loading...'}
                   </span>
@@ -247,7 +248,6 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   onClick={endCallSimulation}
                   className="flex items-center gap-3 group"
                 >
-                  {/* Changed from a round icon to just the image */}
                   <img 
                     src="/phone_screens/decline_call.png" 
                     alt="End Call" 
