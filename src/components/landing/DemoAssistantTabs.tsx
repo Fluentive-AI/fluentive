@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Phone, PhoneOff, MessageSquare, Home, Wrench } from 'lucide-react';
 import { AssistantTab } from '@/types';
 
@@ -213,31 +213,35 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
 
   return (
     <div className="space-y-8">
-      <Tabs 
-        defaultValue="leasing" 
-        value={activeTab} 
-        onValueChange={(value) => {
-          setActiveTab(value);
-        }}
-        className="w-full"
-      >
-        <TabsList className="grid grid-cols-3 w-full max-w-2xl mx-auto mb-8 p-1 bg-muted rounded-xl">
-          {assistantTabs.map(tab => (
-            <TabsTrigger 
-              key={tab.id} 
-              value={tab.id}
-              className={`flex items-center justify-center rounded-lg text-sm font-medium transition-all py-3 px-2
-                ${activeTab === tab.id ? 'shadow-md' : 'hover:bg-gray-100/80'}`}
-            >
-              {getTabIcon(tab.id)}
-              <span className="hidden sm:inline">{tab.name}</span>
-              <span className="sm:hidden">{tab.name.charAt(0)}</span>
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
+      <div className="flex justify-center gap-4 mb-8">
         {assistantTabs.map(tab => (
-          <TabsContent key={tab.id} value={tab.id} className="mt-0">
+          <Button 
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-5 py-6 rounded-lg transition-all ${
+              activeTab === tab.id 
+                ? `bg-${tab.id === 'leasing' ? 'brand' : tab.id === 'operations' ? 'blue' : 'amber'}-500 text-white hover:opacity-90` 
+                : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+            }`}
+            variant="ghost"
+          >
+            <div className="flex flex-col items-center gap-2">
+              <div className={`rounded-full p-2 ${
+                activeTab === tab.id 
+                  ? 'bg-white/20' 
+                  : `text-${tab.id === 'leasing' ? 'brand' : tab.id === 'operations' ? 'blue' : 'amber'}-500`
+              }`}>
+                {getTabIcon(tab.id)}
+              </div>
+              <span className="font-medium">{tab.name}</span>
+            </div>
+          </Button>
+        ))}
+      </div>
+
+      <div className="transition-all">
+        {assistantTabs.map(tab => (
+          <div key={tab.id} className={`${activeTab === tab.id ? 'block' : 'hidden'}`}>
             <div className="text-center mb-8">
               <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">{tab.name} - {tab.title}</h3>
               <p className="text-gray-600 max-w-2xl mx-auto">{tab.description}</p>
@@ -322,9 +326,9 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+          </div>
         ))}
-      </Tabs>
+      </div>
     </div>
   );
 };
