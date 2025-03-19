@@ -148,9 +148,9 @@ const LandingPage = () => {
                 >
                   <Button 
                     size="lg" 
-                    className="text-lg px-6 py-6 h-auto w-full sm:w-auto font-medium shadow-md hover:shadow-lg transition-all"
+                    className="text-lg px-6 py-6 h-auto w-full sm:w-auto sm:min-w-[250px] font-medium shadow-md hover:shadow-lg transition-all"
                   >
-                    Try our Property Management Dashboard
+                    Try our Product
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
@@ -259,7 +259,7 @@ const LandingPage = () => {
           <div className="text-center mt-14">
             <Button 
               size="lg" 
-              onClick={() => navigate('/login')}
+              onClick={() => window.open('https://calendly.com/homm-ai/30min', '_blank')}
               className="font-medium shadow-md hover:shadow-lg transition-all"
             >
               Explore All Features
@@ -324,10 +324,10 @@ const LandingPage = () => {
               <div className="pt-4 pl-14">
                 <Button 
                   size="lg" 
-                  onClick={() => navigate('/login')}
+                  onClick={() => window.open('https://calendly.com/homm-ai/30min', '_blank')}
                   className="font-medium shadow-md hover:shadow-lg transition-all"
                 >
-                  See Demo Dashboard
+                  Try our Demo Dashboard
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
@@ -464,7 +464,7 @@ const LandingPage = () => {
               size="lg" 
               variant="secondary"
               className="text-primary text-lg px-6 sm:px-10 py-6 sm:py-7 h-auto font-medium shadow-xl hover:shadow-2xl transition-all w-full sm:w-auto"
-              onClick={() => navigate('/login')}
+              onClick={() => window.open('https://calendly.com/homm-ai/30min', '_blank')}
             >
               Try Demo Dashboard
               <ArrowRight className="ml-2 h-5 w-5" />
