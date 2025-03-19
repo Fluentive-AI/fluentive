@@ -171,17 +171,46 @@ const LandingPage = () => {
         </nav>
         
         <div className="flex items-center gap-2">
+          <a 
+            href="https://calendly.com/homm-ai/30min" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hidden sm:flex"
+          >
+            <Button 
+              size="sm"
+              className="flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
+              variant="outline"
+            >
+              Contact Us
+              <MessageSquare className="ml-1 h-3 w-3" />
+            </Button>
+          </a>
+          
           <Button 
             size="sm"
             onClick={() => navigate('/login')}
-            className="flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
+            className="hidden sm:flex items-center text-xs md:text-sm px-2 py-1 h-8 md:h-9"
             variant="default"
           >
-            <span className="hidden sm:inline">Try Demo</span>
-            <span className="sm:hidden">Try Demo</span>
-            <ArrowRight className="ml-1 h-3 w-3 hidden sm:block" />
-            <SquareArrowOutUpRight className="ml-1 h-3 w-3 sm:hidden" />
+            <span>Try Demo</span>
+            <ArrowRight className="ml-1 h-3 w-3" />
           </Button>
+
+          <a 
+            href="https://calendly.com/homm-ai/30min" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="sm:hidden"
+          >
+            <Button 
+              size="sm"
+              className="flex items-center text-xs px-2 py-1 h-8"
+              variant="outline"
+            >
+              Contact Us
+            </Button>
+          </a>
 
           <div className="md:hidden">
             <Button 
@@ -228,6 +257,16 @@ const LandingPage = () => {
             >
               Pricing
             </a>
+            <Button 
+              onClick={() => {
+                navigate('/login');
+                setMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-2 text-lg"
+              variant="default"
+            >
+              Try Demo
+            </Button>
           </nav>
         </div>
       )}
@@ -242,9 +281,6 @@ const LandingPage = () => {
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 leading-tight">
                 AI Agents for SFR Property Managers
               </h1>
-              {/* <p className="mt-2 text-lg sm:text-xl md:text-2xl text-gray-600 font-bold">
-                Demo For Brandywine Homes USA and Lafayette RE
-              </p> */}
               
               <p className="text-lg sm:text-xl text-gray-600">
                 We transform SFR property management with AI agents that automate operations, enhance tenant experiences, and drive better business outcomes.
@@ -568,25 +604,25 @@ const LandingPage = () => {
                     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
                       <Check className="h-4 w-4 text-blue-600" />
                     </div>
-                    <span className="text-gray-700">Custom AI agents trained on your processes and brand voice</span>
+                    <span>Custom AI agents trained on your processes and brand voice</span>
                   </li>
                   <li className="flex items-start">
                     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
                       <Check className="h-4 w-4 text-blue-600" />
                     </div>
-                    <span className="text-gray-700">Dedicated integration support with your existing property management software</span>
+                    <span>Dedicated integration support with your existing property management software</span>
                   </li>
                   <li className="flex items-start">
                     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
                       <Check className="h-4 w-4 text-blue-600" />
                     </div>
-                    <span className="text-gray-700">24/7 phone and chat support for your team</span>
+                    <span>24/7 phone and chat support for your team</span>
                   </li>
                   <li className="flex items-start">
                     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
                       <Check className="h-4 w-4 text-blue-600" />
                     </div>
-                    <span className="text-gray-700">Unlimited AI interactions with tenants and prospects</span>
+                    <span>Unlimited AI interactions with tenants and prospects</span>
                   </li>
                   <li className="flex items-start">
                     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
@@ -597,31 +633,21 @@ const LandingPage = () => {
                 </ul>
               </CardContent>
               <CardFooter className="px-8 pb-8">
-                <Button 
-                  className="w-full py-6 text-lg shadow-md hover:shadow-xl transition-all bg-gradient-to-r from-blue-500 to-indigo-600"
-                  onClick={() => navigate('/login')}
+                <a 
+                  href="https://calendly.com/homm-ai/30min" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full"
                 >
-                  Talk to Sales
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                  <Button 
+                    className="w-full py-6 text-lg shadow-md hover:shadow-xl transition-all bg-gradient-to-r from-blue-500 to-indigo-600"
+                  >
+                    Contact Us
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </a>
               </CardFooter>
             </Card>
-          </div>
-          
-          <div className="mt-16 text-center bg-white p-8 rounded-xl shadow-md border border-gray-200">
-            <h3 className="text-2xl font-bold mb-4">Need a Custom Solution?</h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Let our team of AI experts design a tailored solution for your property management needs.
-            </p>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="font-medium border-2 border-primary hover:bg-primary/10"
-              onClick={() => navigate('/login')}
-            >
-              Schedule a Consultation
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
           </div>
         </div>
       </section>
@@ -677,9 +703,6 @@ const LandingPage = () => {
                 />
               </div>
               <p className="mb-4 text-gray-400">AI-powered property management solution.</p>
-              {/* <p className="text-sm mb-2 text-gray-500">
-                Demo For Brandywine Homes USA and Lafayette RE
-              </p> */}
               <p className="text-sm text-gray-500">© 2025 Homm. All rights reserved.</p>
             </div>
             
