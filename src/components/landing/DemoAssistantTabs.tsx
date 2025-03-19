@@ -55,7 +55,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       '/phone_screens/in_call_screen.png',
       '/phone_screens/accept_call.png',
       '/phone_screens/decline_call.png',
-      '/phone_screens/incoming_call.png'  // Added incoming call image
+      '/phone_screens/incoming_call.png'
     ];
     
     let loadedCount = 0;
@@ -209,7 +209,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
   };
   
   const renderPhoneScreen = () => {
-    const transitionClass = "w-full rounded-lg transition-opacity duration-300 shadow-lg";
+    const transitionClass = "w-full rounded-lg transition-opacity duration-300";
     
     // Special case for operations tab in contact state
     if (activeTab === 'operations' && phoneState === 'contact') {
@@ -301,8 +301,8 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
               )}
             </div>
 
-            <Card className="bg-white shadow-xl border rounded-2xl overflow-hidden max-w-5xl mx-auto">
-              <CardContent className="p-6 md:p-10">
+            <Card className="bg-white border-0 rounded-2xl overflow-hidden max-w-5xl mx-auto">
+              <CardContent className="p-6 md:p-8">
                 <div className="flex flex-col items-center md:hidden">
                   <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative">
                     {renderPhoneScreen()}
@@ -325,20 +325,21 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   </div>
                 </div>
                 
-                <div className="hidden md:flex flex-row gap-10 items-center">
-                  <div className="md:w-[45%] flex justify-center items-center">
+                <div className="hidden md:flex flex-row gap-6 items-center bg-white">
+                  <div className="md:w-[40%] flex justify-center items-center">
                     <div className="max-w-[280px] mx-auto">
                       {renderPhoneScreen()}
                     </div>
                   </div>
                   
-                  <div className="md:w-[55%] flex items-center">
+                  <div className="md:w-[60%] flex items-center">
                     <video 
                       ref={videoRef}
                       src={tab.videoPath}
-                      className="w-full rounded-lg shadow-md" 
+                      className="w-full rounded-lg" 
                       preload="auto"
                       controls={false}
+                      muted={false}
                     />
                   </div>
                 </div>
@@ -359,4 +360,3 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
 };
 
 export default DemoAssistantTabs;
-

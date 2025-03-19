@@ -245,3 +245,16 @@
 .ios-call-button-row {
   @apply flex justify-around mb-8;
 }
+
+/* Phone and video integration styles */
+.demo-phone-display {
+  @apply bg-white rounded-lg overflow-hidden;
+}
+
+.demo-video-container {
+  @apply bg-white rounded-lg overflow-hidden;
+}
+
+.demo-card-container {
+  @apply bg-white border-0 shadow-none;
+}
