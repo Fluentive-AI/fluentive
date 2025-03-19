@@ -54,7 +54,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       '/phone_screens/calling_screen.png',
       '/phone_screens/in_call_screen.png',
       '/phone_screens/accept_call.png',
-      '/phone_screens/decline_call.jpg'
+      '/phone_screens/decline_call.png'  // Updated to correct path
     ];
     
     let loadedCount = 0;
@@ -247,9 +247,12 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   onClick={endCallSimulation}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
-                    <img src="/phone_screens/decline_call.jpg" alt="End Call" className="w-8 h-8" />
-                  </div>
+                  {/* Changed from a round icon to just the image */}
+                  <img 
+                    src="/phone_screens/decline_call.png" 
+                    alt="End Call" 
+                    className="w-16 h-16 hover:opacity-90 transition-all"
+                  />
                   <span className="text-xl font-medium text-gray-800">End Call</span>
                 </button>
               )}
