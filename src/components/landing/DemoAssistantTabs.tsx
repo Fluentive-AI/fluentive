@@ -1,8 +1,7 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Phone, PhoneOff, MessageSquare, Home, Wrench } from 'lucide-react';
+import { Phone, PhoneOff } from 'lucide-react';
 import { AssistantTab } from '@/types';
 
 interface DemoAssistantTabsProps {
@@ -198,27 +197,14 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     }
   };
 
-  const getTabIcon = (id: string) => {
-    switch (id) {
-      case 'leasing':
-        return <Home className="h-4 w-4 mr-2" />;
-      case 'operations':
-        return <MessageSquare className="h-4 w-4 mr-2" />;
-      case 'maintenance':
-        return <Wrench className="h-4 w-4 mr-2" />;
-      default:
-        return <MessageSquare className="h-4 w-4 mr-2" />;
-    }
-  };
-
   const getTabLabel = (id: string) => {
     switch (id) {
       case 'leasing':
-        return 'Leasing';
+        return 'AI Leasing Assistant';
       case 'operations':
-        return 'Property Operations';
+        return 'AI Property Operations Assistant';
       case 'maintenance':
-        return 'Maintenance';
+        return 'AI Maintenance Assistant';
       default:
         return id;
     }
@@ -226,28 +212,19 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-center gap-4 mb-8">
+      <div className="flex justify-center gap-4 mb-8 w-full max-w-4xl mx-auto">
         {assistantTabs.map(tab => (
           <Button 
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-5 py-6 rounded-lg transition-all md:min-w-[180px] ${
+            className={`px-5 py-6 rounded-lg transition-all w-full md:min-w-[220px] ${
               activeTab === tab.id 
                 ? `bg-${tab.id === 'leasing' ? 'brand' : tab.id === 'operations' ? 'blue' : 'amber'}-500 text-white hover:opacity-90` 
                 : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
             }`}
             variant="ghost"
           >
-            <div className="flex flex-col items-center gap-2">
-              <div className={`rounded-full p-2 ${
-                activeTab === tab.id 
-                  ? 'bg-white/20' 
-                  : `text-${tab.id === 'leasing' ? 'brand' : tab.id === 'operations' ? 'blue' : 'amber'}-500`
-              }`}>
-                {getTabIcon(tab.id)}
-              </div>
-              <span className="font-medium">{getTabLabel(tab.id)}</span>
-            </div>
+            <span className="font-medium text-base sm:text-lg">{getTabLabel(tab.id)}</span>
           </Button>
         ))}
       </div>
