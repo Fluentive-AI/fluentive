@@ -13,13 +13,36 @@ const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => 
   const [phoneState, setPhoneState] = useState<'contact' | 'calling' | 'in-call'>('contact');
   const [callTime, setCallTime] = useState(0);
   const [videoError, setVideoError] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Load video as soon as component mounts
   useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.src = assistant.videoPath;
+      videoRef.current.load();
+      
+      // Set event listeners for video loading
+      videoRef.current.onloadeddata = () => {
+        console.log(`Video for ${assistant.id} preloaded successfully`);
+        setVideoLoaded(true);
+        // Ensure the video is paused at the first frame
+        if (videoRef.current) {
+          videoRef.current.currentTime = 0;
+          videoRef.current.pause();
+        }
+      };
+      
+      videoRef.current.onerror = (e) => {
+        console.error(`Error preloading video for ${assistant.id}:`, e);
+        setVideoError(true);
+      };
+    }
+
     return () => endCallSimulation();
-  }, []);
+  }, [assistant.id, assistant.videoPath]);
 
   const startCallSimulation = () => {
     if (assistant.id === 'operations') {
@@ -31,23 +54,16 @@ const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => 
       }, 1000);
       
       if (videoRef.current) {
-        videoRef.current.src = assistant.videoPath;
-        videoRef.current.load();
+        // Video is already loaded, just play it
+        console.log(`Playing video for ${assistant.id}: ${assistant.videoPath}`);
+        const playPromise = videoRef.current.play();
         
-        // Give more time for the video to load
-        setTimeout(() => {
-          if (videoRef.current) {
-            console.log(`Playing video for ${assistant.id}: ${assistant.videoPath}`);
-            const playPromise = videoRef.current.play();
-            
-            if (playPromise !== undefined) {
-              playPromise.catch(error => {
-                console.error(`Video play error for ${assistant.id}:`, error);
-                setVideoError(true);
-              });
-            }
-          }
-        }, 2000);
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.error(`Video play error for ${assistant.id}:`, error);
+            setVideoError(true);
+          });
+        }
       }
       
       if (audioRef.current && window.innerWidth < 768) {
@@ -69,23 +85,16 @@ const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => 
         }, 1000);
         
         if (videoRef.current) {
-          videoRef.current.src = assistant.videoPath;
-          videoRef.current.load();
+          // Video is already loaded, just play it
+          console.log(`Playing video for ${assistant.id}: ${assistant.videoPath}`);
+          const playPromise = videoRef.current.play();
           
-          // Give more time for the video to load
-          setTimeout(() => {
-            if (videoRef.current) {
-              console.log(`Playing video for ${assistant.id}: ${assistant.videoPath}`);
-              const playPromise = videoRef.current.play();
-              
-              if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                  console.error(`Video play error for ${assistant.id}:`, error);
-                  setVideoError(true);
-                });
-              }
-            }
-          }, 2000);
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.error(`Video play error for ${assistant.id}:`, error);
+              setVideoError(true);
+            });
+          }
         }
         
         if (audioRef.current && window.innerWidth < 768) {
@@ -207,14 +216,21 @@ const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => 
             <div className="md:w-[60%] flex items-center relative">
               <video 
                 ref={videoRef}
-                className="w-full rounded-lg" 
+                className={`w-full rounded-lg ${videoLoaded ? 'block' : 'hidden'}`}
                 preload="auto"
                 controls={false}
-                muted={false}
+                muted={phoneState !== 'in-call'}
                 playsInline
                 loop
               />
-              {videoError && phoneState === 'in-call' && (
+              
+              {!videoLoaded && !videoError && (
+                <div className="w-full rounded-lg bg-gray-100 flex items-center justify-center" style={{aspectRatio: '16/9'}}>
+                  <div className="animate-pulse text-gray-400">Loading video...</div>
+                </div>
+              )}
+              
+              {videoError && (
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                   <button 
                     onClick={handleManualPlay}
