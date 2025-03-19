@@ -1,4 +1,3 @@
-
 export interface MetricData {
   label: string;
   value: number;
@@ -22,7 +21,6 @@ export interface MetricData {
   id?: string | number;
 }
 
-// Add missing interfaces to fix type errors
 export interface Lead {
   id: string;
   name: string;
@@ -42,8 +40,8 @@ export interface Lead {
   dateCreated?: string;
   tourDateTime?: string;
   propertyAddress?: string;
-  nextFollowUp?: string; // Added to fix build errors
-  lastContact?: string; // Added to fix build errors
+  nextFollowUp?: string;
+  lastContact?: string;
 }
 
 export interface Application {
@@ -79,11 +77,11 @@ export interface Application {
   };
   leadId?: string;
   propertyAddress?: string;
-  notes?: string; // Added to fix build errors
+  notes?: string;
 }
 
 export interface Tenant {
-  id: string | number; // Updated to accept number
+  id: string | number;
   name: string;
   email: string;
   phone: string;
@@ -101,8 +99,8 @@ export interface Tenant {
   delinquentAmount?: number;
   propertyManager?: string;
   notes?: string;
-  amountDQ?: number; // Added to fix build errors
-  region?: string; // Added to fix build errors
+  amountDQ?: number;
+  region?: string;
 }
 
 export interface MaintenanceRequest {
@@ -124,7 +122,7 @@ export interface MaintenanceRequest {
   issue?: string;
   scheduledDate?: string;
   endDate?: string;
-  type?: string; // Added to fix build errors
+  type?: string;
 }
 
 export interface RentPayment {
@@ -140,8 +138,8 @@ export interface RentPayment {
   tenantId?: string;
   tenantName?: string;
   dueDate?: string;
-  datePaid?: string | null; // Updated to accept null
-  paymentMethod?: string | null; // Updated to accept null
+  datePaid?: string | null;
+  paymentMethod?: string | null;
   propertyManager?: string;
 }
 
@@ -163,11 +161,11 @@ export interface RentCommunication {
   tenantId?: string;
   propertyManager?: string;
   property?: string;
-  channel?: string; // Added to fix build errors
-  dateTime?: string; // Added to fix build errors
-  summary?: string; // Added to fix build errors
-  transcript?: string; // Added to fix build errors
-  rentStatus?: string; // Added to fix build errors
+  channel?: string;
+  dateTime?: string;
+  summary?: string;
+  transcript?: string;
+  rentStatus?: string;
 }
 
 export interface SuperCommunication {
@@ -176,30 +174,28 @@ export interface SuperCommunication {
   unit: string;
   community: string;
   superintendent: string;
-  status: "scheduled" | "urgent" | "completed" | string; // Updated to accept any string
+  status: "scheduled" | "urgent" | "completed" | string;
   message: string;
   date: string;
   category: string;
 }
 
-// Add the scenario prop to TenantLeasing interface to fix the typescript errors in App.tsx
 export interface TenantLeasingProps {
   scenario?: string;
 }
 
 export interface MetricCardProps {
   metric: MetricData;
-  selectedMarket?: string; // Added to fix build errors
+  selectedMarket?: string;
 }
 
-// Added to fix Dashboard.tsx build errors
 export interface DashboardMetric {
   id: string | number;
-  title: string; // Required field for DashboardMetric
+  title: string;
   value: number;
   change: number;
   status: 'increase_good' | 'increase_bad' | 'decrease_good' | 'decrease_bad' | null;
-  label?: string; // Added to fix build errors
+  label?: string;
   markets?: {
     [key: string]: {
       value: number;
@@ -215,10 +211,9 @@ export interface DashboardMetric {
     };
   };
   kpi?: string;
-  originalPosition?: number; // Added to fix build errors
+  originalPosition?: number;
 }
 
-// New type for the assistant demo tabs
 export interface AssistantTab {
   id: string;
   name: string;
@@ -226,9 +221,13 @@ export interface AssistantTab {
   description: string;
   videoPath: string;
   audioPath: string;
+  avatarPath?: string;
 }
 
-// Add missing AIConversation interface to fix build errors
+export interface TenantLeasingScenarioProps {
+  scenario: string;
+}
+
 export interface AIConversation {
   id: string;
   tenantName: string;
@@ -244,7 +243,6 @@ export interface AIConversation {
   manager?: string;
 }
 
-// Add missing AIAgentConsoleProps interface
 export interface AIAgentConsoleProps {
   conversations: AIConversation[];
   activeDepartment: string;
@@ -255,14 +253,12 @@ export interface AIAgentConsoleProps {
   statusFilters: string[];
 }
 
-// Add missing ScenarioFilterProps interface
 export interface ScenarioFilterProps {
   options: any[];
   selectedValues: string[];
   onChange: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-// Add missing CommunicationsAnalyticsProps interface
 export interface CommunicationsAnalyticsProps {
   conversations: AIConversation[];
 }
