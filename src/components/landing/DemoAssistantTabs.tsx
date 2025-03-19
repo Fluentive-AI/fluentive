@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Phone, PhoneOff } from 'lucide-react';
 import { AssistantTab } from '@/types';
 
 interface DemoAssistantTabsProps {
@@ -53,7 +52,9 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     const imageUrls = [
       '/phone_screens/contact_screen.png',
       '/phone_screens/calling_screen.png',
-      '/phone_screens/in_call_screen.png'
+      '/phone_screens/in_call_screen.png',
+      '/phone_screens/accept_call.png',
+      '/phone_screens/decline_call.jpg'
     ];
     
     let loadedCount = 0;
@@ -155,16 +156,16 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     return `${mins}:${secs < 10 ? '0' + secs : secs}`;
   };
   
-  const getTabColor = (id: string) => {
+  const getTabLabel = (id: string) => {
     switch (id) {
       case 'leasing':
-        return 'bg-brand-500 text-white';
+        return 'AI Leasing Assistant';
       case 'operations':
-        return 'bg-blue-500 text-white';
+        return 'AI Property Operations Assistant';
       case 'maintenance':
-        return 'bg-amber-500 text-white';
+        return 'AI Maintenance Assistant';
       default:
-        return 'bg-gray-200 text-gray-700';
+        return id;
     }
   };
   
@@ -198,19 +199,6 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
     }
   };
 
-  const getTabLabel = (id: string) => {
-    switch (id) {
-      case 'leasing':
-        return 'AI Leasing Assistant';
-      case 'operations':
-        return 'AI Property Operations Assistant';
-      case 'maintenance':
-        return 'AI Maintenance Assistant';
-      default:
-        return id;
-    }
-  };
-
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap justify-center gap-4 mb-8 w-full max-w-4xl mx-auto">
@@ -220,7 +208,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
             onClick={() => setActiveTab(tab.id)}
             className={`px-5 py-6 rounded-lg transition-all flex-grow sm:flex-grow-0 w-full sm:w-auto md:min-w-[220px] ${
               activeTab === tab.id 
-                ? `bg-${tab.id === 'leasing' ? 'brand' : tab.id === 'operations' ? 'blue' : 'amber'}-500 text-white hover:opacity-90` 
+                ? 'bg-blue-500 text-white hover:opacity-90'
                 : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
             }`}
             variant="ghost"
@@ -246,10 +234,9 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   disabled={!imagesLoaded}
                 >
                   <div className={`${imagesLoaded ? 
-                    `w-16 h-16 rounded-full ${getTabColor(tab.id)} hover:opacity-90` : 
-                    'w-16 h-16 rounded-full bg-gray-400'} 
-                    flex items-center justify-center shadow-lg transition-all`}>
-                    <Phone className="h-8 w-8 text-white" stroke="white" />
+                    'w-16 h-16 rounded-full bg-blue-500 hover:opacity-90 flex items-center justify-center shadow-lg transition-all' : 
+                    'w-16 h-16 rounded-full bg-gray-400 flex items-center justify-center shadow-lg transition-all'}`}>
+                    <img src="/phone_screens/accept_call.png" alt="Call" className="w-8 h-8" />
                   </div>
                   <span className="text-xl font-medium text-gray-800">
                     {imagesLoaded ? `Call ${tab.name}` : 'Loading...'}
@@ -261,7 +248,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   className="flex items-center gap-3 group"
                 >
                   <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
-                    <PhoneOff className="h-8 w-8 text-white" stroke="white" />
+                    <img src="/phone_screens/decline_call.jpg" alt="End Call" className="w-8 h-8" />
                   </div>
                   <span className="text-xl font-medium text-gray-800">End Call</span>
                 </button>
