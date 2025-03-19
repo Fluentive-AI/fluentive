@@ -57,3 +57,10 @@ git push --force
 pnpm run dev
 pnpm run dev
 pnpm run dev
+pnpm run dev
+pnpm run dev
+pnpm run dev
+git branch -a
+git pull origin main
+git config pull.rebase false
+git pull origin main
