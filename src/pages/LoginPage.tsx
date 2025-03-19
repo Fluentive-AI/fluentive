@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -31,7 +32,9 @@ const LoginPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-md">
         <div className="mb-6 sm:mb-8 text-center">
-          <AppLogo />
+          <div className="h-16 flex items-center justify-center">
+            <AppLogo />
+          </div>
           <h2 className="mt-4 text-xl sm:text-2xl font-bold text-gray-900">Welcome to Homm</h2>
           <p className="text-gray-600 mt-2 text-sm sm:text-base">Sign in to continue to your dashboard</p>
         </div>

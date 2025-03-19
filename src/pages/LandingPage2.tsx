@@ -11,8 +11,8 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation Bar */}
-      <header className="w-full py-4 px-8 border-b flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-sm z-10 shadow-sm">
-        <div>
+      <header className="w-full h-16 px-8 border-b flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-sm z-10 shadow-sm">
+        <div className="flex items-center h-full">
           <AppLogo />
         </div>
         
