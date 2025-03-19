@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -91,12 +92,19 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         setCallTime(prev => prev + 1);
       }, 1000);
       
-      if (videoRef.current && window.innerWidth >= 768) {
+      // Preload the video
+      if (videoRef.current) {
         videoRef.current.src = currentAssistant.videoPath;
         videoRef.current.load();
-        videoRef.current.play().catch(error => {
-          console.error("Video play error:", error);
-        });
+        
+        // Use a timeout to ensure the video has time to load
+        setTimeout(() => {
+          if (videoRef.current) {
+            videoRef.current.play().catch(error => {
+              console.error("Video play error:", error);
+            });
+          }
+        }, 500);
       }
       
       if (audioRef.current && window.innerWidth < 768) {
@@ -130,12 +138,31 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
           }, 1000);
         }, 100);
         
-        if (videoRef.current && window.innerWidth >= 768) {
+        // Preload the video
+        if (videoRef.current) {
           videoRef.current.src = currentAssistant.videoPath;
           videoRef.current.load();
-          videoRef.current.play().catch(error => {
-            console.error("Video play error:", error);
-          });
+          
+          // Use a timeout to ensure the video has time to load
+          setTimeout(() => {
+            if (videoRef.current) {
+              const playPromise = videoRef.current.play();
+              
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  console.error("Video play error:", error);
+                  // Fallback: try playing again with a delay
+                  setTimeout(() => {
+                    if (videoRef.current) {
+                      videoRef.current.play().catch(err => {
+                        console.error("Second attempt video play error:", err);
+                      });
+                    }
+                  }, 1000);
+                });
+              }
+            }
+          }, 500);
         }
         
         if (audioRef.current && window.innerWidth < 768) {
@@ -327,11 +354,12 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                   <div className="md:w-[60%] flex items-center">
                     <video 
                       ref={videoRef}
-                      src={tab.videoPath}
                       className="w-full rounded-lg" 
                       preload="auto"
                       controls={false}
                       muted={false}
+                      loop
+                      playsInline
                     />
                   </div>
                 </div>
