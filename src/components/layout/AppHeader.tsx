@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -127,6 +128,10 @@ const AppHeader = () => {
     setProfileSwitcherOpen(false);
   };
   
+  const handleLogout = () => {
+    navigate('/');
+  };
+  
   return (
     <header className="h-16 border-b border-border flex items-center justify-between px-6 bg-background fixed top-0 left-64 right-0 z-10">
       <div>
@@ -194,7 +199,9 @@ const AppHeader = () => {
             <DropdownMenuItem onSelect={() => setProfileSwitcherOpen(true)}>
               Switch Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>Log out</DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleLogout}>
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
