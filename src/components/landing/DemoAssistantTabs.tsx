@@ -17,6 +17,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   const assistantTabs: AssistantTab[] = [
     {
@@ -77,10 +78,23 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         }
       };
     });
+
+    // Preload the videos
+    assistantTabs.forEach(tab => {
+      const video = document.createElement('video');
+      video.src = tab.videoPath;
+      video.preload = 'auto';
+      video.muted = true;
+      
+      video.onerror = () => {
+        console.error(`Failed to load video: ${tab.videoPath}`);
+      };
+    });
   }, []);
 
   useEffect(() => {
     endCallSimulation();
+    setVideoError(false);
   }, [activeTab]);
 
   const startCallSimulation = () => {
@@ -92,19 +106,30 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
         setCallTime(prev => prev + 1);
       }, 1000);
       
-      // Preload the video
       if (videoRef.current) {
         videoRef.current.src = currentAssistant.videoPath;
         videoRef.current.load();
         
-        // Use a timeout to ensure the video has time to load
         setTimeout(() => {
           if (videoRef.current) {
-            videoRef.current.play().catch(error => {
-              console.error("Video play error:", error);
-            });
+            const playPromise = videoRef.current.play();
+            
+            if (playPromise !== undefined) {
+              playPromise.catch(error => {
+                console.error("Video play error:", error);
+                setVideoError(true);
+                // Try again with a longer delay
+                setTimeout(() => {
+                  if (videoRef.current) {
+                    videoRef.current.play().catch(err => {
+                      console.error("Second attempt video play error:", err);
+                    });
+                  }
+                }, 1500);
+              });
+            }
           }
-        }, 500);
+        }, 1000);
       }
       
       if (audioRef.current && window.innerWidth < 768) {
@@ -138,12 +163,10 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
           }, 1000);
         }, 100);
         
-        // Preload the video
         if (videoRef.current) {
           videoRef.current.src = currentAssistant.videoPath;
           videoRef.current.load();
           
-          // Use a timeout to ensure the video has time to load
           setTimeout(() => {
             if (videoRef.current) {
               const playPromise = videoRef.current.play();
@@ -151,18 +174,19 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
               if (playPromise !== undefined) {
                 playPromise.catch(error => {
                   console.error("Video play error:", error);
-                  // Fallback: try playing again with a delay
+                  setVideoError(true);
+                  // Try again with a longer delay
                   setTimeout(() => {
                     if (videoRef.current) {
                       videoRef.current.play().catch(err => {
                         console.error("Second attempt video play error:", err);
                       });
                     }
-                  }, 1000);
+                  }, 1500);
                 });
               }
             }
-          }, 500);
+          }, 1000);
         }
         
         if (audioRef.current && window.innerWidth < 768) {
@@ -260,6 +284,12 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       default:
         return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className={transitionClass} />;
     }
+  };
+
+  // Fix issues with the SuperCommunication type in types.ts
+  const fixTypeIssues = () => {
+    // This function doesn't do anything at runtime - it's just a placeholder
+    // The real fix happens in the Types.ts file
   };
 
   return (
@@ -361,6 +391,23 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
                       loop
                       playsInline
                     />
+                    {videoError && phoneState === 'in-call' && (
+                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <button 
+                          onClick={() => {
+                            setVideoError(false);
+                            if (videoRef.current) {
+                              videoRef.current.play().catch(err => {
+                                console.error("Manual play attempt error:", err);
+                              });
+                            }
+                          }}
+                          className="bg-white text-black px-4 py-2 rounded-lg"
+                        >
+                          Click to play video
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
                 

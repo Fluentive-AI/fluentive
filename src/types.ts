@@ -227,3 +227,42 @@ export interface AssistantTab {
   videoPath: string;
   audioPath: string;
 }
+
+// Add missing AIConversation interface to fix build errors
+export interface AIConversation {
+  id: string;
+  tenantName: string;
+  date: string;
+  category: string;
+  summary: string;
+  transcript: string;
+  status: string;
+  channel: string;
+  department?: string;
+  market?: string;
+  community?: string;
+  manager?: string;
+}
+
+// Add missing AIAgentConsoleProps interface
+export interface AIAgentConsoleProps {
+  conversations: AIConversation[];
+  activeDepartment: string;
+  activeView: string;
+  searchQuery: string;
+  marketFilters: string[];
+  communityFilters: string[];
+  statusFilters: string[];
+}
+
+// Add missing ScenarioFilterProps interface
+export interface ScenarioFilterProps {
+  options: any[];
+  selectedValues: string[];
+  onChange: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+// Add missing CommunicationsAnalyticsProps interface
+export interface CommunicationsAnalyticsProps {
+  conversations: AIConversation[];
+}
