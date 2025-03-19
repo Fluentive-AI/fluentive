@@ -6,26 +6,59 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useToast } from '@/components/ui/use-toast';
 import AppLogo from '@/components/layout/AppLogo';
+
+// This is not secure for production, but serves as a simple authentication mechanism
+// In a real application, this would be handled by a backend service
+const ALLOWED_USER = {
+  email: 'er526@cornell.edu',
+  password: '123' 
+};
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [userType, setUserType] = useState<'propertyManager' | 'tenant' | 'agent'>('propertyManager');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    // Determine which route to navigate to based on user type
-    if (userType === 'propertyManager') {
-      navigate('/dashboard');
-    } else if (userType === 'tenant') {
-      navigate('/tenant');
-    } else if (userType === 'agent') {
-      navigate('/agent');
-    }
+    // Simulate a network request
+    setTimeout(() => {
+      // Check if the credentials match the allowed user
+      if (email === ALLOWED_USER.email && password === ALLOWED_USER.password) {
+        // Store authentication state in session storage
+        sessionStorage.setItem('isAuthenticated', 'true');
+        
+        // If remember me is checked, store in local storage as well
+        if (rememberMe) {
+          localStorage.setItem('isAuthenticated', 'true');
+        }
+        
+        // Determine which route to navigate to based on user type
+        if (userType === 'propertyManager') {
+          navigate('/dashboard');
+        } else if (userType === 'tenant') {
+          navigate('/tenant');
+        } else if (userType === 'agent') {
+          navigate('/agent');
+        }
+      } else {
+        // Show error toast for invalid credentials
+        toast({
+          title: "Authentication Failed",
+          description: "Invalid email or password. Please try again.",
+          variant: "destructive",
+        });
+      }
+      setIsLoading(false);
+    }, 800); // Simulating network delay
   };
 
   return (
@@ -83,9 +116,18 @@ const LoginPage = () => {
                 </label>
               </div>
               
-              <Button type="submit" className="w-full bg-brand-500 hover:bg-brand-600 h-10 sm:h-12 mt-2">
-                Sign in
+              <Button 
+                type="submit" 
+                className="w-full bg-brand-500 hover:bg-brand-600 h-10 sm:h-12 mt-2"
+                disabled={isLoading}
+              >
+                {isLoading ? "Signing in..." : "Sign in"}
               </Button>
+
+              {/* Development hint - remove for production */}
+              <p className="text-xs text-muted-foreground text-center">
+                Hint: Use er526@cornell.edu / 123
+              </p>
             </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 px-6 pb-6">
