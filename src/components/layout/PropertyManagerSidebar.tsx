@@ -40,7 +40,7 @@ const PropertyManagerSidebar = () => {
   return (
     <div className="h-screen w-64 border-r border-sidebar-border bg-sidebar fixed left-0 top-0 flex flex-col">
       <div className="p-4 border-b border-sidebar-border">
-        <NavLink to="/manager">
+        <NavLink to="/manager" className="flex justify-center w-full">
           <AppLogo />
         </NavLink>
       </div>

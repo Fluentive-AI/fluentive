@@ -65,12 +65,10 @@ const SubNavItem = ({ to, label, isActive }: SubNavItemProps) => (
 const AppSidebar = () => {
   const location = useLocation();
   
-  // Check if we're on reports page or creating a dashboard from dashboard page
   const isReportsActive = 
     location.pathname === '/reports' || 
     (location.pathname === '/dashboard' && location.search.includes('create'));
     
-  // Check if we're on specific reports tabs
   const isAskAgentActive = location.pathname === '/reports' && 
     (!location.search || location.search.includes('tab=ask'));
   
@@ -82,7 +80,7 @@ const AppSidebar = () => {
   return (
     <div className="h-screen w-64 border-r border-sidebar-border bg-sidebar fixed left-0 top-0 flex flex-col">
       <div className="p-4 border-b border-sidebar-border">
-        <NavLink to="/dashboard">
+        <NavLink to="/dashboard" className="flex justify-center w-full">
           <AppLogo />
         </NavLink>
       </div>
