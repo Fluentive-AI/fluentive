@@ -167,6 +167,7 @@ export interface RentCommunication {
   dateTime?: string; // Added to fix build errors
   summary?: string; // Added to fix build errors
   transcript?: string; // Added to fix build errors
+  rentStatus?: string; // Added to fix build errors
 }
 
 export interface SuperCommunication {
@@ -194,7 +195,7 @@ export interface MetricCardProps {
 // Added to fix Dashboard.tsx build errors
 export interface DashboardMetric {
   id: string | number;
-  title: string;
+  title: string; // Required field for DashboardMetric
   value: number;
   change: number;
   status: 'increase_good' | 'increase_bad' | 'decrease_good' | 'decrease_bad' | null;
@@ -215,4 +216,14 @@ export interface DashboardMetric {
   };
   kpi?: string;
   originalPosition?: number; // Added to fix build errors
+}
+
+// New type for the assistant demo tabs
+export interface AssistantTab {
+  id: string;
+  name: string;
+  title: string;
+  description: string;
+  videoPath: string;
+  audioPath: string;
 }

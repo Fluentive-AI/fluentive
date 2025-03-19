@@ -49,6 +49,7 @@ export interface AIAgentConsoleProps {
   marketFilters: string[];
   communityFilters: string[];
   statusFilters: string[];
+  className?: string;
 }
 
 export interface CommunicationsAnalyticsProps {

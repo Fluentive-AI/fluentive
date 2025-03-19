@@ -3,158 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
 import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight, Sparkles } from 'lucide-react';
-import { FaPhone } from "react-icons/fa6";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import DemoAssistantTabs from '@/components/landing/DemoAssistantTabs';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [phoneState, setPhoneState] = useState('contact');
-  const [callTime, setCallTime] = useState(0);
-  const [showClock, setShowClock] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const videoRef = useRef(null);
-  const audioRef = useRef(null);
-  const timerRef = useRef(null);
-  
-  useEffect(() => {
-    const imageUrls = [
-      '/phone_screens/contact_screen.png',
-      '/phone_screens/calling_screen.png',
-      '/phone_screens/in_call_screen.png'
-    ];
-    
-    let loadedCount = 0;
-    const totalImages = imageUrls.length;
-    
-    const preloadImages = () => {
-      imageUrls.forEach(url => {
-        const img = new Image();
-        img.src = url;
-        img.onload = () => {
-          loadedCount++;
-          if (loadedCount === totalImages) {
-            setImagesLoaded(true);
-          }
-        };
-        img.onerror = () => {
-          console.error(`Failed to load image: ${url}`);
-          loadedCount++;
-          if (loadedCount === totalImages) {
-            setImagesLoaded(true);
-          }
-        };
-      });
-    };
-    
-    preloadImages();
-    
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.currentTime = 0;
-      }
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-    };
-  }, []);
-  
-  const startCallSimulation = () => {
-    setPhoneState('calling');
-    
-    setTimeout(() => {
-      setPhoneState('in-call');
-      
-      setTimeout(() => {
-        setShowClock(true);
-        
-        timerRef.current = setInterval(() => {
-          setCallTime(prev => prev + 1);
-        }, 1000);
-      }, 100);
-      
-      if (videoRef.current && window.innerWidth >= 768) {
-        videoRef.current.play().catch(error => {
-          console.error("Video play error:", error);
-        });
-      }
-      
-      if (audioRef.current && window.innerWidth < 768) {
-        const playPromise = audioRef.current.play();
-        
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.error("Audio playback error (likely autoplay restriction):", error);
-            audioRef.current.muted = true;
-            audioRef.current.play().catch(err => {
-              console.error("Even muted audio failed to play:", err);
-            });
-          });
-        }
-      }
-    }, 2000);
-  };
-  
-  const endCallSimulation = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    
-    setPhoneState('contact');
-    setCallTime(0);
-    setShowClock(false);
-    
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-    
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-  };
-  
-  const formatCallTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? '0' + secs : secs}`;
-  };
-  
-  const renderPhoneScreen = () => {
-    const transitionClass = "w-full rounded-lg transition-opacity duration-300";
-    
-    switch (phoneState) {
-      case 'contact':
-        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className={transitionClass} />;
-      case 'calling':
-        return <img src="/phone_screens/calling_screen.png" alt="Calling screen" className={transitionClass} />;
-      case 'in-call':
-        return (
-          <div className="relative">
-            <img 
-              src="/phone_screens/in_call_screen.png" 
-              alt="In-call screen" 
-              className={transitionClass} 
-            />
-            {showClock && (
-              <div 
-                className="absolute top-20 sm:top-20 md:top-20 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-xl md:text-lg font-semibold transition-opacity duration-300"
-              >
-                {formatCallTime(callTime)}
-              </div>
-            )}
-          </div>
-        );
-      default:
-        return <img src="/phone_screens/contact_screen.png" alt="Contact screen" className={transitionClass} />;
-    }
-  };
   
   return (
     <div className="min-h-screen bg-white">
@@ -483,90 +337,13 @@ const LandingPage = () => {
             <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-3">
               Interactive Demo
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">See Our AI Call Assistant in Action</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Experience Our AI Assistants</h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-              Experience how our AI handles property inquiries, providing instant, professional responses to potential tenants.
+              See how our specialized AI assistants handle different property management scenarios, providing instant, professional responses.
             </p>
           </div>
           
-          <div className="space-y-8">
-            <div className="flex justify-center items-center">
-              {phoneState === 'contact' ? (
-                <button 
-                  onClick={startCallSimulation}
-                  className="flex items-center gap-3 group"
-                  disabled={!imagesLoaded}
-                >
-                  <div className={`${imagesLoaded ? 'w-16 h-16 rounded-full bg-green-500 hover:bg-green-600' : 'w-16 h-16 rounded-full bg-gray-400'} flex items-center justify-center shadow-lg transition-all`}>
-                    <Phone className="h-8 w-8 text-white" stroke="white" />
-                  </div>
-                  <span className="text-xl font-medium text-gray-800">
-                    {imagesLoaded ? 'Call Homm' : 'Loading...'}
-                  </span>
-                </button>
-              ) : (
-                <button 
-                  onClick={endCallSimulation}
-                  className="flex items-center gap-3 group"
-                >
-                  <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center shadow-lg transition-all hover:bg-red-600">
-                    <PhoneOff className="h-8 w-8 text-white" stroke="white" />
-                  </div>
-                  <span className="text-xl font-medium text-gray-800">End Call</span>
-                </button>
-              )}
-            </div>
-            
-            <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
-              <CardContent className="p-6 md:p-10">
-                <div className="flex flex-col items-center md:hidden">
-                  <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative">
-                    {renderPhoneScreen()}
-                    
-                    <button 
-                      onClick={phoneState === 'contact' ? startCallSimulation : endCallSimulation}
-                      className="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
-                      aria-label={phoneState === 'contact' ? "Call Homm" : "End Call"}
-                      disabled={!imagesLoaded && phoneState === 'contact'}
-                    />
-                    
-                    <audio 
-                      ref={audioRef}
-                      src="/phone_calls/leasing/lead.m4a" 
-                      preload="auto"
-                      playsInline
-                      muted={false}
-                      loop
-                    />
-                  </div>
-                </div>
-                
-                <div className="hidden md:flex flex-row gap-8 items-center">
-                  <div className="md:w-[45%] flex justify-center items-center">
-                    <div className="max-w-[280px] mx-auto">
-                      {renderPhoneScreen()}
-                    </div>
-                  </div>
-                  
-                  <div className="md:w-[55%] flex items-center">
-                    <video 
-                      ref={videoRef}
-                      src="/phone_calls/leasing/lead.mp4" 
-                      className="w-full rounded-lg" 
-                      preload="auto"
-                      controls={false}
-                    />
-                  </div>
-                </div>
-                
-                <div className="hidden">
-                  <img src="/phone_screens/contact_screen.png" alt="Preload" />
-                  <img src="/phone_screens/calling_screen.png" alt="Preload" />
-                  <img src="/phone_screens/in_call_screen.png" alt="Preload" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <DemoAssistantTabs onCallEnd={() => console.log('Call ended')} />
         </div>
       </section>
       
