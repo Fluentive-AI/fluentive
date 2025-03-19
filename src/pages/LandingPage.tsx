@@ -1,8 +1,9 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
-import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight } from 'lucide-react';
+import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight, Mail } from 'lucide-react';
 import { FaPhone } from "react-icons/fa6";
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -184,7 +185,7 @@ const LandingPage = () => {
           <a href="#features" className="text-gray-700 hover:text-primary transition-colors font-medium">Features</a>
           <a href="#benefits" className="text-gray-700 hover:text-primary transition-colors font-medium">Benefits</a>
           <a href="#demo" className="text-gray-700 hover:text-primary transition-colors font-medium">Demo</a>
-          <a href="#testimonials" className="text-gray-700 hover:text-primary transition-colors font-medium">Case Studies</a>
+          <a href="#pricing" className="text-gray-700 hover:text-primary transition-colors font-medium">Pricing</a>
         </nav>
         
         <div className="flex items-center gap-2">
@@ -241,11 +242,11 @@ const LandingPage = () => {
               Demo
             </a>
             <a 
-              href="#testimonials" 
+              href="#pricing" 
               className="text-xl font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Case Studies
+              Pricing
             </a>
           </nav>
         </div>
@@ -565,26 +566,76 @@ const LandingPage = () => {
         </div>
       </section>
       
-      {/* Testimonials Section (Placeholder) */}
-      <section id="testimonials" className="py-20 px-8 bg-gradient-to-br from-gray-50 to-blue-50">
+      {/* Pricing Section (replacing Case Studies) */}
+      <section id="pricing" className="py-20 px-8 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <div className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-3">
-              Success Stories
+              Pricing
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Case Studies</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Talk to Us About Your Needs</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              See how property management companies have transformed their operations with Homm.
+              We offer customized solutions tailored to your property management requirements.
             </p>
           </div>
           
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-16 text-center bg-white hover:bg-gray-100 transition-colors">
-            <p className="text-gray-500 text-xl font-medium">Case studies coming soon</p>
+          <div className="max-w-3xl mx-auto">
+            <Card className="bg-white shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-8 md:p-10">
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold mb-2">Custom Solution</h3>
+                  <p className="text-gray-600">
+                    We create personalized pricing based on your portfolio size and specific needs
+                  </p>
+                </div>
+                
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-3 mt-1" />
+                    <p>Tailored AI solutions for your specific property management challenges</p>
+                  </div>
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-3 mt-1" />
+                    <p>Scale pricing based on your portfolio size</p>
+                  </div>
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-3 mt-1" />
+                    <p>Custom integration with your existing systems</p>
+                  </div>
+                  <div className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-3 mt-1" />
+                    <p>Dedicated account manager and priority support</p>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col md:flex-row justify-center gap-4">
+                  <Button 
+                    size="lg" 
+                    variant="default"
+                    className="px-6 py-6 h-auto font-medium shadow-md hover:shadow-lg transition-all"
+                    onClick={() => window.location.href = 'mailto:rozenblum.eytan@gmail.com'}
+                  >
+                    <Mail className="mr-2 h-5 w-5" />
+                    Contact Us
+                  </Button>
+                  
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="px-6 py-6 h-auto font-medium shadow-sm hover:shadow-md transition-all"
+                    onClick={() => window.location.href = 'tel:+16462503816'}
+                  >
+                    <FaPhone className="mr-2 h-4 w-4" />
+                    Call (646) 250-3816
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
       
-      {/* Social Proof Section (Placeholder) */}
+      {/* Comment out Social Proof Section 
       <section className="py-14 px-8 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center bg-white hover:bg-gray-50 transition-colors">
@@ -592,6 +643,7 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      */}
       
       {/* Final CTA Section */}
       <section className="py-12 sm:py-20 px-4 sm:px-8 bg-gradient-to-br from-primary to-accent text-white">
@@ -654,8 +706,8 @@ const LandingPage = () => {
               <ul className="space-y-2">
                 <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
                 <li><a href="#benefits" className="hover:text-white transition-colors">Benefits</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#demo" className="hover:text-white transition-colors">Demo</a></li>
               </ul>
             </div>
             
