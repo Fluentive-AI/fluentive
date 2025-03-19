@@ -306,12 +306,14 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
               
               <div className="flex justify-center md:justify-end md:w-1/2">
                 <div className="relative">
-                  <div className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden bg-gray-100 shadow-subtle">
-                    <div className="absolute inset-0 rounded-full bg-gray-200 bg-opacity-70"></div>
-                    <Avatar className="w-full h-full">
-                      <AvatarImage src={tab.avatarPath} alt={tab.name} className="object-cover" />
-                      <AvatarFallback>{tab.name[0]}</AvatarFallback>
-                    </Avatar>
+                  <div className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent rounded-full filter blur-md"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-transparent rounded-full filter blur-md"></div>
+                    <img 
+                      src={tab.avatarPath} 
+                      alt={tab.name} 
+                      className="w-full h-full object-contain relative z-10"
+                    />
                   </div>
                 </div>
               </div>

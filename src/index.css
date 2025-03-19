@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -189,6 +188,25 @@
   @apply shadow-lg;
 }
 
+/* Assistant avatar styles */
+.assistant-avatar {
+  @apply relative;
+}
+
+.assistant-avatar img {
+  @apply relative z-10;
+}
+
+.assistant-avatar::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-r from-transparent via-gray-400/20 to-transparent rounded-full filter blur-md;
+}
+
+.assistant-avatar::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-b from-transparent via-gray-400/20 to-transparent rounded-full filter blur-md;
+}
+
 /* Sound wave animation */
 @keyframes soundwave {
   0% {
@@ -270,17 +288,4 @@
 
 .demo-card-container {
   @apply bg-white border-0 shadow-none;
-}
-
-/* Assistant avatar styles */
-.assistant-avatar-container {
-  @apply relative inline-block;
-}
-
-.assistant-avatar-backdrop {
-  @apply absolute inset-0 rounded-full bg-gray-200 opacity-70;
-}
-
-.assistant-avatar {
-  @apply relative z-10 w-full h-full object-cover rounded-full;
 }

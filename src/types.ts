@@ -1,3 +1,4 @@
+
 export interface MetricData {
   label: string;
   value: number;
@@ -225,5 +226,5 @@ export interface AssistantTab {
   description: string;
   videoPath: string;
   audioPath: string;
-  avatarPath?: string;
+  avatarPath: string; // Updated to be required
 }
