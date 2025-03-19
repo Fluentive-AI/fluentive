@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -212,12 +213,12 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-center gap-4 mb-8 w-full max-w-4xl mx-auto">
+      <div className="flex flex-wrap justify-center gap-4 mb-8 w-full max-w-4xl mx-auto">
         {assistantTabs.map(tab => (
           <Button 
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-5 py-6 rounded-lg transition-all w-full md:min-w-[220px] ${
+            className={`px-5 py-6 rounded-lg transition-all flex-grow sm:flex-grow-0 w-full sm:w-auto md:min-w-[220px] ${
               activeTab === tab.id 
                 ? `bg-${tab.id === 'leasing' ? 'brand' : tab.id === 'operations' ? 'blue' : 'amber'}-500 text-white hover:opacity-90` 
                 : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
