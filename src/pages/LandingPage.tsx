@@ -635,27 +635,6 @@ const LandingPage = () => {
               </CardFooter>
             </Card>
           </div>
-          
-          <div className="mt-16 text-center bg-white p-8 rounded-xl shadow-md border border-gray-200">
-            <h3 className="text-2xl font-bold mb-4">Need a Custom Solution?</h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Let our team of AI experts design a tailored solution for your property management needs.
-            </p>
-            <a 
-              href="https://calendly.com/homm-ai/30min" 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="font-medium border-2 border-primary hover:bg-primary/10"
-              >
-                Schedule a Consultation
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </a>
-          </div>
         </div>
       </section>
       

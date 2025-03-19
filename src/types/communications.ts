@@ -9,3 +9,47 @@ export interface ConversationFilterProps {
   selectedFilter: string;
   setSelectedFilter: (filter: string) => void;
 }
+
+export interface ScenarioFilterProps {
+  options: any[];
+  selectedValues: string[];
+  onChange: (selectedValues: string[]) => void;
+}
+
+export interface AIConversation {
+  id: string;
+  tenant: string;
+  unit: string;
+  dateTime: string;
+  topic: string;
+  status: string;
+  messages: {
+    sender: 'tenant' | 'ai';
+    message: string;
+    timestamp: string;
+  }[];
+  department: string;
+  community: string;
+  market: string;
+  resolution?: string;
+  contactName?: string;
+  channel?: string;
+  scenario?: string;
+  sentiment?: string;
+  summary?: string;
+}
+
+export interface AIAgentConsoleProps {
+  conversations: AIConversation[];
+  activeDepartment: string;
+  activeView: string;
+  searchQuery: string;
+  marketFilters: string[];
+  communityFilters: string[];
+  statusFilters: string[];
+}
+
+export interface CommunicationsAnalyticsProps {
+  conversations: AIConversation[];
+  department?: string;
+}

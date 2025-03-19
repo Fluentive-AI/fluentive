@@ -36,6 +36,12 @@ export interface Lead {
   followUp: string;
   market: string;
   community: string;
+  propertyInterest?: string;
+  assignedTo?: string;
+  tourScheduled?: string;
+  dateCreated?: string;
+  tourDateTime?: string;
+  propertyAddress?: string;
 }
 
 export interface Application {
@@ -54,6 +60,23 @@ export interface Application {
   income: number;
   pets: boolean;
   documents: string[];
+  assignedTo?: string;
+  propertyInterest?: string;
+  dateSubmitted?: string;
+  backgroundCheck?: {
+    status: string;
+    completed: boolean;
+  };
+  creditCheck?: {
+    status: string;
+    completed: boolean;
+  };
+  incomeVerification?: {
+    status: string;
+    completed: boolean;
+  };
+  leadId?: string;
+  propertyAddress?: string;
 }
 
 export interface Tenant {
@@ -70,6 +93,11 @@ export interface Tenant {
   lastPayment: string;
   community: string;
   market: string;
+  rentStatus?: string;
+  rentAmount?: number;
+  delinquentAmount?: number;
+  propertyManager?: string;
+  notes?: string;
 }
 
 export interface MaintenanceRequest {
@@ -86,24 +114,11 @@ export interface MaintenanceRequest {
   notes: string[];
   community: string;
   market: string;
-}
-
-export interface AIConversation {
-  id: string;
-  tenant: string;
-  unit: string;
-  dateTime: string;
-  topic: string;
-  status: string;
-  messages: {
-    sender: 'tenant' | 'ai';
-    message: string;
-    timestamp: string;
-  }[];
-  department: string;
-  community: string;
-  market: string;
-  resolution?: string;
+  tenantId?: string;
+  tenantName?: string;
+  issue?: string;
+  scheduledDate?: string;
+  endDate?: string;
 }
 
 export interface RentPayment {
@@ -116,6 +131,12 @@ export interface RentPayment {
   method: string;
   community: string;
   market: string;
+  tenantId?: string;
+  tenantName?: string;
+  dueDate?: string;
+  datePaid?: string;
+  paymentMethod?: string;
+  propertyManager?: string;
 }
 
 export interface ChartData {
@@ -133,6 +154,9 @@ export interface RentCommunication {
   category: string;
   community: string;
   market: string;
+  tenantId?: string;
+  propertyManager?: string;
+  property?: string;
 }
 
 export interface SuperCommunication {
@@ -150,4 +174,9 @@ export interface SuperCommunication {
 // Add the scenario prop to TenantLeasing interface to fix the typescript errors in App.tsx
 export interface TenantLeasingProps {
   scenario?: string;
+}
+
+export interface MetricCardProps {
+  metric: MetricData;
+  selectedMarket?: string;
 }
