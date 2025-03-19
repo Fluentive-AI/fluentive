@@ -3,7 +3,7 @@ import React from 'react';
 
 const AppLogo = () => {
   return (
-    <div className="flex items-center justify-center w-full h-16">
+    <div className="flex items-center h-16">
       <img 
         src="/logo/logo_blue_horizontal.png" 
         alt="Homm Logo"

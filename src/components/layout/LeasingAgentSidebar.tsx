@@ -39,8 +39,8 @@ const NavItem = ({ to, icon, label, end = false }: NavItemProps) => (
 const LeasingAgentSidebar = () => {
   return (
     <div className="h-screen w-64 border-r border-sidebar-border bg-sidebar fixed left-0 top-0 flex flex-col">
-      <div className="p-4 border-b border-sidebar-border">
-        <NavLink to="/agent" className="flex justify-center w-full">
+      <div className="p-4 pl-6 border-b border-sidebar-border">
+        <NavLink to="/agent" className="flex w-full">
           <AppLogo />
         </NavLink>
       </div>

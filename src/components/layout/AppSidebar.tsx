@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import AppLogo from './AppLogo';
@@ -79,8 +80,8 @@ const AppSidebar = () => {
 
   return (
     <div className="h-screen w-64 border-r border-sidebar-border bg-sidebar fixed left-0 top-0 flex flex-col">
-      <div className="p-4 border-b border-sidebar-border">
-        <NavLink to="/dashboard" className="flex justify-center w-full">
+      <div className="p-4 pl-6 border-b border-sidebar-border">
+        <NavLink to="/dashboard" className="flex w-full">
           <AppLogo />
         </NavLink>
       </div>
