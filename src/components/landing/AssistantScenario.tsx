@@ -145,6 +145,14 @@ const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => 
     }
   };
 
+  // Custom button text based on assistant type
+  const getCallButtonText = () => {
+    if (assistant.id === 'operations') {
+      return `Accept ${assistant.name}'s Call`;
+    }
+    return `Call ${assistant.name}`;
+  };
+
   return (
     <div className="text-center mb-8">
       <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">{assistant.name} - {assistant.title}</h3>
@@ -162,7 +170,7 @@ const AssistantScenario = ({ assistant, onCallEnd }: AssistantScenarioProps) => 
               className="w-16 h-16 hover:opacity-90 transition-all"
             />
             <span className="text-xl font-medium text-gray-800">
-              Call {assistant.name}
+              {getCallButtonText()}
             </span>
           </button>
         ) : (
