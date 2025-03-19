@@ -80,7 +80,7 @@ const AppSidebar = () => {
 
   return (
     <div className="h-screen w-64 border-r border-sidebar-border bg-sidebar fixed left-0 top-0 flex flex-col">
-      <div className="p-4 pl-6 border-b border-sidebar-border">
+      <div className="p-4 pl-8 border-b border-sidebar-border">
         <NavLink to="/dashboard" className="flex w-full">
           <AppLogo />
         </NavLink>
