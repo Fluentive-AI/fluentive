@@ -176,6 +176,19 @@
   @apply bg-gray-100 text-gray-800;
 }
 
+/* Shadow options */
+.shadow-subtle {
+  @apply shadow-sm;
+}
+
+.shadow-elevated {
+  @apply shadow-md;
+}
+
+.shadow-floating {
+  @apply shadow-lg;
+}
+
 /* Sound wave animation */
 @keyframes soundwave {
   0% {
@@ -259,15 +272,15 @@
   @apply bg-white border-0 shadow-none;
 }
 
-/* Shadow options */
-.shadow-subtle {
-  @apply shadow-sm;
+/* Assistant avatar styles */
+.assistant-avatar-container {
+  @apply relative inline-block;
 }
 
-.shadow-elevated {
-  @apply shadow-md;
+.assistant-avatar-backdrop {
+  @apply absolute inset-0 rounded-full bg-gray-200 opacity-70;
 }
 
-.shadow-floating {
-  @apply shadow-lg;
+.assistant-avatar {
+  @apply relative z-10 w-full h-full object-cover rounded-full;
 }
