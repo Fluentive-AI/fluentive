@@ -1,6 +1,7 @@
+
 import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Volume2 } from 'lucide-react';
+import { Volume2, Phone, PlayCircle } from 'lucide-react';
 
 interface TenantVoiceAgentProps {
   currentScreen?: 'contact' | 'calling' | 'inCall';
@@ -62,21 +63,21 @@ const TenantVoiceAgent = forwardRef<TenantVoiceAgentRef, TenantVoiceAgentProps>(
     }));
 
     return (
-      <Card className="h-full">
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Volume2 className="h-5 w-5 mr-2" />
+      <Card className="h-full shadow-lg border border-gray-200">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-lg">
+          <CardTitle className="flex items-center text-blue-700">
+            <Volume2 className="h-5 w-5 mr-2 text-blue-600" />
             Homm Voice Assistant - {scenarioNames[scenario || 'lead']}
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col h-[500px] space-y-4">
-          <div className="bg-gray-100 p-4 rounded-lg w-2/3">
-            <p className="text-base">
+        <CardContent className="flex flex-col h-[500px] space-y-4 p-5">
+          <div className="bg-blue-50 p-4 rounded-lg w-2/3 shadow-sm border border-blue-100">
+            <p className="text-base text-blue-800">
               Hello! I'm your Homm personal assistant. How can I help you today?
             </p>
           </div>
           
-          <div className="bg-white p-4 rounded-lg border border-gray-200">
+          <div className="relative bg-white p-2 rounded-lg border border-gray-200 shadow-md">
             <video
               ref={videoRef}
               className="w-full h-auto rounded-lg"
@@ -85,14 +86,22 @@ const TenantVoiceAgent = forwardRef<TenantVoiceAgentRef, TenantVoiceAgentProps>(
             >
               <source src="/phone_calls/leasing/lead.mp4" type="video/mp4" />
             </video>
+            
+            {!isPlaying && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+                <PlayCircle className="h-16 w-16 text-white opacity-80 hover:opacity-100 transition-opacity cursor-pointer" onClick={toggleVideo} />
+              </div>
+            )}
           </div>
 
-          {/* Transparent button at the bottom */}
+          {/* Control button at the bottom */}
           <button
             onClick={toggleVideo}
-            className="absolute bottom-0 left-0 right-0 h-16 bg-transparent hover:bg-black/[0.02] transition-colors duration-200"
-            style={{ border: 'none', outline: 'none' }}
-          />
+            className="mt-auto py-3 px-6 bg-brand-500 text-white rounded-full font-medium flex items-center justify-center hover:bg-brand-600 transition-colors duration-200 shadow-md"
+          >
+            {isPlaying ? 'Stop Demo' : 'Start Demo'}
+            <Phone className="ml-2 h-4 w-4" />
+          </button>
         </CardContent>
       </Card>
     );
