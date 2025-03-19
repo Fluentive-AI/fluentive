@@ -1017,7 +1017,7 @@ export const mockAIConversations: AIConversation[] = [
     channel: 'voice' as 'voice' | 'sms' | 'email',
     dateTime: '2025-03-12T14:32',
     summary: 'Inquired about 2-bedroom house availability and pricing near Riverview, FL. Wants to visit 123 Maple Street on Saturday, March 15th at 1:00 PM.',
-    transcript: `AI: Hello, thank you for calling PropertyAI. How can I assist you today?
+    transcript: `AI: Hello, thank you for calling Property Homes. How can I assist you today?
 John: Hi, I'm looking for information about 2-bedroom houses near Riverview or in the Tampa area.
 AI: I'd be happy to help! We currently have two 2-bedroom houses available in the Riverview area. The first one is located at 123 Maple Street, Riverview, FL, and rents for $1,900 per month. House #2 is located at 456 Oakview Drive, Riverview, FL, and rents for $2,100 per month. Would you like to hear more about their amenities?
 John: That sounds great. Yes sure!
@@ -1080,7 +1080,7 @@ AI: You're welcome, Jennifer! If you have any questions while completing your ap
     channel: 'sms' as 'voice' | 'sms' | 'email',
     dateTime: '2025-03-10T16:45:00',
     summary: 'Maintenance request for leaking faucet in master bathroom. Scheduled repair for tomorrow between 1-3 PM.',
-    transcript: `AI: Hello! This is PropertyAI from Oakwood Apartments. How can I assist you today?
+    transcript: `AI: Hello! This is Property Homes from Oakwood Apartments. How can I assist you today?
 Thomas: Hi, the faucet in my master bathroom is leaking and getting worse.
 AI: I'm sorry to hear about the leaking faucet. I'd be happy to help get that fixed for you. Could you please confirm your apartment number so I can create a maintenance request?
 Thomas: It's apartment 304.
@@ -1110,7 +1110,7 @@ AI: You're welcome! If you need anything else, feel free to text us anytime. Hav
     channel: 'voice' as 'voice' | 'sms' | 'email',
     dateTime: '2025-03-09T13:20:00',
     summary: 'Discussed lease renewal options and negotiated a 14-month lease with $50 rent increase instead of the standard $100 increase.',
-    transcript: `AI: Hello, thank you for calling PropertyAI. How can I assist you today?
+    transcript: `AI: Hello, thank you for calling Property Homes. How can I assist you today?
 Sarah: Hi, this is Sarah Johnson from apartment 512. I received a lease renewal notice and wanted to discuss the options.
 AI: Hello Ms. Johnson, I'd be happy to discuss your lease renewal options. I see your current lease for apartment 512 at Parkview Apartments is set to expire on April 30th, 2025. We're offering a 12-month renewal with a $100 monthly increase, or a 6-month renewal with a $150 monthly increase. Which option were you considering?
 Sarah: The $100 increase seems high. I've been a good tenant for two years now. Is there any way to reduce that?
@@ -1140,7 +1140,7 @@ AI: You're very welcome, Ms. Johnson. We value you as a resident and appreciate 
     channel: 'voice' as 'voice' | 'sms' | 'email',
     dateTime: '2025-03-08T11:10:00',
     summary: 'Provided move-out instructions and scheduled final inspection for March 31st at 10:00 AM.',
-    transcript: `AI: Hello, thank you for calling PropertyAI. How can I assist you today?
+    transcript: `AI: Hello, thank you for calling Property Homes. How can I assist you today?
 Michael: Hi, I need information about moving out. My lease ends next month.
 AI: I'd be happy to help you with the move-out process. Could you please provide your name and apartment number so I can pull up your information?
 Michael: Michael Chen, apartment 721.

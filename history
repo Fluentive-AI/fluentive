@@ -52,3 +52,8 @@ pnpm run dev
 pnpm run dev
 pnpm run dev
 pnpm run dev
+git reset --hard 801eac930450df138785754107d00de306a04bf4
+git push --force
+pnpm run dev
+pnpm run dev
+pnpm run dev
