@@ -1,9 +1,7 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AssistantTab } from '@/types';
-import AssistantAvatar from './AssistantAvatar';
 
 interface DemoAssistantTabsProps {
   onCallEnd: () => void;
@@ -26,8 +24,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       title: 'Leasing Assistant',
       description: 'Handles rental inquiries and application questions',
       videoPath: '/phone_calls/leasing/lead.mp4',
-      audioPath: '/phone_calls/leasing/lead.m4a',
-      avatarPath: '/avatars/jessica.jpg'
+      audioPath: '/phone_calls/leasing/lead.m4a'
     },
     {
       id: 'operations',
@@ -35,8 +32,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       title: 'Property Operations',
       description: 'Assists with rent payments and property management',
       videoPath: '/phone_calls/property_operations/property_operations.mp4',
-      audioPath: '/phone_calls/property_operations/property_operations.m4a',
-      avatarPath: '/avatars/susan.jpg'
+      audioPath: '/phone_calls/property_operations/property_operations.m4a'
     },
     {
       id: 'maintenance',
@@ -44,8 +40,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       title: 'Maintenance Assistant',
       description: 'Processes maintenance requests and scheduling',
       videoPath: '/phone_calls/maintenance/maintenance.mp4',
-      audioPath: '/phone_calls/maintenance/maintenance.m4a',
-      avatarPath: '/avatars/james.jpg'
+      audioPath: '/phone_calls/maintenance/maintenance.m4a'
     }
   ];
 
@@ -262,46 +257,40 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       <div className="transition-all">
         {assistantTabs.map(tab => (
           <div key={tab.id} className={`${activeTab === tab.id ? 'block' : 'hidden'}`}>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-10">
-              <div className="md:mr-4">
-                <AssistantAvatar name={tab.name} imagePath={tab.avatarPath} />
-              </div>
-              
-              <div className="text-center md:text-left flex-1">
-                <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">{tab.name} - {tab.title}</h3>
-                <p className="text-gray-600 max-w-2xl mx-auto md:mx-0">{tab.description}</p>
-              </div>
-              
-              <div className="mt-4 md:mt-0">
-                {phoneState === 'contact' ? (
-                  <button 
-                    onClick={startCallSimulation}
-                    className="flex items-center gap-3 group"
-                    disabled={!imagesLoaded}
-                  >
-                    <img 
-                      src="/phone_screens/accept_call.png" 
-                      alt="Call" 
-                      className="w-16 h-16 hover:opacity-90 transition-all"
-                    />
-                    <span className="text-xl font-medium text-gray-800">
-                      {imagesLoaded ? `Call ${tab.name}` : 'Loading...'}
-                    </span>
-                  </button>
-                ) : (
-                  <button 
-                    onClick={endCallSimulation}
-                    className="flex items-center gap-3 group"
-                  >
-                    <img 
-                      src="/phone_screens/decline_call.png" 
-                      alt="End Call" 
-                      className="w-16 h-16 hover:opacity-90 transition-all"
-                    />
-                    <span className="text-xl font-medium text-gray-800">End Call</span>
-                  </button>
-                )}
-              </div>
+            <div className="text-center mb-8">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800">{tab.name} - {tab.title}</h3>
+              <p className="text-gray-600 max-w-2xl mx-auto">{tab.description}</p>
+            </div>
+            
+            <div className="flex justify-center items-center mb-10">
+              {phoneState === 'contact' ? (
+                <button 
+                  onClick={startCallSimulation}
+                  className="flex items-center gap-3 group"
+                  disabled={!imagesLoaded}
+                >
+                  <img 
+                    src="/phone_screens/accept_call.png" 
+                    alt="Call" 
+                    className="w-16 h-16 hover:opacity-90 transition-all"
+                  />
+                  <span className="text-xl font-medium text-gray-800">
+                    {imagesLoaded ? `Call ${tab.name}` : 'Loading...'}
+                  </span>
+                </button>
+              ) : (
+                <button 
+                  onClick={endCallSimulation}
+                  className="flex items-center gap-3 group"
+                >
+                  <img 
+                    src="/phone_screens/decline_call.png" 
+                    alt="End Call" 
+                    className="w-16 h-16 hover:opacity-90 transition-all"
+                  />
+                  <span className="text-xl font-medium text-gray-800">End Call</span>
+                </button>
+              )}
             </div>
 
             <Card className="bg-white border-0 rounded-2xl overflow-hidden max-w-5xl mx-auto shadow-md">
