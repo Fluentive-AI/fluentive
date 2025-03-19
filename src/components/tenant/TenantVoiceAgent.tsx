@@ -66,13 +66,13 @@ const TenantVoiceAgent = forwardRef<TenantVoiceAgentRef, TenantVoiceAgentProps>(
         <CardHeader>
           <CardTitle className="flex items-center">
             <Volume2 className="h-5 w-5 mr-2" />
-            Property AI Voice Assistant - {scenarioNames[scenario || 'lead']}
+            Homm Voice Assistant - {scenarioNames[scenario || 'lead']}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col h-[500px] space-y-4">
           <div className="bg-gray-100 p-4 rounded-lg w-2/3">
             <p className="text-base">
-              Hello! I'm your Property AI assistant. How can I help you today?
+              Hello! I'm your Homm personal assistant. How can I help you today?
             </p>
           </div>
           

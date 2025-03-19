@@ -76,7 +76,7 @@ const TenantMaintenance = () => {
       <CardContent className="p-6">
         <h3 className="text-xl font-medium flex items-center mb-6">
           <Phone className="h-5 w-5 mr-2" />
-          Property AI Call Assistant
+          Homm Call Assistant
         </h3>
         
         <div className="flex flex-col md:flex-row gap-6">

@@ -491,7 +491,7 @@ const LandingPage = () => {
                     <Phone className="h-8 w-8 text-white" stroke="white" />
                   </div>
                   <span className="text-xl font-medium text-gray-800">
-                    {imagesLoaded ? 'Call Property AI' : 'Loading...'}
+                    {imagesLoaded ? 'Call Homm' : 'Loading...'}
                   </span>
                 </button>
               ) : (
@@ -518,7 +518,7 @@ const LandingPage = () => {
                     <button 
                       onClick={phoneState === 'contact' ? startCallSimulation : endCallSimulation}
                       className="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
-                      aria-label={phoneState === 'contact' ? "Call Property AI" : "End Call"}
+                      aria-label={phoneState === 'contact' ? "Call Homm" : "End Call"}
                       disabled={!imagesLoaded && phoneState === 'contact'}
                     />
                     
