@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AppLogo from '@/components/layout/AppLogo';
-import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight } from 'lucide-react';
+import { ArrowRight, Check, BarChart3, MessageSquare, Clock, ArrowUpRight, Building2, Phone, PhoneOff, Menu, X, SquareArrowOutUpRight, Sparkles } from 'lucide-react';
 import { FaPhone } from "react-icons/fa6";
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -17,7 +17,6 @@ const LandingPage = () => {
   const audioRef = useRef(null);
   const timerRef = useRef(null);
   
-  // Preload all phone screen images on component mount
   useEffect(() => {
     const imageUrls = [
       '/phone_screens/contact_screen.png',
@@ -50,7 +49,6 @@ const LandingPage = () => {
     
     preloadImages();
     
-    // Cleanup timer on component unmount
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -67,40 +65,31 @@ const LandingPage = () => {
   }, []);
   
   const startCallSimulation = () => {
-    // First transition to calling screen
     setPhoneState('calling');
     
-    // After 2 seconds, transition to in-call and start the clock
     setTimeout(() => {
       setPhoneState('in-call');
       
-      // Small delay to ensure the in-call screen is rendered before showing the clock
       setTimeout(() => {
         setShowClock(true);
         
-        // Start the call timer
         timerRef.current = setInterval(() => {
           setCallTime(prev => prev + 1);
         }, 1000);
       }, 100);
       
-      // Handle desktop video playback
       if (videoRef.current && window.innerWidth >= 768) {
         videoRef.current.play().catch(error => {
           console.error("Video play error:", error);
         });
       }
       
-      // Handle mobile audio playback
       if (audioRef.current && window.innerWidth < 768) {
-        // Create a user interaction context for mobile browsers
         const playPromise = audioRef.current.play();
         
-        // Handle potential play() promise rejection (common on mobile)
         if (playPromise !== undefined) {
           playPromise.catch(error => {
             console.error("Audio playback error (likely autoplay restriction):", error);
-            // Try playing again with muted setting which is more permissive on mobile
             audioRef.current.muted = true;
             audioRef.current.play().catch(err => {
               console.error("Even muted audio failed to play:", err);
@@ -112,23 +101,19 @@ const LandingPage = () => {
   };
   
   const endCallSimulation = () => {
-    // Stop the timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
     
-    // Reset the call state
     setPhoneState('contact');
     setCallTime(0);
     setShowClock(false);
     
-    // Pause and reset the video
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
     
-    // Pause and reset the audio
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -142,7 +127,6 @@ const LandingPage = () => {
   };
   
   const renderPhoneScreen = () => {
-    // Common transition class for smooth fade between images
     const transitionClass = "w-full rounded-lg transition-opacity duration-300";
     
     switch (phoneState) {
@@ -174,7 +158,6 @@ const LandingPage = () => {
   
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation Bar */}
       <header className="w-full py-0 px-4 sm:px-8 border-b flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm">
         <div>
           <AppLogo />
@@ -184,7 +167,7 @@ const LandingPage = () => {
           <a href="#features" className="text-gray-700 hover:text-primary transition-colors font-medium">Features</a>
           <a href="#benefits" className="text-gray-700 hover:text-primary transition-colors font-medium">Benefits</a>
           <a href="#demo" className="text-gray-700 hover:text-primary transition-colors font-medium">Demo</a>
-          <a href="#testimonials" className="text-gray-700 hover:text-primary transition-colors font-medium">Case Studies</a>
+          <a href="#pricing" className="text-gray-700 hover:text-primary transition-colors font-medium">Pricing</a>
         </nav>
         
         <div className="flex items-center gap-2">
@@ -200,7 +183,6 @@ const LandingPage = () => {
             <SquareArrowOutUpRight className="ml-1 h-3 w-3 sm:hidden" />
           </Button>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <Button 
               variant="ghost" 
@@ -215,7 +197,6 @@ const LandingPage = () => {
         </div>
       </header>
 
-      {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 bg-white z-10 md:hidden pt-16 px-4">
           <nav className="flex flex-col items-center space-y-6 mt-10">
@@ -241,17 +222,16 @@ const LandingPage = () => {
               Demo
             </a>
             <a 
-              href="#testimonials" 
+              href="#pricing" 
               className="text-xl font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Case Studies
+              Pricing
             </a>
           </nav>
         </div>
       )}
       
-      {/* Hero Section */}
       <section className="py-12 sm:py-20 px-4 sm:px-8 bg-gradient-to-br from-blue-50 via-white to-indigo-50">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
@@ -295,7 +275,6 @@ const LandingPage = () => {
         </div>
       </section>
       
-      {/* Key Features Section */}
       <section id="features" className="py-20 px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
@@ -309,7 +288,6 @@ const LandingPage = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
             <div className="bg-white border rounded-xl p-8 shadow-sm hover:shadow-md transition-all duration-200 group hover:bg-blue-50">
               <div className="bg-blue-100 p-4 rounded-xl w-fit mb-6 group-hover:bg-blue-200 transition-colors">
                 <BarChart3 className="h-7 w-7 text-blue-600" />
@@ -334,7 +312,6 @@ const LandingPage = () => {
               </ul>
             </div>
             
-            {/* Feature 2 */}
             <div className="bg-white border rounded-xl p-8 shadow-sm hover:shadow-md transition-all duration-200 group hover:bg-indigo-50">
               <div className="bg-indigo-100 p-4 rounded-xl w-fit mb-6 group-hover:bg-indigo-200 transition-colors">
                 <MessageSquare className="h-7 w-7 text-indigo-600" />
@@ -359,7 +336,6 @@ const LandingPage = () => {
               </ul>
             </div>
             
-            {/* Feature 3 */}
             <div className="bg-white border rounded-xl p-8 shadow-sm hover:shadow-md transition-all duration-200 group hover:bg-emerald-50">
               <div className="bg-emerald-100 p-4 rounded-xl w-fit mb-6 group-hover:bg-emerald-200 transition-colors">
                 <Clock className="h-7 w-7 text-emerald-600" />
@@ -398,7 +374,6 @@ const LandingPage = () => {
         </div>
       </section>
       
-      {/* Benefits Section */}
       <section id="benefits" className="py-20 px-8 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
@@ -466,7 +441,6 @@ const LandingPage = () => {
         </div>
       </section>
       
-      {/* Tool Preview Section */}
       <section id="demo" className="py-12 sm:py-20 px-4 sm:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 sm:mb-14">
@@ -509,12 +483,10 @@ const LandingPage = () => {
             
             <Card className="bg-white shadow-lg border rounded-2xl overflow-hidden">
               <CardContent className="p-6 md:p-10">
-                {/* Mobile layout (hidden on md and up) */}
                 <div className="flex flex-col items-center md:hidden">
                   <div className="w-full max-w-[280px] sm:max-w-[320px] mx-auto relative">
                     {renderPhoneScreen()}
                     
-                    {/* Transparent button overlay */}
                     <button 
                       onClick={phoneState === 'contact' ? startCallSimulation : endCallSimulation}
                       className="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
@@ -522,7 +494,6 @@ const LandingPage = () => {
                       disabled={!imagesLoaded && phoneState === 'contact'}
                     />
                     
-                    {/* Hidden audio element for mobile - improved for mobile */}
                     <audio 
                       ref={audioRef}
                       src="/phone_calls/leasing/lead.m4a" 
@@ -534,7 +505,6 @@ const LandingPage = () => {
                   </div>
                 </div>
                 
-                {/* Desktop layout (hidden on small screens, visible on md and up) */}
                 <div className="hidden md:flex flex-row gap-8 items-center">
                   <div className="md:w-[45%] flex justify-center items-center">
                     <div className="max-w-[280px] mx-auto">
@@ -553,7 +523,6 @@ const LandingPage = () => {
                   </div>
                 </div>
                 
-                {/* Hidden images for preloading */}
                 <div className="hidden">
                   <img src="/phone_screens/contact_screen.png" alt="Preload" />
                   <img src="/phone_screens/calling_screen.png" alt="Preload" />
@@ -565,35 +534,98 @@ const LandingPage = () => {
         </div>
       </section>
       
-      {/* Testimonials Section (Placeholder) */}
-      <section id="testimonials" className="py-20 px-8 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section id="pricing" className="py-20 px-8 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <div className="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-3">
-              Success Stories
+            <div className="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium mb-3">
+              Enterprise Solutions
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Case Studies</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Transform Your Property Management</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              See how property management companies have transformed their operations with Homm.
+              Tailored AI solutions for property management companies of all sizes.
             </p>
           </div>
           
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-16 text-center bg-white hover:bg-gray-100 transition-colors">
-            <p className="text-gray-500 text-xl font-medium">Case studies coming soon</p>
+          <div className="flex justify-center">
+            <Card className="w-full max-w-md border-2 border-blue-200 shadow-xl hover:shadow-2xl transition-all duration-300 bg-white">
+              <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-center py-8">
+                <CardTitle className="text-2xl md:text-3xl font-bold">Enterprise</CardTitle>
+                <CardDescription className="text-blue-100 text-lg">Custom AI Solutions</CardDescription>
+              </CardHeader>
+              <CardContent className="pt-8 px-8">
+                <div className="text-center mb-6">
+                  <span className="text-gray-600 text-lg font-medium">Tailored to your needs</span>
+                </div>
+                
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                      <Check className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700">Full AI communication suite for leasing, maintenance, and tenant relations</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                      <Check className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700">Custom AI agents trained on your processes and brand voice</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                      <Check className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700">Dedicated integration support with your existing property management software</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                      <Check className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700">24/7 phone and chat support for your team</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                      <Check className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700">Unlimited AI interactions with tenants and prospects</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                      <Sparkles className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <span className="text-gray-700 font-medium">Custom analytics dashboard for your portfolio</span>
+                  </li>
+                </ul>
+              </CardContent>
+              <CardFooter className="px-8 pb-8">
+                <Button 
+                  className="w-full py-6 text-lg shadow-md hover:shadow-xl transition-all bg-gradient-to-r from-blue-500 to-indigo-600"
+                  onClick={() => navigate('/login')}
+                >
+                  Talk to Sales
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+          
+          <div className="mt-16 text-center bg-white p-8 rounded-xl shadow-md border border-gray-200">
+            <h3 className="text-2xl font-bold mb-4">Need a Custom Solution?</h3>
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+              Let our team of AI experts design a tailored solution for your property management needs.
+            </p>
+            <Button 
+              variant="outline" 
+              size="lg"
+              className="font-medium border-2 border-primary hover:bg-primary/10"
+              onClick={() => navigate('/login')}
+            >
+              Schedule a Consultation
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>
       
-      {/* Social Proof Section (Placeholder) */}
-      <section className="py-14 px-8 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center bg-white hover:bg-gray-50 transition-colors">
-            <p className="text-gray-500 text-lg font-medium">Trusted by leading property management companies</p>
-          </div>
-        </div>
-      </section>
-      
-      {/* Final CTA Section */}
       <section className="py-12 sm:py-20 px-4 sm:px-8 bg-gradient-to-br from-primary to-accent text-white">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
@@ -633,7 +665,6 @@ const LandingPage = () => {
         </div>
       </section>
       
-      {/* Footer */}
       <footer className="py-12 sm:py-16 px-4 sm:px-8 bg-gray-900 text-gray-300">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
