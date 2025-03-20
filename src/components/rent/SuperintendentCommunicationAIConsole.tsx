@@ -21,6 +21,7 @@ interface SuperCommunication {
   category: string;
   // Add virtual channel property based on ID to simulate different channels
   channel?: 'sms' | 'email' | 'phone';
+  transcript: string;
 }
 
 interface SuperintendentCommunicationAIConsoleProps {
@@ -168,22 +169,6 @@ const SuperintendentCommunicationAIConsole: React.FC<SuperintendentCommunication
       setSelectedCommunication(null);
     }
   }, [searchQuery, statusFilters, marketFilters, topicFilters]);
-
-  // Generate a mock transcript for the communication
-  const generateMockTranscript = (comm: SuperCommunication) => {
-    const tenantName = comm.tenantName;
-    let transcript = '';
-    
-    if (comm.status === 'urgent') {
-      transcript = `AI: Hello, this is the property management AI assistant. Is there an issue at your unit?\n${tenantName}: Yes, ${comm.message.toLowerCase()}\nAI: I understand this is urgent. I'll notify the superintendent immediately. When did you first notice this issue?\n${tenantName}: About an hour ago\nAI: I've escalated this to Mike Johnson. He'll be there as soon as possible. Would you like me to arrange temporary accommodations if needed?\n${tenantName}: No, I think we'll be okay until it's fixed\nAI: Understood. Michael should contact you shortly with an estimated arrival time. Please call emergency services if the situation worsens.`;
-    } else if (comm.status === 'scheduled') {
-      transcript = `AI: Hello, this is the property management AI assistant. I'm reaching out about maintenance for your unit.\n${tenantName}: Hi, what's this about?\nAI: We need to schedule ${comm.message.toLowerCase()}\n${tenantName}: That would be great. When can someone come?\nAI: Mike Johnson has availability tomorrow between 1-3 PM. Would that work for you?\n${tenantName}: Yes, that time works for me\nAI: Perfect. I've scheduled maintenance for tomorrow between 1-3 PM. Mike Johnson will be handling this. Is there anything else you need assistance with?\n${tenantName}: No, that's all. Thanks!`;
-    } else {
-      transcript = `AI: Hello, this is the property management AI assistant. I'm following up on the recent maintenance in your unit.\n${tenantName}: Yes, the maintenance has been completed\nAI: Great! ${comm.message} Was everything done to your satisfaction?\n${tenantName}: Yes, the work was done well\nAI: I'm glad to hear that. If you notice any issues or have any other maintenance needs, please don't hesitate to let us know.`;
-    }
-    
-    return transcript;
-  };
 
   return (
     <div className="flex border rounded-md overflow-hidden h-[600px]">
@@ -410,7 +395,7 @@ const SuperintendentCommunicationAIConsole: React.FC<SuperintendentCommunication
               
               {activeTab === 'transcript' && (
                 <div>
-                  {generateMockTranscript(selectedCommunication).split('\n').map((line, index) => {
+                  {selectedCommunication.transcript.split('\n').map((line, index) => {
                     const isAI = line.startsWith('AI:');
                     const content = line.replace(/^(AI:|.*?:)/, '').trim();
                     

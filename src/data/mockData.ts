@@ -1537,7 +1537,7 @@ export const mockOccupancyData = [
 // Mock Delinquency Data
 export const mockDelinquencyData = [
   { month: 'Mar 24', Atlanta: 3.2, Tampa: 3.5, Jacksonville: 3.1, Orlando: 3.4, Average: 3.3, 'Atlanta/Osborne Farms': 3.4, 'Atlanta/Suwanee Square': 3.0, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.7, 'Tampa/Avila Bay': 3.3, 'Tampa/Belmont': 3.6, 'Tampa/Scattered': 3.4, 'Jacksonville/Sawyer\'s Preserve': 3.0, 'Jacksonville/Scattered': 3.2, 'Orlando/Scattered': 3.4 },
-  { month: 'Apr 24', Atlanta: 3.4, Tampa: 3.3, Jacksonville: 3.5, Orlando: 3.1, Average: 3.3, 'Atlanta/Osborne Farms': 3.6, 'Atlanta/Suwanee Square': 3.3, 'Atlanta/Scattered': 3.3, 'Tampa/Preserve at Pine Grove': 3.4, 'Tampa/Avila Bay': 3.2, 'Tampa/Belmont': 3.4, 'Tampa/Scattered': 3.2, 'Jacksonville/Sawyer\'s Preserve': 3.7, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.1 },
+  { month: 'Apr 24', Atlanta: 3.4, Tampa: 3.3, Jacksonville: 3.5, Orlando: 3.2, Average: 3.4, 'Atlanta/Osborne Farms': 3.6, 'Atlanta/Suwanee Square': 3.3, 'Atlanta/Scattered': 3.3, 'Tampa/Preserve at Pine Grove': 3.4, 'Tampa/Avila Bay': 3.2, 'Tampa/Belmont': 3.4, 'Tampa/Scattered': 3.2, 'Jacksonville/Sawyer\'s Preserve': 3.7, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.1 },
   { month: 'May 24', Atlanta: 3.1, Tampa: 3.6, Jacksonville: 3.2, Orlando: 3.3, Average: 3.3, 'Atlanta/Osborne Farms': 3.2, 'Atlanta/Suwanee Square': 2.9, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.8, 'Tampa/Avila Bay': 3.5, 'Tampa/Belmont': 3.5, 'Tampa/Scattered': 3.6, 'Jacksonville/Sawyer\'s Preserve': 3.1, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.3 },
   { month: 'Jun 24', Atlanta: 2.8, Tampa: 3.9, Jacksonville: 3.0, Orlando: 3.5, Average: 3.3, 'Atlanta/Osborne Farms': 2.7, 'Atlanta/Suwanee Square': 2.8, 'Atlanta/Scattered': 2.9, 'Tampa/Preserve at Pine Grove': 4.0, 'Tampa/Avila Bay': 3.8, 'Tampa/Belmont': 3.9, 'Tampa/Scattered': 3.9, 'Jacksonville/Sawyer\'s Preserve': 2.9, 'Jacksonville/Scattered': 3.1, 'Orlando/Scattered': 3.5 },
   { month: 'Jul 24', Atlanta: 3.0, Tampa: 3.7, Jacksonville: 2.8, Orlando: 3.7, Average: 3.3, 'Atlanta/Osborne Farms': 3.1, 'Atlanta/Suwanee Square': 3.0, 'Atlanta/Scattered': 2.9, 'Tampa/Preserve at Pine Grove': 3.6, 'Tampa/Avila Bay': 3.9, 'Tampa/Belmont': 3.7, 'Tampa/Scattered': 3.6, 'Jacksonville/Sawyer\'s Preserve': 2.6, 'Jacksonville/Scattered': 3.0, 'Orlando/Scattered': 3.7 },
@@ -1567,18 +1567,41 @@ export const mockWorkOrdersData: ChartData[] = [
 // Mock Rent Communications
 export const mockRentCommunications: RentCommunication[] = [
   {
+    id: "comm4",
+    tenantId: "6",
+    tenantName: "Robert Martinez",
+    channel: "voice",
+    dateTime: "2025-03-18T11:30:00",
+    summary: "Urgent payment discussion",
+    status: "committed",
+    rentStatus: "delinquent",
+    transcript: "AI: Hello Robert, this is Susan from Property Homes. I'm calling about your significantly overdue rent payment. Our records show you have an outstanding balance of $1,500. First, I want to check that everything is okay for you.\nRobert: Yes, thanks for checking in. I'm aware of the balance. I've been having some financial difficulties but I just received my paycheck today.\nAI: I understand. When do you think you'll be able to make a payment?\nRobert: I can make a payment of $750 today and the remaining $750 next Friday.\nAI: That sounds like a good plan. I'll note that in your account. \nRobert: Thank you for your understanding. Have a very good day.\nAI: You're welcome. Have a good day too.",
+    unit: "3456 Suwanee Creek Road",
+    amount: 1500,
+    dueDate: "2025-03-05",
+    contactPhone: "(555) 678-9012",
+    contactEmail: "robert.martinez@example.com",
+    propertyManager: "John Davis",
+    actionItems: [
+      "Payment plan established via phone",
+      "Expect $750 payment today",
+      "Expect remaining $750 next Friday",
+      "Follow up if first payment not received"
+    ]
+  },
+  {
     id: "comm1",
     tenantId: "2",
     tenantName: "Michael Chen",
     channel: "sms",
-    dateTime: "2023-05-15T10:30:00",
+    dateTime: "2025-03-15T10:30:00",
     summary: "Rent payment reminder sent",
     status: "pending",
     rentStatus: "delinquent",
-    transcript: "AI: Hello Michael, this is a friendly reminder that your rent payment of $1,450 is now 15 days past due. Please make your payment to avoid additional late fees.\nMichael: Thanks for the reminder, I'll take care of it today.",
+    transcript: "AI: Hello Michael, this is Susan from Property Homes. I'm calling about your significantly overdue rent payment. Our records show you have an outstanding balance of $1,450. First, I want to check that everything is okay for you.\nMichael: Yes, thanks for checking in. I'm aware of the balance. I've been having some financial difficulties but I just received my paycheck today.\nAI: I understand. When do you think you'll be able to make a payment?\nRobert: I can make a payment of $750 today and the remaining $750 next Friday.\nAI: That sounds like a good plan. I'll note that in your account. You can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nRobert: Thank you for your understanding. Have a good day.\nAI: You're welcome. Have a good day too.",
     unit: "4578 Magnolia Drive",
     amount: 1450,
-    dueDate: "2023-05-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 234-5678",
     contactEmail: "michael.chen@example.com",
     propertyManager: "John Davis",
@@ -1593,14 +1616,14 @@ export const mockRentCommunications: RentCommunication[] = [
     tenantId: "3",
     tenantName: "Jessica Williams",
     channel: "email",
-    dateTime: "2023-05-14T09:15:00",
+    dateTime: "2025-03-14T09:15:00",
     summary: "Upcoming rent payment reminder",
     status: "pending",
     rentStatus: "pending",
-    transcript: "AI: Dear Jessica Williams, This is a friendly reminder that your rent payment of $1,350 is due on May 1st. Please make your payment on time to avoid late fees.\nJessica: Thank you for the reminder. I've scheduled the payment for tomorrow.",
+    transcript: "AI: Hello Jessica, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,350 was due on March 5th. Please make your payment as soon as possible to avoid late fees.\nJessica: Thank you for the reminder. I've scheduled a reminder to make the payment tomorrow. Can you send me a link to the payment portal?\nAI: Absolutely, you can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nJessica: Thank you. it'll be done in time.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nJessica: Thank you. Have a good day too.",
     unit: "789 Oakwood Circle",
     amount: 1350,
-    dueDate: "2023-05-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 345-6789",
     contactEmail: "jessica.williams@example.com",
     propertyManager: "John Davis",
@@ -1615,14 +1638,14 @@ export const mockRentCommunications: RentCommunication[] = [
     tenantId: "5",
     tenantName: "Emily Taylor",
     channel: "sms",
-    dateTime: "2023-05-13T14:45:00",
+    dateTime: "2025-03-03T14:45:00",
     summary: "Rent payment reminder",
     status: "pending",
     rentStatus: "pending",
-    transcript: "AI: Hello Emily, this is a friendly reminder that your rent payment of $1,550 is due on May 1st. Please make your payment on time to avoid late fees.\nEmily: I'll make the payment this weekend. Thanks for the reminder.",
+    transcript: "AI: Hello Emily, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,550 is due in two days, on March 5th. Please make your payment on time to avoid late fees.\nEmily: I'll make the payment tomorrow. Thanks for the reminder.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nEmily: Thank you. Have a good day too.",
     unit: "2345 Roswell Road",
-    amount: 1550,
-    dueDate: "2023-05-01",
+    amount: 0,
+    dueDate: "2025-03-05",
     contactPhone: "(555) 567-8901",
     contactEmail: "emily.taylor@example.com",
     propertyManager: "John Davis",
@@ -1633,41 +1656,18 @@ export const mockRentCommunications: RentCommunication[] = [
     ]
   },
   {
-    id: "comm4",
-    tenantId: "6",
-    tenantName: "Robert Martinez",
-    channel: "voice",
-    dateTime: "2023-05-12T11:30:00",
-    summary: "Urgent payment discussion",
-    status: "committed",
-    rentStatus: "delinquent",
-    transcript: "AI: Hello Robert, I'm calling about your significantly overdue rent payment. Our records show you have an outstanding balance of $1,500.\nRobert: Yes, I'm aware. I've been having some financial difficulties but I just received my paycheck today.\nAI: I understand. When do you think you'll be able to make a payment?\nRobert: I can make a payment of $750 today and the remaining $750 next Friday.\nAI: That sounds like a good plan. I'll note that in your account.",
-    unit: "3456 Suwanee Creek Road",
-    amount: 1300,
-    dueDate: "2023-04-01",
-    contactPhone: "(555) 678-9012",
-    contactEmail: "robert.martinez@example.com",
-    propertyManager: "John Davis",
-    actionItems: [
-      "Payment plan established via phone",
-      "Expect $750 payment today",
-      "Expect remaining $750 next Friday",
-      "Follow up if first payment not received"
-    ]
-  },
-  {
     id: "comm5",
     tenantId: "7",
     tenantName: "Amanda Lee",
     channel: "email",
-    dateTime: "2023-05-11T09:00:00",
+    dateTime: "2025-03-11T09:00:00",
     summary: "Late payment notification",
     status: "committed",
     rentStatus: "delinquent",
-    transcript: "AI: Dear Amanda Lee, Our records show that your rent payment of $1,400 is now overdue. Please make your payment as soon as possible to avoid additional late fees.\nAmanda: I apologize for the delay. I've been out of town and will make the payment when I return tomorrow.",
+    transcript: "AI: Hello Amanda, this is Susan from Property Homes. Our records show that your rent payment of $1,400 is now overdue. Please make your payment as soon as possible to avoid additional late fees.\nAmanda: I apologize for the delay. I've been out of town and will make the payment when I return tomorrow.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nAmanda: Actually, could you send me a link to the payment portal?\nAI: Absolutely, you can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nAmanda: Thank you. Have a good day too.\nAI: You're welcome. Have a good day too.",
     unit: "8901 Piedmont Avenue",
     amount: 1400,
-    dueDate: "2023-05-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 789-0123",
     contactEmail: "amanda.lee@example.com",
     propertyManager: "John Davis",
@@ -1682,14 +1682,14 @@ export const mockRentCommunications: RentCommunication[] = [
     tenantId: "8",
     tenantName: "Daniel Kim",
     channel: "sms",
-    dateTime: "2023-05-10T16:15:00",
+    dateTime: "2025-03-10T16:15:00",
     summary: "Payment plan discussion",
     status: "failed",
     rentStatus: "delinquent",
-    transcript: "AI: Hello Daniel, I'm reaching out about your overdue rent payment of $1,500. Would you like to discuss payment options?\nDaniel: Yes, I've been meaning to call about that. I can pay $500 now and then $500 each week for the next two weeks.\nAI: That sounds like a reasonable plan. I'll update your account with this arrangement.",
+    transcript: "AI: Hello Daniel, this is Susan from Property Homes. I'm reaching out about your overdue rent payment of $1,500. I see that it's unusual for you to be late with your rent. Is everything okay?\nDaniel: Yes, thanks for checking in. I've been having some financial difficulties last month but I just received my paycheck today.\nAI: I understand. When do you think you'll be able to make a payment?\nDaniel: I can make a payment of $500 now and then $500 each week for the next two weeks.\nAI: That sounds like a reasonable plan. I'll update your account with this arrangement. You can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nDaniel: Thank you for your understanding. Have a good day.\nAI: You're welcome. Have a good day too.",
     unit: "6789 Osborne Road",
     amount: 1500,
-    dueDate: "2023-05-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 890-1234",
     contactEmail: "daniel.kim@example.com",
     propertyManager: "John Davis",
@@ -1706,20 +1706,20 @@ export const mockRentCommunications: RentCommunication[] = [
     tenantId: "9",
     tenantName: "Sophia Garcia",
     channel: "email",
-    dateTime: "2023-05-09T10:45:00",
+    dateTime: "2025-03-07T10:45:00",
     summary: "Rent payment reminder",
     status: "pending",
     rentStatus: "pending",
-    transcript: "AI: Dear Sophia Garcia, This is a friendly reminder that your rent payment of $1,275 is due on May 1st. Please make your payment on time to avoid late fees.\nSophia: Thank you for the reminder. I'll make the payment this week.",
+    transcript: "AI: Hello Sophia, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,275 was due two days ago, on March 5th. Please make your payment as soon as possible to avoid late fees.\nSophia: Thank you for the reminder. I'll go on the portal today and make the payment.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nSophia: Thank you. Have a good day too.",
     unit: "5432 McGinnis Ferry Road",
     amount: 1275,
-    dueDate: "2023-05-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 901-2345",
     contactEmail: "sophia.garcia@example.com",
     propertyManager: "John Davis",
     actionItems: [
       "Payment reminder sent via email",
-      "Tenant promised payment this week",
+      "Tenant promised payment on March 9th",
       "Follow up if payment not received by Friday"
     ]
   },
@@ -1728,21 +1728,21 @@ export const mockRentCommunications: RentCommunication[] = [
     tenantId: "11",
     tenantName: "Olivia Thompson",
     channel: "sms",
-    dateTime: "2023-05-08T13:30:00",
+    dateTime: "2025-03-08T13:30:00",
     summary: "Rent payment reminder",
     status: "committed",
     rentStatus: "pending",
-    transcript: "AI: Hello Olivia, this is a friendly reminder that your rent payment of $1,225 is due on May 1st. Please make your payment on time to avoid late fees.\nOlivia: Thanks for the reminder! I'll make the payment today.",
+    transcript: "AI: Hello Olivia, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,225 was due three days ago, on March 5th. Please make your payment as soon as possible to avoid late fees.\nOlivia: Thanks for the reminder! I'll make the payment today. Could you send me the payment link?\nAI: Absolutely, you can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nOlivia: Thank you. Have a good day.\nAI: You're welcome. Have a good day too.",
     unit: "7890 Avila Circle",
     amount: 1225,
-    dueDate: "2023-05-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 123-4567",
     contactEmail: "olivia.thompson@example.com",
     propertyManager: "Emily Watson",
     actionItems: [
       "Payment reminder sent via SMS",
       "Tenant committed to pay today",
-      "Verify payment receipt tomorrow"
+      "Verify payment receipt on March 11"
     ]
   },
   {
@@ -1750,21 +1750,21 @@ export const mockRentCommunications: RentCommunication[] = [
     tenantId: "12",
     tenantName: "William Brown",
     channel: "voice",
-    dateTime: "2023-05-07T14:00:00",
+    dateTime: "2025-03-07T14:00:00",
     summary: "Urgent payment discussion",
     status: "pending",
     rentStatus: "delinquent",
-    transcript: "AI: Hello William, I'm calling about your significantly overdue rent payment. Our records show you have an outstanding balance of $2,950, which is equivalent to two months of rent.\nWilliam: I've been dealing with some serious financial hardships. I lost my job last month.\nAI: I'm sorry to hear that. Would you like to discuss potential assistance programs or a payment plan?\nWilliam: Yes, that would be very helpful. I'm actively looking for a new job and expect to have income again soon.\nAI: We can work with you on this. Let's set up a meeting with the property manager to discuss options.",
+    transcript: "AI: Hello William, this is Susan from Property Homes. I'm calling about your significantly overdue rent payment. Our records show you have an outstanding balance of $2,950, which is equivalent to two months of rent.\nWilliam: I've been dealing with some serious financial hardships. I lost my job last month.\nAI: I'm sorry to hear that. Would you like to discuss potential assistance programs or a payment plan to avoid eviction?\nWilliam: Yes, that would be very helpful. I'm actively looking for a new job and expect to have income again soon.\nAI: We can work with you on this. Let's set up a meeting with the property manager to discuss options.\nWilliam: Thank you for your understanding. I am fully free starting tomorrow to discuss options.\nAI: Perfect. I set up a meeting with Emily Watson tomorrow March 8th at 10:30 AM. You'll be able to discuss next steps with her.\nWilliam: Thank you. My apologies again for this delay. It's not in my habits. Have a good day.\nAI: You're welcome. Have a good day too.",
     unit: "4321 Belmont Shores Drive",
     amount: 1475,
-    dueDate: "2023-04-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 234-5678",
     contactEmail: "william.brown@example.com",
     propertyManager: "Emily Watson",
     actionItems: [
       "Urgent payment discussion via phone",
       "Tenant experiencing significant financial hardship",
-      "Schedule meeting with property manager",
+      "Scheduled meeting with Emily Watson on March 8th at 10:30 AM",
       "Research assistance programs for tenant",
       "Flag account for special handling"
     ]
@@ -1774,21 +1774,21 @@ export const mockRentCommunications: RentCommunication[] = [
     tenantId: "14",
     tenantName: "Alexander Martin",
     channel: "email",
-    dateTime: "2023-05-06T11:45:00",
+    dateTime: "2025-03-16T11:45:00",
     summary: "Late payment notification",
     status: "delivered",
     rentStatus: "delinquent",
-    transcript: "AI: Dear Alexander Martin, Your rent payment of $1,250 is now significantly overdue. Our records show you have an outstanding balance of $1,875. Please contact us immediately to discuss payment options and avoid potential eviction proceedings.\nAlexander: I apologize for the delay. I've been hospitalized for the past few weeks. I'll call the office tomorrow to discuss a payment plan.",
+    transcript: "AI: Hello Alexander, this is Susan from Property Homes. Your rent payment of $1,250 is now significantly overdue. Our records show you have an outstanding balance of $1,250. Please contact us immediately to discuss payment options and avoid potential eviction proceedings.\nAlexander: I apologize for the delay. I've been hospitalized for the past few weeks. I'll call the office tomorrow to discuss a payment plan.\nAI: I understand. I'll pass on your message to the property manager. Have a good day.\nAlexander: Thank you. Have a good day too.",
     unit: "5544 Riverside Drive",
     amount: 1250,
-    dueDate: "2023-04-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 456-7890",
     contactEmail: "alexander.martin@example.com",
     propertyManager: "Michael Roberts",
     actionItems: [
       "Late payment notification sent via email",
       "Tenant reported medical emergency",
-      "Expect call from tenant tomorrow",
+      "Expect call from tenant on March 17th",
       "Prepare payment plan options",
       "Flag for compassionate handling"
     ]
@@ -1798,21 +1798,21 @@ export const mockRentCommunications: RentCommunication[] = [
     tenantId: "15",
     tenantName: "Isabella Clark",
     channel: "sms",
-    dateTime: "2023-05-05T15:20:00",
+    dateTime: "2025-03-05T15:20:00",
     summary: "Rent payment reminder",
     status: "failed",
     rentStatus: "pending",
-    transcript: "AI: Hello Isabella, this is a friendly reminder that your rent payment of $1,500 is due on May 1st. Please make your payment on time to avoid late fees.\nIsabella: Thank you for the reminder. I've already set up automatic payment for tomorrow.",
+    transcript: "AI: Hello Isabella, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,500 is due today. Please make it on time to avoid late fees.\nIsabella: Thank you for the reminder. I've already set up automatic payment it should be processed today.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nIsabella: Thank you. Have a good day too.",
     unit: "3210 Lake Eola Drive",
     amount: 1500,
-    dueDate: "2023-05-01",
+    dueDate: "2025-03-05",
     contactPhone: "(555) 567-8901",
     contactEmail: "isabella.clark@example.com",
     propertyManager: "Lisa Johnson",
     actionItems: [
       "Reminder sent via SMS",
       "Tenant confirmed automatic payment scheduled",
-      "Verify payment receipt tomorrow",
+      "Verify payment receipt on March 8th",
       "Consider suggesting enrollment in autopay program"
     ]
   }
@@ -1826,112 +1826,204 @@ export const mockSuperCommunications = [
   {
     id: '1',
     tenantName: 'Robert Garcia',
-    unit: 'Oakwood 101',
+    unit: '101 Oakwood Drive',
     community: 'Atlanta/Osborne Farms',
     superintendent: 'Michael Rodriguez',
     status: 'urgent',
-    message: 'Water leak reported in bathroom, possible pipe burst. Tenant reports water coming through ceiling. Immediate attention required.',
+    message: 'Water leak reported in bathroom, possible issue with bathtub joint. Tenant reports a small puddle on the floor. No other leak reported.',
     date: '2025-03-15T09:30:00',
-    category: 'plumbing'
+    category: 'plumbing',
+    transcript: `Robert Garcia: Hello? This is Robert Garcia from 101 Oakwood Drive. I need help in my house! There's a small water leak in my bathroom.
+AI: Hello Robert, this is James, from Property Homes. I'm sorry to hear that. First of all, are you safe?
+Robert Garcia: Yes, I'm safe. I'm in the kitchen. 
+AI: Can you describe what's happening in more detail to help our technicians understand the issue?
+Robert Garcia: I think it's an issue with my bathtub joint. Water is dripping from the joint and pooling on the floor. It's not a big leak but it does not seem to be stopping!
+AI: When did you first notice the leak?
+Robert Garcia: About 20 minutes ago when I was taking a shower.
+AI: I've escalated this to Michael Rodriguez. He can be here anytime tomorrow. Do you have a preferred time?
+Robert Garcia: I'm working from home, so I can meet him whenever works best for him.
+AI: Perfect. I've scheduled him for tomorrow between 10 AM and noon. I'll let him know. In the meantime, he recommends taking short showers and placing a mop at the place of the leak. Can you do that?
+Robert Garcia: Yes, absolutely. Thank you for your help.
+AI: You're welcome. Have a good day.
+Robert Garcia: Thank you. You too.`
   },
   {
     id: '2',
     tenantName: 'Jennifer Lopez',
-    unit: 'Riverfront 205',
+    unit: '205 Riverfront Drive',
     community: 'Tampa/Preserve at Pine Grove',
     superintendent: 'Michael Rodriguez',
     status: 'scheduled',
-    message: 'HVAC maintenance scheduled for tomorrow between 1-3 PM. Unit is cooling but not efficiently.',
+    message: 'HVAC maintenance scheduled for March 25th between 1-3 PM. Unit is cooling but not efficiently.',
     date: '2025-03-14T14:15:00',
-    category: 'hvac'
+    category: 'hvac',
+    transcript: `Jennifer Lopez: Hi, this is Jennifer Lopez from 205 Riverfront Drive. I'm contacting you for my AC. It's been running all day but it's barely keeping the house cool.
+AI: Hello Jennifer, this is James, from Property Homes. I'm sorry to hear you're having trouble with your cooling system. How long has this been happening?
+Jennifer Lopez: About a week now. It's getting worse and my electricity bill is going to be huge.
+AI: I understand your concern. We need to schedule HVAC maintenance to check your unit's cooling efficiency.
+Jennifer Lopez: That would be great. When can someone come?
+AI: Michael Rodriguez has availability on March 25th. Do you have preferences between the morning and the afternoon?
+Jennifer Lopez: The beginning of the afternoon would be great.
+AI: Perfect. Would 1-3 PM work for you?
+Jennifer Lopez: Yes, that time works for me. I'll be home.
+AI: Perfect. I've scheduled HVAC maintenance for tomorrow between 1-3 PM. Michael Rodriguez will be handling this. Is there anything else you need assistance with?
+Jennifer Lopez: No, that's all. Thank you!`
   },
   {
     id: '3',
     tenantName: 'Thomas White',
-    unit: 'Sunset 304',
+    unit: '304 Sunset Drive',
     community: 'Jacksonville/Sawyer\'s Preserve',
     superintendent: 'Michael Rodriguez',
     status: 'completed',
-    message: 'Replaced broken garbage disposal as requested. Also noticed and fixed a small leak under the sink.',
+    message: 'Replaced broken garbage disposal as requested. Satisfied customer.',
     date: '2025-03-13T11:45:00',
-    category: 'appliance'
+    category: 'appliance',
+    transcript: `Thomas White: Hi, this is Thomas White from 304 Sunset Drive. I wanted to update you on the fix for my garbage disposal. Michael was great and fixed everything very quickly. It is now back to normal.
+AI: Hi Thomas, this is James from Property Homes. I'm glad to hear that. Is there anything else you need assistance with at this time?
+Thomas White: No, that's all. Thank you!
+AI: You're welcome. I am happy that we could help you out. Please don't hesite to leave a review on Google if you have a moment. This is very helpful for us.
+Thomas White: I will do that. Thank you for your help.
+AI: You're welcome. Have a good day.`
   },
   {
     id: '4',
     tenantName: 'Patricia Martinez',
-    unit: 'Oakwood 205',
+    unit: '205 Oakwood Drive',
     community: 'Atlanta/Osborne Farms',
     superintendent: 'Michael Rodriguez',
     status: 'scheduled',
     message: 'Smoke detector replacement scheduled for Mar 19. Current detector is beeping intermittently.',
     date: '2025-03-13T16:30:00',
-    category: 'safety'
+    category: 'safety',
+    transcript: `Patricia Martinez: Hello, this is Patricia Martinez from 205 Oakwood Drive. I need to report an issue with my smoke detector. It's been beeping randomly even though I just changed the battery.
+AI: Hello Patricia, thanks for reaching out. This is James, from Property Homes. Thank you for reporting this safety concern. How long has the smoke detector been beeping intermittently?
+Patricia Martinez: For about two days now. I've tried resetting it but it keeps happening.
+AI: We need to schedule a replacement for your smoke detector as soon as possible. Safety equipment needs to be in perfect working order.
+Patricia Martinez: I agree. When can someone come to replace it?
+AI: We have an opening on March 19th. Michael Rodriguez can come by to install a new smoke detector. Would that work for your schedule?
+Patricia Martinez: Yes, March 19th is fine. I'm free in the morning.What time?
+AI: He can come between 10 AM and noon. We'll provide a new detector and make sure it's properly installed.
+Patricia Martinez: Perfect, thank you for addressing this quickly.
+AI: Of course. Your safety is our priority. We'll see you on the 19th.`
   },
   {
     id: '5',
-    tenantName: 'James Taylor',
-    unit: 'Riverfront 110',
+    tenantName: 'Mark Taylor',
+    unit: '110 Riverfront Drive',
     community: 'Tampa/Preserve at Pine Grove',
     superintendent: 'Michael Rodriguez',
     status: 'urgent',
     message: 'No hot water in apartment. Tenant has reported water heater making unusual noises yesterday.',
     date: '2025-03-15T08:15:00',
-    category: 'plumbing'
+    category: 'plumbing',
+    transcript: `Mark Taylor: Hello, this is Mark Taylor from 110 Riverfront Drive. I'm contacting you for my water heater. It's not working and making unusual noises.
+AI: Hello Mark, this is James from Property Homes. I'm sorry to hear you're having trouble with your water heater. How long has it been making unusual noises?
+Mark Taylor: About 2 days now. It's making a loud banging noise when I turn it on.
+AI: I understand. I'll arrange for our maintenance team to take a look. Would tomorrow morning work for you?
+Mark Taylor: Yes, that would be great.
+AI: Perfect. I've scheduled maintenance for tomorrow morning between 10 AM and noon. Michael Rodriguez will be handling this. Is there anything else you need assistance with?
+Mark Taylor: No, that's all. Thank you!
+AI: You're welcome. Have a good day.`
   },
   {
     id: '6',
     tenantName: 'Mary Johnson',
-    unit: 'Sunset 202',
+    unit: '202 Sunset Drive',
     community: 'Orlando/Scattered',
     superintendent: 'Michael Rodriguez',
-    status: 'completed',
+    status: 'scheduled',
     message: 'Repaired loose balcony railing as reported. Inspected all other railings and found them secure.',
     date: '2025-03-10T13:20:00',
-    category: 'structural'
+    category: 'structural',
+    transcript: `Mary Johnson: Hello, this is Mary Johnson from 202 Sunset Drive. Im contacting you for my balcony railing. It's loose and making a loud noise when I walk on it.
+AI: Hello Mary, this is James from Property Homes. I'm sorry to hear you're having trouble with your balcony railing. How long has it been loose?
+Mary Johnson: About 2 days now. It's making a loud banging noise when I walk on it.
+AI: I understand. I'll arrange for our maintenance team to take a look. Would tomorrow morning work for you?
+Mary Johnson: Yes, that would be great.
+AI: Perfect. I've scheduled maintenance for tomorrow morning between 1-3PM. Michael Rodriguez will be handling this. Is there anything else you need assistance with?
+Mary Johnson: No, that's all. Thank you!
+AI: You're welcome. Have a good day.`
   },
   {
     id: '7',
     tenantName: 'Daniel Brown',
-    unit: 'Oakwood 303',
+    unit: '303 Oakwood Lane',
     community: 'Atlanta/Suwanee Square',
     superintendent: 'Michael Rodriguez',
     status: 'scheduled',
     message: 'Window replacement scheduled for Mar 20. Current window has crack that is expanding.',
     date: '2025-03-12T10:30:00',
-    category: 'windows'
+    category: 'windows',
+    transcript: `Daniel Brown: Hello, this is Daniel Brown from 303 Oakwood Lane. I'm contacting you for my window. It's been cracked by some kids playing in the street.
+AI: Hello Daniel, this is James from Property Homes. I'm sorry to hear you're having trouble with your window. When did that happen?
+Daniel Brown: About 2 days now. It's fine it's not letting in any air, but it's annoying.
+AI: I understand. I'll arrange for our maintenance team to take a look. Would March 28th in the morning work for you?
+Daniel Brown: Yes, that would be great.
+AI: Perfect. I've scheduled maintenance for March 28th between 10 AM and noon. Michael Rodriguez will be handling this. Is there anything else you need assistance with?
+Daniel Brown: No, that's all. Thank you!
+AI: You're welcome. Have a good day.`
   },
   {
     id: '8',
-    tenantName: 'Sarah Wilson',
-    unit: 'Riverfront 307',
+    tenantName: 'Robert Wilson',
+    unit: '307 Riverfront Circle',
     community: 'Tampa/Avila Bay',
     superintendent: 'Michael Rodriguez',
-    status: 'completed',
-    message: 'Fixed kitchen light fixture flickering issue. Replaced ballast and verified operation.',
+    status: 'scheduled',
+    message: 'Light fixture flickering issue in the living room. Scheduled maintenance for March 28th between 1-3PM.',
     date: '2025-03-11T15:45:00',
-    category: 'electrical'
+    category: 'electrical',
+    transcript: `Robert Wilson: Hello, this is Robert Wilson from 307 Riverfront Circle. I'm contacting you for my light fixture in the living room. It's flickering and making a buzzing noise when I turn it on.
+AI: Hello Robert, this is James from Property Homes. I'm sorry to hear you're having trouble with your light fixture. How long has it been flickering?
+Robert Wilson: About 2 days now. I changed the light bulbs but nothing changed, so I suspect that it is something electrical.
+AI: I understand. I'll arrange for our maintenance team to take a look. Would March 28th between 1-3PM work for you?
+Robert Wilson: Yes, that would be great.
+AI: Perfect. I've scheduled maintenance for March 28th between 1-3PM. Michael Rodriguez will be handling this. In the meantime, please refrain from using it to ensure that you keep safe. Is there anything else you need assistance with?
+Robert Wilson: No, that's all. Thank you!
+AI: You're welcome. Have a good day.`
   },
   {
     id: '9',
     tenantName: 'Michael Davis',
-    unit: 'Sunset 105',
+    unit: '105 Sunset Drive',
     community: 'Jacksonville/Scattered',
     superintendent: 'Michael Rodriguez',
     status: 'urgent',
-    message: 'Front door lock jammed, tenant unable to enter apartment. Locksmith dispatched.',
+    message: 'Front door lock jammed, tenant unable to enter house. Locksmith dispatched.',
     date: '2025-03-15T17:00:00',
-    category: 'locks'
+    category: 'locks',
+    transcript: `Michael Davis: Hey, this is Michael Davis from 105 Sunset Drive. I'm contacting you for my lock. It's jammed and I can't get in my house.
+AI: Hello Michael, this is James from Property Homes. Thanks for calling. I'm sorry to hear you're having trouble with your lock. First of all, are you safe?
+Michael Davis: Yes, I'm safe. I'm just locked outside and it's very annoying. 
+AI: We will get a technician to come by and help you out as soon as possible. Is it the first time you've had this issue?
+Michael Davis: Yes, it's the first time.
+AI: Okay. Thanks for your patience. I've escalated this to our locksmith. He should be here in the next hour.
+Michael Davis: Thank you.
+AI: You're welcome. Please don't hesitate to call back if the situation escalates. Have a good day.`
   },
   {
     id: '10',
     tenantName: 'Emily Thompson',
-    unit: 'Oakwood 404',
+    unit: '404 Oakwood Drive',
     community: 'Atlanta/Scattered',
     superintendent: 'Michael Rodriguez',
-    status: 'scheduled',
-    message: 'Dishwasher making loud noise during operation. Repair scheduled for Mar 18.',
+    status: 'completed',
+    message: 'Dishwasher making loud noise during operation. Self-resolved by tenant.',
     date: '2025-03-14T09:15:00',
-    category: 'appliance'
+    category: 'appliance',
+    transcript: `Emily Thompson: Hello, this is Emily Thompson from 404 Oakwood Drive. I'm contacting you for my dishwasher. It's been making a loud noise for the past 4 days.
+AI: Hello Emily, this is James from Property Homes. I'm sorry to hear you're having trouble with your dishwasher. Have you checked the filter? Sometimes, things can get stuck in there and cause the noise.
+Emily Thompson: I'll go have a look. 
+AI: Thank you.
+Emily Thompson: Oh wait, it seems like something a spoon is stuck in the filter. Do you want me to remove it?
+AI: Yes, please.
+Emily Thompson: It is done. What should I do now?
+AI: You can start by trying to run it again. If the noise persists, we will send a technician to take a look.
+Emily Thompson: Okay. Thank you.
+AI: Please keep me updated as soon as you've tried it.
+Emily Thompson: Will do. Thank you!
+AI: You're welcome. Have a good day.`
   }
 ];
 
@@ -1948,15 +2040,21 @@ export const mockLeasingCommunications = [
     community: 'Osborne Farms',
     market: 'Atlanta',
     leasingAgent: 'Emily Wilson',
-    status: 'inquiry',
+    status: 'tour_scheduled',
     message: 'Initial inquiry about 3-bedroom homes, pricing, and availability for April move-in. Interested in pet policies and yard size.',
     date: '2025-03-12T10:30:00',
-    category: 'inquiry',
-    transcript: `AI: Hello! Thank you for your interest in our Atlanta properties. How can I help you today?
-Sarah Johnson: Hi, I'm looking for information about homes in the Osborne Farms area.
-AI: Great! We have several properties available in Osborne Farms. Are you interested in a specific size or number of bedrooms?
+    category: 'tour',
+    transcript: `Sarah Johnson: Hello, I'm trying to reach Property Homes. I'm looking for a new house around Dallas, GA.
+AI: Hello Sarah, this is Jessica from Property Homes. Thank you for reaching out to Property Homes. We have lovely houses in our brand new community in Dallas. Are you interested in a specific size or number of bedrooms?
 Sarah Johnson: I'm looking for a 3-bedroom home with a fenced yard. What's your pet policy?
-AI: Many of our homes in Osborne Farms have 3 bedrooms and fenced yards. We are pet-friendly with a $500 pet deposit and $35 monthly pet rent. We have a lovely property at 245 Oakridge Drive that might be perfect for you. Would you like to schedule a tour?`
+AI: Many of our homes in Osborne Farms have 3 bedrooms and fenced yards. We are pet-friendly with a $500 pet deposit and $35 monthly pet rent. We have a lovely property at 245 Oakridge Drive that might be perfect for you. Would you like to schedule a tour?
+Sarah Johnson: Yes, please. I'm available to tour for all of next week.
+AI: Perfect! How about we schedule a tour for Tuesday 3/25 at 10 AM?
+Sarah Johnson: That works for me. Can you also send me some information about the community?
+AI: Absolutely! I'll send you a brochure with the confirmation of the tour. Do you want me to send it at this number or would you like me to send it to your email?
+Sarah Johnson: This number is perfect.
+AI: That sounds good. I'll send it right away. Thank you and have a great day! Please let me know if you have any questions.
+Sarah Johnson: Thank you!`
   },
   {
     id: '2',
@@ -1969,28 +2067,33 @@ AI: Many of our homes in Osborne Farms have 3 bedrooms and fenced yards. We are 
     message: 'Tour scheduled for tomorrow at 2 PM. Looking for 4-bedroom with fenced yard. Mentioned parking needs for 2 vehicles.',
     date: '2025-03-14T14:15:00',
     category: 'tour',
-    transcript: `AI: Hello! I'd like to confirm your tour scheduled for 3/14/2025, 2:15:00 PM at 187 Riverside Lane. Is this time still convenient for you?
+    transcript: `AI: Hello Michael. This is Jessica from Property Homes. I'd like to confirm your tour scheduled for 3/28/2025, 2:15:00 PM at 187 Riverside Lane. Is this time still convenient for you?
 Michael Chen: Yes, that works for me. I'm especially interested in seeing the yard and garage space.
 AI: Perfect! Your tour is confirmed with Emily Wilson, our leasing specialist. She'll show you the entire property including the yard and garage. Is there anything specific you'd like to know about the neighborhood?
 Michael Chen: I'd like to know about nearby schools and shopping areas.
-AI: Absolutely! Emily Wilson will provide information about the local schools and amenities. The property is near several well-rated schools and just 10 minutes from a shopping center. We look forward to meeting you!`
+AI: Absolutely! The property is near several well-rated schools and just 10 minutes from a shopping center. It is one of the safest neighborhoods in Tampa. 
+Michael Chen: That sounds great.
+AI: Please let me know if you have any questions. Emily will also be available to answer any questions you have during the tour. We look forward to meeting you!`
   },
   {
     id: '3',
-    prospectName: 'Jessica Rodriguez',
+    prospectName: 'Amelia Rodriguez',
     propertyInterest: '722 Parkview Avenue',
     community: 'Scattered',
     market: 'Orlando',
     leasingAgent: 'Emily Wilson',
-    status: 'application_sent',
+    status: 'application_received',
     message: 'Application sent for review. Follow-up call about income verification documents and pet deposit information.',
     date: '2025-03-11T11:45:00',
     category: 'application',
-    transcript: `AI: Hello Jessica Rodriguez, I'm following up regarding your application for 722 Parkview Avenue. Our team is currently reviewing your information.
-Jessica Rodriguez: Thanks for the update. How long does the review process usually take?
+    transcript: `AI: Hello Amelia, this is Jessica from Property Homes. I'm following up regarding your application for 722 Parkview Avenue. Our team is currently reviewing your information.
+Amelia Rodriguez: Thanks for the update. How long does the review process usually take?
 AI: Our standard review process takes 2-3 business days. We're checking credit history, income verification, and rental references. Do you have any questions about the process?
-Jessica Rodriguez: What's the minimum credit score requirement?
-AI: We typically look for a credit score of 650 or higher, but we consider the complete application. If needed, we can discuss options like a higher security deposit or having a guarantor. The 722 Parkview Avenue property is very popular, so we're trying to process applications quickly.`
+Amelia Rodriguez: What's the minimum credit score requirement?
+AI: We typically look for a credit score of 650 or higher, but we consider the complete application. If needed, we can discuss options like a higher security deposit or having a guarantor. The 722 Parkview Avenue property is very popular, so we're trying to process applications quickly.
+Amelia Rodriguez: Thank you! Please tell me if you need anything else from me.
+AI: You're welcome! I'll keep you posted on the status of your application, we have everything we need for the moment. Have a great day!
+Amelia Rodriguez: Thank you, you too!`
   },
   {
     id: '4',
@@ -2003,11 +2106,13 @@ AI: We typically look for a credit score of 650 or higher, but we consider the c
     message: 'Application received. Discussion about credit score requirements and guarantor options. Will provide additional references.',
     date: '2025-03-10T16:30:00',
     category: 'screening',
-    transcript: `AI: Hello David Taylor, I wanted to let you know we've received your application for 528 Suwanee Circle and have begun the screening process.
+    transcript: `AI: Hello David Taylor, this is Jessica from Property Homes. I wanted to let you know we've received your application for 528 Suwanee Circle and have begun the screening process.
 David Taylor: Great, thank you. Are there any documents I need to provide?
 AI: We'll need your last two pay stubs or proof of income, and we'll be contacting your previous landlords for references. Your credit check is already in progress.
 David Taylor: I just started a new job. Will that be an issue?
-AI: As long as you can provide an offer letter and verification of employment, that should be fine. Our goal is to complete your screening by 3/13/2025.`
+AI: As long as you can provide an offer letter and verification of employment, that should be fine. Can you send all documents over by email (jessica@propertyhomes.com) or directly upload them to your application on our website? 
+David Taylor: I'll send them over right away.
+AI: Thank you! I'll keep you posted on the status of your application. Our goal is to complete your screening by 3/23/2025.`
   },
   {
     id: '5',
@@ -2020,16 +2125,23 @@ AI: As long as you can provide an offer letter and verification of employment, t
     message: 'Application approved. Discussion about lease signing date and move-in details. Requested information about utility setup.',
     date: '2025-03-12T09:15:00',
     category: 'approval',
-    transcript: `AI: Congratulations Jennifer Lee! I'm pleased to inform you that your application for 953 Avila Drive has been approved.
-Jennifer Lee: That's wonderful news! What are the next steps?
+    transcript: `AI: Hello Jennifer. This is Jessica from Property Homes. Congratulations! I'm pleased to inform you that your application for 953 Avila Drive has been approved.
+Jennifer Lee: That's wonderful news! Thanks Jessica for the update.What are the next steps?
 AI: We'll need you to sign the lease agreement within 48 hours to secure the property. Would you prefer to do this electronically or in person?
-Jennifer Lee: Electronic would be easiest for me. When can I move in?
-AI: We can send the lease documents today via email. Based on your requested move-in date, you can move in on April 1st. We'll also need your security deposit and first month's rent before providing keys. Do you have any questions about utilities or the move-in process?`
+Jennifer Lee: Electronic would be easiest for me. Can you send over the link via email?
+AI: Absolutely! I'll send it right away. Is jennifer.lee@gmail.com the correct email?
+Jennifer Lee: Yes, that's correct.
+AI: Thank you! I'll send it right away.
+Jennifer Lee: Do you know when I can expect to move in?
+AI: We can send the lease documents today via email. Based on your requested move-in date, you can move in on April 1st. We'll also need your security deposit and first month's rent before providing keys. Do you have any questions about utilities or the move-in process?
+Jennifer Lee: Not yet. Can I call you back once I've signed everything to discuss these details?
+AI: Absolutely! I'll be available to discuss whenever you're ready. Have a great day and please keep me updated in you need anything from my side!
+Jennifer Lee: Thank you! Have a great day too.`
   },
   {
     id: '6',
     prospectName: 'Robert Wilson',
-    propertyInterest: '341 Magnolia Court',
+    propertyInterest: 'Inquiry stage',
     community: 'Scattered',
     market: 'Orlando',
     leasingAgent: 'Emily Wilson',
@@ -2037,11 +2149,18 @@ AI: We can send the lease documents today via email. Based on your requested mov
     message: 'Inquiry about pricing for 4-bedroom homes and any current specials. Asked about school districts and neighborhood amenities.',
     date: '2025-03-09T13:20:00',
     category: 'pricing',
-    transcript: `AI: Hello! Thank you for your interest in our properties in Scattered. How can I assist you today?
-Robert Wilson: I'm wondering about pricing for homes in the area, particularly 4-bedroom properties.
-AI: In Scattered, our 4-bedroom homes typically rent for between $2,200 and $2,600 per month, depending on features like updated kitchens, finished basements, or larger yards. Are you looking for any specific features?
-Robert Wilson: Do you offer any move-in specials or discounts?
-AI: Yes! We currently have a spring special offering half off the first month's rent for leases signed before April 15th. We also waive the application fee for qualified military personnel and first responders.`
+    transcript: `AI: Hello Robert! This is Jessica from Property Homes. Thank you for submitting a form on our website. We're excited to hear about your interest in renting one of our houses in Orlando. How could I assist you in your house search?
+Robert Wilson: Hello Jessica, thanks for getting back to me so quickly. I'm looking for a 4-bedroom home with a fenced yard in the Orlando area. Ideally, in the suburbs. Do you have any properties that fit this description?
+AI: Absolutely! We have a few houses that could meet this description. What is your budget?
+Robert Wilson: I'm looking for a house that's around $2,100 per month.
+AI: In Orlando, our 4-bedroom homes typically rent for between $2,200 and $2,600 per month, depending on features like updated kitchens, finished basements, or larger yards. Would that be a good range for you?
+Robert Wilson: That's a bit on the expensive side. Do you offer any move-in specials or discounts?
+AI: We can absolutely offer a discount. We currently have a spring special offering half off the first month's rent for leases signed before April 15th. We also waive the application fee for qualified military personnel and first responders.
+Robert Wilson: That's great to hear. Could you send me the link to some of your properties by email? I'll have a look and get back to you. 
+AI: Of course. What is your email address?
+Robert Wilson: robert.wilson@gmail.com. Please send me those on the cheaper end of the range.
+AI: Of course! I'll send them right away. Thank you for your interest in our properties. You can contact me whenever if you have any questions. Have a great day!
+Robert Wilson: Thank you. Have a great day too.`
   },
   {
     id: '7',
@@ -2051,14 +2170,17 @@ AI: Yes! We currently have a spring special offering half off the first month's 
     market: 'Tampa',
     leasingAgent: 'Emily Wilson',
     status: 'tour_scheduled',
-    message: 'Virtual tour scheduled for March 15. Relocating from out of state. Requested information about nearby schools and public transportation.',
+    message: 'Virtual tour scheduled for March 25. Relocating from out of state. Requested information about nearby schools and public transportation.',
     date: '2025-03-08T10:30:00',
     category: 'location',
-    transcript: `AI: Hello Emma Garcia! I understand you're relocating to our area. How can I help make your move easier?
-Emma Garcia: I'd like to know more about Belmont and what's around it. Particularly schools and transportation.
+    transcript: `AI: Hello Emma! This is Jessica from Property Homes. Thank you for your interest in 675 Belmont Road. Is there anything I can help you with before your tour next Tuesday?
+Emma Garcia: Hey Jessica, thanks for your thoughtful message. I'd like to know more about your Belmont community and what's around it. Particularly schools and transportation.
 AI: Belmont is located in a family-friendly area with excellent schools. The elementary school is rated 8/10 on GreatSchools, and there's a middle and high school within 3 miles. Public transportation includes bus routes that connect to downtown, and there's a commuter train station about 4 miles away. The neighborhood has several parks within walking distance and a community center with a pool.
 Emma Garcia: That sounds promising. What about grocery stores and restaurants?
-AI: You'll find a Publix supermarket just 5 minutes away, along with several local restaurants and cafes. There's a larger shopping center about 10 minutes by car with more retail options, restaurants, and a movie theater.`
+AI: You'll find a Publix supermarket just 5 minutes away, along with several local restaurants and cafes. There's a larger shopping center about 10 minutes by car with more retail options, restaurants, and a movie theater.
+Emma Garcia: That sounds great. I am looking forward to the tour.
+AI: Perfect! Don't hesitate to reach out if you have any questions or need assistance. Have a great day!
+Emma Garcia: Thank you Jessica. Have a great day too.`
   },
   {
     id: '8',
@@ -2071,16 +2193,19 @@ AI: You'll find a Publix supermarket just 5 minutes away, along with several loc
     message: 'Application declined due to insufficient income. Discussion about alternative properties with lower rent requirements.',
     date: '2025-03-07T15:45:00',
     category: 'application',
-    transcript: `AI: Hello Thomas Brown, I'm reaching out regarding your application for 442 Sawyer Lane. I regret to inform you that we were unable to approve your application at this time.
+    transcript: `AI: Hello Thomas, this is Jessica from Property Homes. I'm reaching out regarding your application for 442 Sawyer Lane. I regret to inform you that we were unable to approve your application at this time.
 Thomas Brown: Can you tell me why it was declined?
 AI: The primary reason was the income verification. Our policy requires that monthly income be at least three times the monthly rent. We do have other properties with lower rental rates that might be more suitable. Would you be interested in hearing about those options?
-Thomas Brown: Yes, please. What other properties do you have available?
-AI: We have a nice home in Jacksonville with a monthly rent that's about $400 less. It's still a 3-bedroom but slightly smaller. Would you like to schedule a tour of this property instead?`
+Thomas Brown: Yes, please. I still need three bedrooms. And I need to be less than 1 hour away from Orange Park. Do you have other properties that could fit this description?
+AI: We have three nice homes in Jacksonville with a monthly rent that's about $400 less. It's still a 3-bedroom but slightly smaller. I remember that you'd required to receive all information via email the last time. Do you want me to send the information to the same address?
+Thomas Brown: Yes, please. I'll have a look and get back to you.
+AI: Of course! I'll send them right away. Thank you for your interest in our properties. You can contact me whenever if you have any questions. Have a great day!
+Thomas Brown: Thank you. Have a great day too.`
   },
   {
     id: '9',
-    prospectName: 'Sophia Martinez',
-    propertyInterest: '829 Scattered Way',
+    prospectName: 'Peter Martinez',
+    propertyInterest: '829 Circle Lane',
     community: 'Scattered',
     market: 'Jacksonville',
     leasingAgent: 'Emily Wilson',
@@ -2088,11 +2213,18 @@ AI: We have a nice home in Jacksonville with a monthly rent that's about $400 le
     message: 'Detailed questions about property maintenance, lawn care responsibilities, and whether a home office space can be built in the garage.',
     date: '2025-03-13T17:00:00',
     category: 'amenities',
-    transcript: `AI: Hello Sophia Martinez, thank you for your interest in 829 Scattered Way. How can I assist you today?
-Sophia Martinez: I have some questions about the property maintenance and whether I can build a home office in the garage.
+    transcript: `AI: Hello Peter, this is Jessica from Property Homes. Thank you for submitting your interest in 829 Circle Lane. Is there anything I can assist you with for your application process?
+Peter Martinez: Hey. Thanks for getting back to me. I have some questions about the property maintenance and whether I can build a home office in the garage.
 AI: For maintenance, our company handles all structural, plumbing, electrical, and HVAC issues. Tenants are responsible for lawn care and basic upkeep, though we do offer a lawn service add-on for $120 per month. Regarding modifications to the garage, any permanent changes would need approval, but we're generally open to reasonable improvements. Could you tell me more about what you're planning?
-Sophia Martinez: I'd just need to add electrical outlets and possibly insulation to make it comfortable as a workspace.
-AI: Adding outlets would likely be approved as long as it's done by a licensed electrician. Insulation might also be permitted if it doesn't alter the structure. Would you like to discuss this further during a property tour?`
+Peter Martinez: I'd just need to add electrical outlets and possibly insulation to make it comfortable as a workspace.
+AI: Adding outlets would likely be approved as long as it's done by a licensed electrician. Insulation might also be permitted if it doesn't alter the structure. Would you like to discuss this further during a property tour?
+Peter Martinez: Yes, please. I'd like to schedule a tour for next week. I'm pretty open starting Wednesday.
+AI: Perfect! How about we schedule a tour for Wednesday 3/26 at 10 AM?
+Peter Martinez: That works for me. Can you also send me some information about the community?
+AI: Absolutely! I'll send you a brochure with the confirmation of the tour. Do you want me to send it at this number or would you like me to send it to your email?
+Peter Martinez: This number is good.
+AI: That sounds good. I'll send it right away. Thank you and have a great day! Please let me know if you have any questions.
+Peter Martinez: Thank you! Have a great day too.`
   },
   {
     id: '10',
@@ -2105,10 +2237,13 @@ AI: Adding outlets would likely be approved as long as it's done by a licensed e
     message: 'Tour scheduled for next week. Specific interest in home layout and storage space. Asked about noise levels from neighboring properties.',
     date: '2025-03-15T09:15:00',
     category: 'tour',
-    transcript: `AI: Hello Daniel Kim! I'd like to confirm your tour scheduled for March 15th at 156 Osborne Street. Is this time still convenient for you?
-Daniel Kim: Yes, that works for me. I'm particularly interested in the home layout and storage options.
-AI: Perfect! Your tour is confirmed with Emily Wilson. She'll be sure to highlight the layout and all storage areas throughout the home. Is there anything specific about the layout you're looking for?
+    transcript: `AI: Hello Daniel! This is Jessica from Property Homes. I'd like to confirm your tour scheduled for March 28th at 11AM at 156 Osborne Street. Is this time still convenient for you?
+Daniel Kim: Yes, that works for me.
+AI: Perfect! Your tour is confirmed with Emily Wilson. Is there anything specific that you want to check out during the tour or that you'd like to know in advance?
 Daniel Kim: I work from home, so I need a good space for a home office. Also, what's the noise level like from neighboring properties?
-AI: Emily will show you several spaces that would work well as a home office. Regarding noise, Osborne Farms is known for being a quiet community with good spacing between homes. Most neighbors are families or professionals, and the HOA has noise regulations to ensure everyone's comfort. We look forward to meeting you on the 15th!`
+AI: It's a quiet community with good spacing between homes. Most neighbors are families or professionals, and the HOA has noise regulations to ensure everyone's comfort.
+Daniel Kim: That sounds great.
+AI: Good! Please let me know if you have any questions or need assistance. Have a great day and enjoy the tour next week!
+Daniel Kim: Thank you! Have a great day too.`
   }
 ];

@@ -69,3 +69,4 @@ pnpm run dev
 ls -la public/phone_calls/leasing/lead.mp4
    ls -la public/phone_calls/property_operations/property_operations.mp4
 pnpm run dev
+pnpm run dev
