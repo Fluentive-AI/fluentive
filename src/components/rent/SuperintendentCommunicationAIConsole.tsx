@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Badge } from "@/components/ui/badge";
-import { Bot, User, MessageSquare, Mail, Phone, List, MessageCircle, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
+import { Bot, User, MessageSquare, Mail, Phone, List, MessageCircle, AlertCircle, CheckCircle2, Clock, Play, Pause } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { mockSuperCommunications, CURRENT_SUPER } from '@/data/mockData';
@@ -107,6 +107,67 @@ const getStatusDisplayName = (status: string) => {
     default:
       return status.charAt(0).toUpperCase() + status.slice(1);
   }
+};
+
+// Simple Audio Player Component
+const SimpleAudioPlayer = ({ audioSrc }: { audioSrc: string }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        // Reset error state on new play attempt
+        setError(null);
+        
+        // Play the audio
+        const playPromise = audioRef.current.play();
+        
+        // Handle play() promise rejection (browsers require user interaction for audio)
+        playPromise.then(() => {
+          setIsPlaying(true);
+        }).catch(e => {
+          console.error("Error playing audio:", e);
+          setError("Could not play audio. Make sure audio files exist in public folder.");
+        });
+      }
+    }
+  };
+
+  // Handle when audio ends
+  const handleEnded = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <audio 
+        ref={audioRef}
+        src={`/${audioSrc}`} // Make sure the path starts with a slash
+        onEnded={handleEnded}
+        onError={() => setError("Audio file not found or format not supported")}
+        style={{ display: 'none' }} // Hide the audio element
+      />
+      
+      <Button
+        onClick={togglePlayPause}
+        className="flex items-center gap-2"
+      >
+        {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+        {isPlaying ? "Pause Recording" : "Play Recording"}
+      </Button>
+
+      {error && (
+        <div className="text-red-500 text-sm mt-2">
+          {error}
+        </div>
+      )}
+    </div>
+  );
 };
 
 const SuperintendentCommunicationAIConsole: React.FC<SuperintendentCommunicationAIConsoleProps> = ({
@@ -422,12 +483,30 @@ const SuperintendentCommunicationAIConsole: React.FC<SuperintendentCommunication
                 </div>
               )}
               
-              {activeTab === 'conversation' && (
-                <div className="flex items-center justify-center h-full">
+              {activeTab === 'conversation' && selectedCommunication.channel === 'phone' && (
+                <div className="flex flex-col items-center justify-center h-full">
                   <div className="text-center">
                     <Phone className="h-12 w-12 mx-auto mb-3 text-brand-300" />
-                    <p>Call recording would play here</p>
-                    <p className="text-sm text-gray-500 mt-2">Duration: 2:18</p>
+                    <p className="mb-4">Call recording with {selectedCommunication.tenantName}</p>
+                    
+                    {/* Simple Audio Player */}
+                    <div className="mt-4">
+                      {(() => {
+                        // Generate audio file path based on tenant name
+                        const names = selectedCommunication.tenantName.toLowerCase().split(' ');
+                        const firstName = names[0];
+                        const lastName = names.length > 1 ? names[names.length - 1] : '';
+                        const audioPath = `phone_calls/mock_tenant_communications/maintenance/${firstName}_${lastName}.m4a`;
+                        
+                        return (
+                          <SimpleAudioPlayer audioSrc={audioPath} />
+                        );
+                      })()}
+                    </div>
+                    
+                    <p className="text-sm text-gray-500 mt-4">
+                      Recorded on {new Date(selectedCommunication.date).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
               )}

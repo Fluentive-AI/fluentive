@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Badge } from "@/components/ui/badge";
-import { Bot, User, MessageSquare, Mail, Phone, List, MessageCircle } from 'lucide-react';
+import { Bot, User, MessageSquare, Mail, Phone, List, MessageCircle, Play, Pause } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { mockRentCommunications } from '@/data/mockData';
 import { useAuth } from "@/hooks/useAuth";
+import { useRef } from 'react';
 
 // Define the structure for rent communications
 interface RentCommunication {
@@ -91,6 +92,67 @@ const getChannelDisplayName = (channel: string) => {
   }
 };
 
+// Simple Audio Player Component
+const SimpleAudioPlayer = ({ audioSrc }: { audioSrc: string }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        // Reset error state on new play attempt
+        setError(null);
+        
+        // Add a proper leading slash for public folder assets
+        const playPromise = audioRef.current.play();
+        
+        // Handle play() promise rejection (browsers require user interaction for audio)
+        playPromise.then(() => {
+          setIsPlaying(true);
+        }).catch(e => {
+          console.error("Error playing audio:", e);
+          setError("Could not play audio. Make sure audio files exist in public folder.");
+        });
+      }
+    }
+  };
+
+  // Handle when audio ends
+  const handleEnded = () => {
+    setIsPlaying(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <audio 
+        ref={audioRef}
+        src={`/${audioSrc}`} // Make sure the path starts with a slash
+        onEnded={handleEnded}
+        onError={() => setError("Audio file not found or format not supported")}
+        style={{ display: 'none' }} // Hide the audio element
+      />
+      
+      <Button
+        onClick={togglePlayPause}
+        className="flex items-center gap-2"
+      >
+        {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+        {isPlaying ? "Pause Recording" : "Play Recording"}
+      </Button>
+
+      {error && (
+        <div className="text-red-500 text-sm mt-2">
+          {error}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> = ({
   communications = mockRentCommunications,
   currentManager = "John Davis", // Default for demo purposes
@@ -101,6 +163,7 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
   const [selectedCommunication, setSelectedCommunication] = useState<RentCommunication | null>(null);
   const [activeTab, setActiveTab] = useState('summary');
   const [filteredCommunications, setFilteredCommunications] = useState<RentCommunication[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   useEffect(() => {
     // Start with communications for the current property manager
@@ -384,12 +447,30 @@ const PropertyManagerRentAIConsole: React.FC<PropertyManagerRentAIConsoleProps> 
                 </div>
               )}
               
-              {activeTab === 'conversation' && (
-                <div className="flex items-center justify-center h-full">
+              {activeTab === 'conversation' && selectedCommunication.channel === 'voice' && (
+                <div className="flex flex-col items-center justify-center h-full">
                   <div className="text-center">
                     <Phone className="h-12 w-12 mx-auto mb-3 text-brand-300" />
-                    <p>Call recording would play here</p>
-                    <p className="text-sm text-gray-500 mt-2">Duration: 3:45</p>
+                    <p className="mb-4">Call recording with {selectedCommunication.tenantName}</p>
+                    
+                    {/* Simple Audio Player */}
+                    <div className="mt-4">
+                      {(() => {
+                        // Generate audio file path based on tenant name
+                        const names = selectedCommunication.tenantName.toLowerCase().split(' ');
+                        const firstName = names[0];
+                        const lastName = names.length > 1 ? names[names.length - 1] : '';
+                        const audioPath = `phone_calls/mock_tenant_communications/property_operations/${firstName}_${lastName}.m4a`;
+                        
+                        return (
+                          <SimpleAudioPlayer audioSrc={audioPath} />
+                        );
+                      })()}
+                    </div>
+                    
+                    <p className="text-sm text-gray-500 mt-4">
+                      Recorded on {new Date(selectedCommunication.dateTime).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
               )}

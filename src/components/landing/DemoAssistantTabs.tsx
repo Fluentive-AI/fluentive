@@ -32,7 +32,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       id: 'leasing',
       name: 'Jessica',
       title: 'Leasing Assistant',
-      description: 'Handles rental inquiries and application questions',
+      description: 'Handles rental inquiries and application support',
       videoPath: '/phone_calls/leasing/lead.mp4',
       audioPath: '/phone_calls/leasing/lead.m4a',
       avatarPath: '/avatars/jessica.png'
@@ -41,7 +41,7 @@ const DemoAssistantTabs = ({ onCallEnd }: DemoAssistantTabsProps) => {
       id: 'operations',
       name: 'Susan',
       title: 'Property Operations',
-      description: 'Assists with rent payments and property management',
+      description: 'Assists with rent collection and property management',
       videoPath: '/phone_calls/property_operations/property_operations.mp4',
       audioPath: '/phone_calls/property_operations/property_operations.m4a',
       avatarPath: '/avatars/susan.png'
