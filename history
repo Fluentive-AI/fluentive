@@ -70,3 +70,15 @@ ls -la public/phone_calls/leasing/lead.mp4
    ls -la public/phone_calls/property_operations/property_operations.mp4
 pnpm run dev
 pnpm run dev
+npm install react@latest react-dom@latest @types/react@latest @types/react-dom@latest
+git pull
+git branch
+git checkout -b bite
+git branch -D main
+git fetch
+git co main
+git checkout main
+git br -D bite
+git branch -D bite
+git branch
+git log
