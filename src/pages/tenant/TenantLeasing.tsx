@@ -50,7 +50,7 @@ const TenantLeasing: React.FC<TenantLeasingProps> = ({ scenario: propScenario })
           <div className="space-y-4">
             <h3 className="text-lg font-medium flex items-center">
               <Home className="h-5 w-5 mr-2" />
-              Homm Voice Assistant - {scenario || 'lead'} Interaction
+              FluentiveAI Voice Assistant - {scenario || 'lead'} Interaction
             </h3>
             <p className="text-sm">
               Start a call using the phone interface to see the AI assistant in action.

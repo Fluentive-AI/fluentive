@@ -12,11 +12,11 @@ import AppLogo from '@/components/layout/AppLogo';
 // In a real application, this would be handled by a backend service
 const ALLOWED_USERS = [
   {
-    email: 'eytan@homm.com',
+    email: 'eytan@ex.ai',
     password: 'safe_password' 
   },
   {
-    email: 'antoine@homm.com',
+    email: 'antoine@ex.ai',
     password: 'safe_password'
   }
 ];
@@ -77,7 +77,7 @@ const LoginPage = () => {
           <div className="h-16 flex items-center justify-center">
             <AppLogo />
           </div>
-          <h2 className="mt-4 text-xl sm:text-2xl font-bold text-gray-900">Welcome to Homm</h2>
+          <h2 className="mt-4 text-xl sm:text-2xl font-bold text-gray-900">Welcome to FluentiveAI</h2>
           <p className="text-gray-600 mt-2 text-sm sm:text-base">Sign in to continue to your dashboard</p>
         </div>
 

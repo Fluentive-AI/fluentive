@@ -47,7 +47,7 @@ const LandingPage = () => {
               </h1>
               
               <p className="text-xl text-gray-600">
-                Homm transforms property management with AI agents that automate operations, enhance tenant experiences, and drive better business outcomes.
+                FluentiveAI transforms property management with AI agents that automate lead engagement, enhance tenant experiences, and drive better business outcomes.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 pt-6">
@@ -193,7 +193,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <div className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium mb-3">
-              Why Choose Homm
+              Why Choose FluentiveAI
             </div>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Transform Your Property Management</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -205,7 +205,7 @@ const LandingPage = () => {
             <div>
               <img 
                 src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=800&q=80" 
-                alt="Property manager using Homm" 
+                alt="Property manager using FluentiveAI" 
                 className="rounded-xl shadow-xl w-full transform hover:scale-[1.02] transition-all duration-300"
               />
             </div>
@@ -265,7 +265,7 @@ const LandingPage = () => {
             </div>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Case Studies</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              See how property management companies have transformed their operations with Homm.
+              See how property management companies have transformed their operations with FluentiveAI.
             </p>
           </div>
           
@@ -340,13 +340,13 @@ const LandingPage = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Building2 className="h-6 w-6 text-white" />
-                <span className="font-bold text-xl text-white">Homm</span>
+                <span className="font-bold text-xl text-white">FluentiveAI</span>
               </div>
               <p className="mb-4 text-gray-400">AI-powered property management solution.</p>
               <p className="text-sm mb-2 text-gray-500">
                 Demo For Brandywine Homes USA and Lafayette RE
               </p>
-              <p className="text-sm text-gray-500">© 2025 Homm. All rights reserved.</p>
+              <p className="text-sm text-gray-500">© 2025 FluentiveAI. All rights reserved.</p>
             </div>
             
             <div>
@@ -372,7 +372,7 @@ const LandingPage = () => {
             <div>
               <h3 className="font-bold text-white text-lg mb-4">Contact</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="mailto:info@homm.com" className="hover:text-white transition-colors flex items-center"><ArrowUpRight className="h-3 w-3 mr-1" />info@homm.com</a></li>
+                <li><a href="mailto:eytan@fluentive.ai" className="hover:text-white transition-colors flex items-center"><ArrowUpRight className="h-3 w-3 mr-1" />eytan@fluentive.ai</a></li>
                 <li><a href="tel:+1234567890" className="hover:text-white transition-colors flex items-center"><ArrowUpRight className="h-3 w-3 mr-1" />+1 (234) 567-890</a></li>
                 <li><address className="not-italic">123 Property St, San Francisco, CA 94103</address></li>
               </ul>

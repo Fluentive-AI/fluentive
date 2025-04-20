@@ -36,7 +36,7 @@ const LandingPage = () => {
           </Button>
           
           <a 
-            href="https://calendly.com/homm-ai/30min" 
+            href="https://calendly.com/fluentive-ai/30min" 
             target="_blank" 
             rel="noopener noreferrer"
             className="hidden sm:block"
@@ -107,7 +107,7 @@ const LandingPage = () => {
               Pricing
             </a>
             <a 
-              href="https://calendly.com/homm-ai/30min"
+              href="https://calendly.com/fluentive-ai/30min"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
@@ -141,7 +141,7 @@ const LandingPage = () => {
               
               <div className="flex flex-col gap-4 pt-6 items-center md:items-center">
                 <a 
-                  href="https://calendly.com/homm-ai/30min" 
+                  href="https://calendly.com/fluentive-ai/30min" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto"
@@ -259,7 +259,7 @@ const LandingPage = () => {
           <div className="text-center mt-14">
             <Button 
               size="lg" 
-              onClick={() => window.open('https://calendly.com/homm-ai/30min', '_blank')}
+              onClick={() => window.open('https://calendly.com/fluentive-ai/30min', '_blank')}
               className="font-medium shadow-md hover:shadow-lg transition-all"
             >
               Explore All Features
@@ -273,7 +273,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <div className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium mb-3">
-              Why Choose Homm
+              Why Choose FluentiveAI
             </div>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Transform Your Property Management</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -285,7 +285,7 @@ const LandingPage = () => {
             <div>
               <img 
                 src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=800&q=80" 
-                alt="Property manager using Homm" 
+                alt="Property manager using FluentiveAI" 
                 className="rounded-xl shadow-xl w-full transform hover:scale-[1.02] transition-all duration-300"
               />
             </div>
@@ -324,7 +324,7 @@ const LandingPage = () => {
               <div className="pt-4 pl-14">
                 <Button 
                   size="lg" 
-                  onClick={() => window.open('https://calendly.com/homm-ai/30min', '_blank')}
+                  onClick={() => window.open('https://calendly.com/fluentive-ai/30min', '_blank')}
                   className="font-medium shadow-md hover:shadow-lg transition-all"
                 >
                   Try our Demo Dashboard
@@ -422,7 +422,7 @@ const LandingPage = () => {
               </CardContent>
               <CardFooter className="px-8 pb-8">
                 <a 
-                  href="https://calendly.com/homm-ai/30min" 
+                  href="https://calendly.com/fluentive-ai/30min" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="w-full"
@@ -470,7 +470,7 @@ const LandingPage = () => {
               size="lg" 
               variant="secondary"
               className="text-primary text-lg px-6 sm:px-10 py-6 sm:py-7 h-auto font-medium shadow-xl hover:shadow-2xl transition-all w-full sm:w-auto"
-              onClick={() => window.open('https://calendly.com/homm-ai/30min', '_blank')}
+              onClick={() => window.open('https://calendly.com/fluentive-ai/30min', '_blank')}
             >
               Try Demo Dashboard
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -486,12 +486,12 @@ const LandingPage = () => {
               <div className="flex items-center gap-2 mb-4">
                 <img 
                   src="/logo/logo_white_horizontal_no_border.png" 
-                  alt="Homm Logo" 
+                  alt="FluentiveAI Logo" 
                   className="h-8" 
                 />
               </div>
               <p className="mb-4 text-gray-400">AI-powered property management solution.</p>
-              <p className="text-sm text-gray-500">© 2025 Homm. All rights reserved.</p>
+              <p className="text-sm text-gray-500">© 2025 FluentiveAI. All rights reserved.</p>
             </div>
             
             <div>

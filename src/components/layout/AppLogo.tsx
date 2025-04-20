@@ -6,7 +6,7 @@ const AppLogo = () => {
     <div className="flex items-center h-16">
       <img 
         src="/logo/logo_blue_horizontal.png" 
-        alt="Homm Logo"
+        alt="FluentiveAI Logo"
         className="h-8 sm:h-10 w-auto object-contain" 
       />
     </div>
