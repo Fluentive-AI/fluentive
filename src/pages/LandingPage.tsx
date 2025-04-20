@@ -485,7 +485,7 @@ const LandingPage = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <img 
-                  src="/logo/logo_white_horizontal_no_border.png" 
+                  src="/logo/logo_white_horizontal.png" 
                   alt="FluentiveAI Logo" 
                   className="h-8" 
                 />
