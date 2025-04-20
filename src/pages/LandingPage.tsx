@@ -517,7 +517,7 @@ const LandingPage = () => {
             <div>
               <h3 className="font-bold text-white text-lg mb-4">Contact</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="mailto:rozenblum.eytan@gmail.com" className="hover:text-white transition-colors flex items-center"><ArrowUpRight className="h-3 w-3 mr-1" />rozenblum.eytan@gmail.com</a></li>
+                <li><a href="mailto:eytan@fluentive.ai" className="hover:text-white transition-colors flex items-center"><ArrowUpRight className="h-3 w-3 mr-1" />eytan@fluentive.ai</a></li>
                 <li><a href="tel:+1234567890" className="hover:text-white transition-colors flex items-center"><ArrowUpRight className="h-3 w-3 mr-1" />+1 (646) 250-3816</a></li>
                 <li><address className="not-italic">1E Loop Road, New York, NY 10044</address></li>
               </ul>
