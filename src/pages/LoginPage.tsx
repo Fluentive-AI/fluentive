@@ -8,18 +8,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/components/ui/use-toast';
 import AppLogo from '@/components/layout/AppLogo';
 
-// This is not secure for production, but serves as a simple authentication mechanism
-// In a real application, this would be handled by a backend service
-const ALLOWED_USERS = [
-  {
-    email: 'eytan@ex.ai',
-    password: 'safe_password' 
-  },
-  {
-    email: 'antoine@ex.ai',
-    password: 'safe_password'
-  }
-];
+// Import allowed users from environment variables
+const ALLOWED_USERS = JSON.parse(import.meta.env.VITE_ALLOWED_USERS_JSON || '[]');
 
 const LoginPage = () => {
   const navigate = useNavigate();

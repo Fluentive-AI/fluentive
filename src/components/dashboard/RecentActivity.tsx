@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AIConversation } from '@/types';
 import { Phone, MessageSquare, Mail, Clock } from 'lucide-react';
@@ -9,8 +8,8 @@ interface RecentActivityProps {
 }
 
 const RecentActivity = ({ conversations }: RecentActivityProps) => {
-  const getChannelIcon = (channel: 'voice' | 'sms' | 'email') => {
-    switch (channel) {
+  const getChannelIcon = (channel: string) => {
+    switch (channel.toLowerCase()) {
       case 'voice':
         return <Phone className="h-4 w-4" />;
       case 'sms':
@@ -37,8 +36,8 @@ const RecentActivity = ({ conversations }: RecentActivityProps) => {
     }
   };
   
-  const getSentimentColor = (sentiment: 'positive' | 'neutral' | 'negative') => {
-    switch (sentiment) {
+  const getSentimentColor = (sentiment: string) => {
+    switch (sentiment.toLowerCase()) {
       case 'positive':
         return 'bg-green-100 text-green-800';
       case 'neutral':

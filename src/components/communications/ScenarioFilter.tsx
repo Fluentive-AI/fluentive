@@ -17,12 +17,14 @@ interface ScenarioFilterProps {
   options: CategoryOption[];
   selectedValues: string[];
   onChange: (values: string[]) => void;
+  className?: string;
 }
 
 const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
   options,
   selectedValues,
   onChange,
+  className,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -101,7 +103,7 @@ const ScenarioFilter: React.FC<ScenarioFilterProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-8 justify-between min-w-[150px] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap"
+          className={cn("h-8 justify-between min-w-[150px] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap", className)}
         >
           {getSelectedText()}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

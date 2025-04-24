@@ -3,7 +3,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const TenantMaintenance = () => {
+interface TenantMaintenanceProps {
+  scenario: string;
+}
+
+const TenantMaintenance: React.FC<TenantMaintenanceProps> = ({ scenario }) => {
   const [phoneState, setPhoneState] = useState('contact');
   const [callTime, setCallTime] = useState(0);
   const [showClock, setShowClock] = useState(false);

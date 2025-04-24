@@ -1,3 +1,5 @@
+import { MessageType } from '@/types/communications';
+
 export interface MetricData {
   label: string;
   value: number;
@@ -158,6 +160,10 @@ export interface RentCommunication {
   category: string;
   community: string;
   market: string;
+  amount?: number;
+  dueDate?: string;
+  contactPhone?: string;
+  contactEmail?: string;
   tenantId?: string;
   propertyManager?: string;
   property?: string;
@@ -166,6 +172,7 @@ export interface RentCommunication {
   summary?: string;
   transcript?: string;
   rentStatus?: string;
+  actionItems?: string[];
 }
 
 export interface SuperCommunication {
@@ -230,17 +237,34 @@ export interface TenantLeasingScenarioProps {
 
 export interface AIConversation {
   id: string;
-  tenantName: string;
-  date: string;
-  category: string;
+  contactName: string;
+  tenant?: string;
+  unit?: string;
+  dateTime: string;
+  topic?: string;
+  status?: string;
+  messages?: MessageType[];
+  department?: string;
+  community?: string;
+  market?: string;
+  resolution?: string;
+  channel: 'voice' | 'sms' | 'email' | string;
   summary: string;
   transcript: string;
-  status: string;
-  channel: string;
-  department?: string;
-  market?: string;
-  community?: string;
-  manager?: string;
+  sentiment: 'positive' | 'neutral' | 'negative' | string;
+  actionItems: string[];
+  scenario?: string;
+  contactPhone?: string;
+  contactEmail?: string;
+  systemLinks?: string[] | {
+    yardi: string;
+    calendar: string;
+    posting?: string;
+    maintenance?: string;
+    leases?: string;
+    moveout?: string;
+  };
+  relatedTo?: string;
 }
 
 export interface AIAgentConsoleProps {
@@ -261,4 +285,5 @@ export interface ScenarioFilterProps {
 
 export interface CommunicationsAnalyticsProps {
   conversations: AIConversation[];
+  department?: string;
 }

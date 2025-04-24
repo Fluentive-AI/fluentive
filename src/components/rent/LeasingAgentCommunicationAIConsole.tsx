@@ -226,7 +226,8 @@ const LeasingAgentCommunicationAIConsole: React.FC<LeasingAgentCommunicationAICo
     
     if (marketFilters.length > 0) {
       filtered = filtered.filter(comm => {
-        return marketFilters.some(filter => comm.community.includes(filter));
+        const marketCommunity = `${comm.market}/${comm.community}`;
+        return marketFilters.includes(marketCommunity);
       });
     }
 

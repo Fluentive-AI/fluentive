@@ -9,8 +9,10 @@ import { Button } from '@/components/ui/button';
 import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
 import ApplicationStatusFilter from '@/components/applications/ApplicationStatusFilter';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Application } from '@/types/index';
 
 const ApplicationPage = () => {
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<string>('all');
   const [selectedMarketCommunities, setSelectedMarketCommunities] = useState<string[]>([]);
@@ -32,7 +34,7 @@ const ApplicationPage = () => {
       if (searchTerm) {
         const query = searchTerm.toLowerCase();
         const matchesSearch = 
-          app.name.toLowerCase().includes(query) ||
+          app.applicantName.toLowerCase().includes(query) ||
           app.email.toLowerCase().includes(query) ||
           app.propertyInterest.toLowerCase().includes(query) ||
           (app.assignedTo && app.assignedTo.toLowerCase().includes(query));
