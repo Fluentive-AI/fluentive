@@ -9,6 +9,7 @@ import {
   RentCommunication
 } from '@/types';
 import { Application } from '@/types/index';
+import { MockLeasingConversation } from '@/types/index';
 
 // Helper to generate today's date string in ISO format
 const todayISO = new Date().toISOString().split('T')[0];
@@ -332,21 +333,20 @@ export const mockApplications: Application[] = [
   {
     id: '1',
     leadId: '3',
-    name: 'Michael Brown',
+    applicantName: 'Michael Brown',
     email: 'mbrown@example.com',
     phone: '(555) 456-7890',
     propertyInterest: '5678 Osborne Road',
     status: 'reviewing',
     dateSubmitted: '2025-03-12',
-    backgroundCheck: { status: 'approved', completed: true },
-    creditCheck: { status: 'pending', completed: false },
-    incomeVerification: { status: 'approved', completed: true },
+    backgroundCheck: { status: 'approved', score: 95 },
+    creditCheck: { status: 'pending', score: 720 },
+    incomeVerification: { status: 'approved', verified: true },
     assignedTo: 'Sarah Johnson',
     market: 'Atlanta',
     community: 'Osborne Farms',
-    date: todayISO,
     agent: 'Sarah Johnson',
-    unit: 'A101',
+    unit: '5678 Osborne Road',
     moveInDate: '2025-04-01',
     creditScore: 720,
     income: 75000,
@@ -356,15 +356,15 @@ export const mockApplications: Application[] = [
   {
     id: '2',
     leadId: '2',
-    name: 'Sarah Johnson',
+    applicantName: 'Sarah Johnson',
     email: 'sarah.j@example.com',
     phone: '(555) 987-6543',
     propertyInterest: '456 Oak Avenue',
     status: 'approved',
     dateSubmitted: '2025-03-10',
-    backgroundCheck: { status: 'approved', completed: true },
-    creditCheck: { status: 'approved', completed: true },
-    incomeVerification: { status: 'approved', completed: true },
+    backgroundCheck: { status: 'approved', score: 95 },
+    creditCheck: { status: 'approved', score: 750 },
+    incomeVerification: { status: 'approved', verified: true },
     assignedTo: 'Mike Brown',
     market: 'Tampa',
     community: 'Avila Bay',
@@ -374,21 +374,20 @@ export const mockApplications: Application[] = [
     income: 85000,
     pets: false,
     documents: [],
-    date: '2025-03-10',
     agent: 'Mike Brown'
   },
   {
     id: '3',
     leadId: '4',
-    name: 'Emma Davis',
+    applicantName: 'Emma Davis',
     email: 'emma.d@example.com',
     phone: '(555) 234-5678',
     propertyInterest: '321 Willow Drive',
     status: 'pending',
     dateSubmitted: '2025-03-14',
-    backgroundCheck: { status: 'pending', completed: false },
-    creditCheck: { status: 'pending', completed: false },
-    incomeVerification: { status: 'pending', completed: false },
+    backgroundCheck: { status: 'pending', score: 80 },
+    creditCheck: { status: 'pending', score: 690 },
+    incomeVerification: { status: 'pending', verified: false },
     assignedTo: 'Emily Wilson',
     market: 'Jacksonville',
     community: 'Sawyer\'s Preserve',
@@ -398,45 +397,43 @@ export const mockApplications: Application[] = [
     income: 62000,
     pets: true,
     documents: [],
-    date: '2025-03-14',
     agent: 'Emily Wilson'
   },
   {
     id: '4',
     leadId: 'lead-tampa-106',
-    name: 'David Brown',
+    applicantName: 'David Brown',
     email: 'david.brown@example.com',
     phone: '(813) 555-6789',
     propertyInterest: '1876 Avila Bay Drive',
     status: 'reviewing',
     dateSubmitted: '2025-03-15',
-    backgroundCheck: { status: 'approved', completed: true },
-    creditCheck: { status: 'pending', completed: false },
-    incomeVerification: { status: 'approved', completed: true },
+    backgroundCheck: { status: 'approved', score: 90 },
+    creditCheck: { status: 'pending', score: 720 },
+    incomeVerification: { status: 'approved', verified: true },
     assignedTo: 'Emily Wilson',
     market: 'Tampa',
     community: 'Avila Bay',
     unit: '1876 Avila Bay Drive',
     moveInDate: '2025-04-20',
-    creditScore: 710,
+    creditScore: 720,
     income: 68000,
     pets: false,
     documents: [],
-    date: '2025-03-15',
     agent: 'Emily Wilson'
   },
   {
     id: '5',
     leadId: 'lead-tampa-105',
-    name: 'Maria Lopez',
+    applicantName: 'Maria Lopez',
     email: 'maria.lopez@example.com',
     phone: '(813) 555-5678',
     propertyInterest: '7823 Pine Grove Circle',
     status: 'pending',
     dateSubmitted: '2025-03-16',
-    backgroundCheck: { status: 'pending', completed: false },
-    creditCheck: { status: 'pending', completed: false },
-    incomeVerification: { status: 'pending', completed: false },
+    backgroundCheck: { status: 'pending', score: 85 },
+    creditCheck: { status: 'pending', score: 650 },
+    incomeVerification: { status: 'pending', verified: false },
     assignedTo: 'Emily Wilson',
     market: 'Tampa',
     community: 'Preserve at Pine Grove',
@@ -446,21 +443,20 @@ export const mockApplications: Application[] = [
     income: 55000,
     pets: true,
     documents: [],
-    date: '2025-03-16',
     agent: 'Emily Wilson'
   },
   {
     id: '6',
     leadId: 'lead-atlanta-201',
-    name: 'Thomas Clark',
+    applicantName: 'Thomas Clark',
     email: 'thomas.clark@example.com',
     phone: '(404) 555-1234',
     propertyInterest: '5432 Osborne Road',
     status: 'approved',
     dateSubmitted: '2025-03-11',
-    backgroundCheck: { status: 'approved', completed: true },
-    creditCheck: { status: 'approved', completed: true },
-    incomeVerification: { status: 'approved', completed: true },
+    backgroundCheck: { status: 'approved', score: 92 },
+    creditCheck: { status: 'approved', score: 780 },
+    incomeVerification: { status: 'approved', verified: true },
     assignedTo: 'John Smith',
     market: 'Atlanta',
     community: 'Osborne Farms',
@@ -470,21 +466,20 @@ export const mockApplications: Application[] = [
     income: 95000,
     pets: false,
     documents: [],
-    date: '2025-03-11',
     agent: 'John Smith'
   },
   {
     id: '7',
     leadId: 'lead-atlanta-202',
-    name: 'Patricia Lee',
+    applicantName: 'Patricia Lee',
     email: 'patricia.lee@example.com',
     phone: '(404) 555-2345',
     propertyInterest: '8901 Suwanee Creek Drive',
     status: 'reviewing',
     dateSubmitted: '2025-03-13',
-    backgroundCheck: { status: 'approved', completed: true },
-    creditCheck: { status: 'pending', completed: false },
-    incomeVerification: { status: 'approved', completed: true },
+    backgroundCheck: { status: 'approved', score: 90 },
+    creditCheck: { status: 'pending', score: 730 },
+    incomeVerification: { status: 'approved', verified: true },
     assignedTo: 'John Smith',
     market: 'Atlanta',
     community: 'Suwanee Square',
@@ -494,21 +489,20 @@ export const mockApplications: Application[] = [
     income: 72000,
     pets: true,
     documents: [],
-    date: '2025-03-13',
     agent: 'John Smith'
   },
   {
     id: '8',
     leadId: 'lead-jacksonville-101',
-    name: 'Mike Brown',
+    applicantName: 'Mike Brown',
     email: 'mike.b@example.com',
     phone: '(904) 555-9012',
     propertyInterest: '9012 Sawyer\'s Creek Road',
     status: 'denied',
     dateSubmitted: '2025-03-09',
-    backgroundCheck: { status: 'denied', completed: true },
-    creditCheck: { status: 'approved', completed: true },
-    incomeVerification: { status: 'approved', completed: true },
+    backgroundCheck: { status: 'failed', score: 65 },
+    creditCheck: { status: 'approved', score: 600 },
+    incomeVerification: { status: 'approved', verified: true },
     assignedTo: 'Lisa Johnson',
     market: 'Jacksonville',
     community: 'Sawyer\'s Preserve',
@@ -518,21 +512,20 @@ export const mockApplications: Application[] = [
     income: 45000,
     pets: false,
     documents: [],
-    date: '2025-03-09',
     agent: 'Lisa Johnson'
   },
   {
     id: '8',
     leadId: 'lead-jacksonville-301',
-    name: 'James Wilson',
+    applicantName: 'James Wilson',
     email: 'james.wilson@example.com',
     phone: '(904) 555-1234',
     propertyInterest: '3214 Sawyer\'s Creek Road',
     status: 'denied',
     dateSubmitted: '2025-03-09',
-    backgroundCheck: { status: 'denied', completed: true },
-    creditCheck: { status: 'approved', completed: true },
-    incomeVerification: { status: 'approved', completed: true },
+    backgroundCheck: { status: 'failed', score: 65 },
+    creditCheck: { status: 'approved', score: 600 },
+    incomeVerification: { status: 'approved', verified: true },
     assignedTo: 'Lisa Johnson',
     market: 'Jacksonville',
     community: 'Sawyer\'s Preserve',
@@ -542,7 +535,6 @@ export const mockApplications: Application[] = [
     income: 45000,
     pets: false,
     documents: [],
-    date: '2025-03-09',
     agent: 'Lisa Johnson'
   }
 ];
@@ -1765,6 +1757,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 678-9012",
     contactEmail: "robert.martinez@example.com",
     propertyManager: "John Davis",
+    message: "AI: Hello Robert, this is Susan from Property Homes. I'm calling about your significantly overdue rent payment. Our records show you have an outstanding balance of $1,500. First, I want to check that everything is okay for you.\nRobert: Yes, thanks for checking in. I'm aware of the balance. I've been having some financial difficulties but I just received my paycheck today.\nAI: I understand. When do you think you'll be able to make a payment?\nRobert: I can make a payment of $750 today and the remaining $750 next Friday.\nAI: That sounds like a good plan. I'll note that in your account. \nRobert: Thank you for your understanding. Have a very good day.\nAI: You're welcome. Have a good day too.",
+    date: "2025-03-18",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Payment plan established via phone",
       "Expect $750 payment today",
@@ -1788,6 +1785,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 234-5678",
     contactEmail: "michael.chen@example.com",
     propertyManager: "John Davis",
+    message: "AI: Hello Michael, this is Susan from Property Homes. I'm calling about your significantly overdue rent payment. Our records show you have an outstanding balance of $1,450. First, I want to check that everything is okay for you.\nMichael: Yes, thanks for checking in. I'm aware of the balance. I've been having some financial difficulties but I just received my paycheck today.\nAI: I understand. When do you think you'll be able to make a payment?\nRobert: I can make a payment of $750 today and the remaining $750 next Friday.\nAI: That sounds like a good plan. I'll note that in your account. You can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nRobert: Thank you for your understanding. Have a good day.\nAI: You're welcome. Have a good day too.",
+    date: "2025-03-15",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Payment reminder sent via SMS",
       "Tenant confirmed payment will be made today",
@@ -1810,6 +1812,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 345-6789",
     contactEmail: "jessica.williams@example.com",
     propertyManager: "John Davis",
+    message: "AI: Hello Jessica, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,350 was due on March 5th. Please make your payment as soon as possible to avoid late fees.\nJessica: Thank you for the reminder. I've scheduled a reminder to make the payment tomorrow. Can you send me a link to the payment portal?\nAI: Absolutely, you can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nJessica: Thank you. it'll be done in time.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nJessica: Thank you. Have a good day too.",
+    date: "2025-03-14",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Reminder sent via email",
       "Tenant confirmed payment scheduled for tomorrow",
@@ -1832,6 +1839,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 567-8901",
     contactEmail: "emily.taylor@example.com",
     propertyManager: "John Davis",
+    message: "AI: Hello Emily, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,550 is due in two days, on March 5th. Please make your payment on time to avoid late fees.\nEmily: I'll make the payment tomorrow. Thanks for the reminder.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nEmily: Thank you. Have a good day too.",
+    date: "2025-03-03",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Payment reminder sent via SMS",
       "Tenant promised payment by weekend",
@@ -1854,6 +1866,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 789-0123",
     contactEmail: "amanda.lee@example.com",
     propertyManager: "John Davis",
+    message: "AI: Hello Amanda, this is Susan from Property Homes. Our records show that your rent payment of $1,400 is now overdue. Please make your payment as soon as possible to avoid additional late fees.\nAmanda: I apologize for the delay. I've been out of town and will make the payment when I return tomorrow.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nAmanda: Actually, could you send me a link to the payment portal?\nAI: Absolutely, you can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nAmanda: Thank you. Have a good day too.\nAI: You're welcome. Have a good day too.",
+    date: "2025-03-11",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Late payment notification sent via email",
       "Tenant promised payment tomorrow",
@@ -1876,6 +1893,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 890-1234",
     contactEmail: "daniel.kim@example.com",
     propertyManager: "John Davis",
+    message: "AI: Hello Daniel, this is Susan from Property Homes. I'm reaching out about your overdue rent payment of $1,500. I see that it's unusual for you to be late with your rent. Is everything okay?\nDaniel: Yes, thanks for checking in. I've been having some financial difficulties last month but I just received my paycheck today.\nAI: I understand. When do you think you'll be able to make a payment?\nDaniel: I can make a payment of $500 now and then $500 each week for the next two weeks.\nAI: That sounds like a reasonable plan. I'll update your account with this arrangement. You can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nDaniel: Thank you for your understanding. Have a good day.\nAI: You're welcome. Have a good day too.",
+    date: "2025-03-10",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Payment plan established via SMS",
       "Expect $500 payment today",
@@ -1900,6 +1922,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 901-2345",
     contactEmail: "sophia.garcia@example.com",
     propertyManager: "John Davis",
+    message: "AI: Hello Sophia, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,275 was due two days ago, on March 5th. Please make your payment as soon as possible to avoid late fees.\nSophia: Thank you for the reminder. I'll go on the portal today and make the payment.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nSophia: Thank you. Have a good day too.",
+    date: "2025-03-07",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Payment reminder sent via email",
       "Tenant promised payment on March 9th",
@@ -1922,6 +1949,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 123-4567",
     contactEmail: "olivia.thompson@example.com",
     propertyManager: "Emily Watson",
+    message: "AI: Hello Olivia, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,225 was due three days ago, on March 5th. Please make your payment as soon as possible to avoid late fees.\nOlivia: Thanks for the reminder! I'll make the payment today. Could you send me the payment link?\nAI: Absolutely, you can directly go to https://propertyhomes.securecafe.com/residentservices to make the payment.\nOlivia: Thank you. Have a good day.\nAI: You're welcome. Have a good day too.",
+    date: "2025-03-08",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Payment reminder sent via SMS",
       "Tenant committed to pay today",
@@ -1944,6 +1976,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 234-5678",
     contactEmail: "william.brown@example.com",
     propertyManager: "Emily Watson",
+    message: "AI: Hello William, this is Susan from Property Homes. I'm calling about your significantly overdue rent payment. Our records show you have an outstanding balance of $2,950, which is equivalent to two months of rent.\nWilliam: I've been dealing with some serious financial hardships. I lost my job last month.\nAI: I'm sorry to hear that. Would you like to discuss potential assistance programs or a payment plan to avoid eviction?\nWilliam: Yes, that would be very helpful. I'm actively looking for a new job and expect to have income again soon.\nAI: We can work with you on this. Let's set up a meeting with the property manager to discuss options.\nWilliam: Thank you for your understanding. I am fully free starting tomorrow to discuss options.\nAI: Perfect. I set up a meeting with Emily Watson tomorrow March 8th at 10:30 AM. You'll be able to discuss next steps with her.\nWilliam: Thank you. My apologies again for this delay. It's not in my habits. Have a good day.\nAI: You're welcome. Have a good day too.",
+    date: "2025-03-07",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Urgent payment discussion via phone",
       "Tenant experiencing significant financial hardship",
@@ -1968,6 +2005,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 456-7890",
     contactEmail: "alexander.martin@example.com",
     propertyManager: "Michael Roberts",
+    message: "AI: Hello Alexander, this is Susan from Property Homes. Your rent payment of $1,250 is now significantly overdue. Our records show you have an outstanding balance of $1,250. Please contact us immediately to discuss payment options and avoid potential eviction proceedings.\nAlexander: I apologize for the delay. I've been hospitalized for the past few weeks. I'll call the office tomorrow to discuss a payment plan.\nAI: I understand. I'll pass on your message to the property manager. Have a good day.\nAlexander: Thank you. Have a good day too.",
+    date: "2025-03-16",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Late payment notification sent via email",
       "Tenant reported medical emergency",
@@ -1992,6 +2034,11 @@ export const mockRentCommunications: RentCommunication[] = [
     contactPhone: "(555) 567-8901",
     contactEmail: "isabella.clark@example.com",
     propertyManager: "Lisa Johnson",
+    message: "AI: Hello Isabella, this is Susan from Property Homes. This is a friendly reminder that your rent payment of $1,500 is due today. Please make it on time to avoid late fees.\nIsabella: Thank you for the reminder. I've already set up automatic payment it should be processed today.\nAI: Great! Have a good day and don't hesitate to reach out if you need any assistance.\nIsabella: Thank you. Have a good day too.",
+    date: "2025-03-05",
+    category: "rent",
+    community: "Osborne Farms",
+    market: "Atlanta",
     actionItems: [
       "Reminder sent via SMS",
       "Tenant confirmed automatic payment scheduled",
@@ -2215,11 +2262,12 @@ AI: You're welcome. Have a good day.`
 // Define the current leasing agent constant
 
 // Mock Leasing Agent Communications
-export const mockLeasingCommunications = [
+export const mockLeasingCommunications: MockLeasingConversation[] = [
   {
     id: '1',
     prospectName: 'Sarah Johnson',
     propertyInterest: '245 Oakridge Drive',
+    channel: 'text',
     community: 'Osborne Farms',
     market: 'Atlanta',
     leasingAgent: 'Emily Wilson',
@@ -2227,6 +2275,7 @@ export const mockLeasingCommunications = [
     message: 'Initial inquiry about 3-bedroom homes, pricing, and availability for April move-in. Interested in pet policies and yard size.',
     date: '2025-03-12T10:30:00',
     category: 'tour',
+    lead_score: 91,
     transcript: `Sarah Johnson: Hello, I'm trying to reach Property Homes. I'm looking for a new house around Dallas, GA.
 AI: Hello Sarah, this is Jessica from Property Homes. Thank you for reaching out to Property Homes. We have lovely houses in our brand new community in Dallas. Are you interested in a specific size or number of bedrooms?
 Sarah Johnson: I'm looking for a 3-bedroom home with a fenced yard. What's your pet policy?
@@ -2237,12 +2286,17 @@ Sarah Johnson: That works for me. Can you also send me some information about th
 AI: Absolutely! I'll send you a brochure with the confirmation of the tour. Do you want me to send it at this number or would you like me to send it to your email?
 Sarah Johnson: This number is perfect.
 AI: That sounds good. I'll send it right away. Thank you and have a great day! Please let me know if you have any questions.
-Sarah Johnson: Thank you!`
+Sarah Johnson: Thank you!`,
+    sentiment: 'positive',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'tour'
   },
   {
     id: '2',
     prospectName: 'Michael Chen',
     propertyInterest: '187 Riverside Lane',
+    channel: 'text',
     community: 'Preserve at Pine Grove',
     market: 'Tampa',
     leasingAgent: 'Emily Wilson',
@@ -2250,6 +2304,11 @@ Sarah Johnson: Thank you!`
     message: 'Tour scheduled for tomorrow at 2 PM. Looking for 4-bedroom with fenced yard. Mentioned parking needs for 2 vehicles.',
     date: '2025-03-14T14:15:00',
     category: 'tour',
+    lead_score: 78,
+    sentiment: 'positive',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'tour',
     transcript: `AI: Hello Michael. This is Jessica from Property Homes. I'd like to confirm your tour scheduled for 3/28/2025, 2:15:00 PM at 187 Riverside Lane. Is this time still convenient for you?
 Michael Chen: Yes, that works for me. I'm especially interested in seeing the yard and garage space.
 AI: Perfect! Your tour is confirmed with Emily Wilson, our leasing specialist. She'll show you the entire property including the yard and garage. Is there anything specific you'd like to know about the neighborhood?
@@ -2262,6 +2321,7 @@ AI: Please let me know if you have any questions. Emily will also be available t
     id: '3',
     prospectName: 'Amelia Rodriguez',
     propertyInterest: '722 Parkview Avenue',
+    channel: 'text',
     community: 'Scattered',
     market: 'Orlando',
     leasingAgent: 'Emily Wilson',
@@ -2269,6 +2329,11 @@ AI: Please let me know if you have any questions. Emily will also be available t
     message: 'Application sent for review. Follow-up call about income verification documents and pet deposit information.',
     date: '2025-03-11T11:45:00',
     category: 'application',
+    lead_score: 82,
+    sentiment: 'positive',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'application',
     transcript: `AI: Hello Amelia, this is Jessica from Property Homes. I'm following up regarding your application for 722 Parkview Avenue. Our team is currently reviewing your information.
 Amelia Rodriguez: Thanks for the update. How long does the review process usually take?
 AI: Our standard review process takes 2-3 business days. We're checking credit history, income verification, and rental references. Do you have any questions about the process?
@@ -2282,6 +2347,7 @@ Amelia Rodriguez: Thank you, you too!`
     id: '4',
     prospectName: 'David Taylor',
     propertyInterest: '528 Suwanee Circle',
+    channel: 'email',
     community: 'Suwanee Square',
     market: 'Atlanta',
     leasingAgent: 'Emily Wilson',
@@ -2289,6 +2355,11 @@ Amelia Rodriguez: Thank you, you too!`
     message: 'Application received. Discussion about credit score requirements and guarantor options. Will provide additional references.',
     date: '2025-03-10T16:30:00',
     category: 'screening',
+    lead_score: 70,
+    sentiment: 'neutral',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'application',
     transcript: `AI: Hello David Taylor, this is Jessica from Property Homes. I wanted to let you know we've received your application for 528 Suwanee Circle and have begun the screening process.
 David Taylor: Great, thank you. Are there any documents I need to provide?
 AI: We'll need your last two pay stubs or proof of income, and we'll be contacting your previous landlords for references. Your credit check is already in progress.
@@ -2301,13 +2372,19 @@ AI: Thank you! I'll keep you posted on the status of your application. Our goal 
     id: '5',
     prospectName: 'Jennifer Lee',
     propertyInterest: '953 Avila Drive',
+    channel: 'email',
     community: 'Avila Bay',
     market: 'Tampa',
-    leasingAgent: 'Emily Wilson',
+    leasingAgent: 'Lando Calrissian',
     status: 'approved',
     message: 'Application approved. Discussion about lease signing date and move-in details. Requested information about utility setup.',
     date: '2025-03-12T09:15:00',
     category: 'approval',
+    lead_score: 80,
+    sentiment: 'positive',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'approval',
     transcript: `AI: Hello Jennifer. This is Jessica from Property Homes. Congratulations! I'm pleased to inform you that your application for 953 Avila Drive has been approved.
 Jennifer Lee: That's wonderful news! Thanks Jessica for the update.What are the next steps?
 AI: We'll need you to sign the lease agreement within 48 hours to secure the property. Would you prefer to do this electronically or in person?
@@ -2325,6 +2402,7 @@ Jennifer Lee: Thank you! Have a great day too.`
     id: '6',
     prospectName: 'Robert Wilson',
     propertyInterest: 'Inquiry stage',
+    channel: 'text',
     community: 'Scattered',
     market: 'Orlando',
     leasingAgent: 'Emily Wilson',
@@ -2332,6 +2410,11 @@ Jennifer Lee: Thank you! Have a great day too.`
     message: 'Inquiry about pricing for 4-bedroom homes and any current specials. Asked about school districts and neighborhood amenities.',
     date: '2025-03-09T13:20:00',
     category: 'pricing',
+    lead_score: 82,
+    sentiment: 'neutral',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'inquiry',
     transcript: `AI: Hello Robert! This is Jessica from Property Homes. Thank you for submitting a form on our website. We're excited to hear about your interest in renting one of our houses in Orlando. How could I assist you in your house search?
 Robert Wilson: Hello Jessica, thanks for getting back to me so quickly. I'm looking for a 4-bedroom home with a fenced yard in the Orlando area. Ideally, in the suburbs. Do you have any properties that fit this description?
 AI: Absolutely! We have a few houses that could meet this description. What is your budget?
@@ -2349,6 +2432,7 @@ Robert Wilson: Thank you. Have a great day too.`
     id: '7',
     prospectName: 'Emma Garcia',
     propertyInterest: '675 Belmont Road',
+    channel: 'email',
     community: 'Belmont',
     market: 'Tampa',
     leasingAgent: 'Emily Wilson',
@@ -2356,6 +2440,11 @@ Robert Wilson: Thank you. Have a great day too.`
     message: 'Virtual tour scheduled for March 25. Relocating from out of state. Requested information about nearby schools and public transportation.',
     date: '2025-03-08T10:30:00',
     category: 'location',
+    lead_score: 70,
+    sentiment: 'neutral',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'location',
     transcript: `AI: Hello Emma! This is Jessica from Property Homes. Thank you for your interest in 675 Belmont Road. Is there anything I can help you with before your tour next Tuesday?
 Emma Garcia: Hey Jessica, thanks for your thoughtful message. I'd like to know more about your Belmont community and what's around it. Particularly schools and transportation.
 AI: Belmont is located in a family-friendly area with excellent schools. The elementary school is rated 8/10 on GreatSchools, and there's a middle and high school within 3 miles. Public transportation includes bus routes that connect to downtown, and there's a commuter train station about 4 miles away. The neighborhood has several parks within walking distance and a community center with a pool.
@@ -2369,6 +2458,7 @@ Emma Garcia: Thank you Jessica. Have a great day too.`
     id: '8',
     prospectName: 'Thomas Brown',
     propertyInterest: '442 Sawyer Lane',
+    channel: 'phone',
     community: 'Sawyer\'s Preserve',
     market: 'Jacksonville',
     leasingAgent: 'Emily Wilson',
@@ -2376,6 +2466,11 @@ Emma Garcia: Thank you Jessica. Have a great day too.`
     message: 'Application declined due to insufficient income. Discussion about alternative properties with lower rent requirements.',
     date: '2025-03-07T15:45:00',
     category: 'application',
+    lead_score: 48,
+    sentiment: 'negative',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'application',
     transcript: `AI: Hello Thomas, this is Jessica from Property Homes. I'm reaching out regarding your application for 442 Sawyer Lane. I regret to inform you that we were unable to approve your application at this time.
 Thomas Brown: Can you tell me why it was declined?
 AI: The primary reason was the income verification. Our policy requires that monthly income be at least three times the monthly rent. We do have other properties with lower rental rates that might be more suitable. Would you be interested in hearing about those options?
@@ -2389,6 +2484,7 @@ Thomas Brown: Thank you. Have a great day too.`
     id: '9',
     prospectName: 'Peter Martinez',
     propertyInterest: '829 Circle Lane',
+    channel: 'phone',
     community: 'Scattered',
     market: 'Jacksonville',
     leasingAgent: 'Emily Wilson',
@@ -2396,6 +2492,11 @@ Thomas Brown: Thank you. Have a great day too.`
     message: 'Detailed questions about property maintenance, lawn care responsibilities, and whether a home office space can be built in the garage.',
     date: '2025-03-13T17:00:00',
     category: 'amenities',
+    lead_score: 72,
+    sentiment: 'neutral',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'inquiry',
     transcript: `AI: Hello Peter, this is Jessica from Property Homes. Thank you for submitting your interest in 829 Circle Lane. Is there anything I can assist you with for your application process?
 Peter Martinez: Hey. Thanks for getting back to me. I have some questions about the property maintenance and whether I can build a home office in the garage.
 AI: For maintenance, our company handles all structural, plumbing, electrical, and HVAC issues. Tenants are responsible for lawn care and basic upkeep, though we do offer a lawn service add-on for $120 per month. Regarding modifications to the garage, any permanent changes would need approval, but we're generally open to reasonable improvements. Could you tell me more about what you're planning?
@@ -2413,6 +2514,7 @@ Peter Martinez: Thank you! Have a great day too.`
     id: '10',
     prospectName: 'Daniel Kim',
     propertyInterest: '156 Osborne Street',
+    channel: 'text',
     community: 'Osborne Farms',
     market: 'Atlanta',
     leasingAgent: 'Emily Wilson',
@@ -2420,6 +2522,11 @@ Peter Martinez: Thank you! Have a great day too.`
     message: 'Tour scheduled for next week. Specific interest in home layout and storage space. Asked about noise levels from neighboring properties.',
     date: '2025-03-15T09:15:00',
     category: 'tour',
+    lead_score: 57,
+    sentiment: 'neutral',
+    urgency: 'medium',
+    interestLevel: 'high',
+    scenario: 'tour',
     transcript: `AI: Hello Daniel! This is Jessica from Property Homes. I'd like to confirm your tour scheduled for March 28th at 11AM at 156 Osborne Street. Is this time still convenient for you?
 Daniel Kim: Yes, that works for me.
 AI: Perfect! Your tour is confirmed with Emily Wilson. Is there anything specific that you want to check out during the tour or that you'd like to know in advance?

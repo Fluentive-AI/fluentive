@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AIAgentConsole from '@/components/communications/AIAgentConsole';
 import CommunicationsAnalytics from '@/components/communications/CommunicationsAnalytics';
-import { mockAIConversations } from '@/data/mockData';
+import { mockAIConversations, mockLeasingCommunications } from '@/data/mockData';
 import { Button } from '@/components/ui/button';
 import { Phone, MessageSquare, Mail, Plus, Filter, FileText, ExternalLink, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -250,8 +250,9 @@ const Communications = () => {
             
             <TabsContent value="analytics" className="overflow-hidden">
               <CommunicationsAnalytics 
-                conversations={filteredConversations} 
-                department={activeDepartment}
+                marketFilters={selectedMarketCommunities}
+                conversations={mockLeasingCommunications}
+                topicFilters={selectedLeasingTopics}
               />
             </TabsContent>
           </Tabs>

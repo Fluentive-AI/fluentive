@@ -7,13 +7,21 @@ import { Input } from '@/components/ui/input';
 import LeasingAgentCommunicationAIConsole from '@/components/rent/LeasingAgentCommunicationAIConsole';
 import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
 import LeasingTopicFilter from '@/components/rent/LeasingTopicFilter';
-import { CURRENT_LEASING_AGENT } from '@/data/mockData';
+import { CURRENT_LEASING_AGENT, mockLeasingCommunications } from '@/data/mockData';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import CommunicationsAnalytics from '@/components/communications/CommunicationsAnalytics';
 
 const LeasingAgentCommunication = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [marketFilters, setMarketFilters] = useState<string[]>([]);
   const [topicFilters, setTopicFilters] = useState<string[]>([]);
+  const [activeView, setActiveView] = useState('console');
+  
+  // Filter communications for current leasing agent
+  const agentCommunications = mockLeasingCommunications.filter(
+    conv => conv.leasingAgent === CURRENT_LEASING_AGENT
+  );
   
   return (
     <div>
@@ -39,6 +47,16 @@ const LeasingAgentCommunication = () => {
             See in Yardi
           </Button>
         </div>
+      </div>
+      
+      {/* View Toggle */}
+      <div className="flex justify-end mb-4">
+        <Tabs value={activeView} onValueChange={setActiveView} className="w-auto">
+          <TabsList>
+            <TabsTrigger value="console">Agent Console</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       
       <Card>
@@ -68,11 +86,22 @@ const LeasingAgentCommunication = () => {
           </div>
         </CardHeader>
         <CardContent className="pt-0">
-          <LeasingAgentCommunicationAIConsole 
-            searchQuery={searchQuery}
-            marketFilters={marketFilters}
-            topicFilters={topicFilters}
-          />
+          <Tabs value={activeView}>
+            <TabsContent value="console">
+              <LeasingAgentCommunicationAIConsole 
+                searchQuery={searchQuery}
+                marketFilters={marketFilters}
+                topicFilters={topicFilters}
+              />
+            </TabsContent>
+            <TabsContent value="analytics">
+              <CommunicationsAnalytics 
+                marketFilters={marketFilters}
+                conversations={agentCommunications}
+                topicFilters={topicFilters}
+              />
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>

@@ -202,8 +202,44 @@ export interface AIAgentConsoleProps {
   className?: string;
 }
 
+export interface MockLeasingConversation {
+  id: string;
+  prospectName: string;
+  propertyInterest: string;
+  channel: string;
+  community: string;
+  market: string;
+  leasingAgent: string;
+  status: string;
+  message: string;
+  date: string;
+  category: string;
+  lead_score: number;
+  transcript: string;
+  sentiment: 'positive' | 'negative' | 'neutral';
+  urgency: 'high' | 'medium' | 'low';
+  interestLevel: 'high' | 'medium' | 'low';
+  scenario: string;
+}
+
 export interface CommunicationsAnalyticsProps {
   conversations: AIConversation[];
   department?: string;
 }
+
+export interface ConversationType {
+  id: string;
+  prospectName: string;
+  dateTime: string;
+  channel: 'chat' | 'email' | 'phone';
+  market: string;
+  status: 'active' | 'completed' | 'transferred';
+  transcript: string;
+  sentiment: 'positive' | 'neutral' | 'negative';
+  urgency: 'low' | 'medium' | 'high';
+  interestLevel: 'low' | 'medium' | 'high';
+  scenario: string;
+  summary: string;
+}
+
 

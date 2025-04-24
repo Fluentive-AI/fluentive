@@ -34,12 +34,12 @@ const ConversationInterface: React.FC<ConversationInterfaceProps> = ({
     }
     
     // Filter by communication type
-    if (selectedCommTypes.length > 0 && !selectedCommTypes.includes(conversation.channel)) {
+    if (selectedCommTypes.length > 0 && !selectedCommTypes.includes('all') && !selectedCommTypes.includes(conversation.channel)) {
       return false;
     }
 
     // Filter by market
-    if (selectedMarkets.length > 0 && !selectedMarkets.includes(conversation.market)) {
+    if (selectedMarkets.length > 0 && !selectedMarkets.includes('all') && !selectedMarkets.includes(conversation.market)) {
       return false;
     }
     
