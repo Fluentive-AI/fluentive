@@ -15,7 +15,7 @@ interface SuperCommunication {
   unit: string;
   community: string;
   superintendent: string;
-  status: 'urgent' | 'scheduled' | 'completed';
+  status: string;
   message: string;
   date: string;
   category: string;

@@ -91,6 +91,15 @@ const Communications = () => {
     if (selectedCommTypes.length > 0 && !selectedCommTypes.includes('all') && !selectedCommTypes.includes(conversation.channel)) {
       return false;
     }
+
+    // Filter by market/community
+    if (selectedMarketCommunities.length > 0) {
+      const marketCommunity = `${conversation.market}/${conversation.community}`;
+      const matchesMarket = selectedMarketCommunities.some(mc => 
+        marketCommunity === mc
+      );
+      if (!matchesMarket) return false;
+    }
     
     return true;
   });
@@ -133,7 +142,7 @@ const Communications = () => {
     <div>
       {/* Header with title and action buttons */}
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">AI Communications with Tenants</h1>
+        <h1 className="text-2xl font-bold">AI Communications with Leads</h1>
         
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={handleExport} className="flex items-center gap-1">
@@ -155,6 +164,7 @@ const Communications = () => {
       {/* Tabs moved outside of card */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
         {/* Department Tabs */}
+        {/*}
         <Tabs value={activeDepartment} onValueChange={setActiveDepartment} className="w-auto">
           <TabsList>
             <TabsTrigger value="leasing">Leasing</TabsTrigger>
@@ -162,9 +172,10 @@ const Communications = () => {
             <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
           </TabsList>
         </Tabs>
+        */}
         
         {/* View Type Tabs */}
-        <Tabs value={activeView} onValueChange={setActiveView} className="w-auto">
+        <Tabs value={activeView} onValueChange={setActiveView} className="w-auto ml-auto">
           <TabsList>
             <TabsTrigger value="console">Agent Console</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>

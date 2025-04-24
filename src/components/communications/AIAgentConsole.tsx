@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { AIConversation } from '@/types';
+import { AIConversation } from '@/types/index';
 import { Phone, MessageSquare, Mail, User, Bot, Send, Mic, MicOff, FileText, List, MessageCircle, Home, Settings, BarChart2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

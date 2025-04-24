@@ -5,7 +5,8 @@ import CommunicationTypeFilter from './CommunicationTypeFilter';
 import ScenarioFilter from './ScenarioFilter';
 import AIAgentConsole from './AIAgentConsole';
 import CommunicationsAnalytics from './CommunicationsAnalytics';
-import { AIConversation } from '@/types/communications';
+import { AIConversation } from '@/types/index';
+import MarketCommunityFilter from '@/components/leads/MarketCommunityFilter';
 
 interface ConversationInterfaceProps {
   conversations: AIConversation[];
@@ -20,6 +21,7 @@ const ConversationInterface: React.FC<ConversationInterfaceProps> = ({
 }) => {
   const [selectedScenarios, setSelectedScenarios] = useState<string[]>([]);
   const [selectedCommTypes, setSelectedCommTypes] = useState<string[]>([]);
+  const [selectedMarkets, setSelectedMarkets] = useState<string[]>([]);
   
   // Filter conversations based on selected filters
   const filteredConversations = conversations.filter(conversation => {
@@ -33,6 +35,11 @@ const ConversationInterface: React.FC<ConversationInterfaceProps> = ({
     
     // Filter by communication type
     if (selectedCommTypes.length > 0 && !selectedCommTypes.includes(conversation.channel)) {
+      return false;
+    }
+
+    // Filter by market
+    if (selectedMarkets.length > 0 && !selectedMarkets.includes(conversation.market)) {
       return false;
     }
     
@@ -56,6 +63,12 @@ const ConversationInterface: React.FC<ConversationInterfaceProps> = ({
                 onChange={setSelectedCommTypes}
               />
               
+              {/* Market Filter */}
+              <MarketCommunityFilter 
+                selectedValues={selectedMarkets}
+                onChange={setSelectedMarkets}
+              />
+              
               {/* Scenario Filter */}
               <ScenarioFilter 
                 options={scenarioCategories}
@@ -69,7 +82,16 @@ const ConversationInterface: React.FC<ConversationInterfaceProps> = ({
         
         <CardContent className="pt-0 max-h-[calc(100vh-12rem)] overflow-y-auto">
           <TabsContent value="console" className="overflow-hidden">
-            <AIAgentConsole conversations={filteredConversations} />
+            <AIAgentConsole 
+              conversations={filteredConversations} 
+              activeDepartment="all"
+              activeView="all"
+              searchQuery=""
+              marketFilters={selectedMarkets}
+              leasingTopicFilters={[]}
+              statusFilters={[]}
+              maintenanceTopicFilters={[]}
+            />
           </TabsContent>
           
           <TabsContent value="analytics" className="overflow-hidden">

@@ -48,10 +48,11 @@ const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ data, title, yAxisLab
   const yAxisMax = Math.ceil(globalMax * 1.05);
 
   // Create a helper function to format community names consistently
-  const formatCommunityName = (key: string): string => {
+  const formatCommunityName = (key: string | number): string => {
+    const keyStr = String(key);
     // For market/community format
-    if (key.includes('/')) {
-      const [market, community] = key.split('/');
+    if (keyStr.includes('/')) {
+      const [market, community] = keyStr.split('/');
       
       // Special case for Scattered communities
       if (community === 'Scattered') {
@@ -63,7 +64,7 @@ const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ data, title, yAxisLab
     }
     
     // For markets or other values, show as is
-    return key;
+    return keyStr;
   };
 
   // Custom tooltip component that positions to the right of the cursor

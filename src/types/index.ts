@@ -1,18 +1,55 @@
+export interface MessageType {
+  sender: 'tenant' | 'ai' | 'agent' | 'system';
+  message: string;
+  timestamp: string;
+}
 
 export interface AIConversation {
   id: string;
   contactName: string;
+  tenant?: string;
+  unit?: string;
   dateTime: string;
-  channel: 'voice' | 'sms' | 'email';
+  topic?: string;
+  status?: string;
+  messages?: MessageType[];
+  department?: string;
+  community?: string;
+  market?: string;
+  resolution?: string;
+  channel: 'voice' | 'sms' | 'email' | string;
   summary: string;
   transcript: string;
-  sentiment: 'positive' | 'neutral' | 'negative';
+  sentiment: 'positive' | 'neutral' | 'negative' | string;
   actionItems: string[];
   scenario?: string;
   contactPhone?: string;
   contactEmail?: string;
-  systemLinks?: string[];
+  systemLinks?: string[] | {
+    yardi: string;
+    calendar: string;
+    posting?: string;
+    maintenance?: string;
+    leases?: string;
+    moveout?: string;
+  };
   relatedTo?: string;
+}
+
+export interface AIAgentConsoleProps {
+  conversations: AIConversation[];
+  activeDepartment: string;
+  activeView: string;
+  searchQuery: string;
+  marketFilters: string[];
+  communityFilters: string[];
+  statusFilters: string[];
+  className?: string;
+}
+
+export interface CommunicationsAnalyticsProps {
+  conversations: AIConversation[];
+  department?: string;
 }
 
 export type LeadStatus = 'new' | 'contacted' | 'tour_scheduled' | 'application_sent' | 'application_received' | 'pending' | 'scheduled' | 'completed' | 'approved' | 'active';
@@ -43,24 +80,32 @@ export interface Application {
   applicantName: string;
   email: string;
   phone: string;
-  unitType: string;
   dateSubmitted: string;
   status: ApplicationStatus;
   assignedTo?: string;
-  propertyInterest?: string;
-  backgroundCheck?: {
-    status: 'pending' | 'completed' | 'failed';
+  propertyInterest: string;
+  backgroundCheck: {
+    status: 'completed' | 'approved' | 'pending' | 'failed';
     score?: number;
   };
-  creditCheck?: {
-    status: 'pending' | 'completed' | 'failed';
+  creditCheck: {
+    status: 'completed' | 'approved' | 'pending' | 'failed';
     score?: number;
   };
-  incomeVerification?: {
-    status: 'pending' | 'completed' | 'failed';
+  incomeVerification: {
+    status: 'completed' | 'approved' | 'pending' | 'failed';
     verified: boolean;
   };
+  market: string;
+  community: string;
+  unit: string;
+  moveInDate: string;
+  creditScore: number;
+  income: number;
+  pets: boolean;
+  documents: string[];
   leadId?: string;
+  agent: string;
 }
 
 export type TenantStatus = 'active' | 'inactive' | 'notice';
@@ -134,3 +179,31 @@ export interface MetricData {
     value: number;
   }[];
 }
+
+export interface ConversationFilterProps {
+  selectedFilter: string;
+  setSelectedFilter: (filter: string) => void;
+}
+
+export interface ScenarioFilterProps {
+  options: any[];
+  selectedValues: string[];
+  onChange: (selectedValues: string[]) => void;
+  className?: string;
+}
+export interface AIAgentConsoleProps {
+  conversations: AIConversation[];
+  activeDepartment: string;
+  activeView: string;
+  searchQuery: string;
+  marketFilters: string[];
+  communityFilters: string[];
+  statusFilters: string[];
+  className?: string;
+}
+
+export interface CommunicationsAnalyticsProps {
+  conversations: AIConversation[];
+  department?: string;
+}
+

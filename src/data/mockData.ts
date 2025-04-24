@@ -1,6 +1,5 @@
 import { 
   Lead, 
-  Application, 
   Tenant, 
   MaintenanceRequest, 
   AIConversation,
@@ -9,6 +8,7 @@ import {
   ChartData,
   RentCommunication
 } from '@/types';
+import { Application } from '@/types/index';
 
 // Helper to generate today's date string in ISO format
 const todayISO = new Date().toISOString().split('T')[0];
@@ -36,7 +36,10 @@ export const mockLeads: Lead[] = [
     tourScheduled: '2025-03-20',
     assignedTo: 'Sarah Johnson',
     market: 'Tampa',
-    community: 'Preserve at Pine Grove'
+    community: 'Preserve at Pine Grove',
+    date: '2025-03-15',
+    agent: 'Sarah Johnson',
+    followUp: '2025-03-18'
   },
   {
     id: '2',
@@ -51,8 +54,11 @@ export const mockLeads: Lead[] = [
     nextFollowUp: '2025-03-17',
     tourScheduled: '2025-03-19',
     assignedTo: 'Mike Brown',
-    market: 'Atlanta',
-    community: 'Osborne Farms'
+    market: 'Tampa',
+    community: 'Avila Bay',
+    date: '2025-03-10',
+    agent: 'Mike Brown',
+    followUp: '2025-03-17'
   },
   {
     id: '3',
@@ -69,7 +75,10 @@ export const mockLeads: Lead[] = [
     tourDateTime: getTodayAt(14, 0),
     assignedTo: 'Alex Rodriguez',
     market: 'Atlanta',
-    community: 'Suwanee Square'
+    community: 'Suwanee Square',
+    date: '2025-03-05',
+    agent: 'Alex Rodriguez',
+    followUp: '2025-03-16'
   },
   {
     id: '4',
@@ -85,7 +94,10 @@ export const mockLeads: Lead[] = [
     tourScheduled: '2025-03-21',
     assignedTo: 'Emily Wilson',
     market: 'Jacksonville',
-    community: 'Sawyer\'s Preserve'
+    community: 'Sawyer\'s Preserve',
+    date: '2025-03-12',
+    agent: 'Emily Wilson',
+    followUp: '2025-03-19'
   },
   {
     id: '5',
@@ -101,7 +113,10 @@ export const mockLeads: Lead[] = [
     tourScheduled: '2025-03-22',
     assignedTo: 'James Taylor',
     market: 'Tampa',
-    community: 'Avila Bay'
+    community: 'Avila Bay',
+    date: '2025-03-08',
+    agent: 'James Taylor',
+    followUp: '2025-03-18'
   },
   {
     id: '6',
@@ -117,7 +132,10 @@ export const mockLeads: Lead[] = [
     tourScheduled: '2025-03-23',
     assignedTo: 'Alex Rodriguez',
     market: 'Tampa',
-    community: 'Belmont'
+    community: 'Belmont',
+    date: '2025-03-14',
+    agent: 'Alex Rodriguez',
+    followUp: '2025-03-20'
   },
   {
     id: '7',
@@ -133,7 +151,10 @@ export const mockLeads: Lead[] = [
     tourScheduled: '2025-03-18',
     assignedTo: 'Emily Wilson',
     market: 'Orlando',
-    community: 'Scattered'
+    community: 'Scattered',
+    date: '2025-03-09',
+    agent: 'Emily Wilson',
+    followUp: '2025-03-16'
   },
   {
     id: "lead-tampa-101",
@@ -147,7 +168,11 @@ export const mockLeads: Lead[] = [
     community: "Avila Bay",
     assignedTo: "Emily Wilson",
     status: "new",
-    lastContact: getTodayAt(9, 15)
+    lastContact: getTodayAt(9, 15),
+    date: todayISO,
+    agent: "Emily Wilson",
+    notes: "Initial contact made",
+    followUp: todayISO
   },
   {
     id: "lead-tampa-102",
@@ -161,7 +186,11 @@ export const mockLeads: Lead[] = [
     community: "Belmont",
     assignedTo: "Emily Wilson",
     status: "contacted",
-    lastContact: getTodayAt(10, 30)
+    lastContact: getTodayAt(10, 30),
+    date: todayISO,
+    agent: "Emily Wilson",
+    notes: "Initial contact made",
+    followUp: todayISO
   },
   {
     id: "lead-tampa-103",
@@ -176,8 +205,11 @@ export const mockLeads: Lead[] = [
     assignedTo: "Emily Wilson",
     status: "tour_scheduled",
     tourScheduled: todayISO,
-    tourDateTime: getTodayAt(13, 0), // 1:00 PM today
-    notes: "Client is very interested in the bay view property."
+    tourDateTime: getTodayAt(13, 0),
+    notes: "Client is very interested in the bay view property.",
+    date: todayISO,
+    agent: "Emily Wilson",
+    followUp: todayISO
   },
   {
     id: "lead-tampa-104",
@@ -192,8 +224,11 @@ export const mockLeads: Lead[] = [
     assignedTo: "Emily Wilson",
     status: "tour_scheduled",
     tourScheduled: todayISO,
-    tourDateTime: getTodayAt(15, 30), // 3:30 PM today
-    notes: "Looking for pet-friendly options. Has a golden retriever."
+    tourDateTime: getTodayAt(15, 30),
+    notes: "Looking for pet-friendly options. Has a golden retriever.",
+    date: todayISO,
+    agent: "Emily Wilson",
+    followUp: todayISO
   },
   {
     id: "lead-tampa-105",
@@ -207,7 +242,11 @@ export const mockLeads: Lead[] = [
     community: "Preserve at Pine Grove",
     assignedTo: "Emily Wilson",
     status: "application_sent",
-    lastContact: getTodayAt(11, 15)
+    lastContact: getTodayAt(11, 15),
+    date: todayISO,
+    agent: "Emily Wilson",
+    notes: "Looking for pet-friendly options. Has a golden retriever.",
+    followUp: todayISO
   },
   {
     id: "lead-tampa-106",
@@ -221,7 +260,11 @@ export const mockLeads: Lead[] = [
     community: "Avila Bay",
     assignedTo: "Emily Wilson",
     status: "application_received",
-    lastContact: "2023-06-10T09:30:00Z"
+    lastContact: "2023-06-10T09:30:00Z",
+    date: todayISO,
+    agent: "Emily Wilson",
+    notes: "Looking for pet-friendly options. Has a golden retriever.",
+    followUp: todayISO
   },
   {
     id: "lead-atlanta-201",
@@ -236,7 +279,11 @@ export const mockLeads: Lead[] = [
     assignedTo: "John Smith",
     status: "tour_scheduled",
     tourScheduled: todayISO,
-    tourDateTime: getTodayAt(11, 0) // 11:00 AM today
+    tourDateTime: getTodayAt(11, 0),
+    date: todayISO,
+    agent: "John Smith",
+    notes: "Tour scheduled for today",
+    followUp: todayISO
   },
   {
     id: "lead-atlanta-202",
@@ -250,7 +297,11 @@ export const mockLeads: Lead[] = [
     community: "Suwanee Square",
     assignedTo: "John Smith",
     status: "new",
-    lastContact: getTodayAt(8, 45)
+    lastContact: getTodayAt(8, 45),
+    date: todayISO,
+    agent: "John Smith",
+    notes: "Initial contact made",
+    followUp: todayISO
   },
   {
     id: "lead-jacksonville-301",
@@ -265,7 +316,11 @@ export const mockLeads: Lead[] = [
     assignedTo: "Lisa Johnson",
     status: "tour_scheduled",
     tourScheduled: todayISO,
-    tourDateTime: getTodayAt(14, 15) // 2:15 PM today
+    tourDateTime: getTodayAt(14, 15),
+    date: todayISO,
+    agent: "Lisa Johnson",
+    notes: "Tour scheduled for today",
+    followUp: todayISO
   }
 ];
 
@@ -283,28 +338,44 @@ export const mockApplications: Application[] = [
     propertyInterest: '5678 Osborne Road',
     status: 'reviewing',
     dateSubmitted: '2025-03-12',
-    backgroundCheck: 'approved',
-    creditCheck: 'pending',
-    incomeVerification: 'approved',
+    backgroundCheck: { status: 'approved', completed: true },
+    creditCheck: { status: 'pending', completed: false },
+    incomeVerification: { status: 'approved', completed: true },
     assignedTo: 'Sarah Johnson',
     market: 'Atlanta',
-    community: 'Osborne Farms'
+    community: 'Osborne Farms',
+    date: todayISO,
+    agent: 'Sarah Johnson',
+    unit: 'A101',
+    moveInDate: '2025-04-01',
+    creditScore: 720,
+    income: 75000,
+    pets: true,
+    documents: []
   },
   {
     id: '2',
-    leadId: '5',
-    name: 'David Wilson',
-    email: 'dwilson@example.com',
-    phone: '(555) 345-6789',
-    propertyInterest: '2145 Avila Bay Drive',
+    leadId: '2',
+    name: 'Sarah Johnson',
+    email: 'sarah.j@example.com',
+    phone: '(555) 987-6543',
+    propertyInterest: '456 Oak Avenue',
     status: 'approved',
     dateSubmitted: '2025-03-10',
-    backgroundCheck: 'approved',
-    creditCheck: 'approved',
-    incomeVerification: 'approved',
+    backgroundCheck: { status: 'approved', completed: true },
+    creditCheck: { status: 'approved', completed: true },
+    incomeVerification: { status: 'approved', completed: true },
     assignedTo: 'Mike Brown',
     market: 'Tampa',
-    community: 'Avila Bay'
+    community: 'Avila Bay',
+    unit: '456 Oak Avenue',
+    moveInDate: '2025-04-15',
+    creditScore: 780,
+    income: 85000,
+    pets: false,
+    documents: [],
+    date: '2025-03-10',
+    agent: 'Mike Brown'
   },
   {
     id: '3',
@@ -312,17 +383,24 @@ export const mockApplications: Application[] = [
     name: 'Emma Davis',
     email: 'emma.d@example.com',
     phone: '(555) 234-5678',
-    propertyInterest: '3214 Sawyer\'s Creek Road',
+    propertyInterest: '321 Willow Drive',
     status: 'pending',
     dateSubmitted: '2025-03-14',
-    backgroundCheck: 'pending',
-    creditCheck: 'pending',
-    incomeVerification: 'pending',
+    backgroundCheck: { status: 'pending', completed: false },
+    creditCheck: { status: 'pending', completed: false },
+    incomeVerification: { status: 'pending', completed: false },
     assignedTo: 'Emily Wilson',
     market: 'Jacksonville',
-    community: 'Sawyer\'s Preserve'
+    community: 'Sawyer\'s Preserve',
+    unit: '321 Willow Drive',
+    moveInDate: '2025-05-01',
+    creditScore: 690,
+    income: 62000,
+    pets: true,
+    documents: [],
+    date: '2025-03-14',
+    agent: 'Emily Wilson'
   },
-  // Adding 5 more active applications
   {
     id: '4',
     leadId: 'lead-tampa-106',
@@ -332,12 +410,20 @@ export const mockApplications: Application[] = [
     propertyInterest: '1876 Avila Bay Drive',
     status: 'reviewing',
     dateSubmitted: '2025-03-15',
-    backgroundCheck: 'approved',
-    creditCheck: 'pending',
-    incomeVerification: 'approved',
+    backgroundCheck: { status: 'approved', completed: true },
+    creditCheck: { status: 'pending', completed: false },
+    incomeVerification: { status: 'approved', completed: true },
     assignedTo: 'Emily Wilson',
     market: 'Tampa',
-    community: 'Avila Bay'
+    community: 'Avila Bay',
+    unit: '1876 Avila Bay Drive',
+    moveInDate: '2025-04-20',
+    creditScore: 710,
+    income: 68000,
+    pets: false,
+    documents: [],
+    date: '2025-03-15',
+    agent: 'Emily Wilson'
   },
   {
     id: '5',
@@ -348,12 +434,20 @@ export const mockApplications: Application[] = [
     propertyInterest: '7823 Pine Grove Circle',
     status: 'pending',
     dateSubmitted: '2025-03-16',
-    backgroundCheck: 'pending',
-    creditCheck: 'pending',
-    incomeVerification: 'pending',
+    backgroundCheck: { status: 'pending', completed: false },
+    creditCheck: { status: 'pending', completed: false },
+    incomeVerification: { status: 'pending', completed: false },
     assignedTo: 'Emily Wilson',
     market: 'Tampa',
-    community: 'Preserve at Pine Grove'
+    community: 'Preserve at Pine Grove',
+    unit: '7823 Pine Grove Circle',
+    moveInDate: '2025-05-15',
+    creditScore: 650,
+    income: 55000,
+    pets: true,
+    documents: [],
+    date: '2025-03-16',
+    agent: 'Emily Wilson'
   },
   {
     id: '6',
@@ -364,12 +458,20 @@ export const mockApplications: Application[] = [
     propertyInterest: '5432 Osborne Road',
     status: 'approved',
     dateSubmitted: '2025-03-11',
-    backgroundCheck: 'approved',
-    creditCheck: 'approved',
-    incomeVerification: 'approved',
+    backgroundCheck: { status: 'approved', completed: true },
+    creditCheck: { status: 'approved', completed: true },
+    incomeVerification: { status: 'approved', completed: true },
     assignedTo: 'John Smith',
     market: 'Atlanta',
-    community: 'Osborne Farms'
+    community: 'Osborne Farms',
+    unit: '5432 Osborne Road',
+    moveInDate: '2025-04-10',
+    creditScore: 800,
+    income: 95000,
+    pets: false,
+    documents: [],
+    date: '2025-03-11',
+    agent: 'John Smith'
   },
   {
     id: '7',
@@ -380,12 +482,44 @@ export const mockApplications: Application[] = [
     propertyInterest: '8901 Suwanee Creek Drive',
     status: 'reviewing',
     dateSubmitted: '2025-03-13',
-    backgroundCheck: 'approved',
-    creditCheck: 'pending',
-    incomeVerification: 'approved',
+    backgroundCheck: { status: 'approved', completed: true },
+    creditCheck: { status: 'pending', completed: false },
+    incomeVerification: { status: 'approved', completed: true },
     assignedTo: 'John Smith',
     market: 'Atlanta',
-    community: 'Suwanee Square'
+    community: 'Suwanee Square',
+    unit: '8901 Suwanee Creek Drive',
+    moveInDate: '2025-05-01',
+    creditScore: 730,
+    income: 72000,
+    pets: true,
+    documents: [],
+    date: '2025-03-13',
+    agent: 'John Smith'
+  },
+  {
+    id: '8',
+    leadId: 'lead-jacksonville-101',
+    name: 'Mike Brown',
+    email: 'mike.b@example.com',
+    phone: '(904) 555-9012',
+    propertyInterest: '9012 Sawyer\'s Creek Road',
+    status: 'denied',
+    dateSubmitted: '2025-03-09',
+    backgroundCheck: { status: 'denied', completed: true },
+    creditCheck: { status: 'approved', completed: true },
+    incomeVerification: { status: 'approved', completed: true },
+    assignedTo: 'Lisa Johnson',
+    market: 'Jacksonville',
+    community: 'Sawyer\'s Preserve',
+    unit: 'H205',
+    moveInDate: '2025-04-25',
+    creditScore: 600,
+    income: 45000,
+    pets: false,
+    documents: [],
+    date: '2025-03-09',
+    agent: 'Lisa Johnson'
   },
   {
     id: '8',
@@ -396,12 +530,20 @@ export const mockApplications: Application[] = [
     propertyInterest: '3214 Sawyer\'s Creek Road',
     status: 'denied',
     dateSubmitted: '2025-03-09',
-    backgroundCheck: 'denied',
-    creditCheck: 'approved',
-    incomeVerification: 'approved',
+    backgroundCheck: { status: 'denied', completed: true },
+    creditCheck: { status: 'approved', completed: true },
+    incomeVerification: { status: 'approved', completed: true },
     assignedTo: 'Lisa Johnson',
     market: 'Jacksonville',
-    community: 'Sawyer\'s Preserve'
+    community: 'Sawyer\'s Preserve',
+    unit: 'H205',
+    moveInDate: '2025-04-25',
+    creditScore: 600,
+    income: 45000,
+    pets: false,
+    documents: [],
+    date: '2025-03-09',
+    agent: 'Lisa Johnson'
   }
 ];
 
@@ -937,7 +1079,11 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     endDate: '2025-03-18T12:30:00',
     community: 'Avila Bay',
     type: 'maintenance',
-    market: 'Tampa'
+    market: 'Tampa',
+    tenant: 'Robert Garcia',
+    category: 'plumbing',
+    dateCompleted: null,
+    notes: ['Tenant reported the issue this morning']
   },
   {
     id: '2',
@@ -954,7 +1100,11 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     endDate: '2025-03-15T11:00:00',
     community: 'Belmont',
     type: 'maintenance',
-    market: 'Tampa'
+    market: 'Tampa',
+    tenant: 'Thomas White',
+    category: 'hvac',
+    dateCompleted: null,
+    notes: ['Tenant reported the issue this afternoon']
   },
   {
     id: '3',
@@ -971,7 +1121,11 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     endDate: '2025-03-11T15:00:00',
     community: 'Preserve at Pine Grove',
     type: 'maintenance',
-    market: 'Tampa'
+    market: 'Tampa',
+    tenant: 'Jennifer Lopez',
+    category: 'appliance',
+    dateCompleted: '2025-03-11T15:00:00',
+    notes: ['Tenant reported the issue yesterday', 'Technician completed the repair']
   },
   {
     id: '4',
@@ -988,7 +1142,11 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     endDate: '2025-03-14T11:45:00',
     community: 'Scattered',
     type: 'maintenance',
-    market: 'Orlando'
+    market: 'Orlando',
+    tenant: 'James Taylor',
+    category: 'plumbing',
+    dateCompleted: null,
+    notes: ['Tenant reported the issue this morning']
   },
   {
     id: '5',
@@ -1005,7 +1163,11 @@ export const mockMaintenanceRequests: MaintenanceRequest[] = [
     endDate: '2025-03-19T16:00:00',
     community: 'Osborne Farms',
     type: 'maintenance',
-    market: 'Atlanta'
+    market: 'Atlanta',
+    tenant: 'Patricia Martinez',
+    category: 'electrical',
+    dateCompleted: null,
+    notes: ['Tenant reported the issue yesterday evening']
   },
 ];
 
@@ -1014,8 +1176,8 @@ export const mockAIConversations: AIConversation[] = [
   {
     id: '1',
     contactName: 'John Smith',
-    channel: 'voice' as 'voice' | 'sms' | 'email',
     dateTime: '2025-03-12T14:32',
+    channel: 'voice',
     summary: 'Inquired about 2-bedroom house availability and pricing near Riverview, FL. Wants to visit 123 Maple Street on Saturday, March 15th at 1:00 PM.',
     transcript: `AI: Hello, thank you for calling Property Homes. How can I assist you today?
 John: Hi, I'm looking for information about 2-bedroom houses near Riverview or in the Tampa area.
@@ -1038,11 +1200,7 @@ AI: You're welcome, John. We look forward to seeing you on Saturday. Feel free t
       'Added to Yardi'
     ],
     scenario: 'leasing/lead',
-    systemLinks: {
-      yardi: 'https://www.yardi.com/',
-      calendar: 'https://calendar.google.com/calendar/u/0/r?pli=1',
-      posting: 'https://www.brandywinehomesusa.com/'
-    }
+    systemLinks: ['https://www.yardi.com/', 'https://calendar.google.com/calendar/u/0/r?pli=1', 'https://www.brandywinehomesusa.com/']
   },
   {
     id: '2',
@@ -1182,6 +1340,11 @@ export const mockRentPayments: RentPayment[] = [
     datePaid: '2025-03-01',
     status: 'paid',
     paymentMethod: 'bank',
+    tenant: 'Robert Garcia',
+    date: '2025-03-01',
+    method: 'bank',
+    community: 'Osborne Farms',
+    market: 'Atlanta'
   },
   {
     id: '2',
@@ -1193,6 +1356,11 @@ export const mockRentPayments: RentPayment[] = [
     datePaid: null,
     status: 'pending',
     paymentMethod: null,
+    tenant: 'Jennifer Lopez',
+    date: '2025-03-01',
+    method: null,
+    community: 'Avila Bay',
+    market: 'Tampa'
   },
   {
     id: '3',
@@ -1204,6 +1372,11 @@ export const mockRentPayments: RentPayment[] = [
     datePaid: null,
     status: 'delinquent',
     paymentMethod: null,
+    tenant: 'Thomas White',
+    date: '2025-03-01',
+    method: null,
+    community: 'Sawyer\'s Preserve',
+    market: 'Jacksonville'
   },
   {
     id: '4',
@@ -1215,6 +1388,11 @@ export const mockRentPayments: RentPayment[] = [
     datePaid: '2025-02-28',
     status: 'paid',
     paymentMethod: 'card',
+    tenant: 'Patricia Martinez',
+    date: '2025-02-28',
+    method: 'card',
+    community: 'Osborne Farms',
+    market: 'Atlanta'
   },
   {
     id: '5',
@@ -1226,7 +1404,12 @@ export const mockRentPayments: RentPayment[] = [
     datePaid: '2025-02-27',
     status: 'paid',
     paymentMethod: 'bank',
-  },
+    tenant: 'James Taylor',
+    date: '2025-02-27',
+    method: 'bank',
+    community: 'Avila Bay',
+    market: 'Tampa'
+  }
 ];
 
 // Mock Metrics Data
@@ -1454,7 +1637,7 @@ export const mockDelinquencyTrendData = [
   { month: 'Jul 24', Atlanta: 3.0, Tampa: 3.6, Jacksonville: 2.8, Orlando: 3.7, Average: 3.3, 'Atlanta/Osborne Farms': 3.1, 'Atlanta/Suwanee Square': 3.0, 'Atlanta/Scattered': 2.9, 'Tampa/Preserve at Pine Grove': 3.5, 'Tampa/Avila Bay': 3.8, 'Tampa/Belmont': 3.7, 'Tampa/Scattered': 3.4, 'Jacksonville/Sawyer\'s Preserve': 2.6, 'Jacksonville/Scattered': 3.0, 'Orlando/Scattered': 3.7 },
   { month: 'Aug 24', Atlanta: 3.3, Tampa: 3.4, Jacksonville: 2.9, Orlando: 3.6, Average: 3.3, 'Atlanta/Osborne Farms': 3.5, 'Atlanta/Suwanee Square': 3.2, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.3, 'Tampa/Avila Bay': 3.5, 'Tampa/Belmont': 3.4, 'Tampa/Scattered': 3.4, 'Jacksonville/Sawyer\'s Preserve': 2.7, 'Jacksonville/Scattered': 3.1, 'Orlando/Scattered': 3.6 },
   { month: 'Sep 24', Atlanta: 3.5, Tampa: 3.2, Jacksonville: 3.4, Orlando: 3.2, Average: 3.3, 'Atlanta/Osborne Farms': 3.7, 'Atlanta/Suwanee Square': 3.4, 'Atlanta/Scattered': 3.4, 'Tampa/Preserve at Pine Grove': 3.0, 'Tampa/Avila Bay': 3.2, 'Tampa/Belmont': 3.3, 'Tampa/Scattered': 3.3, 'Jacksonville/Sawyer\'s Preserve': 3.5, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.2 },
-  { month: 'Oct 24', Atlanta: 3.2, Tampa: 3.4, Jacksonville: 3.7, Orlando: 3.0, Average: 3.3, 'Atlanta/Osborne Farms': 3.0, 'Atlanta/Suwanee Square': 3.3, 'Atlanta/Scattered': 3.3, 'Tampa/Preserve at Pine Grove': 3.5, 'Tampa/Avila Bay': 3.4, 'Tampa/Belmont': 3.2, 'Tampa/Scattered': 3.5, 'Jacksonville/Sawyer\'s Preserve': 3.8, 'Jacksonville/Scattered': 3.6, 'Orlando/Scattered': 3.0 },
+  { month: 'Oct 24', Atlanta: 3.2, Tampa: 3.4, Jacksonville: 3.6, Orlando: 3.0, Average: 3.3, 'Atlanta/Osborne Farms': 3.0, 'Atlanta/Suwanee Square': 3.3, 'Atlanta/Scattered': 3.3, 'Tampa/Preserve at Pine Grove': 3.5, 'Tampa/Avila Bay': 3.4, 'Tampa/Belmont': 3.2, 'Tampa/Scattered': 3.5, 'Jacksonville/Sawyer\'s Preserve': 3.8, 'Jacksonville/Scattered': 3.6, 'Orlando/Scattered': 3.0 },
   { month: 'Nov 24', Atlanta: 3.0, Tampa: 3.3, Jacksonville: 3.4, Orlando: 3.6, Average: 3.3, 'Atlanta/Osborne Farms': 2.8, 'Atlanta/Suwanee Square': 3.1, 'Atlanta/Scattered': 3.1, 'Tampa/Preserve at Pine Grove': 3.2, 'Tampa/Avila Bay': 3.4, 'Tampa/Belmont': 3.3, 'Tampa/Scattered': 3.3, 'Jacksonville/Sawyer\'s Preserve': 3.3, 'Jacksonville/Scattered': 3.5, 'Orlando/Scattered': 3.6 },
   { month: 'Dec 24', Atlanta: 3.6, Tampa: 3.0, Jacksonville: 3.2, Orlando: 3.4, Average: 3.3, 'Atlanta/Osborne Farms': 3.8, 'Atlanta/Suwanee Square': 3.5, 'Atlanta/Scattered': 3.5, 'Tampa/Preserve at Pine Grove': 2.9, 'Tampa/Avila Bay': 3.0, 'Tampa/Belmont': 3.1, 'Tampa/Scattered': 3.0, 'Jacksonville/Sawyer\'s Preserve': 3.1, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.4 },
   { month: 'Jan 25', Atlanta: 3.3, Tampa: 3.5, Jacksonville: 3.0, Orlando: 3.4, Average: 3.3, 'Atlanta/Osborne Farms': 3.1, 'Atlanta/Suwanee Square': 3.4, 'Atlanta/Scattered': 3.4, 'Tampa/Preserve at Pine Grove': 3.7, 'Tampa/Avila Bay': 3.4, 'Tampa/Belmont': 3.5, 'Tampa/Scattered': 3.4, 'Jacksonville/Sawyer\'s Preserve': 2.9, 'Jacksonville/Scattered': 3.1, 'Orlando/Scattered': 3.4 },
@@ -1537,8 +1720,8 @@ export const mockOccupancyData = [
 // Mock Delinquency Data
 export const mockDelinquencyData = [
   { month: 'Mar 24', Atlanta: 3.2, Tampa: 3.5, Jacksonville: 3.1, Orlando: 3.4, Average: 3.3, 'Atlanta/Osborne Farms': 3.4, 'Atlanta/Suwanee Square': 3.0, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.7, 'Tampa/Avila Bay': 3.3, 'Tampa/Belmont': 3.6, 'Tampa/Scattered': 3.4, 'Jacksonville/Sawyer\'s Preserve': 3.0, 'Jacksonville/Scattered': 3.2, 'Orlando/Scattered': 3.4 },
-  { month: 'Apr 24', Atlanta: 3.4, Tampa: 3.3, Jacksonville: 3.5, Orlando: 3.2, Average: 3.4, 'Atlanta/Osborne Farms': 3.6, 'Atlanta/Suwanee Square': 3.3, 'Atlanta/Scattered': 3.3, 'Tampa/Preserve at Pine Grove': 3.4, 'Tampa/Avila Bay': 3.2, 'Tampa/Belmont': 3.4, 'Tampa/Scattered': 3.2, 'Jacksonville/Sawyer\'s Preserve': 3.7, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.1 },
-  { month: 'May 24', Atlanta: 3.1, Tampa: 3.6, Jacksonville: 3.2, Orlando: 3.3, Average: 3.3, 'Atlanta/Osborne Farms': 3.2, 'Atlanta/Suwanee Square': 2.9, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.8, 'Tampa/Avila Bay': 3.5, 'Tampa/Belmont': 3.5, 'Tampa/Scattered': 3.6, 'Jacksonville/Sawyer\'s Preserve': 3.1, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.3 },
+  { month: 'Apr 24', Atlanta: 3.4, Tampa: 3.3, Jacksonville: 3.5, Orlando: 3.2, Average: 3.4, 'Atlanta/Osborne Farms': 3.6, 'Atlanta/Suwanee Square': 3.3, 'Atlanta/Scattered': 3.3, 'Tampa/Preserve at Pine Grove': 3.4, 'Tampa/Avila Bay': 3.2, 'Tampa/Belmont': 3.4, 'Tampa/Scattered': 3.2, 'Jacksonville/Sawyer\'s Preserve': 3.7, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.2 },
+  { month: 'May 24', Atlanta: 3.1, Tampa: 3.6, Jacksonville: 3.2, Orlando: 3.3, Average: 3.3, 'Atlanta/Osborne Farms': 3.2, 'Atlanta/Suwanee Square': 2.9, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.8, 'Tampa/Avila Bay': 3.5, 'Tampa/Belmont': 3.6, 'Tampa/Scattered': 3.5, 'Jacksonville/Sawyer\'s Preserve': 3.1, 'Jacksonville/Scattered': 3.3, 'Orlando/Scattered': 3.3 },
   { month: 'Jun 24', Atlanta: 2.8, Tampa: 3.9, Jacksonville: 3.0, Orlando: 3.5, Average: 3.3, 'Atlanta/Osborne Farms': 2.7, 'Atlanta/Suwanee Square': 2.8, 'Atlanta/Scattered': 2.9, 'Tampa/Preserve at Pine Grove': 4.0, 'Tampa/Avila Bay': 3.8, 'Tampa/Belmont': 3.9, 'Tampa/Scattered': 3.9, 'Jacksonville/Sawyer\'s Preserve': 2.9, 'Jacksonville/Scattered': 3.1, 'Orlando/Scattered': 3.5 },
   { month: 'Jul 24', Atlanta: 3.0, Tampa: 3.7, Jacksonville: 2.8, Orlando: 3.7, Average: 3.3, 'Atlanta/Osborne Farms': 3.1, 'Atlanta/Suwanee Square': 3.0, 'Atlanta/Scattered': 2.9, 'Tampa/Preserve at Pine Grove': 3.6, 'Tampa/Avila Bay': 3.9, 'Tampa/Belmont': 3.7, 'Tampa/Scattered': 3.6, 'Jacksonville/Sawyer\'s Preserve': 2.6, 'Jacksonville/Scattered': 3.0, 'Orlando/Scattered': 3.7 },
   { month: 'Aug 24', Atlanta: 3.3, Tampa: 3.4, Jacksonville: 2.9, Orlando: 3.6, Average: 3.3, 'Atlanta/Osborne Farms': 3.5, 'Atlanta/Suwanee Square': 3.2, 'Atlanta/Scattered': 3.2, 'Tampa/Preserve at Pine Grove': 3.3, 'Tampa/Avila Bay': 3.5, 'Tampa/Belmont': 3.4, 'Tampa/Scattered': 3.4, 'Jacksonville/Sawyer\'s Preserve': 2.7, 'Jacksonville/Scattered': 3.1, 'Orlando/Scattered': 3.6 },
@@ -2247,3 +2430,4 @@ AI: Good! Please let me know if you have any questions or need assistance. Have 
 Daniel Kim: Thank you! Have a great day too.`
   }
 ];
+

@@ -1,12 +1,12 @@
-
 import React from 'react';
-import { AIConversation } from '@/types';
+import { AIConversation } from '@/types/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Phone, MessageSquare, Mail, Clock, Users, CheckCircle } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 interface CommunicationsAnalyticsProps {
   conversations: AIConversation[];
+  department?: string;
 }
 
 const CommunicationsAnalytics = ({ conversations }: CommunicationsAnalyticsProps) => {

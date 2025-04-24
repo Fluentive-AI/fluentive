@@ -238,7 +238,7 @@ const AppHeader = () => {
               </div>
             </div>
 
-          
+{/*           
             <div 
               className="flex items-center gap-4 p-4 rounded-lg border hover:bg-gray-50 cursor-pointer"
               onClick={handleSwitchToPropertyManager}
@@ -263,7 +263,7 @@ const AppHeader = () => {
                 <div className="font-medium">{CURRENT_SUPER}</div>
                 <div className="text-sm text-gray-500">Technician</div>
               </div>
-            </div>
+            </div> */}
 
           </div>
         </DialogContent>

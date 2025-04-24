@@ -32,6 +32,7 @@ import AddGraphDialog from '@/components/dashboard/AddGraphDialog';
 import { toast } from 'sonner';
 import { MetricData } from '@/types';
 import ChangeMetricDialog from '@/components/dashboard/ChangeMetricDialog';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 interface DashboardCard {
   id: number;
@@ -54,11 +55,58 @@ interface Dashboard {
 interface DashboardMetric {
   id: number;
   title: string;
-  value: number | string;
+  label: string;
+  value: number;
   change: number;
-  status: 'neutral' | 'up' | 'down' | 'increase_good' | 'increase_bad' | 'decrease_good' | 'decrease_bad';
+  status: 'increase_good' | 'increase_bad' | 'decrease_good' | 'decrease_bad';
   format?: string;
+  markets?: Record<string, { value: number; change: number; status: 'increase_good' | 'increase_bad' | 'decrease_good' | 'decrease_bad' }>;
+  communities?: Record<string, { value: number; change: number; status: 'increase_good' | 'increase_bad' | 'decrease_good' | 'decrease_bad' }>;
+  kpi?: string;
 }
+
+interface ChartDataItem {
+  month: string;
+  Total?: number;
+  Average?: number;
+  [key: string]: any;
+}
+
+const initialMetrics: DashboardMetric[] = [
+  {
+    id: 1,
+    title: 'Total Users',
+    label: 'Total Users',
+    value: 12500,
+    change: 12.5,
+    status: 'increase_good',
+    markets: {
+      'Market A': { value: 5000, change: 8.2, status: 'increase_good' },
+      'Market B': { value: 7500, change: 15.3, status: 'increase_good' }
+    }
+  },
+  {
+    id: 2,
+    title: 'Active Users',
+    label: 'Active Users',
+    value: 8500,
+    change: -5.2,
+    status: 'decrease_bad',
+    communities: {
+      'Community X': { value: 3000, change: -2.1, status: 'decrease_bad' },
+      'Community Y': { value: 5500, change: -7.8, status: 'decrease_bad' }
+    }
+  },
+  {
+    id: 3,
+    title: 'Engagement Rate',
+    label: 'Engagement Rate',
+    value: 68,
+    change: 3.5,
+    status: 'increase_good',
+    kpi: 'engagement'
+  }
+];
 
 const initialDashboards: Dashboard[] = [
   { 
@@ -117,6 +165,29 @@ const Dashboard = () => {
   const [changeMetricOpen, setChangeMetricOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<'add' | 'change'>('change');
   const [metricToChange, setMetricToChange] = useState<{id: string | number, index: number} | null>(null);
+
+  const [metrics, setMetrics] = useState<DashboardMetric[]>(() => {
+    const savedMetrics = localStorage.getItem('dashboardMetrics');
+    if (savedMetrics) {
+      const parsed = JSON.parse(savedMetrics);
+      return parsed.map((metric: any) => ({
+        ...metric,
+        title: metric.label // Use label as title if title is missing
+      }));
+    }
+    return initialMetrics;
+  });
+
+  useEffect(() => {
+    console.log('Mock Data:', {
+      mockRenewalsTrendData,
+      mockOccupancyTrendData,
+      mockDelinquencyTrendData,
+      mockBillHoursTrendData,
+      mockWorkOrdersTrendData,
+      mockLeasingTimelineTrendData
+    });
+  }, []);
 
   useEffect(() => {
     const handleCreateDashboardEvent = (event: CustomEvent) => {
@@ -246,11 +317,11 @@ const Dashboard = () => {
     });
   };
 
-  const filterChartData = (data: any[], isStacked = false, isTechnician = false) => {
+  const filterChartData = (data: ChartDataItem[], isStacked = false, isTechnician = false) => {
     // If no communities selected, show only totals and markets
     if (selectedMarketCommunities.length === 0) {
       return data.map(item => {
-        const result = { month: item.month };
+        const result: ChartDataItem = { month: item.month };
         
         // Include Total/Average
         if (item.Total || item.Average) {
@@ -281,7 +352,7 @@ const Dashboard = () => {
     
     // When communities are selected, show selected communities, their market, and total
     return data.map(item => {
-      const result = { month: item.month };
+      const result: ChartDataItem = { month: item.month };
       
       // Include Total/Average
       if (item.Total || item.Average) {
@@ -460,7 +531,8 @@ const Dashboard = () => {
       // Add new metric card
       const newMetric = {
         ...selectedMetric,
-        id: Date.now(), // Generate a unique ID for the new card
+        id: Date.now(),
+        title: selectedMetric.label
       };
       
       setCustomMetrics([...customMetrics, newMetric]);
@@ -471,7 +543,7 @@ const Dashboard = () => {
         // For custom metrics, update in place
         setCustomMetrics(customMetrics.map(m => 
           m.id === metricToChange.id 
-            ? {...selectedMetric, id: m.id}
+            ? {...selectedMetric, id: m.id, title: selectedMetric.label}
             : m
         ));
       } else {
@@ -481,8 +553,9 @@ const Dashboard = () => {
         
         const newCustomMetric = {
           ...selectedMetric,
-          id: `custom_${Date.now()}`,
-          originalPosition: metricToChange.index
+          id: Date.now(),
+          originalPosition: metricToChange.index,
+          title: selectedMetric.label
         };
         
         setHiddenMetrics(newHiddenMetrics);
@@ -508,6 +581,20 @@ const Dashboard = () => {
     localStorage.setItem('defaultDashboardId', activeDashboard.id);
     
     toast.success("This dashboard has been set as your default view");
+  };
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    const items = Array.from(metrics);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, {
+      ...reorderedItem,
+      title: reorderedItem.label || reorderedItem.title // Use label as fallback for title
+    });
+
+    setMetrics(items);
+    localStorage.setItem('dashboardMetrics', JSON.stringify(items));
   };
 
   return (

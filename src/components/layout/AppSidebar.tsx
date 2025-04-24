@@ -96,7 +96,7 @@ const AppSidebar = () => {
           <NavItem to="/leads" icon={<Users className="h-5 w-5" />} label="Leads & Tours" />
           <NavItem to="/applications" icon={<FileText className="h-5 w-5" />} label="Applications" />
         </div>
-        
+{/*         
         <div className="pt-4 pb-2">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
             Property Operations
@@ -112,7 +112,7 @@ const AppSidebar = () => {
           <NavItem to="/calendar" icon={<Calendar className="h-5 w-5" />} label="Calendar" />
           <NavItem to="/map" icon={<Map className="h-5 w-5" />} label="Map View" />
         </div>
-        
+         */}
         <div className="pt-4 pb-2">
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
             AI Communications

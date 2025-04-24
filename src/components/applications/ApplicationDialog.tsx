@@ -15,8 +15,9 @@ interface ApplicationDialogProps {
 }
 
 const ApplicationDialog = ({ application, open, onOpenChange }: ApplicationDialogProps) => {
-  const getStatusColor = (status: string) => {
-    switch (status) {
+  const getStatusColor = (status: string | { status: string }) => {
+    const statusValue = typeof status === 'string' ? status : status.status;
+    switch (statusValue.toLowerCase()) {
       case 'approved':
         return 'bg-green-100 text-green-800';
       case 'reviewing':
@@ -28,6 +29,11 @@ const ApplicationDialog = ({ application, open, onOpenChange }: ApplicationDialo
       default:
         return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const formatStatus = (status: string | { status: string }) => {
+    const statusValue = typeof status === 'string' ? status : status.status;
+    return statusValue.charAt(0).toUpperCase() + statusValue.slice(1);
   };
 
   return (
@@ -70,25 +76,25 @@ const ApplicationDialog = ({ application, open, onOpenChange }: ApplicationDialo
               <div>
                 <p className="text-sm text-muted-foreground">Overall Status</p>
                 <Badge className={getStatusColor(application.status)}>
-                  {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
+                  {formatStatus(application.status)}
                 </Badge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Background Check</p>
                 <Badge className={getStatusColor(application.backgroundCheck)}>
-                  {application.backgroundCheck.charAt(0).toUpperCase() + application.backgroundCheck.slice(1)}
+                  {formatStatus(application.backgroundCheck)}
                 </Badge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Credit Check</p>
                 <Badge className={getStatusColor(application.creditCheck)}>
-                  {application.creditCheck.charAt(0).toUpperCase() + application.creditCheck.slice(1)}
+                  {formatStatus(application.creditCheck)}
                 </Badge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Income Verification</p>
                 <Badge className={getStatusColor(application.incomeVerification)}>
-                  {application.incomeVerification.charAt(0).toUpperCase() + application.incomeVerification.slice(1)}
+                  {formatStatus(application.incomeVerification)}
                 </Badge>
               </div>
               <div>
